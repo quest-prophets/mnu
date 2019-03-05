@@ -1,4 +1,4 @@
-package mnu.model
+package mnu.model.employee
 
 import mnu.model.enums.Gender
 import mnu.model.enums.PersonStatus

@@ -1,5 +1,7 @@
-package mnu.model
+package mnu.model.employee
 
+import mnu.model.Client
+import mnu.model.Prawn
 import javax.persistence.*
 
 @Entity

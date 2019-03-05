@@ -1,5 +1,6 @@
 package mnu.model
 
+import mnu.model.employee.ManagerEmployee
 import mnu.model.enums.*
 import java.time.LocalDateTime
 import javax.persistence.*

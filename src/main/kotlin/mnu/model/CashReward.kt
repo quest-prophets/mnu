@@ -1,5 +1,6 @@
 package mnu.model
 
+import mnu.model.employee.Employee
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.Min

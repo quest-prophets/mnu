@@ -1,5 +1,6 @@
 package mnu.model
 
+import mnu.model.employee.ScientistEmployee
 import mnu.model.enums.ExperimentStatus
 import mnu.model.enums.ExperimentType
 import java.time.LocalDateTime
@@ -9,8 +10,8 @@ import javax.persistence.*
 @Table(name = "experiments")
 data class Experiment (@Column(nullable = false) var title: String = "",
                        var type: ExperimentType = ExperimentType.MINOR,
-                       var description: String = ""
-                       ){
+                       var description: String = "")
+{
     @Id
     @GeneratedValue
     var id: Long? = null
