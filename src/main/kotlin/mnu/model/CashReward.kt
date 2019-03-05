@@ -1,0 +1,18 @@
+package mnu.model
+
+import java.time.LocalDateTime
+import javax.persistence.*
+import javax.validation.constraints.Min
+
+@Entity
+@Table(name = "cash_rewards")
+data class CashReward (@Min(1) var reward: Long = 1,
+                       var issueDate: LocalDateTime = LocalDateTime.now()){
+    @Id
+    @GeneratedValue
+    var id: Long? = null
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    var employee: Employee? = null
+}
