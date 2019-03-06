@@ -17,4 +17,7 @@ data class Vacancy (@Column(nullable = false) var title: String = "",
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "job")
     var workers: MutableList<Prawn>? = null
 
+    @Min(0)
+    var vacantPlaces: Long? = null
+
 }

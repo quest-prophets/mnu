@@ -10,24 +10,24 @@ import javax.persistence.*
 @Table(name = "experiments")
 data class Experiment (@Column(nullable = false) var title: String = "",
                        var type: ExperimentType = ExperimentType.MINOR,
-                       var description: String = "")
+                       var description: String = "",
+                       var date: LocalDateTime = LocalDateTime.now(),
+
+                       @ManyToOne(fetch = FetchType.EAGER)
+                       @JoinColumn(name = "examinator_id", referencedColumnName = "id")
+                       var examinator: ScientistEmployee? = null,
+
+                       @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+                       @JoinTable(name = "assistants_in_experiments",
+                            joinColumns = [JoinColumn(name = "experiment_id")],
+                            inverseJoinColumns = [JoinColumn(name = "assistant_id")])
+                       var assistants: List<ScientistEmployee>? = null)
 {
     @Id
     @GeneratedValue
     var id: Long? = null
 
     var status: ExperimentStatus? = null
-    var date: LocalDateTime? = null
     var result: String? = null
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "house_id", referencedColumnName = "id")
-    var examinator: ScientistEmployee? = null
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    @JoinTable(name = "assistants_in_experiments",
-        joinColumns = [JoinColumn(name = "experiment_id")],
-        inverseJoinColumns = [JoinColumn(name = "assistant_id")]
-    )
-    var assistants: List<ScientistEmployee>? = null
 }
