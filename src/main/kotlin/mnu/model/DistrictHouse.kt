@@ -17,6 +17,6 @@ data class DistrictHouse (var shelterRow: Long = 0,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "districtHouse")
     var inhabitants: MutableList<Prawn>? = null
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "manager")
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "house")
     var incidents: MutableList<DistrictIncident>? = null
 }

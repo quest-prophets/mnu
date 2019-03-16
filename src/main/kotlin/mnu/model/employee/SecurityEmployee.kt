@@ -1,11 +1,12 @@
 package mnu.model.employee
 
+import mnu.model.DistrictIncident
 import mnu.model.Transport
 import mnu.model.Weapon
 import javax.persistence.*
 
 @Entity
-@Table(name = "security")
+@Table(name = "security_employees")
 class SecurityEmployee {
     @Id
     @OneToOne(fetch = FetchType.EAGER)
@@ -25,6 +26,9 @@ class SecurityEmployee {
         inverseJoinColumns = [JoinColumn(name = "tran_id")]
     )
     var transport: List<Transport>? = null
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "assistants")
+    var incidents: List<DistrictIncident>? = null
 
     var position: String? = null
 }

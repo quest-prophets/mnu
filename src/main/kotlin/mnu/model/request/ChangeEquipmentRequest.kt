@@ -2,6 +2,7 @@ package mnu.model.request
 
 import mnu.model.Transport
 import mnu.model.Weapon
+import mnu.model.employee.ManagerEmployee
 import mnu.model.employee.SecurityEmployee
 import javax.persistence.*
 
@@ -22,4 +23,8 @@ data class ChangeEquipmentRequest (@ManyToOne(fetch = FetchType.EAGER)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "request_id", referencedColumnName = "id")
     var request: Request? = null
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "manager_id", referencedColumnName = "id")
+    var resolver: ManagerEmployee? = null
 }

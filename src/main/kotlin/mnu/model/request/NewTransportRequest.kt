@@ -6,7 +6,7 @@ import javax.persistence.*
 import javax.validation.constraints.Min
 
 @Entity
-@Table (name = "new_weapon_requests")
+@Table (name = "new_transport_requests")
 data class NewTransportRequest (@Column(nullable = false) var name: String = "",
                              @Enumerated(EnumType.STRING) var type: TransportType = TransportType.LAND,
                              var description: String = "",
