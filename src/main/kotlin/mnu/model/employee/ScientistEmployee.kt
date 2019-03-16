@@ -1,6 +1,7 @@
 package mnu.model.employee
 
 import mnu.model.Article
+import mnu.model.Experiment
 import javax.persistence.*
 
 @Entity
@@ -15,4 +16,10 @@ class ScientistEmployee {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "scientist")
     var articles: MutableList<Article>? = null
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "examinator")
+    var conductedExperiments: MutableList<Experiment>? = null
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "assistants")
+    var assistedExperiments: MutableList<Experiment>? = null
 }
