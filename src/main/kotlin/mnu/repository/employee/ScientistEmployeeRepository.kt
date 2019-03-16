@@ -12,4 +12,8 @@ interface ScientistEmployeeRepository : JpaRepository<ScientistEmployee, Long> {
     @Query("select s.employee_id, e.name, s.position, e.level from scientists s" +
             " inner join employees e on (s.employee_id = e.id) where (e.level < :level)")
     fun getAssistants(@Param("level") examinatorLvl: Long) : List<Array<Any>>
+
+    @Query("select count(*) from scientists s inner join experiments ex on (s.id = ex.examinator_id)" +
+            " inner join assistants_in_experiments aie on (s.id = aie.assistant_id);", nativeQuery = true)
+    fun allExperiments() : Long
 }

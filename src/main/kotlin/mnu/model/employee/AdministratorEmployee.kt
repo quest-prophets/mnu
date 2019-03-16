@@ -10,5 +10,4 @@ class AdministratorEmployee {
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     var employee: Employee? = null
 
-
 }

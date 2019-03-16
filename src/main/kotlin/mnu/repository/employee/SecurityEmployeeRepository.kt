@@ -8,6 +8,6 @@ interface SecurityEmployeeRepository : JpaRepository<SecurityEmployee, Long>{
             "inner join security_employees s on (e.id = s.employee_id) where (e.status = 'WORKING')")
     fun getAllWorkingSecurity() : List<Array<Any>>
 
-    @Query(value = "select count(*) from security_employees s inner join security_in_incidents sii on (s.id = sii.security_id)", nativeQuery = true)
+    @Query(value = "select count(*) from security_employees s inner join security_in_incidents sii on (s.id = sii.security_id);", nativeQuery = true)
     fun allIncidentsParticipatedIn(id: Long) : Long
 }
