@@ -3,21 +3,31 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <title>MNU</title>
 </head>
 <body>
 <div class="shopGrid">
     <div class="shopHeader">
-        <div class="feedbackButton"></div>
-        <div>You are logged in as ****</div>
+        <a class="feedbackButton" href="shop.html">Feedback</a>
+        <img alt="Feedback" class="shopIconButton mobileFeedbackButton" src="images/feedback.png">
+        <span class="shopHeaderFlexRow">You are logged in as ****
+            <img alt="Profile settings" class="shopIconButton" src="images/profile.png">
+            <img alt="History" class="shopIconButton" src="images/history.svg">
+            <img alt="Cart" class="shopIconButton" src="images/cart.png">
+        </span>
+    </div>
+    <div class="shopDepartmentsTitle flexColumn">
+        Departments
     </div>
     <div class="shopDepartments">
         <div></div>
     </div>
+    <div class="shopSearchBar">
+        <input placeholder="Search...">
+    </div>
     <div class="shopCatalogue">
-
     </div>
 </div>
 </body>

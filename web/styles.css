@@ -81,6 +81,14 @@ body {
     justify-content: center;
 }
 
+.shopHeaderFlexRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    float: right;
+}
+
 .checkBoxFlex {
     display: flex;
 }
@@ -91,7 +99,18 @@ body {
 
 .shopGrid {
     display: grid;
-    grid: "header header" 50px "departments catalogue";
+    padding: 5px 20px;
+    grid: "header header" 55px "departmentsTitle searchBar" 60px "departments catalogue";
+    grid-template-columns: 1fr 9fr;
+}
+
+.shopDepartmentsTitle{
+    grid-area: departmentsTitle;
+    border: 1px solid black;
+}
+
+.shopSearchBar{
+    grid-area: searchBar;
 }
 
 .shopHeader {
@@ -100,6 +119,27 @@ body {
 
 .shopDepartments {
     grid-area: departments;
+    overflow-y: auto;
+}
+
+.shopIconButton{
+    cursor: pointer;
+    width: 40px;
+    margin-left: 10px;
+}
+
+.feedbackButton{
+    color: blue;
+    font-style: italic;
+    text-decoration: none;
+}
+
+.feedbackButton:hover{
+    text-decoration: underline;
+}
+
+.mobileFeedbackButton{
+    display: none;
 }
 
 .shopCatalogue {
