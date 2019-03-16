@@ -1,0 +1,135 @@
+body {
+    font-family: "Helvetica", sans-serif;
+    font-size: 16px;
+}
+
+.loginPage {
+    overflow: hidden;
+}
+
+.loginBox {
+    margin-top: -200px;
+    border: 1px solid black;
+    padding: 35px;
+}
+
+@media (max-height: 850px) {
+    .loginBox {
+        margin-top: 0;
+    }
+}
+
+.loginItem {
+    margin-top: 15px;
+}
+
+.loginInput {
+    font-size: 16px;
+    height: 25px;
+}
+
+.checkboxLabel {
+    font-size: 16px;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+}
+
+.registerCheckbox {
+    margin-right: 15px;
+}
+
+.backLink {
+    text-decoration: none;
+    margin-right: 160px;
+    color: blue;
+    cursor: pointer;
+}
+
+.backLink:hover {
+    text-decoration: underline;
+}
+
+.button {
+    color: black;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 8px 22px;
+    font-size: 20px;
+}
+
+.buttonUnpressed {
+    box-shadow: 2px 4px 4px -1px grey;
+    background: white;
+}
+
+.buttonUnpressed:active {
+    box-shadow: none;
+}
+
+.buttonPressed {
+    background: lightgreen;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkBoxFlex {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+.shopGrid {
+    display: grid;
+    grid: "header header" 50px "departments catalogue";
+}
+
+.shopHeader {
+    grid-area: header;
+}
+
+.shopDepartments {
+    grid-area: departments;
+}
+
+.shopCatalogue {
+    grid-area: catalogue;
+    overflow-y: auto;
+}
+
+@media (max-width: 350px) {
+    .loginBox {
+        border: none;
+    }
+
+    .loginInput {
+        width: 75vw;
+        height: 40px;
+    }
+
+    .checkBoxFlex {
+        flex-direction: column;
+    }
+
+    .backLink {
+        margin-right: 55vw
+    }
+
+    .loginBox {
+        padding: 0;
+    }
+
+    .registerCheckbox {
+        margin-right: 0;
+    }
+}

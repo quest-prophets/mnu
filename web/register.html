@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>MNU</title>
+</head>
+<body class="loginPage">
+<div class="flexColumn" style="height: 100vh">
+    <div class="flexColumn loginBox">
+        <a class="backLink" href="index.html">< back</a>
+        <input class="loginItem loginInput" placeholder="Login">
+        <input type="password" class="loginItem loginInput" placeholder="Password">
+        <input type="password" class="loginItem loginInput" placeholder="Confirm password">
+        <input type="email" class="loginItem loginInput" placeholder="Email">
+        <input class="loginItem loginInput" placeholder="First name">
+        <input class="loginItem loginInput" placeholder="Last name">
+        <div class="checkBoxFlex">
+            <div class="registerCheckbox">
+                <input id="customerRadio" type="radio" name="clientType" class="loginItem checkbox">
+                <label class="checkboxLabel" for="customerRadio">Customer</label>
+            </div>
+            <div class="registerCheckbox">
+                <input id="manufacturerRadio" type="radio" name="clientType" class="loginItem checkbox">
+                <label class="checkboxLabel" for="manufacturerRadio">Manufacturer</label>
+            </div>
+        </div>
+        <a class="loginItem button buttonUnpressed" href="register.html">Register</a>
+    </div>
+</div>
+</body>
+</html>
