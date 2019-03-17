@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.*
 interface TransportRepository : JpaRepository<Transport, Long> {
     fun findAllByType(type: TransportType) : List<Transport>
 
+    fun findAllByRequiredAccessLvlLessThanEqual(accessLevel: Int) : List<Transport>
+
     fun findAllByQuantityGreaterThanEqual(quantity: Long) : List<Transport>
 
     fun findAllByTypeOrderByPriceAsc(type: TransportType) : List<Transport>
