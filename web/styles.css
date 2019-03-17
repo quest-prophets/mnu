@@ -23,7 +23,7 @@ body {
     margin-top: 15px;
 }
 
-.loginInput {
+.bigInput {
     font-size: 16px;
     height: 25px;
 }
@@ -59,14 +59,22 @@ body {
     border-radius: 6px;
     padding: 8px 22px;
     font-size: 20px;
+    position: relative;
+    cursor: pointer;
 }
 
 .buttonUnpressed {
-    box-shadow: 2px 4px 4px -1px grey;
+    box-shadow: 0 5px #cacaca;
     background: white;
 }
 
+.buttonUnpressed:hover {
+    top: 2px;
+    box-shadow: 0 3px #cacaca;
+}
+
 .buttonUnpressed:active {
+    top: 5px;
     box-shadow: none;
 }
 
@@ -81,7 +89,7 @@ body {
     justify-content: center;
 }
 
-.shopHeaderFlexRow{
+.shopHeaderFlexRow {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -99,22 +107,42 @@ body {
 
 .shopGrid {
     display: grid;
-    padding: 5px 20px;
-    grid: "header header" 55px "departmentsTitle searchBar" 60px "departments catalogue";
-    grid-template-columns: 1fr 9fr;
+    padding: 0 20px;
+    grid: "departmentsTitle searchBar" 60px "departments catalogue";
+    grid-template-columns: 1.5fr 8.5fr;
+    column-gap: 15px;
 }
 
-.shopDepartmentsTitle{
+.shopDepartmentsTitle {
     grid-area: departmentsTitle;
-    border: 1px solid black;
+    border: 2px solid black;
+    border-top: none;
 }
 
-.shopSearchBar{
+.grid--shopSearchBar {
     grid-area: searchBar;
 }
 
+.shopSearchBar {
+    margin-left: 15px;
+    margin-top: 15px;
+    border-radius: 10px 0 0 10px;
+}
+
+.shopSearchBarButton {
+    border-radius: 0 10px 10px 0;
+    padding: 3px 15px;
+}
+
+.shopSorter {
+    float: right;
+    margin-top: 15px;
+    margin-right: 15px;
+}
+
 .shopHeader {
-    grid-area: header;
+    border-bottom: 2px solid black;
+    height: 50px;
 }
 
 .shopDepartments {
@@ -122,23 +150,30 @@ body {
     overflow-y: auto;
 }
 
-.shopIconButton{
+.shopIconButton {
     cursor: pointer;
     width: 40px;
-    margin-left: 10px;
+    margin-left: 15px;
 }
 
-.feedbackButton{
+.shopIconButton:last-child {
+    margin-right: 20px;
+}
+
+.feedbackButton {
+    margin-left: 20px;
     color: blue;
     font-style: italic;
     text-decoration: none;
+    top: 10px;
+    position: relative;
 }
 
-.feedbackButton:hover{
+.feedbackButton:hover {
     text-decoration: underline;
 }
 
-.mobileFeedbackButton{
+.mobileFeedbackButton {
     display: none;
 }
 
@@ -152,7 +187,7 @@ body {
         border: none;
     }
 
-    .loginInput {
+    .bigInput {
         width: 75vw;
         height: 40px;
     }

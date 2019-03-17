@@ -7,25 +7,33 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <title>MNU</title>
 </head>
-<body>
-<div class="shopGrid">
-    <div class="shopHeader">
-        <a class="feedbackButton" href="shop.html">Feedback</a>
-        <img alt="Feedback" class="shopIconButton mobileFeedbackButton" src="images/feedback.png">
-        <span class="shopHeaderFlexRow">You are logged in as ****
+<body style="margin: 7px 0">
+<div class="shopHeader">
+    <a class="feedbackButton" href="shop.html">Feedback</a>
+    <img alt="Feedback" class="shopIconButton mobileFeedbackButton" src="images/feedback.png">
+    <span class="shopHeaderFlexRow">You are logged in as ****
             <img alt="Profile settings" class="shopIconButton" src="images/profile.png">
             <img alt="History" class="shopIconButton" src="images/history.svg">
             <img alt="Cart" class="shopIconButton" src="images/cart.png">
         </span>
-    </div>
+</div>
+<div class="shopGrid">
     <div class="shopDepartmentsTitle flexColumn">
         Departments
     </div>
     <div class="shopDepartments">
         <div></div>
     </div>
-    <div class="shopSearchBar">
-        <input placeholder="Search...">
+    <div class="grid--shopSearch">
+        <input class="shopSearchBar bigInput" placeholder="Search..."
+        ><button class="shopSearchBarButton button buttonUnpressed">Go!</button>
+        <span class="shopSorter">Sort by: <select class="bigInput">
+            <option selected>Price (asc.)</option>
+            <option>Price (desc.)</option>
+            <option>???</option>
+            <option>???</option>
+        </select>
+        </span>
     </div>
     <div class="shopCatalogue">
     </div>
