@@ -9,6 +9,7 @@ import javax.validation.constraints.Min
 data class Weapon (@Column(nullable = false) var name: String = "",
                    @Enumerated(EnumType.STRING) var type: WeaponType = WeaponType.PISTOL,
                    var description: String = "",
+                   @Min(0) var price: Double = 0.0,
                    var requiredAccessLvl: Short = 0) {
     @Id
     @GeneratedValue
