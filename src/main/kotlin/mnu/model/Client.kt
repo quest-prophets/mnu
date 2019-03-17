@@ -7,9 +7,10 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "clients")
-data class Client (@Column(nullable = false) var name: String = "",
+data class Client (@Column(nullable = false, unique = true) var login: String = "",
+                   @Column(nullable = false) var name: String = "",
                    var password: String = "",
-                   var email: String = "",
+                   @Column(nullable = false, unique = true) var email: String = "",
                    @Enumerated(EnumType.STRING) var gender: Gender = Gender.MALE,
                    @Enumerated(EnumType.STRING) var type: ClientType = ClientType.CLIENT,
                    var dateOfBirth: LocalDateTime? = null) {

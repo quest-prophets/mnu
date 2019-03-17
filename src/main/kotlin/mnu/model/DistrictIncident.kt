@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.*
 
-data class DistrictIncident (@Min(0) @Max(2) var dangerLevel: Short = 0,
+data class DistrictIncident (@Min(0) @Max(3) var dangerLevel: Short = 0,
                              var description: String = "",
                              var appearanceTime: LocalDateTime = LocalDateTime.now()) {
     @Id

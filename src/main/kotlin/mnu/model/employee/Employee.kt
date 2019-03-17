@@ -8,7 +8,8 @@ import javax.validation.constraints.*
 
 @Entity
 @Table (name = "employees")
-data class Employee (@Column(nullable = false) var name: String = "",
+data class Employee (@Column(nullable = false, unique = true) var login: String = "",
+                     @Column(nullable = false) var name: String = "",
                      var password: String = "",
                      @Enumerated(EnumType.STRING) var gender: Gender = Gender.MALE,
                      var dateOfBirth: LocalDateTime? = null,

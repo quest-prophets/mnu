@@ -1,5 +1,6 @@
 package mnu.model.request
 
+import mnu.model.employee.Employee
 import mnu.model.enums.RequestStatus
 import javax.persistence.*
 
@@ -12,4 +13,8 @@ class Request {
 
     @Enumerated(EnumType.STRING)
     var status: RequestStatus? = null
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "resolver_id", referencedColumnName = "id")
+    var resolver: Employee? = null
 }

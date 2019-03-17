@@ -7,7 +7,8 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "prawns")
-data class Prawn (@Column(nullable = false) var name: String = "",
+data class Prawn (@Column(nullable = false, unique = true) var login: String = "",
+                  @Column(nullable = false) var name: String = "",
                   var password: String = "",
                   var dateOfBirth: LocalDateTime = LocalDateTime.now()) {
     @Id

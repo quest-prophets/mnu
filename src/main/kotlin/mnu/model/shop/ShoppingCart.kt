@@ -12,7 +12,7 @@ data class ShoppingCart (var dateOfCreation: LocalDateTime = LocalDateTime.now()
     @GeneratedValue
     var id: Long? = null
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     var client: Client? = null
 
