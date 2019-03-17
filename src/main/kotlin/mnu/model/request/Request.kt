@@ -15,6 +15,6 @@ class Request {
     var status: RequestStatus? = null
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "resolver_id", referencedColumnName = "id")
+    @JoinColumn(name = "resolver_id", referencedColumnName = "user_id")
     var resolver: Employee? = null
 }

@@ -7,20 +7,21 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "prawns")
-data class Prawn (@Column(nullable = false, unique = true) var login: String = "",
-                  @Column(nullable = false) var name: String = "",
-                  var password: String = "",
+data class Prawn (@Column(nullable = false) var name: String = "",
                   var dateOfBirth: LocalDateTime = LocalDateTime.now()) {
     @Id
-    @GeneratedValue
-    var id: Long? = null
+    var userId: Long? = null
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    val user: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "house_id", referencedColumnName = "id")
     var districtHouse: DistrictHouse? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id", referencedColumnName = "id")
+    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
     var manager: ManagerEmployee? = null
 
     @ManyToOne(fetch = FetchType.LAZY)

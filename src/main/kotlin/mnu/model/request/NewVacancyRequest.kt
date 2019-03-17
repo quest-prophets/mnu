@@ -13,12 +13,12 @@ data class NewVacancyRequest (@Column(nullable = false) var title: String = "",
                               @Min(1) var vacantPlaces: Long? = 1,
 
                               @ManyToOne(fetch = FetchType.EAGER)
-                              @JoinColumn(name = "requester_id", referencedColumnName = "id")
+                              @JoinColumn(name = "requester_id", referencedColumnName = "user_id")
                               var client: Client? = null) {
     @Id
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "request_id", referencedColumnName = "id")
-    var request: Request? = null
+    var requestId: Long? = null
 
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private val request: Request? = null
 }

@@ -9,9 +9,11 @@ import javax.persistence.*
 @Table(name = "security_employees")
 class SecurityEmployee {
     @Id
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id", referencedColumnName = "id")
-    var employee: Employee? = null
+    var employeeId: Long? = null
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private val employee: Employee? = null
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinTable(name = "security_employees_weapons",

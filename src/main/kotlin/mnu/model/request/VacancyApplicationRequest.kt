@@ -7,14 +7,16 @@ import javax.persistence.*
 @Entity
 @Table (name = "vacancy_application_requests")
 data class VacancyApplicationRequest (@ManyToOne(fetch = FetchType.EAGER)
-                                      @JoinColumn(name = "prawn_id", referencedColumnName = "id")
+                                      @JoinColumn(name = "prawn_id", referencedColumnName = "user_id")
                                       var prawn: Prawn? = null,
 
                                       @ManyToOne(fetch = FetchType.EAGER)
                                       @JoinColumn(name = "vacancy_id", referencedColumnName = "id")
                                       var vacancy: Vacancy? = null) {
     @Id
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "request_id", referencedColumnName = "id")
-    var request: Request? = null
+    var requestId: Long? = null
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private val request: Request? = null
 }

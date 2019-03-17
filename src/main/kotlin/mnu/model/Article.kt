@@ -12,7 +12,7 @@ data class Article (@Column(nullable = false) var title: String = "",
     var id: Long? = null
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "scientist_id", referencedColumnName = "id")
+    @JoinColumn(name = "scientist_id", referencedColumnName = "employee_id")
     var scientist: ScientistEmployee? = null
 
 }

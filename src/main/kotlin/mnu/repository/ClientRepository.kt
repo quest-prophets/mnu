@@ -6,7 +6,6 @@ import mnu.model.enums.ClientType
 import org.springframework.data.jpa.repository.*
 
 interface ClientRepository : JpaRepository<Client, Long>{
-    fun findByLogin (login: String) : Client
 
     fun findByEmail (email: String) : Client
 

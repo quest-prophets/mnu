@@ -14,6 +14,6 @@ data class CashReward (@Min(1) var reward: Long = 1,
     var id: Long? = null
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    @JoinColumn(name = "employee_id", referencedColumnName = "user_id")
     var employee: Employee? = null
 }

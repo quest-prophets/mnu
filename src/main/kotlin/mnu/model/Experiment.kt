@@ -14,7 +14,7 @@ data class Experiment (@Column(nullable = false) var title: String = "",
                        var date: LocalDateTime = LocalDateTime.now(),
 
                        @ManyToOne(fetch = FetchType.EAGER)
-                       @JoinColumn(name = "examinator_id", referencedColumnName = "id")
+                       @JoinColumn(name = "examinator_id", referencedColumnName = "employee_id")
                        var examinator: ScientistEmployee? = null,
 
                        @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])

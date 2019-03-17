@@ -8,9 +8,11 @@ import javax.persistence.*
 @Table(name = "managers")
 class ManagerEmployee {
     @Id
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id", referencedColumnName = "id")
-    var employee: Employee? = null
+    var employeeId: Long? = null
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private val employee: Employee? = null
 
     var position: String? = null
 

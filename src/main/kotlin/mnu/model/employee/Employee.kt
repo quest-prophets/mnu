@@ -5,26 +5,31 @@ import mnu.model.enums.PersonStatus
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.*
+import mnu.model.User
+import javax.persistence.MapsId
+import javax.persistence.FetchType
+
 
 @Entity
 @Table (name = "employees")
-data class Employee (@Column(nullable = false, unique = true) var login: String = "",
-                     @Column(nullable = false) var name: String = "",
-                     var password: String = "",
+data class Employee (@Column(nullable = false) var name: String = "",
                      @Enumerated(EnumType.STRING) var gender: Gender = Gender.MALE,
                      var dateOfBirth: LocalDateTime? = null,
-                     var dateOfEmployment: LocalDateTime = LocalDateTime.now()) {
+                     var dateOfEmployment: LocalDateTime? = null) {
     @Id
-    @GeneratedValue
-    var id: Long? = null
+    var userId: Long? = null
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    val user: User? = null
 
     @Enumerated(EnumType.STRING)
     var status: PersonStatus? = null
 
     @Min(0)
+    @Max(10)
     var level: Int? = null
 
     @Min(0)
     var salary: Long? = null
-
 }

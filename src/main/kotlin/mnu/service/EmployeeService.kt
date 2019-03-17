@@ -1,17 +1,20 @@
-package mnu.repository.employee
+package mnu.service
 
 import mnu.model.employee.Employee
 import mnu.model.enums.PersonStatus
-import org.springframework.data.jpa.repository.*
 
-interface EmployeeRepository : JpaRepository <Employee, Long> {
+interface EmployeeService {
+    fun findAll(): List<Employee>
 
-    fun findByUserId (id: Long) : Employee
+    fun save(entity: Employee): Employee
+
+    fun delete(entity: Employee)
+
+    fun findByUserId(id: Long): Employee
 
     fun findAllBySalaryGreaterThanEqual (salary: Long) : List<Employee>
 
     fun findAllByLevelLessThanEqualAndLevelGreaterThanEqual (levelLess: Long, levelGreater: Long) : List<Employee>
 
     fun findAllByStatus (status: PersonStatus) : List<Employee>
-
 }
