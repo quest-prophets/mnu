@@ -1,6 +1,6 @@
 body {
     font-family: "Helvetica", sans-serif;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 .loginPage {
@@ -93,25 +93,29 @@ body {
 
 .scientistsGrid {
     display: grid;
-    grid: "info notifications expButton artButton addButton" 50px "content content content content content";
-    grid-template-columns: 1fr 0.3fr 3.7fr 2.5fr 2.5fr;
+    grid: "empInfoNotifications expButton artButton addButton" 50px "content content content content";
+    grid-template-columns: 2fr 3fr 2.5fr 2.5fr;
     padding: 5px;
 }
 
-.grid--notifications {
-    grid-area: notifications;
+.grid--empInfoNotifications{
+    grid-area: empInfoNotifications;
+}
+
+.empInfo {
+    margin: auto 0 auto 0;
+}
+
+.empNotifications {
     cursor: pointer;
+    margin: auto auto auto 20px;
 }
 
-.grid--employeeInfo {
-    grid-area: info;
-}
-
-.gridButton{
+.gridButton {
     margin: auto;
     text-align: center;
-    font-size: 26px;
-    width: 200px;
+    font-size: 24px;
+    width: 220px;
 }
 
 .grid--expButton {
@@ -221,6 +225,13 @@ body {
     overflow-y: auto;
 }
 
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 @media (max-width: 350px) {
     .loginBox {
         border: none;
@@ -246,4 +257,57 @@ body {
     .registerCheckbox {
         margin-right: 0;
     }
+}
+
+@media (max-width: 1200px) {
+    .scientistsGrid {
+        grid-template-columns: 2fr 3fr 2.5fr 2.5fr;
+    }
+
+    .gridButton {
+        width: 180px;
+        font-size: 22px;
+    }
+
+    .grid--expButton {
+        margin-right: 5px;
+    }
+
+    .grid--artButton {
+        margin-left: 5px;
+    }
+
+    .grid--addButton {
+        width: 120px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .scientistsGrid {
+        grid: "empInfoNotifications empInfoNotifications" 50px "expButton artButton" 80px "addButton addButton" 50px "content content";
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .empNotifications{
+        margin: auto 0 auto auto;
+    }
+
+    .grid--addButton {
+        width: auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .scientistsGrid {
+        grid: "empInfoNotifications" 50px "expButton" 50px "artButton" 50px "addButton" 60px "content";
+    }
+
+    .grid--expButton {
+        margin: auto;
+    }
+
+    .grid--artButton {
+        margin: auto;
+    }
+
 }
