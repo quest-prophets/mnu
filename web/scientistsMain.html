@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>MNU</title>
+</head>
+<body>
+<div class="scientistsGrid">
+    <div class="grid--employeeInfo"> Name Surname <br> Level: x</div>
+    <div class="grid--notifications">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path d="M 16 7
+            a 5.38 5.38 0 0 0 -4.46 -4.85
+            C 11.6 1.46 11.53 0 10 0
+            S 8.4 1.46 8.46 2.15
+            A 5.38 5.38 0 0 0 4 7
+            v 6
+            l -2 2
+            v 1
+            h 16
+            v -1
+            l -2 -2 z
+            m -6 13
+            a 3 3 0 0 0 3 -3
+            H 7
+            a 3 3 0 0 0 3 3 z"></path>
+            <g class="hidden">
+                <circle fill="red" cx="15" cy="5" r="4"></circle>
+                <text id="notificationsNumber" fill="white" x="13.5" y="7" font-size="6">9</text>
+                <!-- x=11.8 for two-digit numbers -->
+            </g>
+        </svg>
+    </div>
+    <button class="grid--expButton gridButton button buttonPressed">Experiments</button>
+    <button class="grid--artButton gridButton button buttonUnpressed">Articles</button>
+    <a class="grid--addButton gridButton button buttonUnpressed">Add Experiment</a>
+</div>
+</body>
+</html>

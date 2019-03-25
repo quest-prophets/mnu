@@ -79,7 +79,9 @@ body {
 }
 
 .buttonPressed {
+    outline: none;
     background: lightgreen;
+    cursor: default;
 }
 
 .flexColumn {
@@ -87,6 +89,43 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.scientistsGrid {
+    display: grid;
+    grid: "info notifications expButton artButton addButton" 50px "content content content content content";
+    grid-template-columns: 1fr 0.3fr 3.7fr 2.5fr 2.5fr;
+    padding: 5px;
+}
+
+.grid--notifications {
+    grid-area: notifications;
+    cursor: pointer;
+}
+
+.grid--employeeInfo {
+    grid-area: info;
+}
+
+.gridButton{
+    margin: auto;
+    text-align: center;
+    font-size: 26px;
+    width: 200px;
+}
+
+.grid--expButton {
+    grid-area: expButton;
+    margin-right: 20px;
+}
+
+.grid--artButton {
+    grid-area: artButton;
+    margin-left: 20px;
+}
+
+.grid--addButton {
+    grid-area: addButton;
 }
 
 .shopHeaderFlexRow {
