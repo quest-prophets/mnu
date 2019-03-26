@@ -98,7 +98,7 @@ body {
     padding: 5px;
 }
 
-.grid--empInfoNotifications{
+.grid--empInfoNotifications {
     grid-area: empInfoNotifications;
 }
 
@@ -130,6 +130,23 @@ body {
 
 .grid--addButton {
     grid-area: addButton;
+}
+
+.securityGrid {
+    display: grid;
+    grid: "empInfoNotifications changeButton reportButton" 50px "content content content";
+    grid-template-columns: 3fr 0.7fr 0.7fr;
+    padding: 5px;
+}
+
+.grid--changeButton {
+    grid-area: changeButton;
+    margin-right: 30px;
+}
+
+.grid--reportButton {
+    grid-area: reportButton;
+    margin-right: 30px;
 }
 
 .shopHeaderFlexRow {
@@ -288,7 +305,7 @@ body {
         grid-template-columns: 1fr 1fr;
     }
 
-    .empNotifications{
+    .empNotifications {
         margin: auto 0 auto auto;
     }
 
@@ -299,7 +316,7 @@ body {
 
 @media (max-width: 400px) {
     .scientistsGrid {
-        grid: "empInfoNotifications" 50px "expButton" 50px "artButton" 50px "addButton" 60px "content";
+        grid: "empInfoNotifications" 50px "expButton" 50px "artButton" 55px "addButton" 60px "content";
     }
 
     .grid--expButton {
@@ -309,5 +326,34 @@ body {
     .grid--artButton {
         margin: auto;
     }
+}
 
+@media (max-width: 650px) {
+    .securityGrid {
+        grid: "empInfoNotifications empInfoNotifications" 50px "changeButton reportButton" 80px "content content";
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gridButton {
+        font-size: 20px;
+    }
+
+    .grid--reportButton {
+        width: auto;
+    }
+
+    .grid--changeButton {
+        width: auto;
+        margin: auto auto auto 30px;
+    }
+}
+
+@media (max-width: 395px) {
+    .securityGrid {
+        grid: "empInfoNotifications" 50px "changeButton" 80px "reportButton" 80px "content";
+    }
+
+    .gridButton {
+        margin: auto;
+    }
 }
