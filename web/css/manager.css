@@ -1,0 +1,102 @@
+body {
+    font-family: "Helvetica", sans-serif;
+    font-size: 17px;
+}
+
+.grid--managerHeader {
+    grid-area: managerHeader;
+}
+
+.empInfo {
+    margin: auto 0 auto 0;
+}
+
+.empNotifications {
+    cursor: pointer;
+    margin: auto auto auto 20px;
+}
+
+.gridButton {
+    margin: 15px auto auto auto;
+    height: 50px;
+    text-align: center;
+    font-size: 24px;
+    width: 220px;
+}
+
+.managersGrid{
+    display: grid;
+    grid: "managerHeader" 60px "managerButtons";
+}
+
+.grid--managerButtons{
+    grid-area: managerButtons;
+}
+
+.bigInput {
+    font-size: 16px;
+    height: 25px;
+}
+
+.button {
+    color: black;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 8px 22px;
+    font-size: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.buttonUnpressed {
+    box-shadow: 0 5px #cacaca;
+    background: white;
+}
+
+.buttonUnpressed:hover {
+    top: 2px;
+    box-shadow: 0 3px #cacaca;
+}
+
+.buttonUnpressed:active {
+    top: 5px;
+    box-shadow: none;
+}
+
+.buttonPressed {
+    outline: none;
+    background: lightgreen;
+    cursor: default;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.flexRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .empNotifications {
+        margin: auto 0 auto auto;
+    }
+}
