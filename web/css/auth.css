@@ -1,0 +1,131 @@
+body {
+    font-family: "Helvetica", sans-serif;
+    font-size: 17px;
+}
+
+.loginPage {
+    overflow: hidden;
+}
+
+.loginBox {
+    margin-top: -200px;
+    border: 1px solid black;
+    padding: 35px;
+}
+
+.loginItem {
+    margin-top: 15px;
+}
+
+.checkboxLabel {
+    font-size: 16px;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+}
+
+.registerCheckbox {
+    margin-right: 15px;
+}
+
+.backLink {
+    text-decoration: none;
+    margin-right: 160px;
+    color: blue;
+    cursor: pointer;
+}
+
+.backLink:hover {
+    text-decoration: underline;
+}
+
+.checkBoxFlex {
+    display: flex;
+}
+
+.bigInput {
+    font-size: 16px;
+    height: 25px;
+}
+
+.button {
+    color: black;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 8px 22px;
+    font-size: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.buttonUnpressed {
+    box-shadow: 0 5px #cacaca;
+    background: white;
+}
+
+.buttonUnpressed:hover {
+    top: 2px;
+    box-shadow: 0 3px #cacaca;
+}
+
+.buttonUnpressed:active {
+    top: 5px;
+    box-shadow: none;
+}
+
+.buttonPressed {
+    outline: none;
+    background: lightgreen;
+    cursor: default;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-height: 850px) {
+    .loginBox {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 350px) {
+    .loginBox {
+        border: none;
+    }
+
+    .bigInput {
+        width: 75vw;
+        height: 40px;
+    }
+
+    .checkBoxFlex {
+        flex-direction: column;
+    }
+
+    .backLink {
+        margin-right: 55vw
+    }
+
+    .loginBox {
+        padding: 0;
+    }
+
+    .registerCheckbox {
+        margin-right: 0;
+    }
+}
+
+
+
+

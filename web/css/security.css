@@ -1,0 +1,129 @@
+body {
+    font-family: "Helvetica", sans-serif;
+    font-size: 17px;
+}
+
+.grid--empInfoNotifications {
+    grid-area: empInfoNotifications;
+}
+
+.empInfo {
+    margin: auto 0 auto 0;
+}
+
+.securityGrid {
+    display: grid;
+    grid: "empInfoNotifications securityButtons" 50px "content content";
+    padding: 5px;
+}
+
+.gridButton {
+    text-align: center;
+    font-size: 24px;
+    width: 220px;
+}
+
+.grid--securityButtons{
+    grid-area: securityButtons;
+}
+
+.changeButton {
+    margin-right: 30px;
+}
+
+.reportButton{
+    margin-right: 10px;
+}
+
+.bigInput {
+    font-size: 16px;
+    height: 25px;
+}
+
+.button {
+    color: black;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 8px 22px;
+    font-size: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.buttonUnpressed {
+    box-shadow: 0 5px #cacaca;
+    background: white;
+}
+
+.buttonUnpressed:hover {
+    top: 2px;
+    box-shadow: 0 3px #cacaca;
+}
+
+.buttonUnpressed:active {
+    top: 5px;
+    box-shadow: none;
+}
+
+.buttonPressed {
+    outline: none;
+    background: lightgreen;
+    cursor: default;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.securityFlexRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .securityGrid {
+        grid: "empInfoNotifications" 50px "securityButtons" 80px "content";
+    }
+
+    .gridButton {
+        width: auto;
+        font-size: 20px;
+    }
+
+    .empInfo{
+        margin-top: 0;
+    }
+
+    .reportButton {
+        margin-right: 0;
+    }
+
+    .securityFlexRow{
+        justify-content: center;
+    }
+}
+
+@media (max-width: 395px) {
+    .securityGrid {
+        grid: "empInfoNotifications" 60px "securityButtons" 160px "content";
+    }
+
+    .securityFlexRow{
+        flex-direction: column;
+    }
+
+    .changeButton{
+        margin: 15px auto 20px auto;
+    }
+}
