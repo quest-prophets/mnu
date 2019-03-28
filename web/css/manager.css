@@ -5,6 +5,10 @@ body {
 
 .grid--managerHeader {
     grid-area: managerHeader;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .empInfo {
@@ -24,13 +28,23 @@ body {
     width: 220px;
 }
 
-.managersGrid{
+.managersGrid {
     display: grid;
     grid: "managerHeader" 60px "managerButtons";
 }
 
-.grid--managerButtons{
+.grid--managerButtons {
     grid-area: managerButtons;
+}
+
+.clientsListButton {
+    margin-left: 15px;
+    margin-right: 15px;
+    width: 55px;
+}
+
+.prawnsListButton {
+    width: 55px;
 }
 
 .bigInput {
@@ -77,14 +91,7 @@ body {
     justify-content: center;
 }
 
-.flexRow{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.iconRow{
+.iconRow {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -98,5 +105,32 @@ body {
 @media (max-width: 1000px) {
     .empNotifications {
         margin: auto 0 auto auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .grid--managerHeader {
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .empNotifications {
+        margin: auto;
+    }
+
+    .managersGrid {
+        grid-template-rows: 120px auto;
+    }
+}
+
+@media (max-width: 300px) {
+    .gridButton{
+        width: 75vw;
+    }
+}
+
+@media (max-width: 277px) {
+    .gridButton{
+        height: auto;
     }
 }
