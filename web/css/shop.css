@@ -84,7 +84,18 @@ body {
 
 .shop-header {
     border-bottom: 2px solid black;
-    height: 50px;
+    height: 55px;
+}
+
+.shop-header_mobile {
+    display: none;
+    grid: "profile history cart feedback";
+    column-gap: 15px;
+    border-top: 2px solid black;
+}
+
+.shop-header_mobile img {
+    margin: 5px auto auto auto;
 }
 
 .shop-grid__departments {
@@ -94,15 +105,16 @@ body {
 
 .shop-icon {
     cursor: pointer;
-    width: 45px;
+    width: 50px;
+    height: 50px;
     margin-left: 15px;
 }
 
-.shop-icon:last-child {
+.cart {
     margin-right: 20px;
 }
 
-.feedback-button {
+.feedback {
     margin-left: 20px;
     color: blue;
     font-style: italic;
@@ -111,12 +123,24 @@ body {
     position: relative;
 }
 
-.feedback-button:hover {
+.feedback:hover {
     text-decoration: underline;
 }
 
-.feedback-button_mobile {
-    display: none;
+.feedback_mobile {
+    grid-area: feedback;
+}
+
+.cart_mobile {
+    grid-area: cart;
+}
+
+.history_mobile {
+    grid-area: history;
+}
+
+.profile_mobile {
+    grid-area: profile;
 }
 
 .shop-grid__shop-catalogue {
@@ -131,6 +155,70 @@ body {
     justify-content: center;
 }
 
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.burger{
+    display: none;
+    margin: auto auto auto 10px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.department-title{
+    display: none;
+    text-align: center;
+    font-size: 20px;
+    grid-area: department-title;
+    height: 60px;
+}
+
 .hidden {
     display: none;
+}
+
+@media (max-width: 700px) {
+    .shop-grid{
+        grid: "department-title" "search-bar" "catalogue";
+    }
+
+    .shop-header {
+        display: none;
+    }
+
+    .shop-header_mobile {
+        display: grid;
+    }
+
+    .department-title{
+        display: flex;
+    }
+
+    .burger{
+        display: block;
+    }
+
+    .shop-grid__departments-title{
+        display: none;
+    }
+
+    .shop-grid__search-bar_input{
+        width: 20vw;
+    }
+}
+
+@media (max-width: 260px) {
+    .shop-header_mobile {
+        grid-column-gap: 0;
+    }
+
+    .shop-icon {
+        width: 40px;
+        height: 40px;
+    }
 }

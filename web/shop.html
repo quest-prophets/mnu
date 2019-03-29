@@ -9,12 +9,11 @@
 </head>
 <body style="margin: 7px 0">
 <div class="shop-header">
-    <a class="feedback-button" href="shop.html">Feedback</a>
-    <img alt="Feedback" class="shop-icon feedback-button_mobile" src="images/feedback.png">
+    <a class="feedback" href="shop.html">Feedback</a>
     <span class="shop-header-flex-row">You are logged in as ****
             <img alt="Profile settings" class="shop-icon" src="images/profile.png">
             <img alt="History" class="shop-icon" src="images/history.svg">
-            <img alt="Cart" class="shop-icon" src="images/cart.png">
+            <img alt="Cart" class="shop-icon cart" src="images/cart.png">
         </span>
 </div>
 <div class="shop-grid">
@@ -25,7 +24,7 @@
         <div></div>
     </div>
     <div class="shop-grid__search-bar">
-        <input class="shop-grid__search-bar__input input_big" placeholder="Search..."
+        <input class="shop-grid__search-bar_input input_big" placeholder="Search..."
         ><button class="shop-grid__search-bar_button button button_unpressed">Go!</button>
         <span class="shop-grid__search-bar_sorter">Sort by: <select class="input_big">
             <option selected>Price (asc.)</option>
@@ -37,6 +36,14 @@
     </div>
     <div class="shop-grid__shop-catalogue">
     </div>
+    <img alt="departments" class="shop-icon burger" src="images/burger.png">
+    <div class="flex-column department-title">Light weapons</div>
+</div>
+<div class="shop-header_mobile">
+    <img alt="Profile settings" class="shop-icon profile_mobile" src="images/profile.png">
+    <img alt="History" class="shop-icon history_mobile" src="images/history.svg">
+    <img alt="Cart" class="shop-icon cart_mobile" src="images/cart.png">
+    <img alt="Feedback" class="shop-icon feedback_mobile" src="images/feedback.png">
 </div>
 </body>
 </html>
