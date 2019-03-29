@@ -131,8 +131,18 @@ body {
     }
 }
 
-@media (max-width: 250px) {
+@media (max-width: 290px) {
     .administrators-menu-grid__synthesized-confiscated-weapons {
         height: 60px;
+    }
+}
+
+@media (max-width: 208px) {
+    .administrators-menu-grid__synthesized-confiscated-weapons{
+        height: 90px;
+    }
+
+    .administrators-menu-grid__clients-manufacturers{
+        height: 80px;
     }
 }
