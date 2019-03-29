@@ -8,9 +8,9 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="managersGrid">
+<div class="adminEmployeesGrid">
     <div class="flexRow grid--adminHeader">
-        <img alt="back" src="images/back.png" class="backButton roundButton buttonUnpressed">
+        <img alt="back" src="images/back.png" class="icon backButton roundButton buttonUnpressed">
         <div class="empInfo"> Name Surname <br> Level: x</div>
         <div class="empNotifications">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="50px">
@@ -37,22 +37,74 @@
             </svg>
         </div>
     </div>
-    <div class="grid--adminEmployeesTable">
+    <div class="admin-employees-grid__table">
         <table>
             <thead>
-
+            <tr>
+                <td>
+                    id
+                </td>
+                <td>
+                    Name
+                </td>
+                <td>
+                    Position
+                </td>
+                <td>
+                    Lvl
+                </td>
+                <td>
+                    Salary
+                </td>
+                <td>
+                    Date of employment
+                </td>
+            </tr>
             </thead>
             <tbody>
 
             </tbody>
         </table>
     </div>
-    <br> <br> <br> <br>
-    <img class="buttonUnpressed roundButton" src="images/dollar.png" width="50px">
-    <img class="buttonUnpressed roundButton" src="images/magnifier.png" width="50px">
-    <img class="buttonUnpressed roundButton" src="images/edit.svg" width="50px">
-    <img class="buttonUnpressed roundButton" src="images/plus.png" width="50px">
-    <img class="buttonUnpressed roundButton" src="images/xMark.png" width="50px">
+    <div class="admin-employees-grid__buttons">
+        <img alt="Add employee" id="add-button" class="buttonPressed roundButton icon" src="images/plus.png">
+        <img alt="Edit employees" id="edit-button" class="buttonUnpressed roundButton icon" src="images/edit.svg">
+        <img alt="Find employees" id="find-button" class="buttonUnpressed roundButton icon" src="images/magnifier.svg">
+        <img alt="Cash Rewards" id="reward-button" class="buttonUnpressed roundButton icon" src="images/dollar.png">
+    </div>
+    <div class="admin-employees-grid__inputs">
+        <div class="admin-employees-grid__inputs_add add-employees-inputs-grid">
+            <input class="add-employees-inputs-grid__name" placeholder="Name">
+            <input class="add-employees-inputs-grid__lvl" placeholder="Lvl">
+            <input class="add-employees-inputs-grid__salary" placeholder="Salary">
+            <input class="add-employees-inputs-grid__position" placeholder="Position">
+            <div class="add-employees-inputs-grid__type">
+                Type:
+                <label>
+                    <input type="radio" name="employee-type">
+                    Security
+                </label>
+                <label>
+                    <input type="radio" name="employee-type">
+                    Scientist
+                </label>
+                <label>
+                    <input type="radio" name="employee-type">
+                    Manager
+                </label>
+                <label>
+                    <input type="radio" name="employee-type">
+                    Administrator
+                </label>
+            </div>
+            <button class="button buttonUnpressed add-employees-inputs-grid__button">Add employee</button>
+        </div>
+        <div class="admin-employees-grid__inputs_edit">
+
+        </div>
+        <div class="admin-employees-grid__inputs_find"></div>
+        <div class="admin-employees-grid__inputs_reward"></div>
+    </div>
 </div>
 </body>
 </html>

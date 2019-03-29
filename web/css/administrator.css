@@ -3,7 +3,7 @@ body {
     font-size: 17px;
 }
 
-.roundButton{
+.roundButton {
     padding: 9px;
     border: 1px solid black;
     border-radius: 100px;
@@ -13,17 +13,117 @@ body {
     cursor: pointer;
 }
 
+.adminEmployeesGrid {
+    display: grid;
+    grid: "adminHeader adminHeader" 80px "table table" "buttons inputs";
+    grid-template-columns: 1fr 9fr;
+    row-gap: 10px;
+}
+
+.admin-employees-grid__table {
+    grid-area: table;
+}
+
+.admin-employees-grid__table table {
+    border-collapse: collapse;
+}
+
+.admin-employees-grid__table td {
+    padding: 3px 6px;
+    border: 1px solid black;
+}
+
+.admin-employees-grid__buttons {
+    grid-area: buttons;
+    display: grid;
+    grid: "add edit" "find reward";
+    row-gap: 10px;
+    column-gap: 15px;
+}
+
+#add-button{
+    grid-area: add;
+}
+
+#edit-button{
+    grid-area: edit;
+}
+
+#reward-button{
+    grid-area: reward;
+}
+
+#find-button{
+    grid-area: find;
+}
+
+.admin-employees-grid__inputs {
+    grid-area: inputs;
+}
+
+.admin-employees-grid__inputs_add {
+
+}
+
+.add-employees-inputs-grid {
+    display: grid;
+    grid: "name name type position" "lvl salary type button";
+    grid-template-columns: 2fr 2fr 1fr 2fr;
+    column-gap: 5px;
+    row-gap: 5px;
+}
+
+.add-employees-inputs-grid__name {
+    grid-area: name;
+}
+
+.add-employees-inputs-grid__lvl {
+    grid-area: lvl;
+}
+
+.add-employees-inputs-grid__salary {
+    grid-area: salary;
+}
+
+.add-employees-inputs-grid__position {
+    grid-area: position;
+}
+
+.add-employees-inputs-grid__type {
+    grid-area: type;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.add-employees-inputs-grid__button {
+    grid-area: button;
+}
+
+.admin-employees-grid__inputs_edit {
+    display: none;
+}
+
+.admin-employees-grid__inputs_find {
+    display: none;
+}
+
+.admin-employees-grid__inputs_reward {
+    display: none;
+}
+
 .grid--adminHeader {
     grid-area: adminHeader;
+    margin-top: 5px;
 }
 
 .empInfo {
-    margin: auto 0 auto 0;
+    margin: 5px 0 auto 0;
 }
 
 .empNotifications {
     cursor: pointer;
-    margin: auto auto auto 20px;
+    margin: 5px auto auto 20px;
 }
 
 .gridButton {
@@ -37,12 +137,16 @@ body {
 .flexRow {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
 }
 
-.backButton {
+.icon {
     width: 50px;
+    height: 50px;
+}
+
+.backButton {
+    margin-top: -5px;
     margin-right: 15px;
 }
 
@@ -141,7 +245,7 @@ body {
 
 @media (max-width: 1000px) {
     .empNotifications {
-        margin: auto 0 auto auto;
+        margin: 5px 0 auto auto;
     }
 }
 
