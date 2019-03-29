@@ -3,39 +3,7 @@ body {
     font-size: 17px;
 }
 
-.grid--empInfoNotifications {
-    grid-area: empInfoNotifications;
-}
-
-.empInfo {
-    margin: auto 0 auto 0;
-}
-
-.securityGrid {
-    display: grid;
-    grid: "empInfoNotifications securityButtons" 50px "content content";
-    padding: 5px;
-}
-
-.gridButton {
-    text-align: center;
-    font-size: 24px;
-    width: 220px;
-}
-
-.grid--securityButtons{
-    grid-area: securityButtons;
-}
-
-.changeButton {
-    margin-right: 30px;
-}
-
-.reportButton{
-    margin-right: 10px;
-}
-
-.bigInput {
+.input_big {
     font-size: 16px;
     height: 25px;
 }
@@ -51,35 +19,68 @@ body {
     cursor: pointer;
 }
 
-.buttonUnpressed {
+.button_unpressed {
     box-shadow: 0 5px #cacaca;
     background: white;
 }
 
-.buttonUnpressed:hover {
+.button_unpressed:hover {
     top: 2px;
     box-shadow: 0 3px #cacaca;
 }
 
-.buttonUnpressed:active {
+.button_unpressed:active {
     top: 5px;
     box-shadow: none;
 }
 
-.buttonPressed {
+.button_pressed {
     outline: none;
     background: lightgreen;
     cursor: default;
 }
 
-.flexColumn {
+.security-grid {
+    display: grid;
+    grid: "header security-buttons" 50px "content content";
+    padding: 5px;
+}
+
+.employee-header {
+    grid-area: header;
+}
+
+.employee-info {
+    margin: auto 0 auto 0;
+}
+
+.grid-button {
+    text-align: center;
+    font-size: 22px;
+    width: 220px;
+}
+
+.security-grid__security-buttons{
+    grid-area: security-buttons;
+    margin-top: 10px;
+}
+
+.security-buttons__change {
+    margin-right: 30px;
+}
+
+.security-buttons_report{
+    margin-right: 10px;
+}
+
+.flex-column {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
 }
 
-.securityFlexRow {
+.security-flex-row {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -92,38 +93,38 @@ body {
 }
 
 @media (max-width: 900px) {
-    .securityGrid {
-        grid: "empInfoNotifications" 50px "securityButtons" 80px "content";
+    .security-grid {
+        grid: "header" 50px "security-buttons" 80px "content";
     }
 
-    .gridButton {
+    .grid-button {
         width: auto;
         font-size: 20px;
     }
 
-    .empInfo{
+    .employee-info{
         margin-top: 0;
     }
 
-    .reportButton {
+    .security-buttons_report {
         margin-right: 0;
     }
 
-    .securityFlexRow{
+    .security-flex-row{
         justify-content: center;
     }
 }
 
 @media (max-width: 395px) {
-    .securityGrid {
-        grid: "empInfoNotifications" 60px "securityButtons" 160px "content";
+    .security-grid {
+        grid: "header" 60px "security-buttons" 160px "content";
     }
 
-    .securityFlexRow{
+    .security-flex-row{
         flex-direction: column;
     }
 
-    .changeButton{
+    .security-buttons__change{
         margin: 15px auto 20px auto;
     }
 }

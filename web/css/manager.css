@@ -3,24 +3,29 @@ body {
     font-size: 17px;
 }
 
-.grid--managerHeader {
-    grid-area: managerHeader;
+.managers-grid {
+    display: grid;
+    grid: "header" 60px "buttons";
+}
+
+.managers-grid__header {
+    grid-area: header;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
 
-.empInfo {
+.employee-info {
     margin: auto 0 auto 0;
 }
 
-.empNotifications {
+.employee-notifications {
     cursor: pointer;
     margin: auto auto auto 20px;
 }
 
-.gridButton {
+.grid-button {
     margin: 15px auto auto auto;
     height: 50px;
     text-align: center;
@@ -28,26 +33,21 @@ body {
     width: 220px;
 }
 
-.managersGrid {
-    display: grid;
-    grid: "managerHeader" 60px "managerButtons";
+.managers-grid__buttons {
+    grid-area: buttons;
 }
 
-.grid--managerButtons {
-    grid-area: managerButtons;
-}
-
-.clientsListButton {
+.managers-grid__client-list {
     margin-left: 15px;
     margin-right: 15px;
     width: 55px;
 }
 
-.prawnsListButton {
+.managers-grid__prawn-list {
     width: 55px;
 }
 
-.bigInput {
+.input_big {
     font-size: 16px;
     height: 25px;
 }
@@ -63,35 +63,35 @@ body {
     cursor: pointer;
 }
 
-.buttonUnpressed {
+.button_unpressed {
     box-shadow: 0 5px #cacaca;
     background: white;
 }
 
-.buttonUnpressed:hover {
+.button_unpressed:hover {
     top: 2px;
     box-shadow: 0 3px #cacaca;
 }
 
-.buttonUnpressed:active {
+.button_unpressed:active {
     top: 5px;
     box-shadow: none;
 }
 
-.buttonPressed {
+.button_pressed {
     outline: none;
     background: lightgreen;
     cursor: default;
 }
 
-.flexColumn {
+.flex-column {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.iconRow {
+.icon-row {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -103,34 +103,34 @@ body {
 }
 
 @media (max-width: 1000px) {
-    .empNotifications {
+    .employee-notifications {
         margin: auto 0 auto auto;
     }
 }
 
 @media (max-width: 400px) {
-    .grid--managerHeader {
+    .managers-grid__header {
         text-align: center;
         flex-direction: column;
     }
 
-    .empNotifications {
+    .employee-notifications {
         margin: auto;
     }
 
-    .managersGrid {
+    .managers-grid {
         grid-template-rows: 120px auto;
     }
 }
 
 @media (max-width: 300px) {
-    .gridButton{
+    .grid-button{
         width: 75vw;
     }
 }
 
 @media (max-width: 277px) {
-    .gridButton{
+    .grid-button{
         height: auto;
     }
 }

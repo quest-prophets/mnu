@@ -3,21 +3,21 @@ body {
     font-size: 17px;
 }
 
-.loginPage {
+.login-page {
     overflow: hidden;
 }
 
-.loginBox {
+.login-page__box {
     margin-top: -200px;
     border: 1px solid black;
     padding: 35px;
 }
 
-.loginItem {
+.login-page__item {
     margin-top: 15px;
 }
 
-.checkboxLabel {
+.login-page__checkbox {
     font-size: 16px;
 }
 
@@ -26,26 +26,26 @@ body {
     height: 16px;
 }
 
-.registerCheckbox {
+.registration-checkbox {
     margin-right: 15px;
 }
 
-.backLink {
+.login-page__back-link {
     text-decoration: none;
     margin-right: 160px;
     color: blue;
     cursor: pointer;
 }
 
-.backLink:hover {
+.login-page__back-link:hover {
     text-decoration: underline;
 }
 
-.checkBoxFlex {
+.checkbox-flex {
     display: flex;
 }
 
-.bigInput {
+.input_big {
     font-size: 16px;
     height: 25px;
 }
@@ -61,28 +61,28 @@ body {
     cursor: pointer;
 }
 
-.buttonUnpressed {
+.button_unpressed {
     box-shadow: 0 5px #cacaca;
     background: white;
 }
 
-.buttonUnpressed:hover {
+.button_unpressed:hover {
     top: 2px;
     box-shadow: 0 3px #cacaca;
 }
 
-.buttonUnpressed:active {
+.button_unpressed:active {
     top: 5px;
     box-shadow: none;
 }
 
-.buttonPressed {
+.button_pressed {
     outline: none;
     background: lightgreen;
     cursor: default;
 }
 
-.flexColumn {
+.flex-column {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -94,34 +94,34 @@ body {
 }
 
 @media (max-height: 850px) {
-    .loginBox {
+    .login-page__box {
         margin-top: 0;
     }
 }
 
 @media (max-width: 350px) {
-    .loginBox {
+    .login-page__box {
         border: none;
     }
 
-    .bigInput {
+    .input_big {
         width: 75vw;
         height: 40px;
     }
 
-    .checkBoxFlex {
+    .checkbox-flex {
         flex-direction: column;
     }
 
-    .backLink {
+    .login-page__back-link {
         margin-right: 55vw
     }
 
-    .loginBox {
+    .login-page__box {
         padding: 0;
     }
 
-    .registerCheckbox {
+    .registration-checkbox {
         margin-right: 0;
     }
 }

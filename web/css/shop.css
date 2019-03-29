@@ -3,96 +3,10 @@ body {
     font-size: 17px;
 }
 
-.shopHeaderFlexRow {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    float: right;
-}
-
-.shopGrid {
-    display: grid;
-    padding: 0 20px;
-    grid: "departmentsTitle searchBar" 60px "departments catalogue";
-    grid-template-columns: 1.5fr 8.5fr;
-    column-gap: 15px;
-}
-
-.shopDepartmentsTitle {
-    grid-area: departmentsTitle;
-    border: 2px solid black;
-    border-top: none;
-}
-
-.grid--shopSearchBar {
-    grid-area: searchBar;
-}
-
-.shopSearchBar {
-    margin-left: 15px;
-    margin-top: 15px;
-    border-radius: 10px 0 0 10px;
-}
-
-.shopSearchBarButton {
-    border-radius: 0 10px 10px 0;
-    padding: 3px 15px;
-}
-
-.shopSorter {
-    float: right;
-    margin-top: 15px;
-    margin-right: 15px;
-}
-
-.shopHeader {
-    border-bottom: 2px solid black;
-    height: 50px;
-}
-
-.shopDepartments {
-    grid-area: departments;
-    overflow-y: auto;
-}
-
-.shopIconButton {
-    cursor: pointer;
-    width: 40px;
-    margin-left: 15px;
-}
-
-.shopIconButton:last-child {
-    margin-right: 20px;
-}
-
-.feedbackButton {
-    margin-left: 20px;
-    color: blue;
-    font-style: italic;
-    text-decoration: none;
-    top: 10px;
-    position: relative;
-}
-
-.feedbackButton:hover {
-    text-decoration: underline;
-}
-
-.mobileFeedbackButton {
-    display: none;
-}
-
-.shopCatalogue {
-    grid-area: catalogue;
-    overflow-y: auto;
-}
-
-.bigInput {
+.input_big {
     font-size: 16px;
     height: 25px;
 }
-
 
 .button {
     color: black;
@@ -105,28 +19,112 @@ body {
     cursor: pointer;
 }
 
-.buttonUnpressed {
+.button_unpressed {
     box-shadow: 0 5px #cacaca;
     background: white;
 }
 
-.buttonUnpressed:hover {
+.button_unpressed:hover {
     top: 2px;
     box-shadow: 0 3px #cacaca;
 }
 
-.buttonUnpressed:active {
+.button_unpressed:active {
     top: 5px;
     box-shadow: none;
 }
 
-.buttonPressed {
+.button_pressed {
     outline: none;
     background: lightgreen;
     cursor: default;
 }
 
-.flexColumn {
+.shop-header-flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    float: right;
+}
+
+.shop-grid {
+    display: grid;
+    padding: 0 20px;
+    grid: "departments-title search-bar" 60px "departments catalogue";
+    grid-template-columns: 1.5fr 8.5fr;
+    column-gap: 15px;
+}
+
+.shop-grid__departments-title {
+    grid-area: departments-title;
+    border: 2px solid black;
+    border-top: none;
+}
+
+.shop-grid__search-bar {
+    grid-area: search-bar;
+    margin-top: 15px;
+}
+
+.shop-grid__search-bar_input {
+    margin-left: 15px;
+    border-radius: 10px 0 0 10px;
+}
+
+.shop-grid__search-bar_button {
+    border-radius: 0 10px 10px 0;
+    padding: 3px 15px;
+}
+
+.shop-grid__search-bar_sorter {
+    float: right;
+    margin-right: 15px;
+}
+
+.shop-header {
+    border-bottom: 2px solid black;
+    height: 50px;
+}
+
+.shop-grid__departments {
+    grid-area: departments;
+    overflow-y: auto;
+}
+
+.shop-icon {
+    cursor: pointer;
+    width: 45px;
+    margin-left: 15px;
+}
+
+.shop-icon:last-child {
+    margin-right: 20px;
+}
+
+.feedback-button {
+    margin-left: 20px;
+    color: blue;
+    font-style: italic;
+    text-decoration: none;
+    top: 10px;
+    position: relative;
+}
+
+.feedback-button:hover {
+    text-decoration: underline;
+}
+
+.feedback-button_mobile {
+    display: none;
+}
+
+.shop-grid__shop-catalogue {
+    grid-area: catalogue;
+    overflow-y: auto;
+}
+
+.flex-column {
     display: flex;
     flex-direction: column;
     align-items: center;

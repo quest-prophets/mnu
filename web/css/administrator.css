@@ -3,7 +3,7 @@ body {
     font-size: 17px;
 }
 
-.roundButton {
+.round-button {
     padding: 9px;
     border: 1px solid black;
     border-radius: 100px;
@@ -13,9 +13,9 @@ body {
     cursor: pointer;
 }
 
-.adminEmployeesGrid {
+.admin-employees-grid {
     display: grid;
-    grid: "adminHeader adminHeader" 80px "table table" "buttons inputs";
+    grid: "admin-header admin-header" 80px "table table" "buttons inputs";
     grid-template-columns: 1fr 9fr;
     row-gap: 10px;
 }
@@ -112,21 +112,21 @@ body {
     display: none;
 }
 
-.grid--adminHeader {
-    grid-area: adminHeader;
+.admin-header {
+    grid-area: admin-header;
     margin-top: 5px;
 }
 
-.empInfo {
+.employee-info {
     margin: 5px 0 auto 0;
 }
 
-.empNotifications {
+.employee-notifications {
     cursor: pointer;
     margin: 5px auto auto 20px;
 }
 
-.gridButton {
+.grid-button {
     margin: 15px auto auto auto;
     height: 80px;
     text-align: center;
@@ -134,7 +134,7 @@ body {
     width: 220px;
 }
 
-.flexRow {
+.flex-row {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -145,12 +145,12 @@ body {
     height: 50px;
 }
 
-.backButton {
+.back-button {
     margin-top: -5px;
     margin-right: 15px;
 }
 
-.bigInput {
+.input_big {
     font-size: 16px;
     height: 25px;
 }
@@ -166,28 +166,28 @@ body {
     cursor: pointer;
 }
 
-.buttonUnpressed {
+.button_unpressed {
     box-shadow: 0 5px #cacaca;
     background: white;
 }
 
-.buttonUnpressed:hover {
+.button_unpressed:hover {
     top: 2px;
     box-shadow: 0 3px #cacaca;
 }
 
-.buttonUnpressed:active {
+.button_unpressed:active {
     top: 5px;
     box-shadow: none;
 }
 
-.buttonPressed {
+.button_pressed {
     outline: none;
     background: lightgreen;
     cursor: default;
 }
 
-.flexColumn {
+.flex-column {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -198,63 +198,63 @@ body {
     display: none;
 }
 
-.administratorsGrid {
+.administrators-menu-grid {
     display: grid;
-    grid: "adminHeader adminHeader" 60px "districtButton empButton" "clientManufacturersButton expArtButton" "prawnVacButton prawnJobApplicationsButton" "prawnRegisterButton synthConfWeaponsButton"
+    grid: "admin-header admin-header" 60px "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
 }
 
-.grid--districtButton {
-    grid-area: districtButton;
+.administrators-menu-grid__district {
+    grid-area: district;
     margin-right: 30px;
 }
 
-.grid--expArtButton {
-    grid-area: expArtButton;
+.administrators-menu-grid__experiments-articles {
+    grid-area: experiments-articles;
     margin-left: 30px;
 }
 
-.grid--clientManufacturersButton {
-    grid-area: clientManufacturersButton;
+.administrators-menu-grid__clients-manufacturers {
+    grid-area: client-manufacturers;
     margin-right: 30px;
 }
 
-.grid--empButton {
-    grid-area: empButton;
+.administrators-menu-grid__employees {
+    grid-area: employees;
     margin-left: 30px;
 }
 
-.grid--prawnVacButton {
-    grid-area: prawnVacButton;
+.administrators-menu-grid__prawn-vacancies {
+    grid-area: prawn-vacancies;
     margin-right: 30px;
 }
 
-.grid--synthConfWeaponsButton {
-    grid-area: synthConfWeaponsButton;
+.administrators-menu-grid__synthesized-confiscated-weapons {
+    grid-area: synthesized-confiscated-weapons;
     margin-left: 30px;
 }
 
-.grid--prawnRegisterButton {
-    grid-area: prawnRegisterButton;
+.administrators-menu-grid__prawn-registration {
+    grid-area: prawn-registration;
     margin-right: 30px;
 }
 
-.grid--prawnJobApplicationsButton {
-    grid-area: prawnJobApplicationsButton;
+.administrators-menu-grid__prawn-job-applications {
+    grid-area: prawn-job-applications;
     margin-left: 30px;
 }
 
 @media (max-width: 1000px) {
-    .empNotifications {
+    .employee-notifications {
         margin: 5px 0 auto auto;
     }
 }
 
 @media (max-width: 700px) {
-    .administratorsGrid {
-        grid: "adminHeader" 60px "districtButton" "empButton" "clientManufacturersButton" "expArtButton" "prawnVacButton" "prawnJobApplicationsButton" "prawnRegisterButton" "synthConfWeaponsButton"
+    .administrators-menu-grid {
+        grid: "admin-header" 60px "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
     }
 
-    .gridButton {
+    .grid-button {
         width: auto;
         height: 40px;
         margin: auto auto 15px auto;
@@ -262,7 +262,7 @@ body {
 }
 
 @media (max-width: 250px) {
-    .grid--synthConfWeaponsButton {
+    .administrators-menu-grid__synthesized-confiscated-weapons {
         height: 60px;
     }
 }

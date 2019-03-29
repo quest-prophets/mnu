@@ -3,55 +3,55 @@ body {
     font-size: 17px;
 }
 
-.grid--empInfoNotifications {
-    grid-area: empInfoNotifications;
+.employee-header {
+    grid-area: header;
 }
 
-.scientistsGrid {
+.scientists-grid {
     display: grid;
-    grid: "empInfoNotifications expButton artButton addButton" 50px "content content content content";
+    grid: "header expButton artButton addButton" 50px "content content content content";
     grid-template-columns: 2fr 3fr 2.5fr 2.5fr;
     padding: 5px;
 }
 
-.empInfo {
+.employee-info {
     margin: auto 0 auto 0;
 }
 
-.empNotifications {
+.employee-notifications {
     cursor: pointer;
     margin: auto auto auto 20px;
 }
 
-.gridButton {
+.grid-button {
     margin: auto;
     text-align: center;
     font-size: 24px;
     width: 220px;
 }
 
-.grid--expButton {
+.scientists-grid__experiments {
     grid-area: expButton;
     margin-right: 20px;
 }
 
-.grid--artButton {
+.scientists-grid__articles {
     grid-area: artButton;
     margin-left: 20px;
 }
 
-.grid--addButton {
+.scientists-grid__add {
     grid-area: addButton;
 }
 
-.flexRow {
+.flex-row {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
 
-.bigInput {
+.input_big {
     font-size: 16px;
     height: 25px;
 }
@@ -67,28 +67,28 @@ body {
     cursor: pointer;
 }
 
-.buttonUnpressed {
+.button_unpressed {
     box-shadow: 0 5px #cacaca;
     background: white;
 }
 
-.buttonUnpressed:hover {
+.button_unpressed:hover {
     top: 2px;
     box-shadow: 0 3px #cacaca;
 }
 
-.buttonUnpressed:active {
+.button_unpressed:active {
     top: 5px;
     box-shadow: none;
 }
 
-.buttonPressed {
+.button_pressed {
     outline: none;
     background: lightgreen;
     cursor: default;
 }
 
-.flexColumn {
+.flex-column {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -100,61 +100,61 @@ body {
 }
 
 @media (max-width: 1200px) {
-    .scientistsGrid {
+    .scientists-grid {
         grid-template-columns: 2fr 3fr 2.5fr 2.5fr;
     }
 
-    .gridButton {
+    .grid-button {
         width: 180px;
         font-size: 22px;
     }
 
-    .grid--expButton {
+    .scientists-grid__experiments {
         margin-right: 5px;
     }
 
-    .grid--artButton {
+    .scientists-grid__articles {
         margin-left: 5px;
     }
 
-    .grid--addButton {
+    .scientists-grid__add {
         width: 120px;
     }
 }
 
 @media (max-width: 1000px) {
-    .scientistsGrid {
-        grid: "empInfoNotifications empInfoNotifications" 50px "expButton artButton" 80px "addButton addButton" 50px "content content";
+    .scientists-grid {
+        grid: "header header" 50px "expButton artButton" 80px "addButton addButton" 50px "content content";
         grid-template-columns: 1fr 1fr;
     }
 
-    .empNotifications {
+    .employee-notifications {
         margin: auto 0 auto auto;
     }
 
-    .grid--addButton {
+    .scientists-grid__add {
         width: auto;
     }
 }
 
 @media (max-width: 400px) {
-    .scientistsGrid {
-        grid: "empInfoNotifications" 75px "expButton" 65px "artButton" 65px "addButton" 65px "content";
+    .scientists-grid {
+        grid: "header" 75px "expButton" 65px "artButton" 65px "addButton" 65px "content";
     }
 
-    .gridButton {
+    .grid-button {
         margin: auto;
     }
 
-    .grid--addButton{
+    .scientists-grid__add{
         margin-top: 10px;
     }
 
-    .empInfo {
+    .employee-info {
         margin-top: 0;
     }
 
-    .empNotifications {
+    .employee-notifications {
         margin-top: 0;
     }
 }
