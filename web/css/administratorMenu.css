@@ -1,0 +1,138 @@
+body {
+    font-family: "Helvetica", sans-serif;
+    font-size: 17px;
+}
+
+.button {
+    color: black;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 8px 22px;
+    font-size: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.button_unpressed {
+    box-shadow: 0 5px #cacaca;
+    background: white;
+}
+
+.button_unpressed:hover {
+    top: 2px;
+    box-shadow: 0 3px #cacaca;
+}
+
+.button_unpressed:active {
+    top: 5px;
+    box-shadow: none;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-header {
+    grid-area: admin-header;
+    margin-top: 5px;
+}
+
+.employee-info {
+    margin: 5px 0 auto 0;
+}
+
+.employee-notifications {
+    cursor: pointer;
+    margin: 5px auto auto 20px;
+}
+
+.grid-button {
+    margin: 15px auto auto auto;
+    height: 80px;
+    text-align: center;
+    font-size: 24px;
+    width: 220px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.administrators-menu-grid {
+    display: grid;
+    grid: "admin-header admin-header" 60px "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
+}
+
+.administrators-menu-grid__district {
+    grid-area: district;
+    margin-right: 30px;
+}
+
+.administrators-menu-grid__experiments-articles {
+    grid-area: experiments-articles;
+    margin-left: 30px;
+}
+
+.administrators-menu-grid__clients-manufacturers {
+    grid-area: client-manufacturers;
+    margin-right: 30px;
+}
+
+.administrators-menu-grid__employees {
+    grid-area: employees;
+    margin-left: 30px;
+}
+
+.administrators-menu-grid__prawn-vacancies {
+    grid-area: prawn-vacancies;
+    margin-right: 30px;
+}
+
+.administrators-menu-grid__synthesized-confiscated-weapons {
+    grid-area: synthesized-confiscated-weapons;
+    margin-left: 30px;
+}
+
+.administrators-menu-grid__prawn-registration {
+    grid-area: prawn-registration;
+    margin-right: 30px;
+}
+
+.administrators-menu-grid__prawn-job-applications {
+    grid-area: prawn-job-applications;
+    margin-left: 30px;
+}
+
+@media (max-width: 1000px) {
+    .employee-notifications {
+        margin: 5px 0 auto auto;
+    }
+}
+
+@media (max-width: 700px) {
+    .administrators-menu-grid {
+        grid: "admin-header" 60px "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
+    }
+
+    .grid-button {
+        width: auto;
+        height: 40px;
+        margin: auto auto 15px auto;
+    }
+}
+
+@media (max-width: 250px) {
+    .administrators-menu-grid__synthesized-confiscated-weapons {
+        height: 60px;
+    }
+}
