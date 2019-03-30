@@ -220,22 +220,22 @@ body {
 }
 
 @media (max-width: 360px) {
-    .shop-grid__search-bar{
+    .shop-grid__search-bar {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
     }
 
-    .shop-grid__search-bar_sorter{
+    .shop-grid__search-bar_sorter {
         margin-top: 10px;
     }
 
-    .shop-grid__search-bar_input{
+    .shop-grid__search-bar_input {
         width: 40vw;
     }
 
-    .department-title{
+    .department-title {
         margin-left: 40px;
     }
 }
@@ -256,12 +256,12 @@ body {
 }
 
 @media (max-width: 240px) {
-    .department-title{
+    .department-title {
         margin-top: 35px;
         margin-left: 0;
     }
 
-    .shop-grid__search-bar_sorter{
+    .shop-grid__search-bar_sorter {
         display: flex;
         flex-direction: column;
         align-items: center;
