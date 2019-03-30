@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="css/scientistNewExperiment.css">
+    <title>MNU</title>
+</head>
+<body>
+<div class="grid">
+    <div class="flex-row header">
+        <a href="scientistsMain.html">
+            <img alt="back" src="images/back.png" class="icon back-button round-button button_unpressed">
+        </a>
+        <div class="info"> Name Surname <br> Level: x</div>
+        <div class="notifications">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="50px">
+                <path d="M 16 7
+            a 5.38 5.38 0 0 0 -4.46 -4.85
+            C 11.6 1.46 11.53 0 10 0
+            S 8.4 1.46 8.46 2.15
+            A 5.38 5.38 0 0 0 4 7
+            v 6
+            l -2 2
+            v 1
+            h 16
+            v -1
+            l -2 -2 z
+            m -6 13
+            a 3 3 0 0 0 3 -3
+            H 7
+            a 3 3 0 0 0 3 3 z"></path>
+                <g class="hidden">
+                    <circle fill="red" cx="15" cy="5" r="4"></circle>
+                    <text id="notificationsNumber" fill="white" x="13.5" y="7" font-size="6">9</text>
+                    <!-- x=11.8 for two-digit numbers -->
+                </g>
+            </svg>
+        </div>
+    </div>
+    <div class="grid__inputs flex-column">
+        <input class="input_big" placeholder="Title">
+        <select class="input_big" >
+            <option disabled selected hidden>Type</option>
+            <option>Minor</option>
+            <option>Major</option>
+        </select>
+        <input class="input_big" placeholder="Assistants">
+        <button class="grid__assistants-button button button_unpressed">Choose assistants</button>
+        <input class="input_big" type="datetime-local" placeholder="Date">
+        <textarea class="text-area_big input_big" placeholder="Description"></textarea>
+        <button class="button button_unpressed">Submit experiment</button>
+    </div>
+    <div class="grid__assistants-table">
+        <table>
+            <thead>
+            <tr>
+                <td>
+                    id
+                </td>
+                <td>
+                    Name
+                </td>
+                <td>
+                    Position
+                </td>
+                <td>
+                    Level
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

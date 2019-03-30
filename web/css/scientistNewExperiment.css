@@ -1,0 +1,172 @@
+body {
+    font-family: "Helvetica", sans-serif;
+    font-size: 17px;
+}
+
+.header {
+    grid-area: header;
+}
+
+.grid {
+    display: grid;
+    grid: "header header" 80px "inputs table";
+    padding: 0 5px;
+}
+
+.grid__inputs {
+    grid-area: inputs;
+    margin-top: 10px;
+}
+
+.grid__inputs * {
+    margin-top: 20px;
+}
+
+.text-area_big {
+    min-height: 100px;
+}
+
+.grid__assistants-table {
+    grid-area: table;
+    margin-top: 30px;
+}
+
+.grid__assistants-table table {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+.grid__assistants-table td {
+    padding: 3px 6px;
+    border: 1px solid black;
+}
+
+.info {
+    margin: auto 0 auto 0;
+}
+
+.notifications {
+    cursor: pointer;
+    margin: auto auto auto 20px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.input_big {
+    font-size: 16px;
+    height: 30px;
+    width: 300px;
+}
+
+.text-area_big {
+    min-height: 100px;
+}
+
+.button {
+    color: black;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 8px 22px;
+    font-size: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.button_unpressed {
+    box-shadow: 0 5px #cacaca;
+    background: white;
+}
+
+.button_unpressed:hover {
+    top: 2px;
+    box-shadow: 0 3px #cacaca;
+}
+
+.button_unpressed:active {
+    top: 5px;
+    box-shadow: none;
+}
+
+.button_pressed {
+    outline: none;
+    background: lightgreen;
+    cursor: default;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.round-button {
+    padding: 9px;
+    border: 1px solid black;
+    border-radius: 100px;
+    color: black;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+}
+
+.grid__assistants-button {
+    display: none;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+}
+
+.back-button {
+    margin-top: 10px;
+    margin-right: 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 750px) {
+    .notifications {
+        margin: auto 0 auto auto;
+    }
+
+    .grid {
+        grid: "header" 80px "inputs";
+        padding: 0;
+    }
+
+    .grid__assistants-table {
+        display: none;
+    }
+
+    .grid__assistants-button {
+        display: block;
+    }
+}
+
+@media (max-width: 350px) {
+    body {
+        margin: 5px;
+    }
+
+    .input_big {
+        width: 80vw;
+    }
+
+    .text-area_big {
+        width: 80vw;
+    }
+
+    .button{
+        width: 80vw;
+    }
+}

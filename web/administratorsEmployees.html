@@ -78,8 +78,8 @@
     <div class="admin-employees-grid__inputs flex-column">
         <div class="admin-employees-grid__inputs_add add-employees-inputs-grid flex-column">
             <input class="add-employees-inputs-grid__name" placeholder="Name">
-            <input class="add-employees-inputs-grid__lvl" placeholder="Lvl">
-            <input class="add-employees-inputs-grid__salary" placeholder="Salary">
+            <input type="number" min="1" max="10" class="add-employees-inputs-grid__lvl" placeholder="Lvl">
+            <input type="number" step="10" class="add-employees-inputs-grid__salary" placeholder="Salary">
             <input class="add-employees-inputs-grid__position" placeholder="Position">
             <select class="add-employees-inputs-grid__type">
                 <option disabled selected hidden>
