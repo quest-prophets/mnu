@@ -19,7 +19,7 @@ class AuthorizationController {
     fun login() = "/index.html"
 
     @GetMapping("/register")
-    fun register() = "/index.html"
+    fun register() = "/register.html"
 
     @GetMapping("/logout")
     fun logout() = "/index.html"
