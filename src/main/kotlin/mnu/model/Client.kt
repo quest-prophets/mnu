@@ -9,9 +9,7 @@ import javax.persistence.*
 @Table(name = "clients")
 data class Client (@Column(nullable = false) var name: String = "",
                    @Column(nullable = false, unique = true) var email: String = "",
-                   @Enumerated(EnumType.STRING) var gender: Gender = Gender.MALE,
-                   @Enumerated(EnumType.STRING) var type: ClientType = ClientType.CLIENT,
-                   var dateOfBirth: LocalDateTime? = null) {
+                   @Enumerated(EnumType.STRING) var type: ClientType = ClientType.CLIENT) {
     @Id
     var userId: Long? = null
 

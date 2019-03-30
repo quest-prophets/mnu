@@ -1,6 +1,5 @@
 package mnu.model.employee
 
-import mnu.model.enums.Gender
 import mnu.model.enums.PersonStatus
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -13,8 +12,6 @@ import javax.persistence.FetchType
 @Entity
 @Table (name = "employees")
 data class Employee (@Column(nullable = false) var name: String = "",
-                     @Enumerated(EnumType.STRING) var gender: Gender = Gender.MALE,
-                     var dateOfBirth: LocalDateTime? = null,
                      var dateOfEmployment: LocalDateTime? = null) {
     @Id
     var userId: Long? = null

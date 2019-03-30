@@ -87,14 +87,18 @@ body {
     height: 55px;
 }
 
-.shop-header_mobile {
+.shop-mobile-footer {
     display: none;
     grid: "profile history cart feedback";
     column-gap: 15px;
     border-top: 2px solid black;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
-.shop-header_mobile img {
+.shop-mobile-footer img {
     margin: 5px auto auto auto;
 }
 
@@ -155,22 +159,22 @@ body {
     justify-content: center;
 }
 
-.flex-row{
+.flex-row {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
 
-.burger{
+.burger {
     display: none;
     margin: auto auto auto 10px;
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    position: fixed;
+    top: 5px;
+    left: 0;
 }
 
-.department-title{
+.department-title {
     display: none;
     text-align: center;
     font-size: 20px;
@@ -183,42 +187,84 @@ body {
 }
 
 @media (max-width: 700px) {
-    .shop-grid{
+    .shop-grid {
         grid: "department-title" "search-bar" "catalogue";
+        grid-template-columns: 100%;
+        grid-column-gap: 0;
+        padding: 0;
     }
 
     .shop-header {
         display: none;
     }
 
-    .shop-header_mobile {
+    .shop-mobile-footer {
         display: grid;
     }
 
-    .department-title{
+    .department-title {
         display: flex;
     }
 
-    .burger{
+    .burger {
         display: block;
     }
 
-    .shop-grid__departments-title{
+    .shop-grid__departments-title {
         display: none;
     }
 
-    .shop-grid__search-bar_input{
+    .shop-grid__search-bar_input {
         width: 20vw;
     }
 }
 
+@media (max-width: 360px) {
+    .shop-grid__search-bar{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .shop-grid__search-bar_sorter{
+        margin-top: 10px;
+    }
+
+    .shop-grid__search-bar_input{
+        width: 40vw;
+    }
+
+    .department-title{
+        margin-left: 40px;
+    }
+}
+
 @media (max-width: 260px) {
-    .shop-header_mobile {
+    .shop-mobile-footer {
         grid-column-gap: 0;
     }
 
     .shop-icon {
         width: 40px;
         height: 40px;
+    }
+
+    .burger {
+        top: 10px;
+    }
+}
+
+@media (max-width: 240px) {
+    .department-title{
+        margin-top: 35px;
+        margin-left: 0;
+    }
+
+    .shop-grid__search-bar_sorter{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 }

@@ -1,5 +1,6 @@
 package mnu.model
 
+import mnu.model.enums.Role
 import javax.persistence.*
 
 @Entity
@@ -9,4 +10,7 @@ data class User (@Column(nullable = false, unique = true) var login: String = ""
     @Id
     @GeneratedValue
     var id: Long? = null
+
+    @Enumerated(EnumType.STRING)
+    var role: Role? = null
 }

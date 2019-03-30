@@ -7,8 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "prawns")
-data class Prawn (@Column(nullable = false) var name: String = "",
-                  var dateOfBirth: LocalDateTime = LocalDateTime.now()) {
+data class Prawn (@Column(nullable = false) var name: String = "") {
     @Id
     var userId: Long? = null
 
