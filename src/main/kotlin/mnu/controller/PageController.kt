@@ -38,6 +38,9 @@ class PageController {
     @GetMapping("/sciMain")
     fun sciMain() = "scientistsMain.html"
 
+    @GetMapping("/sciExperiment")
+    fun sciExperiment() = "scientistsNewExperiment.html"
+
     @GetMapping("/secMain")
     fun secMain() = "securityMain.html"
 
