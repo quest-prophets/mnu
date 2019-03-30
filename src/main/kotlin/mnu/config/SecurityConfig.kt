@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.context.request.RequestContextListener
@@ -49,12 +50,23 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 .formLogin()
                 .loginPage("/auth/login")
                 .successHandler { request, response, authentication -> run {
+                    val roles = AuthorityUtils.authorityListToSet(authentication.authorities)
                     response.status = 200
                     response.contentType = MediaType.APPLICATION_JSON_VALUE
                     response.outputStream.print("{\"Login\":\"" + request.getParameter("login") + "\"}")
+                    if (roles.contains("ADMIN"))
+                        response.sendRedirect("/administratorsMenu")
+                    if (roles.contains("MANAGER"))
+                        response.sendRedirect("/managersMenu")
+                    if (roles.contains("SCIENTIST"))
+                        response.sendRedirect("/scientistMain")
+                    if (roles.contains("SECURITY"))
+                        response.sendRedirect("/securityMain")
+                    if (roles.contains("CLIENT") || roles.contains("MANUFACTURER"))
+                        response.sendRedirect("/shop")
                 }}
                 .failureHandler { request, response, exception -> response.status = 401 }
-                .usernameParameter("username")
+                .usernameParameter("login")
                 .passwordParameter("password")
                 .permitAll()
             .and()
