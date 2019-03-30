@@ -19,6 +19,8 @@ data class NewWeaponRequest (@Column(nullable = false) var name: String = "",
                              var client: Client? = null*/) {
 
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private val request: Request? = null

@@ -11,6 +11,8 @@ data class Client (@Column(nullable = false) var name: String = "",
                    @Column(nullable = false, unique = true) var email: String = "",
                    @Enumerated(EnumType.STRING) var type: ClientType = ClientType.CLIENT) {
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     val user: User? = null

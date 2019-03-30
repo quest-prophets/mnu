@@ -14,6 +14,8 @@ import javax.persistence.FetchType
 data class Employee (@Column(nullable = false) var name: String = "",
                      var dateOfEmployment: LocalDateTime? = null) {
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     val user: User? = null

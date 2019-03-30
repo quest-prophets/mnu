@@ -8,6 +8,8 @@ import javax.persistence.*
 @Table(name = "managers")
 class ManagerEmployee {
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private val employee: Employee? = null

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.*
 import org.springframework.data.repository.query.Param
 
 interface PurchaseRequestRepository : JpaRepository <PurchaseRequest, Long>{
-    fun findAllByClient(client: Client) : List<PurchaseRequest>
+ //   fun findAllByClient(client: Client) : List<PurchaseRequest>
 /*
     @Query("select r.id, pr.requester_id, sc.id from purchase_requests pr" +
             " inner join requests r on (pr.request_id = r.id)" +

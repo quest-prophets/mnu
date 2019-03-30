@@ -18,6 +18,8 @@ data class NewTransportRequest (@Column(nullable = false) var name: String = "",
                              @JoinColumn(name = "requester_id", referencedColumnName = "user_id")
                              var client: Client? = null*/)  {
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private val request: Request? = null

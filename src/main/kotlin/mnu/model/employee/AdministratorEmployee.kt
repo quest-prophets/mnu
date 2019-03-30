@@ -10,6 +10,8 @@ import javax.persistence.FetchType
 @Table (name = "administrators")
 class AdministratorEmployee {
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private val employee: Employee? = null

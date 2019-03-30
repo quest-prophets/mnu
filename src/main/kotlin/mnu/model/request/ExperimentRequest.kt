@@ -22,6 +22,8 @@ data class ExperimentRequest (@Column(nullable = false) var title: String = "",
                                   inverseJoinColumns = [JoinColumn(name = "assistant_id")])
                               var assistants: List<ScientistEmployee>? = null) {
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private val request: Request? = null

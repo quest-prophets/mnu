@@ -9,6 +9,8 @@ import javax.persistence.*
 @Table(name = "prawns")
 data class Prawn (@Column(nullable = false) var name: String = "") {
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     val user: User? = null

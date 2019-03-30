@@ -14,6 +14,8 @@ data class PurchaseRequest (/*@ManyToOne(fetch = FetchType.EAGER)
                             @JoinColumn(name = "cart_id", referencedColumnName = "id")
                             var cart: ShoppingCart? = null) {
     @Id
+    private var id: Long? = null
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private val request: Request? = null
