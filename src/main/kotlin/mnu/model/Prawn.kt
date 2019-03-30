@@ -9,8 +9,6 @@ import javax.persistence.*
 @Table(name = "prawns")
 data class Prawn (@Column(nullable = false) var name: String = "") {
     @Id
-    var userId: Long? = null
-
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     val user: User? = null
@@ -18,11 +16,11 @@ data class Prawn (@Column(nullable = false) var name: String = "") {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "house_id", referencedColumnName = "id")
     var districtHouse: DistrictHouse? = null
-
+/*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
     var manager: ManagerEmployee? = null
-
+*/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", referencedColumnName = "id")
     var job: Vacancy? = null

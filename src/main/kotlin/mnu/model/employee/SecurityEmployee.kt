@@ -9,8 +9,6 @@ import javax.persistence.*
 @Table(name = "security_employees")
 class SecurityEmployee {
     @Id
-    var employeeId: Long? = null
-
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private val employee: Employee? = null

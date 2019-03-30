@@ -12,9 +12,9 @@ data class ExperimentRequest (@Column(nullable = false) var title: String = "",
                               var description: String = "",
                               var date: LocalDateTime = LocalDateTime.now(),
 
-                              @ManyToOne(fetch = FetchType.EAGER)
+                              /*@ManyToOne(fetch = FetchType.EAGER)
                               @JoinColumn(name = "examinator_id", referencedColumnName = "employee_id")
-                              var examinator: ScientistEmployee? = null,
+                              var examinator: ScientistEmployee? = null,*/
 
                               @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
                               @JoinTable(name = "assistants_in_experiment_requests",
@@ -22,8 +22,6 @@ data class ExperimentRequest (@Column(nullable = false) var title: String = "",
                                   inverseJoinColumns = [JoinColumn(name = "assistant_id")])
                               var assistants: List<ScientistEmployee>? = null) {
     @Id
-    var requestId: Long? = null
-
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private val request: Request? = null

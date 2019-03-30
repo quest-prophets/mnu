@@ -5,6 +5,8 @@ import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.*
 
+@Entity
+@Table(name = "district_incidents")
 data class DistrictIncident (@Min(0) @Max(3) var dangerLevel: Short = 0,
                              var description: String = "",
                              var appearanceTime: LocalDateTime = LocalDateTime.now()) {
