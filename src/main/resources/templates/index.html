@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -8,13 +8,14 @@
     <title>MNU</title>
 </head>
 <body class="login-page">
-<div class="flex-column" style="height: 100vh">
-    <div class="flex-column login-page__box">
-        <input class="login-page__item input_big" placeholder="Login">
-        <input type="password" class="login-page__item input_big" placeholder="Password">
-        <a class="login-page__item button button_unpressed" href="index.html">Log in</a>
-        <a class="login-page__item button button_unpressed" href="register.html">Register</a>
-    </div>
+<div sec:authorize="isAuthenticated()">
+    welcome........
+    <span sec:authentication="name"></span>
+    <a th:href="@{/auth/logout}">logout</a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    Goodbye despair
+    <a th:href="@{/auth/login}">login retard</a>
 </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package mnu.controller
 
+import mnu.form.LoginForm
 import mnu.form.RegistrationForm
 import mnu.model.Client
 import mnu.model.User
@@ -25,7 +26,10 @@ class AuthorizationController {
     private val clientRepository: ClientRepository? = null
 
     @GetMapping("/login")
-    fun login() = "/index.html"
+    fun login(model: Model): String {
+        model.addAttribute("form", LoginForm())
+        return "/login.html"
+    }
 
     @GetMapping("/register")
     fun register(model: Model): String {
@@ -54,10 +58,20 @@ class AuthorizationController {
             return if (existingUser != null) {
                 "Username '${form.username}' is already taken. Please try again."
             } else {
-                val newUser = User(form.username, form.password, Role.valueOf(form.type))
-                
+                val role = when (form.type) {
+                    "customer" -> Role.CLIENT
+                    "manufacturer" -> Role.MANUFACTURER
+                    else -> return "Error"
+                }
+                val newUser = User(form.username, form.password, role)
+
+                val clientType = when (form.type) {
+                    "customer" -> ClientType.CLIENT
+                    "manufacturer" -> ClientType.MANUFACTURER
+                    else -> return "Error"
+                }
                 userRepository?.save(newUser)
-                clientRepository?.save(Client(form.name, form.email, ClientType.valueOf(form.type)).apply { this.user = newUser })
+                clientRepository?.save(Client(form.name, form.email, clientType).apply { this.user = newUser })
 
                 "redirect:index.html"
             }

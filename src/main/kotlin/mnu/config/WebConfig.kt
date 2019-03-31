@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
 
 
 @Configuration
@@ -32,6 +33,7 @@ class WebConfig : WebMvcConfigurer {
     fun templateEngine(): SpringTemplateEngine {
 
         val templateEngine = SpringTemplateEngine()
+        templateEngine.setAdditionalDialects(setOf(SpringSecurityDialect()))
         templateEngine.setTemplateResolver(templateResolver())
 
         return templateEngine
