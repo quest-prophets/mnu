@@ -9,7 +9,7 @@ interface ClientRepository : JpaRepository<Client, Long>{
 
     fun findByEmail (email: String) : Client
 
- //   fun findAllByManager (manager: ManagerEmployee) : List<Client>
+    fun findAllByManager (manager: ManagerEmployee) : List<Client>
 
     fun findAllByType (type: ClientType) : List<Client>
 }
