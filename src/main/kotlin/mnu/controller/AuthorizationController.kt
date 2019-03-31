@@ -49,7 +49,7 @@ class AuthorizationController {
             } else {
 
 //              user.active = true
-                user.role = Role.CLIENT
+              //  user.role = Role.CLIENT
                 userRepository?.save(user)
 
                 authResponse.success = true

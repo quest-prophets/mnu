@@ -3,13 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="css/auth.css">
+    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="../static/css/auth.css">
+    <script type="text/javascript" src="../static/js/register.js"></script>
     <title>MNU</title>
 </head>
 <body class="login-page">
 <div class="flex-column" style="height: 100vh">
-    <div class="flex-column login-page__box">
+    <form action="/auth/register" method="post" class="flex-column login-page__box">
         <a class="login-page__back-link" href="index.html">< back</a>
         <input class="login-page__item input_big" placeholder="Login">
         <input type="password" class="login-page__item input_big" placeholder="Password">
@@ -26,8 +27,8 @@
                 <label class="login-page__checkbox" for="manufacturerRadio">Manufacturer</label>
             </div>
         </div>
-        <a class="login-page__item button button_unpressed" href="register.html">Register</a>
-    </div>
+        <input type="submit" class="login-page__item button button_unpressed" value="Register">
+    </form>
 </div>
 </body>
 </html>
