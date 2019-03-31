@@ -6,11 +6,9 @@ import javax.persistence.*
 @Entity
 @Table(name = "users")
 data class User (@Column(nullable = false, unique = true) var login: String = "",
-                 var password: String = "") {
+                 var password: String = "",
+                 @Enumerated(EnumType.STRING) var role: Role? = null) {
     @Id
     @GeneratedValue
     var id: Long? = null
-
-    @Enumerated(EnumType.STRING)
-    var role: Role? = null
 }
