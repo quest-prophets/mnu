@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="../static/css/auth.css">
-    <script type="text/javascript" src="../static/js/register.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/auth.css}">
+    <script type="text/javascript" th:src="@{/js/register.js}"></script>
     <title>MNU</title>
 </head>
 <body class="login-page">
 <div class="flex-column" style="height: 100vh">
-    <form action="/auth/register" method="post" class="flex-column login-page__box">
+    <form action="#" th:action="@{/auth/register}" th:object="${form}" method="post" class="flex-column login-page__box">
         <a class="login-page__back-link" href="index.html">< back</a>
-        <input class="login-page__item input_big" placeholder="Login">
-        <input type="password" class="login-page__item input_big" placeholder="Password">
-        <input type="password" class="login-page__item input_big" placeholder="Confirm password">
-        <input type="email" class="login-page__item input_big" placeholder="Email">
-        <input class="login-page__item input_big" placeholder="Name">
+        <input th:field="*{username}" class="login-page__item input_big" placeholder="Login">
+        <input th:field="*{password}" type="password" class="login-page__item input_big" placeholder="Password">
+        <input th:field="*{email}" type="email" class="login-page__item input_big" placeholder="Email">
+        <input th:field="*{name}" class="login-page__item input_big" placeholder="Name">
         <div class="checkbox-flex">
             <div class="registration-checkbox">
-                <input id="customerRadio" type="radio" name="clientType" class="login-page__item checkbox">
+                <input th:field="*{type}" th:value="customer" id="customerRadio" type="radio" name="clientType" class="login-page__item checkbox">
                 <label class="login-page__checkbox" for="customerRadio">Customer</label>
             </div>
             <div class="registration-checkbox">
-                <input id="manufacturerRadio" type="radio" name="clientType" class="login-page__item checkbox">
+                <input th:field="*{type}" th:value="manufacturer" id="manufacturerRadio" type="radio" name="clientType" class="login-page__item checkbox">
                 <label class="login-page__checkbox" for="manufacturerRadio">Manufacturer</label>
             </div>
         </div>
