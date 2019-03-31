@@ -8,9 +8,9 @@ import javax.persistence.*
 
 @Entity
 @Table (name = "change_equipment_requests")
-data class ChangeEquipmentRequest (/*@ManyToOne(fetch = FetchType.EAGER)
-                                   @JoinColumn(name = "requester_id", referencedColumnName = "employee_id")
-                                   var employee: SecurityEmployee? = null,*/
+data class ChangeEquipmentRequest (@ManyToOne(fetch = FetchType.EAGER)
+                                   @JoinColumn(name = "requester_id", referencedColumnName = "employee_user_id")
+                                   var employee: SecurityEmployee? = null,
 
                                    @ManyToOne(fetch = FetchType.EAGER)
                                    @JoinColumn(name = "new_weapon_id", referencedColumnName = "id")

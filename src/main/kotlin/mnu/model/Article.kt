@@ -12,9 +12,9 @@ data class Article (@Column(nullable = false) var title: String = "",
     @Id
     @GeneratedValue
     var id: Long? = null
-//
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "scientist_id", referencedColumnName = "employee_id")
-//    var scientist: ScientistEmployee? = null
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "scientist_id", referencedColumnName = "employee_user_id")
+    var scientist: ScientistEmployee? = null
 
 }

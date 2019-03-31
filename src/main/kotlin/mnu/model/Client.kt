@@ -17,7 +17,7 @@ data class Client (@Column(nullable = false) var name: String = "",
     @MapsId
     val user: User? = null
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
-//    var manager: ManagerEmployee? = null
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "manager_id", referencedColumnName = "employee_user_id")
+    var manager: ManagerEmployee? = null
 }

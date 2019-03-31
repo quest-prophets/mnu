@@ -6,9 +6,9 @@ import javax.persistence.*
 
 @Entity
 @Table (name = "purchase_requests")
-data class PurchaseRequest (/*@ManyToOne(fetch = FetchType.EAGER)
+data class PurchaseRequest (@ManyToOne(fetch = FetchType.EAGER)
                             @JoinColumn(name = "requester_id", referencedColumnName = "user_id")
-                            var client: Client? = null,*/
+                            var client: Client? = null,
 
                             @OneToOne(fetch = FetchType.EAGER)
                             @JoinColumn(name = "cart_id", referencedColumnName = "id")

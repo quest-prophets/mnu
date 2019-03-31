@@ -10,11 +10,11 @@ data class NewVacancyRequest (@Column(nullable = false) var title: String = "",
                               @Min(1) var salary: Long = 0,
                               @Min(0) var requiredKarma: Long = 0,
                               @Min(0) var workHoursPerWeek: Int = 0,
-                              @Min(1) var vacantPlaces: Long? = 1
+                              @Min(1) var vacantPlaces: Long? = 1,
 
-                              /*@ManyToOne(fetch = FetchType.EAGER)
+                              @ManyToOne(fetch = FetchType.EAGER)
                               @JoinColumn(name = "requester_id", referencedColumnName = "user_id")
-                              var client: Client? = null*/) {
+                              var client: Client? = null) {
     @Id
     private var id: Long? = null
 

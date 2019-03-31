@@ -15,10 +15,10 @@ class ManagerEmployee {
     private val employee: Employee? = null
 
     var position: String? = null
-//
-//    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "manager")
-//    var clients: MutableList<Client>? = null
-//
-//    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "manager")
-//    var prawns: MutableList<Prawn>? = null
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "manager")
+    var clients: MutableList<Client>? = null
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "manager")
+    var prawns: MutableList<Prawn>? = null
 }

@@ -12,9 +12,9 @@ data class ExperimentRequest (@Column(nullable = false) var title: String = "",
                               var description: String = "",
                               var date: LocalDateTime = LocalDateTime.now(),
 
-                              /*@ManyToOne(fetch = FetchType.EAGER)
-                              @JoinColumn(name = "examinator_id", referencedColumnName = "employee_id")
-                              var examinator: ScientistEmployee? = null,*/
+                              @ManyToOne(fetch = FetchType.EAGER)
+                              @JoinColumn(name = "examinator_id", referencedColumnName = "employee_user_id")
+                              var examinator: ScientistEmployee? = null,
 
                               @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
                               @JoinTable(name = "assistants_in_experiment_requests",

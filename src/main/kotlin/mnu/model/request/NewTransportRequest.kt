@@ -12,11 +12,11 @@ data class NewTransportRequest (@Column(nullable = false) var name: String = "",
                              var description: String = "",
                              @Min(1) var quantity: Long = 1,
                              var requiredAccessLvl: Short = 0,
-                             @Min(0) var price: Double = 0.0
+                             @Min(0) var price: Double = 0.0,
 
-                            /* @ManyToOne(fetch = FetchType.EAGER)
+                             @ManyToOne(fetch = FetchType.EAGER)
                              @JoinColumn(name = "requester_id", referencedColumnName = "user_id")
-                             var client: Client? = null*/)  {
+                             var client: Client? = null)  {
     @Id
     private var id: Long? = null
 

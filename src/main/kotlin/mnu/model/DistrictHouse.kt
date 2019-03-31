@@ -4,8 +4,8 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "district_houses"/*,
-    uniqueConstraints = [UniqueConstraint(columnNames = arrayOf("shelter_row" , "shelter_column"))]*/
+@Table(name = "district_houses",
+    uniqueConstraints = [UniqueConstraint(columnNames = arrayOf("shelterColumn" , "shelterRow"))]
 )
 data class DistrictHouse (var shelterRow: Long = 0,
                           var shelterColumn: Long = 0,

@@ -18,11 +18,11 @@ data class Prawn (@Column(nullable = false) var name: String = "") {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "house_id", referencedColumnName = "id")
     var districtHouse: DistrictHouse? = null
-/*
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
+    @JoinColumn(name = "manager_id", referencedColumnName = "employee_user_id")
     var manager: ManagerEmployee? = null
-*/
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", referencedColumnName = "id")
     var job: Vacancy? = null
