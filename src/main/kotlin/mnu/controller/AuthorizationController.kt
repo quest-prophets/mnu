@@ -1,6 +1,7 @@
 package mnu.controller
 
 import mnu.model.User
+import mnu.model.enums.Role
 import mnu.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -48,7 +49,7 @@ class AuthorizationController {
             } else {
 
 //              user.active = true
-//              user.roles = Collections.singleton(Role.USER)
+                user.role = Role.CLIENT
                 userRepository?.save(user)
 
                 authResponse.success = true
