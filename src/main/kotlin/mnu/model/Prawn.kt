@@ -4,6 +4,7 @@ import mnu.model.employee.ManagerEmployee
 import mnu.model.enums.DeathReason
 import java.time.LocalDateTime
 import javax.persistence.*
+import javax.validation.constraints.Min
 
 @Entity
 @Table(name = "prawns")
@@ -13,7 +14,7 @@ data class Prawn (@Column(nullable = false) var name: String = "") {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    val user: User? = null
+    var user: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "house_id", referencedColumnName = "id")
@@ -27,7 +28,7 @@ data class Prawn (@Column(nullable = false) var name: String = "") {
     @JoinColumn(name = "job_id", referencedColumnName = "id")
     var job: Vacancy? = null
 
-    var balance: Long = 0
+    @Min(0) var balance: Long = 0
     var karma: Long = 0
     var dateOfDeath: LocalDateTime? = null
     var deathReason: DeathReason? = null

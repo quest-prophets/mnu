@@ -7,13 +7,13 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "security_employees")
-class SecurityEmployee {
+data class SecurityEmployee (var position: String? = null) {
     @Id
     private var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    private val employee: Employee? = null
+    var employee: Employee? = null
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinTable(name = "security_employees_weapons",
@@ -31,6 +31,4 @@ class SecurityEmployee {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "assistants")
     var incidents: List<DistrictIncident>? = null
-
-    var position: String? = null
 }

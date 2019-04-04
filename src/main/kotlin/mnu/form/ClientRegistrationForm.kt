@@ -1,6 +1,6 @@
 package mnu.form
 
-data class RegistrationForm(
+data class ClientRegistrationForm(
     val username: String = "",
     var password: String = "",
     val email: String = "",

@@ -6,15 +6,13 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "scientists")
-class ScientistEmployee {
+data class ScientistEmployee (var position: String? = null){
     @Id
     private var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    private val employee: Employee? = null
-
-    var position: String? = null
+    var employee: Employee? = null
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "scientist")
     var articles: MutableList<Article>? = null

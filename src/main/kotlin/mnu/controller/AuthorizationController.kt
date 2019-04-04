@@ -1,13 +1,14 @@
 package mnu.controller
 
 import mnu.form.LoginForm
-import mnu.form.RegistrationForm
+import mnu.form.ClientRegistrationForm
 import mnu.model.Client
 import mnu.model.User
 import mnu.model.enums.ClientType
 import mnu.model.enums.Role
 import mnu.repository.ClientRepository
 import mnu.repository.UserRepository
+import mnu.repository.employee.ManagerEmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -24,6 +25,9 @@ class AuthorizationController {
     @Autowired
     private val clientRepository: ClientRepository? = null
 
+    @Autowired
+    private val managerEmployeeRepository: ManagerEmployeeRepository? = null
+
     @GetMapping("/login")
     fun login(model: Model): String {
         model.addAttribute("form", LoginForm())
@@ -32,7 +36,7 @@ class AuthorizationController {
 
     @GetMapping("/register")
     fun register(model: Model): String {
-        model.addAttribute("form", RegistrationForm())
+        model.addAttribute("form", ClientRegistrationForm())
         return "/register.html"
     }
 
@@ -41,9 +45,9 @@ class AuthorizationController {
 
     @PostMapping("/register")
     @ResponseBody
-    fun addUser(@ModelAttribute form: RegistrationForm): String {
+    fun addUser(@ModelAttribute form: ClientRegistrationForm): String {
         val existingUser = userRepository?.findByLogin(form.username)
-        val regex = """[a-zA-Z0-9_]+""".toRegex()
+        val regex = """[a-zA-Z0-9_.]+""".toRegex()
 
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
             "Only latin letters, numbers and underscore are supported."
@@ -68,18 +72,17 @@ class AuthorizationController {
                     "manufacturer" -> ClientType.MANUFACTURER
                     else -> return "Error"
                 }
+                val newClientUser = Client(form.name, form.email, clientType).apply { this.user = newUser }
+
+                if (clientType == ClientType.CUSTOMER)
+                    newClientUser.apply { this.manager = managerEmployeeRepository?.findById(managerEmployeeRepository.getAllIds().random())?.get() }
+
                 userRepository?.save(newUser)
-                clientRepository?.save(Client(form.name, form.email, clientType).apply { this.user = newUser })
+                clientRepository?.save(newClientUser)
 
                 "redirect:index.html"
             }
         }
     }
 
-//    enum class AuthType { LOGIN, REGISTER }
-//
-//    data class AuthResponse(
-//        var login: String = "", var type: AuthType = AuthType.LOGIN,
-//        var success: Boolean = false, var message: String = ""
-//    )
 }

@@ -8,25 +8,20 @@ import mnu.model.User
 import javax.persistence.MapsId
 import javax.persistence.FetchType
 
-
 @Entity
 @Table (name = "employees")
 data class Employee (@Column(nullable = false) var name: String = "",
-                     var dateOfEmployment: LocalDateTime? = null) {
+                     var dateOfEmployment: LocalDateTime? = null,
+                     @Min(0) @Max(10) var level: Int? = null,
+                     @Min(0) var salary: Long? = null) {
     @Id
     private var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    val user: User? = null
+    var user: User? = null
 
     @Enumerated(EnumType.STRING)
     var status: PersonStatus? = null
 
-    @Min(0)
-    @Max(10)
-    var level: Int? = null
-
-    @Min(0)
-    var salary: Long? = null
 }
