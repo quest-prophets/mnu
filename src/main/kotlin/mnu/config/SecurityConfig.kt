@@ -59,9 +59,9 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                     if (roles.contains("MANAGER"))
                         response.sendRedirect("/managersMenu")
                     if (roles.contains("SCIENTIST"))
-                        response.sendRedirect("/scientistMain")
+                        response.sendRedirect("/sciMain")
                     if (roles.contains("SECURITY"))
-                        response.sendRedirect("/securityMain")
+                        response.sendRedirect("/secMain")
                     if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
                         response.sendRedirect("/clientsShop")
                 }}
