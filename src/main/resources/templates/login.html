@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/css/auth.css}">
     <title>MNU</title>
 </head>
@@ -13,7 +13,7 @@
         <input th:field="*{username}" class="login-page__item input_big" placeholder="Login">
         <input th:field="*{password}" type="password" class="login-page__item input_big" placeholder="Password">
         <input type="submit" class="login-page__item button button_unpressed" value="Log in">
-        <a class="login-page__item button button_unpressed" href="register.html">Register</a>
+        <a class="login-page__item button button_unpressed" th:href="@{/auth/register}">Register</a>
     </form>
 </div>
 </body>

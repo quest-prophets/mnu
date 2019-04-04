@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/css/prawnRegistration.css}">
     <title>MNU</title>
 </head>
 <body>
     <div class="flex-row admin-header">
-        <a href="administratorsMenu.html">
-            <img alt="back" src="../static/images/back.png" class="icon back-button round-button button_unpressed">
+        <a th:href="@{/adminMenu}">
+            <img alt="back" th:src="@{/images/back.png}" class="icon back-button round-button button_unpressed">
         </a>
         <div class="employee-info"> Name Surname <br> Level: x</div>
         <div class="employee-notifications">

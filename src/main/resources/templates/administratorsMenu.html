@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/css/administratorMenu.css}">
     <title>MNU</title>
 </head>
@@ -40,7 +40,7 @@
     <a class="flex-column administrators-menu-grid__experiments-articles grid-button button button_unpressed">Experiments
         & Articles</a>
     <a class="flex-column administrators-menu-grid__clients-manufacturers grid-button button button_unpressed">Purchase & sale requests</a>
-    <a href="administratorsEmployees.html"
+    <a th:href="@{/employeeDB}"
        class="flex-column administrators-menu-grid__employees grid-button button button_unpressed">Employees</a>
     <a class="flex-column administrators-menu-grid__prawn-vacancies grid-button button button_unpressed">Prawn
         vacancies</a>

@@ -55,7 +55,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                     response.contentType = MediaType.APPLICATION_JSON_VALUE
                     response.outputStream.print("{\"Login\":\"" + request.getParameter("login") + "\"}")
                     if (roles.contains("ADMIN"))
-                        response.sendRedirect("/administratorsMenu")
+                        response.sendRedirect("/adminMenu")
                     if (roles.contains("MANAGER"))
                         response.sendRedirect("/managersMenu")
                     if (roles.contains("SCIENTIST"))

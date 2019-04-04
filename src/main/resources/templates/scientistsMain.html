@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/css/scientistMain.css}">
     <title>MNU</title>
 </head>
@@ -38,7 +38,7 @@
     </div>
     <button class="scientists-grid__experiments grid-button button button_pressed">Experiments</button>
     <button class="scientists-grid__articles grid-button button button_unpressed">Articles</button>
-    <a href="scientistsNewExperiment.html" class="scientists-grid__add grid-button button button_unpressed">Add Experiment</a>
+    <a th:href="@{/sciExperiment}" class="scientists-grid__add grid-button button button_unpressed">Add Experiment</a>
 </div>
 </body>
 </html>

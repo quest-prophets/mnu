@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/css/shop.css}">
     <title>MNU</title>
 </head>
 <body style="margin: 7px 0">
 <div class="shop-header">
-    <a class="feedback" href="clientsShop.html">Feedback</a>
+    <a class="feedback">Feedback</a>
     <span class="shop-header-flex-row">You are logged in as ****
-            <img alt="Profile settings" class="shop-icon" src="../static/images/profile.png">
-            <img alt="History" class="shop-icon" src="../static/images/history.svg">
-            <img alt="Cart" class="shop-icon cart" src="../static/images/cart.png">
+            <img alt="Profile settings" class="shop-icon" th:src="@{/images/profile.png}">
+            <img alt="History" class="shop-icon" th:src="@{/images/history.svg}">
+            <img alt="Cart" class="shop-icon cart" th:src="@{/images/cart.png}">
         </span>
 </div>
 <div class="shop-grid">
@@ -38,14 +38,14 @@
     </div>
     <div class="shop-grid__shop-catalogue">
     </div>
-    <img alt="departments" class="shop-icon burger" src="../static/images/burger.png">
+    <img alt="departments" class="shop-icon burger" th:src="@{/images/burger.png}">
     <div class="flex-column department-title">Light weapons</div>
 </div>
 <div class="shop-mobile-footer">
-    <img alt="Profile settings" class="shop-icon profile_mobile" src="../static/images/profile.png">
-    <img alt="History" class="shop-icon history_mobile" src="../static/images/history.svg">
-    <img alt="Cart" class="shop-icon cart_mobile" src="../static/images/cart.png">
-    <img alt="Feedback" class="shop-icon feedback_mobile" src="../static/images/feedback.png">
+    <img alt="Profile settings" class="shop-icon profile_mobile" th:src="@{/images/profile.png}">
+    <img alt="History" class="shop-icon history_mobile" th:src="@{/images/history.svg}">
+    <img alt="Cart" class="shop-icon cart_mobile" th:src="@{/images/cart.png}">
+    <img alt="Feedback" class="shop-icon feedback_mobile" th:src="@{/images/feedback.png}">
 </div>
 </body>
 </html>
