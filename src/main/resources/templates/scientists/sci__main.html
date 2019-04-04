@@ -4,15 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/administratorEmployees.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/scientists/sci__main.css}">
     <title>MNU</title>
 </head>
 <body>
-<div class="admin-employees-grid">
-    <div class="flex-row admin-header">
-        <a th:href="@{/adminMenu}">
-            <img alt="back" th:src="@{/images/back.png}" class="icon back-button round-button button_unpressed">
-        </a>
+<div class="scientists-grid">
+    <div class="flex-row employee-header">
         <div class="employee-info"> Name Surname <br> Level: x</div>
         <div class="employee-notifications">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="50px">
@@ -39,11 +36,9 @@
             </svg>
         </div>
     </div>
-    <div>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-            <!-- ДУМОЕМ................................................ -->
-        </svg>
-    </div>
+    <button class="scientists-grid__experiments grid-button button button_pressed">Experiments</button>
+    <button class="scientists-grid__articles grid-button button button_unpressed">Articles</button>
+    <a th:href="@{/sciExperiment}" class="scientists-grid__add grid-button button button_unpressed">Add Experiment</a>
 </div>
 </body>
 </html>

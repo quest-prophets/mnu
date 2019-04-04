@@ -23,30 +23,30 @@ class PageController {
     fun register() = "register.html"
 
     @GetMapping("/clientsShop")
-    fun clientsShop() = "clientsShop.html"
+    fun clientsShop() = "customers/customer__shop.html"
 
     @GetMapping("/employeeDB")
-    fun adminEmployees() = "administratorsEmployees.html"
+    fun adminEmployees() = "administrators/admin__employees.html"
 
     @GetMapping("/adminMenu")
-    fun adminMenu() = "administratorsMenu.html"
+    fun adminMenu() = "administrators/admin__menu.html"
 
     @GetMapping("/managersMenu")
-    fun manMenu() = "managersMenu.html"
+    fun manMenu() = "managers/manager__menu.html"
 
     @GetMapping("/prawnRegister")
     fun prawnRegister(model: Model): String {
         model.addAttribute("form", PrawnRegistrationForm())
-        return "/prawnRegistration.html"
+        return "administrators/admin__prawn-registration.html"
     }
 
     @GetMapping("/sciMain")
-    fun sciMain() = "scientistsMain.html"
+    fun sciMain() = "scientists/sci__main.html"
 
     @GetMapping("/sciExperiment")
-    fun sciExperiment() = "scientistsNewExperiment.html"
+    fun sciExperiment() = "scientists/sci__new-experiment.html"
 
     @GetMapping("/secMain")
-    fun secMain() = "securityMain.html"
+    fun secMain() = "security/sec__main.html"
 
 }
