@@ -28,7 +28,7 @@ class AdministratorController {
     val employeeRepository: EmployeeRepository? = null
 
     @Autowired
-    val districtHouseRepository: DistrictHouseRepository? = null;
+    val districtHouseRepository: DistrictHouseRepository? = null
 
     @Autowired
     val managerEmployeeRepository: ManagerEmployeeRepository? = null

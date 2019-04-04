@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.*
 import java.util.*
 
 interface DistrictHouseRepository : JpaRepository<DistrictHouse, Long> {
-    @Query("select dt.id from district_houses dt")
+    @Query("select dt.id from district_houses dt;", nativeQuery = true)
     fun getAllIds(): List<Long>
 }

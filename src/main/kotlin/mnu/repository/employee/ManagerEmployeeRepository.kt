@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface ManagerEmployeeRepository : JpaRepository<ManagerEmployee, Long> {
-    @Query("select m.id from managers m")
+    @Query("select m.id from managers m;", nativeQuery = true)
     fun getAllIds(): List<Long>
 
     @Query(value = "select e.user_id, e.name, e.level, m.position, e.salary from employees e " +
