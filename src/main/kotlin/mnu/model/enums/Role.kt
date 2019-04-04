@@ -1,7 +1,7 @@
 package mnu.model.enums
 
 enum class Role {
-    CLIENT,
+    CUSTOMER,
     MANUFACTURER,
     ADMIN,
     MANAGER,

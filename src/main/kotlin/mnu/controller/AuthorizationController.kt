@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
 @Controller
 @RequestMapping("/auth")
@@ -44,7 +43,6 @@ class AuthorizationController {
     @ResponseBody
     fun addUser(@ModelAttribute form: RegistrationForm): String {
         val existingUser = userRepository?.findByLogin(form.username)
-//        val authResponse = AuthResponse(form.username, AuthType.REGISTER)
         val regex = """[a-zA-Z0-9_]+""".toRegex()
 
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
@@ -59,14 +57,14 @@ class AuthorizationController {
                 "Username '${form.username}' is already taken. Please try again."
             } else {
                 val role = when (form.type) {
-                    "customer" -> Role.CLIENT
+                    "customer" -> Role.CUSTOMER
                     "manufacturer" -> Role.MANUFACTURER
                     else -> return "Error"
                 }
                 val newUser = User(form.username, form.password, role)
 
                 val clientType = when (form.type) {
-                    "customer" -> ClientType.CLIENT
+                    "customer" -> ClientType.CUSTOMER
                     "manufacturer" -> ClientType.MANUFACTURER
                     else -> return "Error"
                 }

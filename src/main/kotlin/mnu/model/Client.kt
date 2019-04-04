@@ -2,14 +2,13 @@ package mnu.model
 
 import mnu.model.employee.ManagerEmployee
 import mnu.model.enums.*
-import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "clients")
 data class Client (@Column(nullable = false) var name: String = "",
                    @Column(nullable = false, unique = true) var email: String = "",
-                   @Enumerated(EnumType.STRING) var type: ClientType = ClientType.CLIENT) {
+                   @Enumerated(EnumType.STRING) var type: ClientType = ClientType.CUSTOMER) {
     @Id
     private var id: Long? = null
 
