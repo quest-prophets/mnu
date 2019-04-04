@@ -74,7 +74,7 @@
         <img alt="Edit employees" id="edit-button" class="button_unpressed round-button icon" th:src="@{/images/edit.svg}" onclick="setEditInterface()">
         <img alt="Find employees" id="find-button" class="button_unpressed round-button icon"
              th:src="@{/images/magnifier.svg}" onclick="setFindInterface()">
-        <img alt="Cash Rewards" id="reward-button" class="button_unpressed round-button icon" th:src="@{/images/dollar.png}" onclick="setCashInterface">
+        <img alt="Cash Rewards" id="reward-button" class="button_unpressed round-button icon" th:src="@{/images/dollar.png}" onclick="setRewardInterface()">
     </div>
     <div class="admin-employees-grid__inputs flex-column">
         <div id="add-interface" class="admin-employees-grid__inputs_add add-employees-inputs-grid flex-column">
@@ -101,9 +101,20 @@
             </select>
             <button class="button button_unpressed add-employees-inputs-grid__button">Add employee</button>
         </div>
-        <div id="edit-interface" class="admin-employees-grid__inputs_edit"></div>
-        <div id="find-interface" class="admin-employees-grid__inputs_find"></div>
-        <div id="cash-interface" class="admin-employees-grid__inputs_reward"></div>
+        <div id="edit-interface" class="admin-employees-grid__inputs_edit hidden">
+            <input type="number" placeholder="Employee id">
+            <input type="number" min="1" max="10" class="add-employees-inputs-grid__lvl" placeholder="Lvl">
+            <input type="number" step="10" class="add-employees-inputs-grid__salary" placeholder="Salary">
+            <input placeholder="Position">
+            ???
+        </div>
+        <div id="find-interface" class="admin-employees-grid__inputs_find hidden">
+            ???
+        </div>
+        <div id="reward-interface" class="admin-employees-grid__inputs_reward hidden">
+            <input type="number" placeholder="Employee id">
+            <input type="number" placeholder="Reward">
+        </div>
     </div>
 </div>
 </body>
