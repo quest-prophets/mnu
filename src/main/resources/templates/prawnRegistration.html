@@ -38,13 +38,12 @@
             </svg>
         </div>
     </div>
-    <div class="flex-column registration-box">
-        <input class="registration-item input_big" placeholder="Login">
-        <input type="password" class="registration-item input_big" placeholder="Password">
-        <input type="password" class="registration-item input_big" placeholder="Confirm password">
-        <input class="registration-item input_big" placeholder="Name">
-        <button class="registration-item button button_unpressed">Register</button>
-    </div>
+    <form action="#" th:action="@{/admin/registerPrawn}" th:object="${form}" method="post" class="flex-column registration-box">
+        <input th:field="*{username}" class="registration-item input_big" placeholder="Login">
+        <input th:field="*{password}" type="password" class="registration-item input_big" placeholder="Password">
+        <input th:field="*{name}" class="registration-item input_big" placeholder="Name">
+        <input type="submit" class="registration-item button button_unpressed" value="Register">
+    </form>
 </div>
 </body>
 </html>

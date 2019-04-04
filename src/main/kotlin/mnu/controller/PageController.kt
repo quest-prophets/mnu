@@ -1,6 +1,8 @@
 package mnu.controller
 
+import mnu.form.PrawnRegistrationForm
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import java.security.Principal
@@ -33,7 +35,10 @@ class PageController {
     fun manMenu() = "managersMenu.html"
 
     @GetMapping("/prawnRegister")
-    fun prawnRegister() = "prawnRegistration.html"
+    fun prawnRegister(model: Model): String {
+        model.addAttribute("form", PrawnRegistrationForm())
+        return "/prawnRegistration.html"
+    }
 
     @GetMapping("/sciMain")
     fun sciMain() = "scientistsMain.html"

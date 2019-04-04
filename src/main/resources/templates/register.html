@@ -11,10 +11,22 @@
 <div class="flex-column" style="height: 100vh">
     <form action="#" th:action="@{/auth/register}" th:object="${form}" method="post" class="flex-column login-page__box">
         <a class="login-page__back-link" th:href="@{/auth/login}">< back</a>
-        <input th:field="*{username}" class="login-page__item input_big" placeholder="Login">
-        <input th:field="*{password}" type="password" class="login-page__item input_big" placeholder="Password">
-        <input th:field="*{email}" type="email" class="login-page__item input_big" placeholder="Email">
-        <input th:field="*{name}" class="login-page__item input_big" placeholder="Name">
+        <label>
+            Login:
+            <input th:field="*{username}" class="login-page__item input_big" placeholder="Login">
+        </label>
+        <label>
+            Password:
+            <input th:field="*{password}" type="password" class="login-page__item input_big" placeholder="Password">
+        </label>
+        <label>
+            Email:
+            <input th:field="*{email}" type="email" class="login-page__item input_big" placeholder="Email">
+        </label>
+        <label>
+            Name:
+            <input th:field="*{name}" class="login-page__item input_big" placeholder="Name">
+        </label>
         <div class="checkbox-flex">
             <div class="registration-checkbox">
                 <input th:field="*{type}" th:value="customer" id="customerRadio" type="radio" name="clientType" class="login-page__item checkbox">
