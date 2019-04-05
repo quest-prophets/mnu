@@ -17,15 +17,15 @@
     <form action="#" th:action="@{/admin/registerPrawn}" th:object="${form}" method="post" class="flex-column registration-box">
         <label class="form-item">
             <b>Name</b>
-            <input th:field="*{name}" class="registration-item input_big" placeholder="Name">
+            <input th:required="true" th:field="*{name}" class="registration-item input_big" placeholder="Name">
         </label>
         <label class="form-item">
             <b>Login</b>
-            <input th:field="*{username}" class="registration-item input_big" placeholder="Login">
+            <input th:required="true" th:field="*{username}" class="registration-item input_big" placeholder="Login">
         </label>
         <label class="form-item">
             <b>Password</b>
-            <input th:field="*{password}" type="password" class="registration-item input_big" placeholder="Password">
+            <input th:required="true" th:field="*{password}" type="password" class="registration-item input_big" placeholder="Password">
         </label>
         <input type="submit" class="registration-item button" value="Register">
     </form>
