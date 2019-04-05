@@ -15,19 +15,18 @@
         </a>
         <div class="info"> Name Surname <br> Level: x</div>
     </div>
-    <div class="grid__inputs flex-column">
-        <input class="input_big" placeholder="Title">
-        <select class="input_big" >
-            <option disabled selected hidden>Type</option>
-            <option>Minor</option>
-            <option>Major</option>
+    <form action="#" th:action="@{/sci/experiment}" th:object="${form}" method="post" class="grid__inputs flex-column">
+        <input th:required="true" th:field="*{title}" class="input_big" placeholder="Title">
+        <select th:field="*{type}" class="input_big" >
+            <option th:value="minor" th:text="Minor"></option>
+            <option th:value="major" th:text="Major"></option>
         </select>
-        <input class="input_big" placeholder="Assistants">
+        <input id="assistant-id" th:field="*{assistantId}" class="input_big" placeholder="Assistant">
         <button class="grid__assistants-button button button_unpressed">Choose assistants</button>
-        <input class="input_big" type="datetime-local" placeholder="Date">
-        <textarea class="text-area_big input_big" placeholder="Description"></textarea>
-        <button class="button button_unpressed">Submit experiment</button>
-    </div>
+        <input th:required="true" th:field="*{date}" class="input_big" type="datetime-local" placeholder="Date">
+        <textarea th:field="*{description}" class="text-area_big input_big" placeholder="Description"></textarea>
+        <input type="submit" class="button button_unpressed" value="Submit Experiment">
+    </form>
     <div class="grid__assistants-table">
         <table>
             <thead>
@@ -46,8 +45,8 @@
                 </td>
             </tr>
             </thead>
-            <tbody>
-            <tr th:each="assistant : ${assistants}">
+            <tbody id="assistants-tbody">
+            <tr th:each="assistant : ${assistants}" th:attr="data-id=${assistant.id}">
                 <td th:text="${assistant.id}"></td>
                 <td th:text="${assistant.name}"></td>
                 <td th:text="${assistant.position}"></td>
@@ -57,5 +56,6 @@
         </table>
     </div>
 </div>
+<script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__new-experiment.js}"></script>
 </body>
 </html>

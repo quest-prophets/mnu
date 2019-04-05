@@ -2,6 +2,7 @@ package mnu.controller
 
 import mnu.form.NewArticleForm
 import mnu.model.Article
+import mnu.form.NewExperimentForm
 
 import mnu.repository.ArticleRepository
 import mnu.repository.ExperimentRepository
@@ -52,6 +53,7 @@ class ScientistController {
         val user = userRepository?.findByLogin(principal.name)
         val currentScientistLvl = employeeRepository?.findById(user?.id!!)?.get()?.level
         model.addAttribute("assistants", scientistEmployeeRepository?.getAssistants(currentScientistLvl!!))
+        model.addAttribute("form", NewExperimentForm())
         return "/scientists/sci__new-experiment.html"
     }
 

@@ -37,7 +37,7 @@ body {
 }
 
 .grid__assistants-table td {
-    padding: 3px 6px;
+    padding: 4px 10px;
     border: 1px solid black;
 }
 
@@ -55,6 +55,14 @@ body {
     font-size: 16px;
     height: 30px;
     width: 300px;
+}
+
+#assistants-tbody{
+    cursor: pointer;
+}
+
+.selected-row{
+    background: #d6ffc5;
 }
 
 .button {
