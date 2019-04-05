@@ -1,6 +1,7 @@
 package mnu.controller
 
 import mnu.form.NewArticleForm
+import mnu.model.Article
 
 import mnu.repository.ArticleRepository
 import mnu.repository.ExperimentRepository
@@ -56,5 +57,10 @@ class ScientistController {
 
     @PostMapping("/article")
     @ResponseBody
-    fun addEmployee(@ModelAttribute form: NewArticleForm): String = throw NotImplementedError()
+    fun addArticle(@ModelAttribute form: NewArticleForm, principal: Principal): String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
+        articleRepository?.save(Article(form.title, form.article).apply { this.scientist = currentScientist })
+        return "Article added."
+    }
 }
