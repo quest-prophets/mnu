@@ -45,7 +45,7 @@ class AdministratorController {
 
     @GetMapping("/main")
     fun adminMenu() = "administrators/admin__menu.html"
-    
+
 
 
     @PostMapping("/registerEmployee")
