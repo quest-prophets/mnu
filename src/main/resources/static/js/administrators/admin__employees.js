@@ -26,15 +26,12 @@ function unhideInterface(unhidden_interface) {
     unhidden_interface.classList.remove("hidden");
 }
 
-function pressButton(pressed_button) {
-    document.getElementById("add-button").classList.add("button_unpressed");
-    document.getElementById("edit-button").classList.add("button_unpressed");
-    document.getElementById("find-button").classList.add("button_unpressed");
-    document.getElementById("reward-button").classList.add("button_unpressed");
-    document.getElementById("add-button").classList.remove("button_pressed");
-    document.getElementById("edit-button").classList.remove("button_pressed");
-    document.getElementById("find-button").classList.remove("button_pressed");
-    document.getElementById("reward-button").classList.remove("button_pressed");
-    pressed_button.classList.add("button_pressed");
-    pressed_button.classList.remove("button_unpressed");
+function pressButton(button_to_press) {
+    let pressed_buttons = document.getElementsByClassName("button_pressed");
+    while (pressed_buttons.length > 0) {
+        pressed_buttons[0].classList.add("button_unpressed");
+        pressed_buttons[0].classList.remove("button_pressed");
+    }
+    button_to_press.classList.add("button_pressed");
+    button_to_press.classList.remove("button_unpressed");
 }
