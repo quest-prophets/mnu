@@ -39,6 +39,15 @@ class AdministratorController {
     @Autowired
     val administratorEmployeeRepository: AdministratorEmployeeRepository? = null
 
+
+    @GetMapping("/employees")
+    fun adminEmployees() = "administrators/admin__employees.html"
+
+    @GetMapping("/main")
+    fun adminMenu() = "administrators/admin__menu.html"
+    
+
+
     @PostMapping("/registerEmployee")
     @ResponseBody
     fun addEmployee(@ModelAttribute form: EmployeeRegistrationForm): String {
