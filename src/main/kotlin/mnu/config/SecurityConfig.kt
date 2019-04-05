@@ -67,7 +67,10 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                     if (roles.contains("PRAWN"))
                         response.sendRedirect("/prawnMain")
                 }}
-                .failureHandler { request, response, exception -> response.status = 401 }
+                .failureHandler { request, response, exception ->
+                    request.session.setAttribute("loginFailed", true)
+                    response.sendRedirect("/login")
+                }
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .permitAll()
@@ -78,10 +81,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/")
             .and()
-                .exceptionHandling().authenticationEntryPoint { request, response, authException -> run {
-                response.outputStream.print("Not authorized")
-                response.status = 401
-            }}
+                .exceptionHandling().authenticationEntryPoint { request, response, authException -> response.sendRedirect("/auth/login") }
     }
 
 

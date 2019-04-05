@@ -19,6 +19,7 @@
             <input th:field="*{password}" type="password" class="input_big">
         </label>
         <input type="submit" class="login-page__item button" value="Log in">
+        <span th:if="${loginFailed}">Incorrect login or password</span>
         <a class="login-page__item button" th:href="@{/auth/register}">Register</a>
     </form>
 </div>

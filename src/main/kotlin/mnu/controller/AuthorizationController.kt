@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpSession
 
 @Controller
 @RequestMapping("/auth")
@@ -29,8 +31,12 @@ class AuthorizationController {
     private val managerEmployeeRepository: ManagerEmployeeRepository? = null
 
     @GetMapping("/login")
-    fun login(model: Model): String {
+    fun login(model: Model, session: HttpSession): String {
         model.addAttribute("form", LoginForm())
+        if (session.getAttribute("loginFailed") == true) {
+            session.removeAttribute("loginFailed")
+            model.addAttribute("loginFailed", true)
+        }
         return "/login.html"
     }
 
