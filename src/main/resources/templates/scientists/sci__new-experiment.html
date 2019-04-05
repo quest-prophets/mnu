@@ -11,7 +11,7 @@
 <div class="grid">
     <div class="flex-row header">
         <a th:href="@{/sci/main}">
-            <img alt="back" th:src="@{/images/back.png}" class="icon back-button round-button button_unpressed">
+            <img alt="back" th:src="@{/images/back.png}" class="icon button back-button button_round">
         </a>
         <div class="info"> Name Surname <br> Level: x</div>
     </div>
@@ -22,10 +22,10 @@
             <option th:value="major" th:text="Major"></option>
         </select>
         <input id="assistant-id" th:field="*{assistantId}" class="input_big" placeholder="Assistant">
-        <button class="grid__assistants-button button button_unpressed">Choose assistants</button>
+        <button class="grid__assistants-button button">Choose assistants</button>
         <input th:required="true" th:field="*{date}" class="input_big" type="datetime-local" placeholder="Date">
         <textarea th:field="*{description}" class="text-area_big input_big" placeholder="Description"></textarea>
-        <input type="submit" class="button button_unpressed" value="Submit Experiment">
+        <input type="submit" class="button" value="Submit Experiment">
     </form>
     <div class="grid__assistants-table">
         <table>

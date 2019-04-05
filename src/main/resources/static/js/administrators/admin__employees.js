@@ -28,10 +28,6 @@ function unhideInterface(unhidden_interface) {
 
 function pressButton(button_to_press) {
     let pressed_buttons = document.getElementsByClassName("button_pressed");
-    while (pressed_buttons.length > 0) {
-        pressed_buttons[0].classList.add("button_unpressed");
-        pressed_buttons[0].classList.remove("button_pressed");
-    }
+    while (pressed_buttons.length > 0) pressed_buttons[0].classList.remove("button_pressed");
     button_to_press.classList.add("button_pressed");
-    button_to_press.classList.remove("button_unpressed");
 }

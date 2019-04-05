@@ -10,7 +10,7 @@
 <body>
     <div class="flex-row admin-header">
         <a th:href="@{/admin/main}">
-            <img alt="back" th:src="@{/images/back.png}" class="icon back-button round-button button_unpressed">
+            <img alt="back" th:src="@{/images/back.png}" class="icon button back-button button_round">
         </a>
         <div class="employee-info"> Name Surname <br> Level: x</div>
     </div>
@@ -18,7 +18,7 @@
         <input th:field="*{username}" class="registration-item input_big" placeholder="Login">
         <input th:field="*{password}" type="password" class="registration-item input_big" placeholder="Password">
         <input th:field="*{name}" class="registration-item input_big" placeholder="Name">
-        <input type="submit" class="registration-item button button_unpressed" value="Register">
+        <input type="submit" class="registration-item button" value="Register">
     </form>
 </div>
 </body>

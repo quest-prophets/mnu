@@ -60,24 +60,22 @@ body {
     font-size: 20px;
     position: relative;
     cursor: pointer;
-}
-
-.button_unpressed {
     box-shadow: 0 5px #cacaca;
     background: white;
 }
 
-.button_unpressed:hover {
+.button:hover:not(.button_pressed) {
     top: 2px;
     box-shadow: 0 3px #cacaca;
 }
 
-.button_unpressed:active {
+.button:active:not(.button_pressed) {
     top: 5px;
     box-shadow: none;
 }
 
 .button_pressed {
+    box-shadow: none;
     outline: none;
     background: lightgreen;
     cursor: default;
