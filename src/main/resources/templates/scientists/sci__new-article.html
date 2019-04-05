@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/scientists/sci__new-article.css}">
+    <title>MNU</title>
+</head>
+<body>
+<div class="flex-row header">
+    <a th:href="@{/sciMain}">
+        <img alt="back" th:src="@{/images/back.png}" class="icon back-button round-button button_unpressed">
+    </a>
+    <div class="info"> Name Surname <br> Level: x</div>
+</div>
+<div class="flex-column">
+    <input class="input_big" placeholder="Title">
+    <textarea class="text-area_big" placeholder="Article"></textarea>
+    <button class="button button_unpressed">Submit article</button>
+</div>
+</body>
+</html>

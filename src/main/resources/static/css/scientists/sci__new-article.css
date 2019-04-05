@@ -9,7 +9,7 @@ body {
 
 .grid {
     display: grid;
-    grid: "header header" 80px "inputs table";
+    grid: "header" 80px "inputs";
     padding: 0 5px;
 }
 
@@ -24,21 +24,6 @@ body {
 
 .text-area_big {
     min-height: 100px;
-}
-
-.grid__assistants-table {
-    grid-area: table;
-    margin-top: 30px;
-}
-
-.grid__assistants-table table {
-    margin: auto;
-    border-collapse: collapse;
-}
-
-.grid__assistants-table td {
-    padding: 3px 6px;
-    border: 1px solid black;
 }
 
 .info {
@@ -106,10 +91,6 @@ body {
     cursor: pointer;
 }
 
-.grid__assistants-button {
-    display: none;
-}
-
 .icon {
     width: 50px;
     height: 50px;
@@ -128,14 +109,6 @@ body {
     .grid {
         grid: "header" 80px "inputs";
         padding: 0;
-    }
-
-    .grid__assistants-table {
-        display: none;
-    }
-
-    .grid__assistants-button {
-        display: block;
     }
 }
 
