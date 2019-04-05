@@ -11,6 +11,7 @@ import mnu.repository.employee.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
@@ -40,8 +41,11 @@ class AdministratorController {
     val administratorEmployeeRepository: AdministratorEmployeeRepository? = null
 
 
-    @GetMapping("/employees")
-    fun adminEmployees() = "administrators/admin__employees.html"
+    @GetMapping("/employee")
+    fun adminEmployees(model: Model): String {
+        model.addAttribute("form", EmployeeRegistrationForm())
+        return "administrators/admin__employees.html"
+    }
 
     @GetMapping("/main")
     fun adminMenu() = "administrators/admin__menu.html"

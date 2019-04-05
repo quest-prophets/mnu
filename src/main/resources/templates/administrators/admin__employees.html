@@ -11,7 +11,7 @@
 <body>
 <div class="admin-employees-grid">
     <div class="flex-row admin-header">
-        <a th:href="@{/adminMenu}">
+        <a th:href="@{/admin/menu}">
             <img alt="back" th:src="@{/images/back.png}" class="icon back-button round-button button_unpressed">
         </a>
         <div class="employee-info"> Name Surname <br> Level: x</div>
@@ -53,30 +53,21 @@
         <img alt="Cash Rewards" id="reward-button" class="button_unpressed round-button icon" th:src="@{/images/dollar.png}" onclick="setRewardInterface()">
     </div>
     <div class="admin-employees-grid__inputs flex-column">
-        <div id="add-interface" class="admin-employees-grid__inputs_add add-employees-inputs-grid flex-column">
-            <input class="add-employees-inputs-grid__name" placeholder="Name">
-            <input type="number" min="1" max="10" class="add-employees-inputs-grid__lvl" placeholder="Lvl">
-            <input type="number" step="10" class="add-employees-inputs-grid__salary" placeholder="Salary">
-            <input class="add-employees-inputs-grid__position" placeholder="Position">
-            <select class="add-employees-inputs-grid__type">
-                <option disabled selected hidden>
-                    Type
-                </option>
-                <option>
-                    Security
-                </option>
-                <option>
-                    Scientist
-                </option>
-                <option>
-                    Manager
-                </option>
-                <option>
-                    Administrator
-                </option>
+        <form action="#" th:action="@{admin/registerEmployee}" th:object="${form}" method="post" id="add-interface" class="admin-employees-grid__inputs_add add-employees-inputs-grid flex-column">
+            <input th:required="true" th:field="*{username}" class="add-employees-inputs-grid__login" placeholder="Login">
+            <input th:required="true" th:field="*{password}" type="password" class="add-employees-inputs-grid__password" placeholder="Password">
+            <input th:required="true" th:field="*{name}" class="add-employees-inputs-grid__name" placeholder="Name">
+            <input th:required="true" th:field="*{level}" type="number" min="1" max="10" class="add-employees-inputs-grid__lvl" placeholder="Lvl">
+            <input th:required="true" th:field="*{salary}" type="number" class="add-employees-inputs-grid__salary" placeholder="Salary">
+            <input th:required="true" th:field="*{position}" class="add-employees-inputs-grid__position" placeholder="Position">
+            <select th:field="*{type}" class="add-employees-inputs-grid__type">
+                <option th:value="security" th:text="Security"></option>
+                <option th:value="scientist" th:text="Scientist"></option>
+                <option th:value="manager" th:text="Manager"></option>
+                <option th:value="administrator" th:text="Administrator"></option>
             </select>
-            <button class="button button_unpressed add-employees-inputs-grid__button">Add employee</button>
-        </div>
+            <input type="submit" class="button button_unpressed add-employees-inputs-grid__button" value="Add employee">
+        </form>
         <div id="edit-interface" class="admin-employees-grid__inputs_edit hidden">
             <input type="number" placeholder="Employee id">
             <input type="number" min="1" max="10" class="add-employees-inputs-grid__lvl" placeholder="Lvl">
