@@ -9,22 +9,20 @@ import javax.persistence.*
 @Table (name = "experiment_requests")
 data class ExperimentRequest (@Column(nullable = false) var title: String = "",
                               var type: ExperimentType = ExperimentType.MINOR,
-                              var description: String = "",
+                              var description: String? = "",
                               var date: LocalDateTime = LocalDateTime.now(),
 
-                              @ManyToOne(fetch = FetchType.EAGER)
+                              @ManyToOne(fetch = FetchType.LAZY)
                               @JoinColumn(name = "examinator_id", referencedColumnName = "employee_user_id")
                               var examinator: ScientistEmployee? = null,
 
-                              @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-                              @JoinTable(name = "assistants_in_experiment_requests",
-                                  joinColumns = [JoinColumn(name = "request_id")],
-                                  inverseJoinColumns = [JoinColumn(name = "assistant_id")])
-                              var assistants: List<ScientistEmployee>? = null) {
+                              @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+                              @JoinColumn(name = "assistant_id", referencedColumnName = "employee_user_id")
+                              var assistant: ScientistEmployee? = null) {
     @Id
-    private var id: Long? = null
+    var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    private val request: Request? = null
+    var request: Request? = null
 }

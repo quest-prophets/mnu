@@ -8,7 +8,7 @@ import javax.persistence.*
 @Table(name = "scientists")
 data class ScientistEmployee (var position: String? = null){
     @Id
-    private var id: Long? = null
+    var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
@@ -20,6 +20,6 @@ data class ScientistEmployee (var position: String? = null){
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "examinator")
     var conductedExperiments: MutableList<Experiment>? = null
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "assistants")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "assistant")
     var assistedExperiments: MutableList<Experiment>? = null
 }

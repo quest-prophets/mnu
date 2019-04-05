@@ -17,11 +17,9 @@ data class Experiment (@Column(nullable = false) var title: String = "",
                        @JoinColumn(name = "examinator_id", referencedColumnName = "employee_user_id")
                        var examinator: ScientistEmployee? = null,
 
-                       @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-                       @JoinTable(name = "assistants_in_experiments",
-                            joinColumns = [JoinColumn(name = "experiment_id")],
-                            inverseJoinColumns = [JoinColumn(name = "assistant_id")])
-                       var assistants: List<ScientistEmployee>? = null)
+                       @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+                       @JoinColumn(name = "assistant_id", referencedColumnName = "employee_user_id")
+                       var assistant: ScientistEmployee? = null)
 {
     @Id
     @GeneratedValue
