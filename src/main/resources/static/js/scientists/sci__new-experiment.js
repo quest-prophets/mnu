@@ -15,3 +15,11 @@ document.getElementById("assistants-tbody").addEventListener('click', (e) => {
         document.getElementById("assistant-id").value = "";
     }
 });
+
+document.getElementById("assistant-id").addEventListener('input', e => {
+    let selectedRows = document.getElementsByClassName("selected-row");
+    while (selectedRows.length > 0) selectedRows[0].classList.remove("selected-row");
+    let row =  document.querySelector('#assistants-tbody *[data-id="' + e.target.value + '"]');
+    if (!row) return;
+    row.classList.add("selected-row");
+});
