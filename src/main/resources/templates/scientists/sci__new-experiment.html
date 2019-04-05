@@ -16,16 +16,31 @@
         <div class="info"> Name Surname <br> Level: x</div>
     </div>
     <form action="#" th:action="@{/sci/experiment}" th:object="${form}" method="post" class="grid__inputs flex-column">
-        <input th:required="true" th:field="*{title}" class="input_big" placeholder="Title">
-        <select th:field="*{type}" class="input_big" >
-            <option th:value="minor" th:text="Minor"></option>
-            <option th:value="major" th:text="Major"></option>
-        </select>
-        <input id="assistant-id" th:field="*{assistantId}" class="input_big" placeholder="Assistant">
-        <button class="grid__assistants-button button">Choose assistants</button>
-        <input th:required="true" th:field="*{date}" class="input_big" type="datetime-local" placeholder="Date">
-        <textarea th:field="*{description}" class="text-area_big input_big" placeholder="Description"></textarea>
-        <input type="submit" class="button" value="Submit Experiment">
+        <label class="form-item">
+            <b>Title</b>
+            <input th:required="true" th:field="*{title}" class="input_big">
+        </label>
+        <label class="form-item">
+            <b>Type</b>
+            <select th:field="*{type}" class="input_big" >
+                <option th:value="minor" th:text="Minor"></option>
+                <option th:value="major" th:text="Major"></option>
+            </select>
+        </label>
+        <label class="form-item">
+            <b>Assistant</b>
+            <input id="assistant-id" th:field="*{assistantId}" class="input_big">
+        </label>
+        <button class="form-item grid__assistants-button button">Choose assistants</button>
+        <label class="form-item">
+            <b>Date</b>
+            <input th:required="true" th:field="*{date}" class="input_big" type="datetime-local">
+        </label>
+        <label class="form-item">
+            <b>Description</b>
+            <textarea th:field="*{description}" class="text-area_big input_big"></textarea>
+        </label>
+        <input type="submit" class="button form-item" value="Submit Experiment">
     </form>
     <div class="grid__assistants-table">
         <table>

@@ -10,8 +10,14 @@
 <body class="login-page">
 <div class="flex-column" style="height: 100vh">
     <form action="#" method="post" th:action="@{/auth/login}" th:object="${form}" class="flex-column login-page__box">
-        <input th:field="*{username}" class="login-page__item input_big" placeholder="Login">
-        <input th:field="*{password}" type="password" class="login-page__item input_big" placeholder="Password">
+        <label class="login-page__item">
+            <b>Login</b>
+            <input th:field="*{username}" class="input_big">
+        </label>
+        <label class="login-page__item">
+            <b>Password</b>
+            <input th:field="*{password}" type="password" class="input_big">
+        </label>
         <input type="submit" class="login-page__item button" value="Log in">
         <a class="login-page__item button" th:href="@{/auth/register}">Register</a>
     </form>

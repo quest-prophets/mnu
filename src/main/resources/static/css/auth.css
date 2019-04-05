@@ -17,6 +17,10 @@ body {
     margin-top: 15px;
 }
 
+.login-page__item:first-child{
+    margin-top: 0;
+}
+
 .login-page__checkbox {
     font-size: 16px;
 }
@@ -46,6 +50,7 @@ body {
 }
 
 .input_big {
+    display: block;
     font-size: 16px;
     height: 25px;
 }

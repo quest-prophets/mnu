@@ -4,7 +4,7 @@ body {
 }
 
 .text-area_big {
-    min-height: 200px;
+    min-height: 400px;
 }
 
 .info {
@@ -17,14 +17,15 @@ body {
     justify-content: flex-start;
 }
 
-.article-form *{
-    margin-top: 15px;
+.form-item {
+    margin-top: 20px;
 }
 
 .input_big {
+    display: block;
     font-size: 16px;
     height: 30px;
-    width: 300px;
+    width: 500px;
 }
 
 .button {
@@ -83,7 +84,7 @@ body {
     display: none;
 }
 
-@media (max-width: 350px) {
+@media (max-width: 700px) {
     body {
         margin: 5px;
     }
@@ -93,10 +94,6 @@ body {
     }
 
     .text-area_big {
-        width: 80vw;
-    }
-
-    .button{
         width: 80vw;
     }
 }

@@ -18,7 +18,7 @@ body {
     margin-top: 10px;
 }
 
-.grid__inputs * {
+.form-item {
     margin-top: 20px;
 }
 
@@ -52,16 +52,17 @@ body {
 }
 
 .input_big {
+    display: block;
     font-size: 16px;
     height: 30px;
     width: 300px;
 }
 
-#assistants-tbody{
+#assistants-tbody {
     cursor: pointer;
 }
 
-.selected-row{
+.selected-row {
     background: #d6ffc5;
 }
 
@@ -149,11 +150,7 @@ body {
         width: 80vw;
     }
 
-    .text-area_big {
-        width: 80vw;
-    }
-
-    .button{
+    .button:not(.button_round) {
         width: 80vw;
     }
 }
