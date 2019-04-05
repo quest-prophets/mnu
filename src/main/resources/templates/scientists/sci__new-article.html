@@ -14,10 +14,10 @@
     </a>
     <div class="info"> Name Surname <br> Level: x</div>
 </div>
-<div class="flex-column">
-    <input class="input_big" placeholder="Title">
-    <textarea class="text-area_big" placeholder="Article"></textarea>
-    <button class="button button_unpressed">Submit article</button>
-</div>
+<form action="#" th:action="@{UNKNOWN}" th:object="${form}" method="post" class="flex-column">
+    <input th:field="*{title}" class="input_big" placeholder="Title">
+    <textarea th:field="*{article}" class="text-area_big" placeholder="Article"></textarea>
+    <input type="submit" class="button button_unpressed" value="Submit article">
+</form>
 </body>
 </html>

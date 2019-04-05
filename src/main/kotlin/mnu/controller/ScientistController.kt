@@ -1,7 +1,9 @@
 package mnu.controller
 
+import mnu.form.NewArticleForm
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
@@ -14,5 +16,8 @@ class ScientistController {
     fun experiment() = "scientists/sci__new-experiment.html"
 
     @GetMapping("/article")
-    fun article() = "scientists/sci__new-article.html"
+    fun article(model: Model): String {
+        model.addAttribute("form", NewArticleForm())
+        return "scientists/sci__new-article.html"
+    }
 }
