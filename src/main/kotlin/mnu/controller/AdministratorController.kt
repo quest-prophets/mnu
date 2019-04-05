@@ -101,10 +101,22 @@ class AdministratorController {
             return if (existingUser != null) {
                 "Username '${form.username}' is already taken. Please try again."
             } else {
+                val houseIdList = districtHouseRepository?.getAllIds()!!
+                val houseIdNormalList = ArrayList<Long>()
+                for (i in 0 until houseIdList.size) {
+                    houseIdNormalList.add(houseIdList[i].longValueExact())
+                }
+
+                val managerIdList = managerEmployeeRepository?.getAllIds()!!
+                val managerIdNormalList = ArrayList<Long>()
+                for (i in 0 until managerIdList.size) {
+                    managerIdNormalList.add(managerIdList[i].longValueExact())
+                }
+
                 val newUser = User(form.username, form.password, Role.PRAWN)
                 val newPrawn = Prawn(form.name).apply { this.user = newUser
-                    this.districtHouse = districtHouseRepository?.findById(districtHouseRepository?.getAllIds()!!.random())?.get()
-                    this.manager = managerEmployeeRepository?.findById(managerEmployeeRepository?.getAllIds()!!.random())?.get()
+                    this.districtHouse = districtHouseRepository?.findById(houseIdNormalList.random())?.get()
+                    this.manager = managerEmployeeRepository?.findById(managerIdNormalList.random())?.get()
                 }
 
                 userRepository?.save(newUser)

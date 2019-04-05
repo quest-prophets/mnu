@@ -64,6 +64,8 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                         response.sendRedirect("/secMain")
                     if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
                         response.sendRedirect("/clientsShop")
+                    if (roles.contains("PRAWN"))
+                        response.sendRedirect("/prawnMain")
                 }}
                 .failureHandler { request, response, exception -> response.status = 401 }
                 .usernameParameter("username")

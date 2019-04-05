@@ -25,6 +25,9 @@ class PageController {
     @GetMapping("/clientsShop")
     fun clientsShop() = "customers/customer__shop.html"
 
+    @GetMapping("/prawnMain")
+    fun prawnMain() = "prawns/prawn__main.html"
+
     @GetMapping("/employeeDB")
     fun adminEmployees() = "administrators/admin__employees.html"
 
