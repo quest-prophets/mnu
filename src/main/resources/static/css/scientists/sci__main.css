@@ -18,11 +18,6 @@ body {
     margin: auto 0 auto 0;
 }
 
-.employee-notifications {
-    cursor: pointer;
-    margin: auto auto auto 20px;
-}
-
 .grid-button {
     margin: auto;
     text-align: center;
@@ -128,10 +123,6 @@ body {
         grid-template-columns: 1fr 1fr;
     }
 
-    .employee-notifications {
-        margin: auto 0 auto auto;
-    }
-
     .scientists-grid__add {
         width: auto;
     }
@@ -151,10 +142,6 @@ body {
     }
 
     .employee-info {
-        margin-top: 0;
-    }
-
-    .employee-notifications {
         margin-top: 0;
     }
 }

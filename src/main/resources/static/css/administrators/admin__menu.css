@@ -45,11 +45,6 @@ body {
     margin: 5px 0 auto 0;
 }
 
-.employee-notifications {
-    cursor: pointer;
-    margin: 5px auto auto 20px;
-}
-
 .grid-button {
     margin: 15px auto auto auto;
     height: 80px;
@@ -111,12 +106,6 @@ body {
 .administrators-menu-grid__prawn-job-applications {
     grid-area: prawn-job-applications;
     margin-left: 30px;
-}
-
-@media (max-width: 1000px) {
-    .employee-notifications {
-        margin: 5px 0 auto auto;
-    }
 }
 
 @media (max-width: 700px) {

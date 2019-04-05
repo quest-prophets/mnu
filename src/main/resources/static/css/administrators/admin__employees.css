@@ -178,15 +178,10 @@ body {
     margin: 5px 0 auto 0;
 }
 
-.employee-notifications {
-    cursor: pointer;
-    margin: 5px auto auto 20px;
-}
-
 .flex-row {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .icon {
@@ -201,12 +196,6 @@ body {
 
 .hidden {
     display: none;
-}
-
-@media (max-width: 1000px) {
-    .employee-notifications {
-        margin: 5px 0 auto auto;
-    }
 }
 
 @media (max-width: 730px) {

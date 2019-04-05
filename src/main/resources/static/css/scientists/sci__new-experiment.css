@@ -45,16 +45,10 @@ body {
     margin: auto 0 auto 0;
 }
 
-.notifications {
-    cursor: pointer;
-    margin: auto auto auto 20px;
-}
-
 .flex-row {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .input_big {
@@ -135,10 +129,6 @@ body {
 }
 
 @media (max-width: 750px) {
-    .notifications {
-        margin: auto 0 auto auto;
-    }
-
     .grid {
         grid: "header" 80px "inputs";
         padding: 0;

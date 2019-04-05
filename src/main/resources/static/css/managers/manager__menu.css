@@ -20,11 +20,6 @@ body {
     margin: auto 0 auto 0;
 }
 
-.employee-notifications {
-    cursor: pointer;
-    margin: auto auto auto 20px;
-}
-
 .grid-button {
     margin: 15px auto auto auto;
     height: 50px;
@@ -102,20 +97,10 @@ body {
     display: none;
 }
 
-@media (max-width: 1000px) {
-    .employee-notifications {
-        margin: auto 0 auto auto;
-    }
-}
-
 @media (max-width: 400px) {
     .managers-grid__header {
         text-align: center;
         flex-direction: column;
-    }
-
-    .employee-notifications {
-        margin: auto;
     }
 
     .managers-grid {
