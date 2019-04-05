@@ -75,13 +75,9 @@ class AuthorizationController {
                 val newClientUser = Client(form.name, form.email, clientType).apply { this.user = newUser }
 
                 val managerIdList = managerEmployeeRepository?.getAllIds()!!
-                val managerIdNormalList = ArrayList<Long>()
-                for (i in 0 until managerIdList.size) {
-                    managerIdNormalList.add(managerIdList[i].longValueExact())
-                }
 
                 if (clientType == ClientType.CUSTOMER)
-                    newClientUser.apply { this.manager = managerEmployeeRepository.findById(managerIdNormalList.random()).get() }
+                    newClientUser.apply { this.manager = managerEmployeeRepository.findById(managerIdList.random()).get() }
 
                 userRepository?.save(newUser)
                 clientRepository?.save(newClientUser)

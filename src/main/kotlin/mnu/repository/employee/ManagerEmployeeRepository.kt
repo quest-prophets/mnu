@@ -7,7 +7,7 @@ import java.math.BigInteger
 
 interface ManagerEmployeeRepository : JpaRepository<ManagerEmployee, Long> {
     @Query("select m.employee_user_id from managers m;", nativeQuery = true)
-    fun getAllIds(): List<BigInteger>
+    fun getAllIds(): List<Long>
 
     @Query(value = "select e.user_id, e.name, e.level, m.position, e.salary from employees e " +
             "inner join managers m on (e.user_id = m.employee_user_id) where (e.status = 'WORKING');", nativeQuery = true)
