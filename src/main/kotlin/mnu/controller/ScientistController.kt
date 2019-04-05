@@ -1,6 +1,5 @@
 package mnu.controller
 
-
 import mnu.form.NewArticleForm
 
 import mnu.repository.ArticleRepository
@@ -54,4 +53,8 @@ class ScientistController {
         model.addAttribute("assistants", scientistEmployeeRepository?.getAssistants(currentScientistLvl!!))
         return "/scientists/sci__new-experiment.html"
     }
+
+    @PostMapping("/article")
+    @ResponseBody
+    fun addEmployee(@ModelAttribute form: NewArticleForm): String = throw NotImplementedError()
 }

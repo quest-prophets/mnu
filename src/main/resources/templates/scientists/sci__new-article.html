@@ -8,15 +8,15 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="flex-row header">
+<div class="flex-row">
     <a th:href="@{/sci/main}">
         <img alt="back" th:src="@{/images/back.png}" class="icon back-button round-button button_unpressed">
     </a>
     <div class="info"> Name Surname <br> Level: x</div>
 </div>
-<form action="#" th:action="@{UNKNOWN}" th:object="${form}" method="post" class="flex-column">
+<form action="#" th:action="@{article}" th:object="${form}" method="post" class="flex-column article-form">
     <input th:field="*{title}" class="input_big" placeholder="Title">
-    <textarea th:field="*{article}" class="text-area_big" placeholder="Article"></textarea>
+    <textarea th:field="*{article}" class="text-area_big input_big" placeholder="Article"></textarea>
     <input type="submit" class="button button_unpressed" value="Submit article">
 </form>
 </body>

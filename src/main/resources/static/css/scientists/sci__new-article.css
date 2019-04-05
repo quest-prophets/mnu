@@ -3,27 +3,8 @@ body {
     font-size: 17px;
 }
 
-.header {
-    grid-area: header;
-}
-
-.grid {
-    display: grid;
-    grid: "header" 80px "inputs";
-    padding: 0 5px;
-}
-
-.grid__inputs {
-    grid-area: inputs;
-    margin-top: 10px;
-}
-
-.grid__inputs * {
-    margin-top: 20px;
-}
-
 .text-area_big {
-    min-height: 100px;
+    min-height: 200px;
 }
 
 .info {
@@ -34,6 +15,10 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+}
+
+.article-form *{
+    margin-top: 15px;
 }
 
 .input_big {
@@ -103,13 +88,6 @@ body {
 
 .hidden {
     display: none;
-}
-
-@media (max-width: 750px) {
-    .grid {
-        grid: "header" 80px "inputs";
-        padding: 0;
-    }
 }
 
 @media (max-width: 350px) {

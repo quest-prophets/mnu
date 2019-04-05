@@ -53,7 +53,7 @@
         <img alt="Cash Rewards" id="reward-button" class="button_unpressed round-button icon" th:src="@{/images/dollar.png}" onclick="setRewardInterface()">
     </div>
     <div class="admin-employees-grid__inputs flex-column">
-        <form action="#" th:action="@{admin/registerEmployee}" th:object="${form}" method="post" id="add-interface" class="admin-employees-grid__inputs_add add-employees-inputs-grid flex-column">
+        <form action="#" th:action="@{/admin/registerEmployee}" th:object="${form}" method="post" id="add-interface" class="admin-employees-grid__inputs_add add-employees-inputs-grid flex-column">
             <input th:required="true" th:field="*{username}" class="add-employees-inputs-grid__login" placeholder="Login">
             <input th:required="true" th:field="*{password}" type="password" class="add-employees-inputs-grid__password" placeholder="Password">
             <input th:required="true" th:field="*{name}" class="add-employees-inputs-grid__name" placeholder="Name">
