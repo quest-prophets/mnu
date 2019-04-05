@@ -5,6 +5,7 @@ import mnu.form.NewExperimentForm
 import mnu.model.Article
 import mnu.model.employee.ScientistEmployee
 import mnu.model.enums.ExperimentType
+import mnu.model.enums.RequestStatus
 import mnu.model.request.ExperimentRequest
 import mnu.model.request.Request
 import mnu.repository.ArticleRepository
@@ -64,7 +65,7 @@ class ScientistController {
     @ResponseBody
     fun requestExperiment(@ModelAttribute form: NewExperimentForm, principal: Principal): String {
         val user = userRepository?.findByLogin(principal.name)
-        val newRequest = Request()
+        val newRequest = Request().apply { this.status = RequestStatus.PENDING }
 
         val experimentType = when (form.type) {
             "minor" -> ExperimentType.MINOR
