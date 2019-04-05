@@ -11,7 +11,7 @@
 <body>
 <div class="admin-employees-grid">
     <div class="flex-row admin-header">
-        <a th:href="@{/admin/menu}">
+        <a th:href="@{/admin/main}">
             <img alt="back" th:src="@{/images/back.png}" class="icon back-button round-button button_unpressed">
         </a>
         <div class="employee-info"> Name Surname <br> Level: x</div>
@@ -27,7 +27,7 @@
                     Name
                 </td>
                 <td>
-                    Position
+                    Role
                 </td>
                 <td>
                     Lvl
@@ -41,7 +41,14 @@
             </tr>
             </thead>
             <tbody>
-
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.id}"></td>
+                <td th:text="${employee.name}"></td>
+                <td th:text="${employee.user.role}"></td>
+                <td th:text="${employee.level}"></td>
+                <td th:text="${employee.salary}"></td>
+                <td th:text="${employee.dateOfEmployment}"></td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -76,7 +83,9 @@
             ???
         </div>
         <div id="find-interface" class="admin-employees-grid__inputs_find hidden">
-            ???
+            <form action="#" th:action="@{/admin/employee}" method="get">
+                <input type="text" name="q" placeholder="Search employee by name...">
+            </form>
         </div>
         <div id="reward-interface" class="admin-employees-grid__inputs_reward hidden">
             <input type="number" placeholder="Employee id">

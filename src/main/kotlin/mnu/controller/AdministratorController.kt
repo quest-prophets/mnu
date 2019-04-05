@@ -45,14 +45,17 @@ class AdministratorController {
 
 
     @GetMapping("/employee")
-    fun adminEmployees(model: Model): String {
+    fun adminEmployees(model: Model, @RequestParam (required = false) q: String?): String {
         model.addAttribute("form", EmployeeRegistrationForm())
+        if (q != null)
+            model.addAttribute("employees", employeeRepository?.findAllByNameIgnoreCaseContaining(q))
+        else
+            model.addAttribute("employees", employeeRepository?.findAll())
         return "administrators/admin__employees.html"
     }
 
     @GetMapping("/main")
     fun adminMenu() = "administrators/admin__menu.html"
-
 
 
     @PostMapping("/registerEmployee")

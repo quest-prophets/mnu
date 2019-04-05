@@ -15,7 +15,7 @@ data class Employee (@Column(nullable = false) var name: String = "",
                      @Min(0) @Max(10) var level: Int? = null,
                      @Min(0) var salary: Long? = null) {
     @Id
-    private var id: Long? = null
+    var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
