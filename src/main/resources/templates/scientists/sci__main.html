@@ -12,10 +12,11 @@
     <div class="employee-header">
         <div class="employee-info"> Name Surname <br> Level: x</div>
     </div>
-    <button class="scientists-grid__experiments grid-button button button_pressed">Experiments</button>
-    <button class="scientists-grid__articles grid-button button button_unpressed">Articles</button>
-    <a th:href="@{/sci/experiment}" class="scientists-grid__add grid-button button button_unpressed">Add Experiment</a>
-    <a th:href="@{/sci/article}" class="scientists-grid__add grid-button button button_unpressed">Add Article</a>
+    <button id="experiments-button" class="scientists-grid__experiments grid-button button button_pressed">Experiments</button>
+    <button id="articles-button" class="scientists-grid__articles grid-button button button_unpressed">Articles</button>
+    <a id="new-experiment-button" th:href="@{/sci/experiment}" class="scientists-grid__add grid-button button button_unpressed">Add Experiment</a>
+    <a id="new-article-button" th:href="@{/sci/article}" class="scientists-grid__add grid-button button button_unpressed hidden">Write Article</a>
 </div>
+<script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
 </body>
 </html>
