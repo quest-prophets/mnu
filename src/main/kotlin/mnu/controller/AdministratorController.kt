@@ -32,6 +32,9 @@ class AdministratorController {
     val districtHouseRepository: DistrictHouseRepository? = null
 
     @Autowired
+    val cashRewardRepository: CashRewardRepository? = null
+
+    @Autowired
     val managerEmployeeRepository: ManagerEmployeeRepository? = null
     @Autowired
     val securityEmployeeRepository: SecurityEmployeeRepository? = null

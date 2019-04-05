@@ -5,18 +5,20 @@ import org.springframework.data.jpa.repository.*
 import org.springframework.data.repository.query.Param
 
 interface ScientistEmployeeRepository : JpaRepository<ScientistEmployee, Long> {
-    @Query(value = "select e.user_id, e.name, e.level, s.position, e.salary from employees e " +
-            "inner join scientists s on (e.user_id = s.employee_user_id) where (e.status = 'WORKING');", nativeQuery = true)
-    fun getAllWorkingScientists() : List<Array<Any>>
+//    @Query(value = "select e.user_id, e.name, e.level, s.position, e.salary from employees e " +
+//            "inner join scientists s on (e.user_id = s.employee_user_id) where (e.status = 'WORKING');", nativeQuery = true)
+//    fun getAllWorkingScientists() : List<Array<Any>>
 
     @Query(value = "select count(*) from scientists s inner join requests r on (s.employee_user_id = r.resolver_id)" +
             " inner join experiment_requests er on (r.id = er.request_id)" +
             " where (r.status = 'RESOLVED');", nativeQuery = true)
     fun allResolvedExperimentRequests() : Long
 
-    @Query("select s.employee_user_id, e.name, s.position, e.level from scientists s" +
+    @Query("select s.employee_user_id as id, e.name as name, s.position as position, e.level as level from scientists s" +
             " inner join employees e on (s.employee_user_id = e.user_id) where (e.level < ?1);", nativeQuery = true)
-    fun getAssistants(examinatorLvl: Long) : List<Array<Any>>
+    fun getAssistants(examinatorLvl: Int) : List<Assistant>
+
+    interface Assistant { val id: Long; val name: String; val position: String; val level: Int }
 
     @Query("select count(*) from scientists s inner join experiments ex on (s.id = ex.examinator_id);", nativeQuery = true)
     fun allConductedExperiments() : Long

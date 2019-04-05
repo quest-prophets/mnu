@@ -47,6 +47,12 @@
             </tr>
             </thead>
             <tbody>
+            <tr th:each="assistant : ${assistants}">
+                <td th:text="${assistant.id}"></td>
+                <td th:text="${assistant.name}"></td>
+                <td th:text="${assistant.position}"></td>
+                <td th:text="${assistant.level}"></td>
+            </tr>
             </tbody>
         </table>
     </div>
