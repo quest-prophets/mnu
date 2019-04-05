@@ -74,7 +74,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 .logoutUrl("/auth/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/index.html")
+                .logoutSuccessUrl("/")
             .and()
                 .exceptionHandling().authenticationEntryPoint { request, response, authException -> run {
                 response.outputStream.print("Not authorized")
