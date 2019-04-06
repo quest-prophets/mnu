@@ -45,6 +45,9 @@ class ScientistController {
     @GetMapping("/main")
     fun main() = "scientists/sci__main.html"
 
+    @GetMapping("/main/articles")
+    fun mainArticles() = "scientists/sci__main_articles.html"
+
 
     @GetMapping("/article")
     fun article(model: Model): String {
