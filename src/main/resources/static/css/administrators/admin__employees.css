@@ -6,7 +6,7 @@ body {
 .button {
     color: black;
     text-decoration: none;
-    border: 1px solid black;
+    border: 2px solid black;
     border-radius: 6px;
     padding: 8px 22px;
     font-size: 20px;
@@ -27,6 +27,7 @@ body {
 }
 
 .button_pressed {
+    top: 3px;
     box-shadow: none;
     outline: none;
     background: lightgreen;
