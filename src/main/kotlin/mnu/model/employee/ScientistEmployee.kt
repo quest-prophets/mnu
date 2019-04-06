@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "scientists")
-data class ScientistEmployee (var position: String? = null){
+class ScientistEmployee {
     @Id
     var id: Long? = null
 

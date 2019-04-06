@@ -6,9 +6,9 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "managers")
-data class ManagerEmployee (var position: String? = null){
+class ManagerEmployee{
     @Id
-    private var id: Long? = null
+    var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId

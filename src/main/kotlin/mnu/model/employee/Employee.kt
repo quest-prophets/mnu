@@ -13,7 +13,8 @@ import javax.persistence.FetchType
 data class Employee (@Column(nullable = false) var name: String = "",
                      var dateOfEmployment: LocalDateTime? = null,
                      @Min(0) @Max(10) var level: Int? = null,
-                     @Min(0) var salary: Long? = null) {
+                     @Min(0) var salary: Long? = null,
+                     var position: String? = null) {
     @Id
     var id: Long? = null
 

@@ -3,6 +3,7 @@ package mnu.repository.employee
 import mnu.model.employee.Employee
 import mnu.model.enums.PersonStatus
 import org.springframework.data.jpa.repository.*
+import java.time.LocalDateTime
 
 interface EmployeeRepository : JpaRepository <Employee, Long> {
 

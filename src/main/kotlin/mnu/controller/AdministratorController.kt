@@ -82,16 +82,16 @@ class AdministratorController : ApplicationController() {
                 }
                 val newUser = User(form.username, form.password, role)
                 val newEmployeeUser = Employee(form.name, LocalDateTime.now(),
-                    form.level.toInt(), form.salary.toLong()).apply { this.user = newUser
+                    form.level.toInt(), form.salary.toLong(), form.position).apply { this.user = newUser
                     this.status = PersonStatus.WORKING
                 }
 
                 userRepository?.save(newUser)
                 employeeRepository?.save(newEmployeeUser)
                 when (role) {
-                    Role.MANAGER -> managerEmployeeRepository?.save(ManagerEmployee(form.position).apply { this.employee = newEmployeeUser })
-                    Role.SCIENTIST -> scientistEmployeeRepository?.save(ScientistEmployee(form.position).apply { this.employee = newEmployeeUser })
-                    Role.SECURITY -> securityEmployeeRepository?.save(SecurityEmployee(form.position).apply { this.employee = newEmployeeUser })
+                    Role.MANAGER -> managerEmployeeRepository?.save(ManagerEmployee().apply { this.employee = newEmployeeUser })
+                    Role.SCIENTIST -> scientistEmployeeRepository?.save(ScientistEmployee().apply { this.employee = newEmployeeUser })
+                    Role.SECURITY -> securityEmployeeRepository?.save(SecurityEmployee().apply { this.employee = newEmployeeUser })
                     Role.ADMIN -> administratorEmployeeRepository?.save(AdministratorEmployee().apply { this.employee = newEmployeeUser })
                     else -> {}
                 }
@@ -100,6 +100,10 @@ class AdministratorController : ApplicationController() {
             }
         }
     }
+
+//    @PostMapping("/editEmployee")
+//    @ResponseBody
+//    fun editEmployee()
 
     @PostMapping("/registerPrawn")
     @ResponseBody
