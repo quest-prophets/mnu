@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/administrators/admin__experiments-articles.css}">
+    <title>MNU</title>
+</head>
+<body>
+<div class="grid">
+    <div class="employee-header flex-row">
+        <a th:href="@{/admin/main}">
+            <img alt="back" th:src="@{/images/back.png}" class="icon button back-button button_round">
+        </a>
+        <div class="employee-info"> Name Surname <br> Level x</div>
+    </div>
+    <div class="grid__experiments grid-button button button_pressed">
+        Experiments
+    </div>
+    <a th:href="@{/admin/articles}" class="grid__articles grid-button button">
+        Articles
+    </a>
+
+    <div class="content">
+
+    </div>
+</div>
+</body>
+</html>

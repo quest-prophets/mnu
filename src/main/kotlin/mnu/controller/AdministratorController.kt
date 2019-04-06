@@ -55,6 +55,11 @@ class AdministratorController : ApplicationController() {
     @GetMapping("/main")
     fun adminMenu() = "administrators/admin__menu.html"
 
+    @GetMapping("/experiments")
+    fun adminExperiments() = "administrators/admin__experiments.html"
+
+    @GetMapping("/articles")
+    fun adminArticles() = "administrators/admin__articles.html"
 
     @PostMapping("/registerEmployee")
     @ResponseBody
