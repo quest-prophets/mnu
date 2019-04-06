@@ -23,20 +23,19 @@
     </a>
 
     <div class="content">
-        <div class=" content__item">
-            <div class="content__header rejected">
+        <div th:each="exp: ${experiments}" class=" content__item">
+            <div class="content__header">
                 <img class="content-icon" alt="rejected" th:src="@{/images/x_mark.png}">
+                <img class="content-icon">
                 <span class="header-text">
-                    Minor Exp. #NaN <b>EXPERIMENT TITLE</b>
+                    <span th:text="${exp.type} == 'MAJOR' ? 'Major' : 'Minor'"></span> Exp. #<span th:text="${exp.id}"></span> <b>EXPERIMENT TITLE</b>
                 </span>
             </div>
             <div class="content__main">
-                <b>Assistant</b> <br>
-                ASSISTANT NAME <br>
-                <b>Description</b> <br>
-                DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION
-                DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION
-                DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION
+                <b>Assistant</b>
+                <div th:text="${exp.assistant.employee.name}">ASSISTANT NAME</div>
+                <b>Description</b>
+                <div th:text="${exp.description}"></div>
             </div>
         </div>
     </div>
