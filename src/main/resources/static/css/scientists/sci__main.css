@@ -118,24 +118,24 @@ body {
 }
 
 .waiting {
-    background: #83e7ff;
+    background: #dcefff;
 }
 
 .running {
-    background: #80ff85;
+    background: #d6f5d5;
 }
 
 .finished {
-    background: #b5b5b5;
+    background: #ececec;
 }
 
 .rejected {
-    background: #d76d8059;
+    background: #f2d6de;
 }
 
 .content-icon {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
 }
 
 .hidden {

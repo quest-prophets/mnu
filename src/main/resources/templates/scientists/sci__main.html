@@ -24,16 +24,37 @@
 
     <div class="content">
         <div th:each="exp: ${experiments}" class=" content__item">
-            <div class="content__header">
-                <img class="content-icon" alt="rejected" th:src="@{/images/x_mark.png}">
-                <img class="content-icon">
+            <div th:class="content__header"
+                 th:classappend="|${exp.status.name()=='PENDING' ? 'waiting' : exp.status.name()=='APPROVED' ? 'running' : exp.status.name()=='REJECTED' ? 'rejected' : 'finished'}|">
+                <div th:switch="${exp.status.name()}">
+                    <img th:case="PENDING" class="content-icon" alt="pending" th:src="@{/images/clock.png}">
+                    <img th:case="APPROVED" class="content-icon" alt="approved" th:src="@{/images/pencil.png}">
+                    <img th:case="REJECTED" class="content-icon" alt="rejected" th:src="@{/images/x_mark.png}">
+                    <img th:case="FINISHED" class="content-icon" alt="finished" th:src="@{/images/tick.png}">
+                </div>
                 <span class="header-text">
-                    <span th:text="${exp.type} == 'MAJOR' ? 'Major' : 'Minor'"></span> Exp. #<span th:text="${exp.id}"></span> <b>EXPERIMENT TITLE</b>
+                    <span th:text="${exp.type.name()} == 'MAJOR' ? 'Major' : 'Minor'"></span> Exp. #<span
+                        th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>
                 </span>
             </div>
-            <div class="content__main">
-                <b>Assistant</b>
-                <div th:text="${exp.assistant.employee.name}">ASSISTANT NAME</div>
+            <div class="content__main" th:switch="${exp.status.name()}">
+                <div th:if="${exp.assistant}">
+                    <b>Assistant</b>
+                    <div th:text="${exp.assistant.employee.name}"></div>
+                </div>
+                    <div th:case="PENDING">
+                        <b>Submitted on </b>
+                    </div>
+                    <div th:case="APPROVED">
+                        <b>Approved on </b>
+                    </div>
+                    <div th:case="REJECTED">
+                        <b> Rejected on </b>
+                    </div>
+                    <div th:case="FINISHED">
+                        <b> Finished on </b>
+                    </div>
+                <div th:text="${exp.date}"></div>
                 <b>Description</b>
                 <div th:text="${exp.description}"></div>
             </div>
