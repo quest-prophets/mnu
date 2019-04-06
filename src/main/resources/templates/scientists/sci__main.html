@@ -9,7 +9,6 @@
 </head>
 <body>
 <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
-<div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
 <div class="scientists-grid">
     <div class="employee-header">
         <div class="employee-info"> Name Surname <br> Level x</div>
@@ -19,6 +18,9 @@
     </div>
     <a th:href="@{/sci/main/articles}" class="scientists-grid__articles grid-button button">
         Articles
+    </a>
+    <a th:href="@{/sci/main/requests}" class="scientists-grid__requests grid-button button">
+        Requests
     </a>
     <a th:href="@{/sci/experiment}" class="scientists-grid__add grid-button button">
         Add Experiment

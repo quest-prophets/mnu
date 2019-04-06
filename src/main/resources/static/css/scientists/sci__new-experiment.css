@@ -123,6 +123,16 @@ body {
     margin-right: 15px;
 }
 
+.flash {
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.flash_error {
+    background: #f2d6de;
+}
+
 .hidden {
     display: none;
 }

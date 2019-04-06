@@ -10,7 +10,7 @@ body {
 
 .scientists-grid {
     display: grid;
-    grid: "header expButton artButton addButton" 50px "content content content content";
+    grid: "header expButton artButton reqButton addButton" 50px "content content content content content";
     grid-template-columns: 2fr 3fr 2.5fr 2.5fr;
     padding: 5px;
 }
@@ -33,6 +33,11 @@ body {
 
 .scientists-grid__articles {
     grid-area: artButton;
+    margin-left: 20px;
+}
+
+.scientists-grid__requests {
+    grid-area: reqButton;
     margin-left: 20px;
 }
 
@@ -112,7 +117,8 @@ body {
     line-height: 22px;
 }
 
-.content__main{
+.content__main {
+    word-break: break-word;
     text-align: left;
     padding: 12px;
 }
@@ -136,6 +142,16 @@ body {
 .content-icon {
     width: 25px;
     height: 25px;
+}
+
+.flash {
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.flash_success {
+    background: #d6f5d5;
 }
 
 .hidden {
@@ -167,7 +183,7 @@ body {
 
 @media (max-width: 1000px) {
     .scientists-grid {
-        grid: "header header" 50px "expButton artButton" 80px "addButton addButton" 50px "content content";
+        grid: "header header" 50px "expButton artButton reqButton" 80px "addButton addButton addButton" 50px "content content content";
         grid-template-columns: 1fr 1fr;
     }
 
@@ -178,7 +194,7 @@ body {
 
 @media (max-width: 400px) {
     .scientists-grid {
-        grid: "header" 75px "expButton" 65px "artButton" 65px "addButton" 65px "content";
+        grid: "header" 75px "expButton" 65px "artButton" 65px "reqButton" 65px "addButton" 65px "content";
     }
 
     .grid-button {

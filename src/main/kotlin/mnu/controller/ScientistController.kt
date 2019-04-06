@@ -50,6 +50,8 @@ class ScientistController : ApplicationController() {
     @GetMapping("/main/articles")
     fun mainArticles() = "scientists/sci__main_articles.html"
 
+    @GetMapping("/main/requests")
+    fun mainRequests() = "scientists/sci__main_requests.html"
 
     @GetMapping("/article")
     fun article(model: Model): String {
