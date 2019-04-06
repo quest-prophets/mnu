@@ -23,13 +23,7 @@ import java.time.format.DateTimeFormatter
 
 @Controller
 @RequestMapping("/sci")
-class ScientistController {
-    @Autowired
-    val userRepository: UserRepository? = null
-
-    @Autowired
-    val employeeRepository: EmployeeRepository? = null
-
+class ScientistController : ApplicationController() {
     @Autowired
     val scientistEmployeeRepository: ScientistEmployeeRepository? = null
 

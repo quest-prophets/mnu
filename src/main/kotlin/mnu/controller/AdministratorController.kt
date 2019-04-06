@@ -17,16 +17,7 @@ import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/admin")
-class AdministratorController {
-
-    @Autowired
-    val userRepository: UserRepository? = null
-
-    @Autowired
-    val prawnRepository: PrawnRepository? = null
-
-    @Autowired
-    val employeeRepository: EmployeeRepository? = null
+class AdministratorController : ApplicationController() {
 
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
