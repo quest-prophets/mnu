@@ -8,6 +8,8 @@
     <title>MNU</title>
 </head>
 <body>
+<div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+<div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
 <div class="grid">
     <div class="flex-row header">
         <a th:href="@{/sci/main}">

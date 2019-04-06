@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -61,52 +62,57 @@ class ScientistController : ApplicationController() {
         val user = userRepository?.findByLogin(principal.name)
         val currentScientistLvl = employeeRepository?.findById(user?.id!!)?.get()?.level
         model.addAttribute("assistants", scientistEmployeeRepository?.getAssistants(currentScientistLvl!!))
-        model.addAttribute("form", NewExperimentForm())
+        if (!model.containsAttribute("form"))
+            model.addAttribute("form", NewExperimentForm())
         return "/scientists/sci__new-experiment.html"
     }
 
     @PostMapping("/experiment")
-    @ResponseBody
-    fun requestExperiment(@ModelAttribute form: NewExperimentForm, principal: Principal): String {
+    fun requestExperiment(
+        @ModelAttribute form: NewExperimentForm, principal: Principal,
+        redirect: RedirectAttributes
+    ): String {
         val user = userRepository?.findByLogin(principal.name)
 
         val experimentType = when (form.type) {
             "minor" -> ExperimentType.MINOR
             "major" -> ExperimentType.MAJOR
-            else -> return "Error - such experiment type does not exist."
+            else -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Experiment type does not exist.")
+                return "redirect:experiment"
+            }
         }
 
         val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
-        if (form.assistantId != null) {
-            val requestedAssistant: ScientistEmployee? =
-                scientistEmployeeRepository?.findById(form.assistantId)?.orElse(null)
-            return if (requestedAssistant == null)
-                "Scientist with such id does not exist."
-            else {
-
-                if (requestedAssistant.employee!!.level!! < currentScientist!!.employee!!.level!!) {
-
-                    experimentRepository?.save(
-                        Experiment(
-                            form.title, experimentType,
-                            form.description, currentScientist, requestedAssistant
-                        ).apply {
-                            this.status = ExperimentStatus.PENDING
-                            this.statusDate = LocalDateTime.now()
-                        })
-
-                    "Request sent. Wait for supervisor's decision."
-                } else "Requested assistant's level is higher than yours."
+        val assistant = form.assistantId?.let { assistantId ->
+            val requestedAssistant = scientistEmployeeRepository?.findById(assistantId)?.orElse(null)
+            when {
+                requestedAssistant == null -> {
+                    redirect.addFlashAttribute("form", form)
+                    redirect.addFlashAttribute("error", "Scientist does not exist.")
+                    return "redirect:experiment"
+                }
+                requestedAssistant.employee!!.level!! >= currentScientist!!.employee!!.level!! -> {
+                    redirect.addFlashAttribute("form", form)
+                    redirect.addFlashAttribute("error", "Requested assistant's level is higher than yours.")
+                    return "redirect:main"
+                }
+                else -> requestedAssistant
             }
-        } else {
-            experimentRepository?.save(
-                Experiment(
-                    form.title, experimentType,
-                    form.description, currentScientist, null
-                ).apply { this.status = ExperimentStatus.PENDING })
-
-            return "Request sent. Wait for supervisor's decision."
         }
+
+        experimentRepository?.save(
+            Experiment(
+                form.title, experimentType,
+                form.description, currentScientist, assistant
+            ).apply {
+                this.status = ExperimentStatus.PENDING
+                this.statusDate = LocalDateTime.now()
+            })
+
+        redirect.addFlashAttribute("status", "Request sent. Wait for supervisor's decision.")
+        return "redirect:main"
     }
 
     fun reportAccessError(experimentId: Long, principal: Principal): String? {

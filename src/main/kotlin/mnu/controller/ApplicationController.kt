@@ -41,7 +41,6 @@ class ApplicationController {
         }
     }
 
-
 //    @ModelAttribute("karma")
 //    fun getKarma(principal: Principal) : String {
 //        val curUser = userRepository?.findByLogin(principal.name)!!
