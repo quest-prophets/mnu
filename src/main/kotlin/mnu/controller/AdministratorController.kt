@@ -4,6 +4,8 @@ import mnu.form.*
 import mnu.model.Prawn
 import mnu.model.User
 import mnu.model.employee.*
+import mnu.model.enums.ExperimentStatus
+import mnu.model.enums.ExperimentType
 import mnu.model.enums.PersonStatus
 import mnu.model.enums.Role
 import mnu.repository.*
@@ -29,8 +31,13 @@ class AdministratorController : ApplicationController() {
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
 
+//    @Autowired
+//    val cashRewardRepository: CashRewardRepository? = null
+
     @Autowired
-    val cashRewardRepository: CashRewardRepository? = null
+    val articleRepository: ArticleRepository? = null
+    @Autowired
+    val experimentRepository: ExperimentRepository? = null
 
     @Autowired
     val managerEmployeeRepository: ManagerEmployeeRepository? = null
@@ -56,10 +63,16 @@ class AdministratorController : ApplicationController() {
     fun adminMenu() = "administrators/admin__menu.html"
 
     @GetMapping("/experiments")
-    fun adminExperiments() = "administrators/admin__experiments.html"
+    fun adminExperiments(model: Model) : String {
+        model.addAttribute("experiments", experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
+        return "administrators/admin__experiments.html"
+    }
 
     @GetMapping("/articles")
-    fun adminArticles() = "administrators/admin__articles.html"
+    fun adminArticles(model: Model) : String {
+        model.addAttribute("experiments", articleRepository?.findAll())
+        return "administrators/admin__articles.html"
+    }
 
     @PostMapping("/registerEmployee")
     @ResponseBody
@@ -105,7 +118,6 @@ class AdministratorController : ApplicationController() {
             }
         }
     }
-
 //    @PostMapping("/editEmployee")
 //    @ResponseBody
 //    fun editEmployee()
@@ -142,6 +154,36 @@ class AdministratorController : ApplicationController() {
 
                 "Successfully registered a new prawn."
             }
+        }
+    }
+
+    @PostMapping("/acceptExperiment/{id}")
+    @ResponseBody
+    fun acceptExperiment(@PathVariable id: Long) : String {
+        val experiment = experimentRepository?.findById(id)!!
+        return if (!experiment.isPresent)
+            "Experiment with such id does not exist."
+        else {
+            val checkedExperiment = experiment.get()
+            checkedExperiment.statusDate = LocalDateTime.now()
+            checkedExperiment.status = ExperimentStatus.APPROVED
+            experimentRepository?.save(checkedExperiment)
+            "Request accepted."
+        }
+    }
+
+    @PostMapping("/rejectExperiment/{id}")
+    @ResponseBody
+    fun rejectExperiment(@PathVariable id: Long) : String {
+        val experiment = experimentRepository?.findById(id)!!
+        return if (!experiment.isPresent)
+            "Experiment with such id does not exist."
+        else {
+            val checkedExperiment = experiment.get()
+            checkedExperiment.statusDate = LocalDateTime.now()
+            checkedExperiment.status = ExperimentStatus.REJECTED
+            experimentRepository?.save(checkedExperiment)
+            "Request rejected."
         }
     }
 }

@@ -26,6 +26,6 @@ data class Experiment (@Column(nullable = false) var title: String = "",
 
     var status: ExperimentStatus? = null
     var result: String? = null
-    var date: LocalDateTime? = null
+    var statusDate: LocalDateTime? = null
 
 }

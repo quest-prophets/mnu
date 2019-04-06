@@ -90,7 +90,10 @@ class ScientistController : ApplicationController() {
                         Experiment(
                             form.title, experimentType,
                             form.description, currentScientist, requestedAssistant
-                        ).apply { this.status = ExperimentStatus.PENDING })
+                        ).apply {
+                            this.status = ExperimentStatus.PENDING
+                            this.statusDate = LocalDateTime.now()
+                        })
 
                     "Request sent. Wait for supervisor's decision."
                 } else "Requested assistant's level is higher than yours."
@@ -144,7 +147,7 @@ class ScientistController : ApplicationController() {
             val experimentDate =
                 LocalDateTime.parse(form.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))
             experimentRepository?.save(experiment.get().apply {
-                this.date = experimentDate
+                this.statusDate = experimentDate
                 this.result = form.result
                 this.status = ExperimentStatus.FINISHED
             })
