@@ -9,10 +9,6 @@ interface ScientistEmployeeRepository : JpaRepository<ScientistEmployee, Long> {
 //            "inner join scientists s on (e.user_id = s.employee_user_id) where (e.status = 'WORKING');", nativeQuery = true)
 //    fun getAllWorkingScientists() : List<Array<Any>>
 
-    @Query(value = "select count(*) from scientists s inner join requests r on (s.employee_user_id = r.resolver_id)" +
-            " inner join experiment_requests er on (r.id = er.request_id)" +
-            " where (r.status = 'RESOLVED');", nativeQuery = true)
-    fun allResolvedExperimentRequests() : Long
 
     @Query("select s.employee_user_id as id, e.name as name, s.position as position, e.level as level from scientists s" +
             " inner join employees e on (s.employee_user_id = e.user_id) where (e.level < ?1);", nativeQuery = true)

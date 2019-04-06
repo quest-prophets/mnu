@@ -11,7 +11,6 @@ import javax.persistence.*
 data class Experiment (@Column(nullable = false) var title: String = "",
                        var type: ExperimentType = ExperimentType.MINOR,
                        var description: String = "",
-                       var date: LocalDateTime = LocalDateTime.now(),
 
                        @ManyToOne(fetch = FetchType.EAGER)
                        @JoinColumn(name = "examinator_id", referencedColumnName = "employee_user_id")
@@ -27,5 +26,6 @@ data class Experiment (@Column(nullable = false) var title: String = "",
 
     var status: ExperimentStatus? = null
     var result: String? = null
+    var date: LocalDateTime? = null
 
 }

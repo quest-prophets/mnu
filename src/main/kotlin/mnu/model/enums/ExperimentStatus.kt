@@ -1,7 +1,8 @@
 package mnu.model.enums
 
 enum class ExperimentStatus {
-    ONGOING,
-    INTERRUPTED,
+    PENDING,
+    APPROVED,
+    REJECTED,
     FINISHED
 }

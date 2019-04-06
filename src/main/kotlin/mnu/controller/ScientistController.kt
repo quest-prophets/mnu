@@ -2,24 +2,22 @@ package mnu.controller
 
 import mnu.form.NewArticleForm
 import mnu.form.NewExperimentForm
+import mnu.form.NewReportForm
 import mnu.model.Article
+import mnu.model.Experiment
 import mnu.model.employee.ScientistEmployee
+import mnu.model.enums.ExperimentStatus
 import mnu.model.enums.ExperimentType
 import mnu.model.enums.RequestStatus
-import mnu.model.request.ExperimentRequest
 import mnu.model.request.Request
 import mnu.repository.ArticleRepository
-import mnu.repository.UserRepository
-import mnu.repository.employee.EmployeeRepository
+import mnu.repository.ExperimentRepository
 import mnu.repository.employee.ScientistEmployeeRepository
-import mnu.repository.request.ExperimentRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Controller
 @RequestMapping("/sci")
@@ -30,11 +28,9 @@ class ScientistController : ApplicationController() {
     @Autowired
     val articleRepository: ArticleRepository? = null
 
-//    @Autowired
-//    val experimentRepository: ExperimentRepository? = null
-
     @Autowired
-    val experimentRequestRepository: ExperimentRequestRepository? = null
+    val experimentRepository: ExperimentRepository? = null
+
 
     @GetMapping("/main")
     fun main() = "scientists/sci__main.html"
@@ -62,14 +58,13 @@ class ScientistController : ApplicationController() {
     @ResponseBody
     fun requestExperiment(@ModelAttribute form: NewExperimentForm, principal: Principal): String {
         val user = userRepository?.findByLogin(principal.name)
-        val newRequest = Request().apply { this.status = RequestStatus.PENDING }
 
         val experimentType = when (form.type) {
             "minor" -> ExperimentType.MINOR
             "major" -> ExperimentType.MAJOR
             else -> return "Error - such experiment type does not exist."
         }
-        val experimentDate = LocalDateTime.parse(form.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))
+//        val experimentDate = LocalDateTime.parse(form.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))
 
         val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
         if (form.assistantId != null) {
@@ -80,24 +75,30 @@ class ScientistController : ApplicationController() {
 
                 if (requestedAssistant.employee!!.level!! < currentScientist!!.employee!!.level!!) {
 
-                    experimentRequestRepository?.save(
-                        ExperimentRequest(
+                    experimentRepository?.save(
+                        Experiment(
                             form.title, experimentType,
-                            form.description, experimentDate, currentScientist, requestedAssistant
-                        ).apply { this.request = newRequest })
+                            form.description, currentScientist, requestedAssistant
+                        ).apply { this.status = ExperimentStatus.PENDING })
 
                     "Request sent. Wait for supervisor's decision."
                 } else "Requested assistant's level is higher than yours."
             }
         } else {
-            experimentRequestRepository?.save(
-                ExperimentRequest(
+            experimentRepository?.save(
+                Experiment(
                     form.title, experimentType,
-                    form.description, experimentDate, currentScientist, null
-                ).apply { this.request = newRequest })
+                    form.description, currentScientist, null
+                ).apply { this.status = ExperimentStatus.PENDING })
 
             return "Request sent. Wait for supervisor's decision."
         }
+    }
+
+    @PostMapping("/report")
+    @ResponseBody
+    fun addReport(@ModelAttribute form: NewReportForm, principal: Principal) : String {
+        return "GAVNO"
     }
 
     @PostMapping("/article")

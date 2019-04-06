@@ -10,10 +10,6 @@ interface AdministratorEmployeeRepository : JpaRepository<AdministratorEmployee,
             " where (r.status = 'RESOLVED');", nativeQuery = true)
     fun allResolvedNewWeaponRequests() : Long
 
-    @Query(value = "select count(*) from administrators a inner join requests r on (a.employee_user_id = r.resolver_id)" +
-            " inner join experiment_requests er on (r.id = er.request_id)" +
-            " where (r.status = 'RESOLVED');", nativeQuery = true)
-    fun allResolvedExperimentRequests() : Long
 
     @Query(value = "select count(*) from administrators a inner join requests r on (a.employee_user_id = r.resolver_id)" +
             " inner join purchase_requests pr on (r.id = pr.request_id)" +

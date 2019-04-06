@@ -20,9 +20,9 @@ data class ChangeEquipmentRequest (@ManyToOne(fetch = FetchType.EAGER)
                                    @JoinColumn(name = "new_transport_id", referencedColumnName = "id")
                                    var transport: Transport? = null) {
     @Id
-    private var id: Long? = null
+    var id: Long? = null
     
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    private var  request: Request? = null
+    var request: Request? = null
 }
