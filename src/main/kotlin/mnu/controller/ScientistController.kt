@@ -8,8 +8,6 @@ import mnu.model.Experiment
 import mnu.model.employee.ScientistEmployee
 import mnu.model.enums.ExperimentStatus
 import mnu.model.enums.ExperimentType
-import mnu.model.enums.RequestStatus
-import mnu.model.request.Request
 import mnu.repository.ArticleRepository
 import mnu.repository.ExperimentRepository
 import mnu.repository.employee.ScientistEmployeeRepository
@@ -18,6 +16,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Controller
 @RequestMapping("/sci")
@@ -71,11 +71,11 @@ class ScientistController : ApplicationController() {
             "major" -> ExperimentType.MAJOR
             else -> return "Error - such experiment type does not exist."
         }
-//        val experimentDate = LocalDateTime.parse(form.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))
 
         val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
         if (form.assistantId != null) {
-            val requestedAssistant: ScientistEmployee? = scientistEmployeeRepository?.findById(form.assistantId)?.orElse(null)
+            val requestedAssistant: ScientistEmployee? =
+                scientistEmployeeRepository?.findById(form.assistantId)?.orElse(null)
             return if (requestedAssistant == null)
                 "Scientist with such id does not exist."
             else {
@@ -102,10 +102,51 @@ class ScientistController : ApplicationController() {
         }
     }
 
+    fun reportAccessError(experimentId: Long, principal: Principal): String? {
+        val user = userRepository?.findByLogin(principal.name)
+        val possibleScientist = scientistEmployeeRepository?.findById(user?.id!!)!!
+        if (possibleScientist.isPresent)
+            return "You are not a scientist."
+        val currentScientist = possibleScientist.get()
+        val experiment = experimentRepository?.findById(experimentId)!!
+        if (!experiment.isPresent)
+            return "Experiment with such id does not exist."
+        if (experiment.get().examinator != currentScientist)
+            return "You are not allowed to write a report on experiment you did not conduct."
+        if (experiment.get().assistant == currentScientist)
+            return "Assistants are not allowed to write a report on experiments."
+
+        return null
+    }
+
+    @GetMapping("/report/{id}")
+    @ResponseBody
+    fun report(@PathVariable id: Long, model: Model, principal: Principal): String {
+        val error = reportAccessError(id, principal)
+        if (error == null)
+            model.addAttribute("form", NewArticleForm())
+        else
+            model.addAttribute("error", error)
+
+        return "scientists/sci__new-article.html"
+    }
+
     @PostMapping("/report")
     @ResponseBody
-    fun addReport(@ModelAttribute form: NewReportForm, principal: Principal) : String {
-        return "GAVNO"
+    fun addReport(@ModelAttribute form: NewReportForm, principal: Principal): String {
+        val error = reportAccessError(form.experimentId, principal)
+        return if (error == null) {
+            val experiment = experimentRepository?.findById(form.experimentId)!!
+            val experimentDate =
+                LocalDateTime.parse(form.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))
+            experimentRepository?.save(experiment.get().apply {
+                this.date = experimentDate
+                this.result = form.result
+                this.status = ExperimentStatus.FINISHED
+            })
+            "Report submitted."
+        } else
+            error
     }
 
     @PostMapping("/article")
