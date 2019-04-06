@@ -10,21 +10,23 @@
 <body>
 <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
 <div class="scientists-grid">
-    <div class="employee-header">
-        <div class="employee-info"> Name Surname <br> Level x</div>
+    <div class="fixed-header flex-row">
+        <div class="employee-header">
+            <div class="employee-info"> Name Surname <br> Level x</div>
+        </div>
+        <div class="scientists-grid__experiments grid-button button button_pressed">
+            Experiments
+        </div>
+        <a th:href="@{/sci/main/articles}" class="scientists-grid__articles grid-button button">
+            Articles
+        </a>
+        <a th:href="@{/sci/main/requests}" class="scientists-grid__requests grid-button button">
+            Requests
+        </a>
+        <a th:href="@{/sci/experiment}" class="scientists-grid__add grid-button button">
+            Add Experiment
+        </a>
     </div>
-    <div class="scientists-grid__experiments grid-button button button_pressed">
-        Experiments
-    </div>
-    <a th:href="@{/sci/main/articles}" class="scientists-grid__articles grid-button button">
-        Articles
-    </a>
-    <a th:href="@{/sci/main/requests}" class="scientists-grid__requests grid-button button">
-        Requests
-    </a>
-    <a th:href="@{/sci/experiment}" class="scientists-grid__add grid-button button">
-        Add Experiment
-    </a>
 
     <div class="content">
         <div th:each="exp: ${experiments}" class=" content__item">
@@ -46,18 +48,18 @@
                     <b>Assistant</b>
                     <div th:text="${exp.assistant.employee.name}"></div>
                 </div>
-                    <div th:case="PENDING">
-                        <b>Submitted on </b>
-                    </div>
-                    <div th:case="APPROVED">
-                        <b>Approved on </b>
-                    </div>
-                    <div th:case="REJECTED">
-                        <b> Rejected on </b>
-                    </div>
-                    <div th:case="FINISHED">
-                        <b> Finished on </b>
-                    </div>
+                <div th:case="PENDING">
+                    <b>Submitted on </b>
+                </div>
+                <div th:case="APPROVED">
+                    <b>Approved on </b>
+                </div>
+                <div th:case="REJECTED">
+                    <b> Rejected on </b>
+                </div>
+                <div th:case="FINISHED">
+                    <b> Finished on </b>
+                </div>
                 <div th:text="${exp.statusDate}"></div>
                 <b>Description</b>
                 <div th:text="${exp.description}"></div>

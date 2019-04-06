@@ -4,14 +4,20 @@ body {
     font-size: 17px;
 }
 
-.employee-header {
+.fixed-header {
+    position: fixed;
     grid-area: header;
+    top: 0;
+    width: 100%;
+}
+
+.employee-header {
+    grid-area: w;
 }
 
 .scientists-grid {
     display: grid;
-    grid: "header expButton artButton reqButton addButton" 50px "content content content content content";
-    grid-template-columns: 2fr 3fr 2.5fr 2.5fr;
+    grid: "header" 60px "content";
     padding: 5px;
 }
 
@@ -159,10 +165,6 @@ body {
 }
 
 @media (max-width: 1200px) {
-    .scientists-grid {
-        grid-template-columns: 2fr 3fr 2.5fr 2.5fr;
-    }
-
     .grid-button {
         width: 180px;
         font-size: 22px;
@@ -184,7 +186,6 @@ body {
 @media (max-width: 1000px) {
     .scientists-grid {
         grid: "header header" 50px "expButton artButton reqButton" 80px "addButton addButton addButton" 50px "content content content";
-        grid-template-columns: 1fr 1fr;
     }
 
     .scientists-grid__add {
