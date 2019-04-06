@@ -41,21 +41,16 @@ class ApplicationController {
         }
     }
 
-    @ModelAttribute("level")
-    fun getLevel(principal: Principal): String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        return employeeRepository?.findById(curUser.id!!)?.get()!!.level.toString()
-    }
 
-    @ModelAttribute("karma")
-    fun getKarma(principal: Principal) : String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        return prawnRepository?.findById(curUser.id!!)?.get()!!.karma.toString()
-    }
-
-    @ModelAttribute("balance")
-    fun getBalance(principal: Principal) : String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        return prawnRepository?.findById(curUser.id!!)?.get()!!.balance.toString()
-    }
+//    @ModelAttribute("karma")
+//    fun getKarma(principal: Principal) : String {
+//        val curUser = userRepository?.findByLogin(principal.name)!!
+//        return prawnRepository?.findById(curUser.id!!)?.get()!!.karma.toString()
+//    }
+//
+//    @ModelAttribute("balance")
+//    fun getBalance(principal: Principal) : String {
+//        val curUser = userRepository?.findByLogin(principal.name)!!
+//        return prawnRepository?.findById(curUser.id!!)?.get()!!.balance.toString()
+//    }
 }

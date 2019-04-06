@@ -13,11 +13,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/admin")
 class AdministratorController : ApplicationController() {
+
+    @ModelAttribute("level")
+    fun getLevel(principal: Principal): String {
+        val curUser = userRepository?.findByLogin(principal.name)!!
+        return employeeRepository?.findById(curUser.id!!)?.get()!!.level.toString()
+    }
 
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
