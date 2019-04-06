@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.*
 interface ExperimentRepository : JpaRepository<Experiment, Long> {
     fun findAllByType(type: ExperimentType) : List<Experiment>
 
-    fun findAllByExaminator(examinator: ScientistEmployee) : List<Experiment>
+    fun findAllByExaminatorId(examinatorId: Long) : List<Experiment>
 
     fun findAllByExaminatorAndType(examinator: ScientistEmployee, type: ExperimentType) : List<Experiment>
 
