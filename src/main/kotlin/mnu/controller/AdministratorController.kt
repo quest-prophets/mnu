@@ -70,7 +70,7 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/articles")
     fun adminArticles(model: Model) : String {
-        model.addAttribute("experiments", articleRepository?.findAll())
+        model.addAttribute("articles", articleRepository?.findAll())
         return "administrators/admin__articles.html"
     }
 
@@ -165,10 +165,18 @@ class AdministratorController : ApplicationController() {
             "Experiment with such id does not exist."
         else {
             val checkedExperiment = experiment.get()
-            checkedExperiment.statusDate = LocalDateTime.now()
-            checkedExperiment.status = ExperimentStatus.APPROVED
-            experimentRepository?.save(checkedExperiment)
-            "Request accepted."
+            return if (checkedExperiment.type == ExperimentType.MINOR)
+                "Minor experiment requests are handled by high-level scientists."
+            else {
+                if (checkedExperiment.status != ExperimentStatus.PENDING)
+                    "Request has already been handled."
+                else {
+                    checkedExperiment.statusDate = LocalDateTime.now()
+                    checkedExperiment.status = ExperimentStatus.APPROVED
+                    experimentRepository?.save(checkedExperiment)
+                    "Request accepted."
+                }
+            }
         }
     }
 
@@ -180,10 +188,18 @@ class AdministratorController : ApplicationController() {
             "Experiment with such id does not exist."
         else {
             val checkedExperiment = experiment.get()
-            checkedExperiment.statusDate = LocalDateTime.now()
-            checkedExperiment.status = ExperimentStatus.REJECTED
-            experimentRepository?.save(checkedExperiment)
-            "Request rejected."
+            return if (checkedExperiment.type == ExperimentType.MINOR)
+                "Minor experiment requests are handled by high-level scientists."
+            else {
+                if (checkedExperiment.status != ExperimentStatus.PENDING)
+                    "Request has already been handled."
+                else {
+                    checkedExperiment.statusDate = LocalDateTime.now()
+                    checkedExperiment.status = ExperimentStatus.REJECTED
+                    experimentRepository?.save(checkedExperiment)
+                    "Request rejected."
+                }
+            }
         }
     }
 }

@@ -48,10 +48,27 @@ class ScientistController : ApplicationController() {
     }
 
     @GetMapping("/main/articles")
-    fun mainArticles() = "scientists/sci__main_articles.html"
+    fun mainArticles(model: Model, principal: Principal) : String {
+        val user = userRepository?.findByLogin(principal.name)!!
+        model.addAttribute("articles", articleRepository?.findAllByScientistId(user.id!!))
+        return "scientists/sci__main_articles.html"
+    }
 
     @GetMapping("/main/requests")
-    fun mainRequests() = "scientists/sci__main_requests.html"
+    fun mainRequests(model: Model, principal: Principal) : String {
+        val experiments = experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
+        val validExperiments = ArrayList<Experiment>()
+
+        val user = userRepository?.findByLogin(principal.name)
+        val currentScientistLvl = employeeRepository?.findById(user?.id!!)?.get()?.level!!
+
+        experiments?.forEach {
+            if (currentScientistLvl > it.examinator!!.employee!!.level!!)
+                validExperiments.add(it)
+        }
+        model.addAttribute("experiments", validExperiments)
+        return "scientists/sci__main_requests.html"
+    }
 
     @GetMapping("/article")
     fun article(model: Model): String {
@@ -171,5 +188,51 @@ class ScientistController : ApplicationController() {
         val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
         articleRepository?.save(Article(form.title, form.article).apply { this.scientist = currentScientist })
         return "Article added."
+    }
+
+    @PostMapping("/acceptExperiment/{id}")
+    @ResponseBody
+    fun acceptExperiment(@PathVariable id: Long) : String {
+        val experiment = experimentRepository?.findById(id)!!
+        return if (!experiment.isPresent)
+            "Experiment with such id does not exist."
+        else {
+            val checkedExperiment = experiment.get()
+            return if (checkedExperiment.type == ExperimentType.MAJOR)
+                "Major experiment requests are handled by administrators."
+            else {
+                if (checkedExperiment.status != ExperimentStatus.PENDING)
+                    "Request has already been handled."
+                else {
+                    checkedExperiment.statusDate = LocalDateTime.now()
+                    checkedExperiment.status = ExperimentStatus.APPROVED
+                    experimentRepository?.save(checkedExperiment)
+                    "Request accepted."
+                }
+            }
+        }
+    }
+
+    @PostMapping("/rejectExperiment/{id}")
+    @ResponseBody
+    fun rejectExperiment(@PathVariable id: Long) : String {
+        val experiment = experimentRepository?.findById(id)!!
+        return if (!experiment.isPresent)
+            "Experiment with such id does not exist."
+        else {
+            val checkedExperiment = experiment.get()
+            return if (checkedExperiment.type == ExperimentType.MINOR)
+                "Minor experiment requests are handled by high-level scientists."
+            else {
+                if (checkedExperiment.status != ExperimentStatus.PENDING)
+                    "Request has already been handled."
+                else {
+                    checkedExperiment.statusDate = LocalDateTime.now()
+                    checkedExperiment.status = ExperimentStatus.REJECTED
+                    experimentRepository?.save(checkedExperiment)
+                    "Request rejected."
+                }
+            }
+        }
     }
 }

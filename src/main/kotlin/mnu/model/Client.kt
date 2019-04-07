@@ -10,7 +10,7 @@ data class Client (@Column(nullable = false) var name: String = "",
                    @Column(nullable = false, unique = true) var email: String = "",
                    @Enumerated(EnumType.STRING) var type: ClientType = ClientType.CUSTOMER) {
     @Id
-    private var id: Long? = null
+    var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
