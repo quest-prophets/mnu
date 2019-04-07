@@ -24,12 +24,12 @@
 
     <div class="content">
         <div th:each="exp: ${experiments}" class=" content__item">
-            <div class="content__header pending">
+            <div th:id="${'exp-header-' + exp.id}" class="content__header pending">
                 <span class="header-text">
                     <span> Major Exp. #</span><span th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>
                 </span>
             </div>
-            <div class="content__main">
+            <div th:id="${'exp-content-' + exp.id}" class="content__main">
                 <div th:if="${exp.assistant}">
                     <b>Assistant</b>
                     <div th:text="${exp.assistant.employee.name}"></div>
@@ -42,6 +42,11 @@
                     <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved">Accept</a>
                     <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected">Reject</a>
                 </div>
+            </div>
+            <div th:id="${'exp-flash-' + exp.id}" class="flash hidden">
+                <div th:id="${'exp-flash-message-' + exp.id}"></div>
+                <button th:id="${'exp-undo-' + exp.id}" th:attr="data-exp-id=${exp.id}" data-action="undo"
+                   class="form-item button">Undo 10</button>
             </div>
         </div>
     </div>

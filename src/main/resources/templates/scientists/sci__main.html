@@ -8,7 +8,6 @@
     <title>MNU</title>
 </head>
 <body>
-<div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
 <div id="header" class="fixed-header">
     <div id="header_mobile" class="flex-row-left">
         <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
@@ -22,10 +21,10 @@
         <div class="experiments-button grid-button button button_pressed">
             Experiments
         </div>
-        <a th:href="@{/sci/main/articles}" class="articles-button grid-button button">
+        <a th:href="@{/sci/main/articles}" class="grid-button button">
             Articles
         </a>
-        <a th:href="@{/sci/main/requests}" class="requests-button grid-button button">
+        <a th:href="@{/sci/main/requests}" class="grid-button button">
             Requests
         </a>
         <a th:href="@{/sci/experiment}" class="add-button grid-button button">
@@ -35,6 +34,7 @@
 </div>
 
 <div class="content">
+    <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
     <div th:each="exp: ${experiments}" class=" content__item">
         <div th:class="content__header"
              th:classappend="|${exp.status.name()=='PENDING' ? 'pending' : exp.status.name()=='APPROVED' ? 'approved' : exp.status.name()=='REJECTED' ? 'rejected' : 'finished'}|">
