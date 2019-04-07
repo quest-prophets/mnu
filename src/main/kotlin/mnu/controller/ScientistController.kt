@@ -63,7 +63,8 @@ class ScientistController : ApplicationController() {
         val currentScientistLvl = employeeRepository?.findById(user?.id!!)?.get()?.level!!
 
         experiments?.forEach {
-            if (currentScientistLvl > it.examinator!!.employee!!.level!!)
+            if (currentScientistLvl > it.examinator!!.employee!!.level!!
+                || (currentScientistLvl == 10 && it.examinator!!.employee!!.level!! == 10))
                 validExperiments.add(it)
         }
         model.addAttribute("experiments", validExperiments)
