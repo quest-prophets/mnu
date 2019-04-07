@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/css/administrators/admin__employees.css}">
-    <script rel="script" type="text/javascript" th:src="@{/js/administrators/admin__employees.js}"></script>
     <title>MNU</title>
 </head>
 <body>
-<div class="admin-employees-grid">
-    <div class="flex-row-left admin-header">
+<div class="grid">
+    <div class="flex-row-left header">
         <a th:href="@{/admin/main}">
             <img alt="back" th:src="@{/images/back.png}" class="icon button button_back button_round">
         </a>
@@ -19,7 +18,7 @@
             <div th:text="${'Level ' + level}"></div>
         </div>
     </div>
-    <div class="admin-employees-grid__table flex-column">
+    <div class="grid__table flex-column">
         <table>
             <thead>
             <tr>
@@ -42,7 +41,7 @@
                     Salary
                 </td>
                 <td>
-                    Date of employment
+                    D.o.E
                 </td>
             </tr>
             </thead>
@@ -54,49 +53,76 @@
                 <td th:text="${employee.position}"></td>
                 <td th:text="${employee.level}"></td>
                 <td th:text="${employee.salary}"></td>
-                <td th:text="${employee.dateOfEmployment}"></td>
+                <td th:text="${employee.dateOfEmployment}" class="td_date"></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div class="admin-employees-grid__buttons flex-column">
-        <img th:classappend="${param.q} ? null : button_pressed" alt="Add employee" id="add-button" class="button button_round icon" th:src="@{/images/plus.png}" onclick="setAddInterface()">
-        <img alt="Edit employees" id="edit-button" class="button button_round icon" th:src="@{/images/edit.svg}" onclick="setEditInterface()">
-        <img th:classappend="${param.q} ? button_pressed : null" alt="Find employees" id="find-button" class="button button_round icon"
-             th:src="@{/images/magnifier.svg}" onclick="setFindInterface()">
-        <img alt="Cash Rewards" id="reward-button" class="button button_round icon" th:src="@{/images/dollar.png}" onclick="setRewardInterface()">
+    <div class="flex-column-top grid__buttons">
+        <img th:classappend="${param.q} ? null : button_pressed" alt="Add employee" id="add-button"
+             class="button button_round icon" th:src="@{/images/plus.png}">
+        <img alt="Edit employees" id="edit-button" class="button button_round icon" th:src="@{/images/edit.svg}">
+        <img th:classappend="${param.q} ? button_pressed : null" alt="Find employees" id="find-button"
+             class="button button_round icon"
+             th:src="@{/images/magnifier.svg}">
+        <img alt="Cash Rewards" id="reward-button" class="button button_round icon" th:src="@{/images/dollar.png}">
     </div>
-    <div class="admin-employees-grid__inputs flex-column">
-        <form th:classappend="${param.q} ? hidden : null" action="#" th:action="@{/admin/registerEmployee}" th:object="${form}" method="post" id="add-interface" class="admin-employees-grid__inputs_add add-employees-inputs-grid flex-column">
-            <input th:required="true" th:field="*{username}" class="add-employees-inputs-grid__login" placeholder="Login">
-            <input th:required="true" th:field="*{password}" type="password" class="add-employees-inputs-grid__password" placeholder="Password">
-            <input th:required="true" th:field="*{name}" class="add-employees-inputs-grid__name" placeholder="Name">
-            <input th:required="true" th:field="*{level}" type="number" min="1" max="10" class="add-employees-inputs-grid__lvl" placeholder="Lvl">
-            <input th:required="true" th:field="*{salary}" type="number" class="add-employees-inputs-grid__salary" placeholder="Salary">
-            <input th:required="true" th:field="*{position}" class="add-employees-inputs-grid__position" placeholder="Position">
-            <select th:field="*{type}" class="add-employees-inputs-grid__type">
-                <option th:value="security" th:text="Security"></option>
-                <option th:value="scientist" th:text="Scientist"></option>
-                <option th:value="manager" th:text="Manager"></option>
-                <option th:value="administrator" th:text="Administrator"></option>
-            </select>
-            <input type="submit" class="button add-employees-inputs-grid__button" value="Add employee">
+    <div class="grid__inputs flex-column">
+        <form th:classappend="${param.q} ? hidden : null" action="#" th:action="@{/admin/registerEmployee}"
+              th:object="${form}" method="post" id="add-interface" class="flex-column">
+            <label class="form-item_small">
+                <b>Login</b>
+                <input th:required="true" th:field="*{username}" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Password</b>
+                <input th:required="true" th:field="*{password}" type="password" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Name</b>
+                <input th:required="true" th:field="*{name}" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Salary</b>
+                <input th:required="true" th:field="*{salary}" type="number" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Position</b>
+                <input th:required="true" th:field="*{position}" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Type</b>
+                <select th:field="*{type}" class="input_big">
+                    <option th:value="security" th:text="Security"></option>
+                    <option th:value="scientist" th:text="Scientist"></option>
+                    <option th:value="manager" th:text="Manager"></option>
+                    <option th:value="administrator" th:text="Administrator"></option>
+                </select>
+            </label>
+            <label class="form-item_small">
+                <b>Level</b>
+                <input th:required="true" th:field="*{level}" type="number" min="1" max="10" class="input_big">
+            </label>
+            <input type="submit" class="button form-item" value="Add employee">
         </form>
-        <form id="edit-interface" class="admin-employees-grid__inputs_edit hidden">
+        <form id="edit-interface" class="hidden">
             <input type="number" placeholder="Employee id">
             <input type="number" min="1" max="10" class="add-employees-inputs-grid__lvl" placeholder="Lvl">
             <input type="number" step="10" class="add-employees-inputs-grid__salary" placeholder="Salary">
             <input placeholder="Position">
             ???
         </form>
-        <form th:classappend="${param.q} ? null : hidden" action="#" th:action="@{/admin/employee}" method="get" id="find-interface" class="admin-employees-grid__inputs_find">
-            <input th:value="${param.q}" type="text" name="q" placeholder="Search employee by name...">
+        <form th:classappend="${param.q} ? null : hidden" action="#" th:action="@{/admin/employee}" method="get"
+              id="find-interface">
+            <input th:value="${param.q}" type="text" name="q" placeholder="Search employee by name..."
+                   class="input_big">
         </form>
-        <form id="reward-interface" class="admin-employees-grid__inputs_reward hidden">
+        <form id="reward-interface" class="grid__inputs_reward hidden">
             <input type="number" placeholder="Employee id">
             <input type="number" placeholder="Reward">
         </form>
     </div>
 </div>
+<script rel="script" type="text/javascript" th:src="@{/js/administrators/admin__employees.js}"></script>
 </body>
 </html>

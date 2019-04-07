@@ -5,7 +5,7 @@
     padding: 35px;
 }
 
-.admin-header {
+.header {
     grid-area: admin-header;
     margin-top: 5px;
 }
