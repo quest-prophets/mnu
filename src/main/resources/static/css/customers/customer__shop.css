@@ -1,43 +1,4 @@
-body {
-    font-family: "Helvetica", sans-serif;
-    font-size: 17px;
-}
-
-.input_big {
-    font-size: 16px;
-    height: 25px;
-}
-
-.button {
-    color: black;
-    text-decoration: none;
-    border: 2px solid black;
-    border-radius: 6px;
-    padding: 8px 22px;
-    font-size: 20px;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 5px #cacaca;
-    background: white;
-}
-
-.button:hover:not(.button_pressed) {
-    top: 2px;
-    box-shadow: 0 3px #cacaca;
-}
-
-.button:active:not(.button_pressed) {
-    top: 5px;
-    box-shadow: none;
-}
-
-.button_pressed {
-    top: 3px;
-    box-shadow: none;
-    outline: none;
-    background: lightgreen;
-    cursor: default;
-}
+@import url("../common.css");
 
 .shop-header-flex-row {
     display: flex;
@@ -151,20 +112,6 @@ body {
     overflow-y: auto;
 }
 
-.flex-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
 .burger {
     display: none;
     margin: auto auto auto 10px;
@@ -179,10 +126,6 @@ body {
     font-size: 20px;
     grid-area: department-title;
     height: 60px;
-}
-
-.hidden {
-    display: none;
 }
 
 @media (max-width: 700px) {

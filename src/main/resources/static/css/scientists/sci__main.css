@@ -1,8 +1,4 @@
-
-body {
-    font-family: "Helvetica", sans-serif;
-    font-size: 17px;
-}
+@import url("../common.css");
 
 .fixed-header {
     position: fixed;
@@ -51,56 +47,6 @@ body {
     grid-area: addButton;
 }
 
-.flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.input_big {
-    font-size: 16px;
-    height: 25px;
-}
-
-.button {
-    color: black;
-    text-decoration: none;
-    border: 2px solid black;
-    border-radius: 6px;
-    padding: 8px 22px;
-    font-size: 20px;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 5px #cacaca;
-    background: white;
-}
-
-.button:hover:not(.button_pressed) {
-    top: 2px;
-    box-shadow: 0 3px #cacaca;
-}
-
-.button:active:not(.button_pressed) {
-    top: 5px;
-    box-shadow: none;
-}
-
-.button_pressed {
-    top: 3px;
-    box-shadow: none;
-    outline: none;
-    background: lightgreen;
-    cursor: default;
-}
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 .content {
     grid-area: content;
     text-align: center;
@@ -129,39 +75,9 @@ body {
     padding: 12px;
 }
 
-.waiting {
-    background: #dcefff;
-}
-
-.running {
-    background: #d6f5d5;
-}
-
-.finished {
-    background: #ececec;
-}
-
-.rejected {
-    background: #f2d6de;
-}
-
 .content-icon {
     width: 25px;
     height: 25px;
-}
-
-.flash {
-    padding: 15px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.flash_success {
-    background: #d6f5d5;
-}
-
-.hidden {
-    display: none;
 }
 
 @media (max-width: 1200px) {

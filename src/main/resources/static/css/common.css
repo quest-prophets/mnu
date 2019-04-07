@@ -1,0 +1,112 @@
+body {
+    font-family: "Helvetica", sans-serif;
+    font-size: 17px;
+}
+
+.input_big {
+    display: block;
+    font-size: 16px;
+    height: 25px;
+}
+
+.form-item {
+    margin-top: 20px;
+}
+
+.button {
+    color: black;
+    text-decoration: none;
+    border: 2px solid black;
+    border-radius: 6px;
+    padding: 8px 22px;
+    font-size: 20px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 5px #cacaca;
+    background: white;
+}
+
+.button:hover:not(.button_pressed) {
+    top: 2px;
+    box-shadow: 0 3px #cacaca;
+}
+
+.button:active:not(.button_pressed) {
+    top: 5px;
+    box-shadow: none;
+}
+
+.button_pressed {
+    top: 3px;
+    box-shadow: none;
+    outline: none;
+    background: lightgreen;
+    cursor: default;
+}
+
+.button_round {
+    padding: 9px;
+    border-radius: 100px;
+}
+
+.button_back {
+    margin-top: -5px;
+    margin-right: 15px;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-row-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.flex-row {
+    display: flex;
+    justify-content: center;
+}
+
+.pending {
+    background: #dcefff;
+}
+
+.approved {
+    background: #d6f5d5;
+}
+
+.finished {
+    background: #ececec;
+}
+
+.rejected {
+    background: #f2d6de;
+}
+
+.flash {
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.flash_success {
+    background: #d6f5d5;
+}
+
+.flash_error {
+    background: #f2d6de;
+}
+
+.hidden {
+    display: none;
+}

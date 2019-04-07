@@ -1,22 +1,8 @@
-body {
-    font-family: "Helvetica", sans-serif;
-    font-size: 17px;
-    overflow: hidden;
-}
+@import url("../common.css");
 
 .registration-box {
     margin-top: 100px;
     padding: 35px;
-}
-
-.input_big {
-    display: block;
-    font-size: 16px;
-    height: 25px;
-}
-
-.form-item {
-    margin-top: 20px;
 }
 
 .admin-header {
@@ -26,67 +12,4 @@ body {
 
 .employee-info {
     margin: 5px 0 auto 0;
-}
-
-.button {
-    color: black;
-    text-decoration: none;
-    border: 2px solid black;
-    border-radius: 6px;
-    padding: 8px 22px;
-    font-size: 20px;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 5px #cacaca;
-    background: white;
-}
-
-.button:hover:not(.button_pressed) {
-    top: 2px;
-    box-shadow: 0 3px #cacaca;
-}
-
-.button:active:not(.button_pressed) {
-    top: 5px;
-    box-shadow: none;
-}
-
-.button_pressed {
-    top: 3px;
-    box-shadow: none;
-    outline: none;
-    background: lightgreen;
-    cursor: default;
-}
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.button_round {
-    padding: 9px;
-    border-radius: 100px;
-}
-
-.icon {
-    width: 50px;
-    height: 50px;
-}
-
-.flex-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-}
-
-.back-button {
-    margin-top: -5px;
-    margin-right: 15px;
-}
-
-.hidden {
-    display: none;
 }

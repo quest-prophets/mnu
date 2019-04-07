@@ -31,7 +31,7 @@
     <div class="content">
         <div th:each="exp: ${experiments}" class=" content__item">
             <div th:class="content__header"
-                 th:classappend="|${exp.status.name()=='PENDING' ? 'waiting' : exp.status.name()=='APPROVED' ? 'running' : exp.status.name()=='REJECTED' ? 'rejected' : 'finished'}|">
+                 th:classappend="|${exp.status.name()=='PENDING' ? 'pending' : exp.status.name()=='APPROVED' ? 'approved' : exp.status.name()=='REJECTED' ? 'rejected' : 'finished'}|">
                 <div th:switch="${exp.status.name()}">
                     <img th:case="PENDING" class="content-icon" alt="pending" th:src="@{/images/clock.png}">
                     <img th:case="APPROVED" class="content-icon" alt="approved" th:src="@{/images/pencil.png}">

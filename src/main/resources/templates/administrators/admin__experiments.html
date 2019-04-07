@@ -11,7 +11,7 @@
 <div class="grid">
     <div class="employee-header flex-row-left">
         <a th:href="@{/admin/main}">
-            <img alt="back" th:src="@{/images/back.png}" class="icon button back-button button_round">
+            <img alt="back" th:src="@{/images/back.png}" class="icon button button_back button_round">
         </a>
         <div class="employee-info"> Name Surname <br> Level x</div>
     </div>
@@ -24,7 +24,7 @@
 
     <div class="content">
         <div th:each="exp: ${experiments}" class=" content__item">
-            <div class="content__header waiting">
+            <div class="content__header pending">
                 <span class="header-text">
                     <span> Major Exp. #</span><span th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>
                 </span>
@@ -39,7 +39,7 @@
                 <b>Description</b>
                 <div th:text="${exp.description}"></div>
                 <div class="flex-row">
-                    <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button running">Accept</a>
+                    <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved">Accept</a>
                     <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected">Reject</a>
                 </div>
             </div>
