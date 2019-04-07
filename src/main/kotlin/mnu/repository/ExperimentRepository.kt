@@ -13,6 +13,8 @@ interface ExperimentRepository : JpaRepository<Experiment, Long> {
 
     fun findAllByExaminatorId(examinatorId: Long) : List<Experiment>
 
+    fun findAllByExaminatorIdOrderByStatusAsc(examinatorId: Long) : List<Experiment>
+
     fun findAllByExaminatorAndType(examinator: ScientistEmployee, type: ExperimentType) : List<Experiment>
 
     fun findAllByAssistant(assistant: ScientistEmployee) : List<Experiment>
