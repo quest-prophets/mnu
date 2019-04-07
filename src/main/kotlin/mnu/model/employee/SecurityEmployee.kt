@@ -15,19 +15,13 @@ class SecurityEmployee {
     @MapsId
     var employee: Employee? = null
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    @JoinTable(name = "security_employees_weapons",
-        joinColumns = [JoinColumn(name = "employee_id")],
-        inverseJoinColumns = [JoinColumn(name = "weap_id")]
-    )
-    var weapons: List<Weapon>? = null
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "weapon_id", referencedColumnName = "id")
+    var weapon: Weapon? = null
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    @JoinTable(name = "security_employees_transport",
-        joinColumns = [JoinColumn(name = "employee_id")],
-        inverseJoinColumns = [JoinColumn(name = "tran_id")]
-    )
-    var transport: List<Transport>? = null
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "transport_id", referencedColumnName = "id")
+    var transport: Transport? = null
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "assistants")
     var incidents: List<DistrictIncident>? = null
