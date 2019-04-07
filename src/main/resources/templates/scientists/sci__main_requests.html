@@ -14,7 +14,10 @@
         <div id="mobile-title" class="mobile-title">Requests</div>
     </div>
     <div id="mobile-menu" class="flex-row">
-        <div class="employee-info"> Name Surname <br> Level x</div>
+        <div class="employee-info">
+            <div th:text="${fullname}"></div>
+            <div th:text="${'Level ' + level}"></div>
+        </div>
         <a th:href="@{/sci/main}" class="experiments-button grid-button button">
             Experiments
         </a>
@@ -31,7 +34,35 @@
 </div>
 
 <div class="content">
-
+    <div th:each="exp: ${experiments}" class=" content__item">
+        <div th:id="${'exp-header-' + exp.id}" class="content__header pending">
+                <span class="header-text">
+                    <span> Minor Exp. #</span><span th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>
+                </span>
+        </div>
+        <div th:id="${'exp-content-' + exp.id}" class="content__main">
+            <b>Examinator</b>
+            <div th:text="${exp.examinator.employee.name}"></div>
+            <div th:if="${exp.assistant}">
+                <b>Assistant</b>
+                <div th:text="${exp.assistant.employee.name}"></div>
+            </div>
+            <b>Submitted on </b>
+            <div th:text="${exp.statusDate}"></div>
+            <b>Description</b>
+            <div th:text="${exp.description}"></div>
+            <div class="flex-row">
+                <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved button_row">Accept</a>
+                <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected button_row">Reject</a>
+            </div>
+        </div>
+        <div th:id="${'exp-flash-' + exp.id}" class="flash hidden">
+            <div th:id="${'exp-flash-message-' + exp.id}"></div>
+            <button th:id="${'exp-undo-' + exp.id}" th:attr="data-exp-id=${exp.id}" data-action="undo"
+                    class="form-item button">Undo 10
+            </button>
+        </div>
+    </div>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
 </body>

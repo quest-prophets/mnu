@@ -45,6 +45,10 @@ body {
     line-height: 22px;
 }
 
+.button_row {
+    margin: 0 15px;
+}
+
 .content__main {
     word-break: break-word;
     text-align: left;

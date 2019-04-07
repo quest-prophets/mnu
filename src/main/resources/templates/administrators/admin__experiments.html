@@ -13,7 +13,10 @@
         <a th:href="@{/admin/main}">
             <img alt="back" th:src="@{/images/back.png}" class="icon button button_back button_round">
         </a>
-        <div class="employee-info"> Name Surname <br> Level x</div>
+        <div class="employee-info">
+            <div th:text="${fullname}"></div>
+            <div th:text="${'Level ' + level}"></div>
+        </div>
     </div>
     <div class="grid__experiments grid-button button button_pressed">
         Experiments
@@ -30,6 +33,8 @@
                 </span>
             </div>
             <div th:id="${'exp-content-' + exp.id}" class="content__main">
+                <b>Examinator</b>
+                <div th:text="${exp.examinator.employee.name}"></div>
                 <div th:if="${exp.assistant}">
                     <b>Assistant</b>
                     <div th:text="${exp.assistant.employee.name}"></div>
@@ -39,8 +44,8 @@
                 <b>Description</b>
                 <div th:text="${exp.description}"></div>
                 <div class="flex-row">
-                    <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved">Accept</a>
-                    <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected">Reject</a>
+                    <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved button_row">Accept</a>
+                    <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected button_row">Reject</a>
                 </div>
             </div>
             <div th:id="${'exp-flash-' + exp.id}" class="flash hidden">
