@@ -8,26 +8,31 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="scientists-grid">
-    <div class="employee-header">
+<div id="header" class="fixed-header">
+    <div id="header_mobile" class="flex-row-left hidden">
+        <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
+        <div id="mobile-title" class="mobile-title">Requests</div>
+    </div>
+    <div id="mobile-menu" class="flex-row">
         <div class="employee-info"> Name Surname <br> Level x</div>
-    </div>
-    <a th:href="@{/sci/main}" class="scientists-grid__experiments grid-button button">
-        Experiments
-    </a>
-    <a th:href="@{/sci/main/articles}" class="scientists-grid__articles grid-button button">
-        Articles
-    </a>
-    <div th:href="@{/sci/main/requests}" class="scientists-grid__requests grid-button button button_pressed">
-        Requests
-    </div>
-    <a th:href="@{/sci/experiment}" class="scientists-grid__add grid-button button">
-        Add Experiment
-    </a>
-
-    <div class="content">
-
+        <a th:href="@{/sci/main}" class="experiments-button grid-button button">
+            Experiments
+        </a>
+        <a th:href="@{/sci/main/articles}" class="articles-button grid-button button">
+            Articles
+        </a>
+        <div class="requests-button grid-button button button_pressed">
+            Requests
+        </div>
+        <a th:href="@{/sci/experiment}" class="add-button grid-button button">
+            Add Experiment
+        </a>
     </div>
 </div>
+
+<div class="content">
+
+</div>
+<script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
 </body>
 </html>

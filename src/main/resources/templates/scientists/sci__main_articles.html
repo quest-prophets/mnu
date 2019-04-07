@@ -8,26 +8,33 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="scientists-grid">
-    <div class="employee-header">
+<div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+<div id="header" class="fixed-header">
+    <div id="header_mobile" class="flex-row-left">
+        <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
+        <div class="mobile-title">Articles</div>
+    </div>
+    <div id="mobile-menu" class="flex-row">
         <div class="employee-info"> Name Surname <br> Level x</div>
-    </div>
-    <a th:href="@{/sci/main}" id="experiments-button" class="scientists-grid__experiments grid-button button">
-        Experiments
-    </a>
-    <div class="scientists-grid__articles grid-button button button_pressed">
-        Articles
-    </div>
-    <a th:href="@{/sci/main/requests}" class="scientists-grid__requests grid-button button">
-        Requests
-    </a>
-    <a th:href="@{/sci/article}" class="scientists-grid__add grid-button button">
-        Write article
-    </a>
-
-    <div class="content">
-
+        <a th:href="@{/sci/main}" id="experiments-button" class="experiments-button grid-button button">
+            Experiments
+        </a>
+        <div class="articles-button grid-button button button_pressed">
+            Articles
+        </div>
+        <a th:href="@{/sci/main/requests}" class="requests-button grid-button button">
+            Requests
+        </a>
+        <a th:href="@{/sci/article}" class="add-button grid-button button">
+            Write article
+        </a>
     </div>
 </div>
+
+
+<div class="content">
+
+</div>
+<script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
 </body>
 </html>

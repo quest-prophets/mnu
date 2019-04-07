@@ -9,63 +9,69 @@
 </head>
 <body>
 <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
-<div class="scientists-grid">
-    <div class="fixed-header flex-row">
-        <div class="employee-header">
-            <div class="employee-info"> Name Surname <br> Level x</div>
+<div id="header" class="fixed-header">
+    <div id="header_mobile" class="flex-row-left">
+        <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
+        <div class="mobile-title">Experiments</div>
+    </div>
+    <div id="mobile-menu" class="flex-row">
+        <div class="employee-info">
+            <div th:text="${fullname}"></div>
+            <div th:text="${'Level ' + level}"></div>
         </div>
-        <div class="scientists-grid__experiments grid-button button button_pressed">
+        <div class="experiments-button grid-button button button_pressed">
             Experiments
         </div>
-        <a th:href="@{/sci/main/articles}" class="scientists-grid__articles grid-button button">
+        <a th:href="@{/sci/main/articles}" class="articles-button grid-button button">
             Articles
         </a>
-        <a th:href="@{/sci/main/requests}" class="scientists-grid__requests grid-button button">
+        <a th:href="@{/sci/main/requests}" class="requests-button grid-button button">
             Requests
         </a>
-        <a th:href="@{/sci/experiment}" class="scientists-grid__add grid-button button">
+        <a th:href="@{/sci/experiment}" class="add-button grid-button button">
             Add Experiment
         </a>
     </div>
+</div>
 
-    <div class="content">
-        <div th:each="exp: ${experiments}" class=" content__item">
-            <div th:class="content__header"
-                 th:classappend="|${exp.status.name()=='PENDING' ? 'pending' : exp.status.name()=='APPROVED' ? 'approved' : exp.status.name()=='REJECTED' ? 'rejected' : 'finished'}|">
-                <div th:switch="${exp.status.name()}">
-                    <img th:case="PENDING" class="content-icon" alt="pending" th:src="@{/images/clock.png}">
-                    <img th:case="APPROVED" class="content-icon" alt="approved" th:src="@{/images/pencil.png}">
-                    <img th:case="REJECTED" class="content-icon" alt="rejected" th:src="@{/images/x_mark.png}">
-                    <img th:case="FINISHED" class="content-icon" alt="finished" th:src="@{/images/tick.png}">
-                </div>
-                <span class="header-text">
+<div class="content">
+    <div th:each="exp: ${experiments}" class=" content__item">
+        <div th:class="content__header"
+             th:classappend="|${exp.status.name()=='PENDING' ? 'pending' : exp.status.name()=='APPROVED' ? 'approved' : exp.status.name()=='REJECTED' ? 'rejected' : 'finished'}|">
+            <div th:switch="${exp.status.name()}">
+                <img th:case="PENDING" class="content-icon" alt="pending" th:src="@{/images/clock.png}">
+                <img th:case="APPROVED" class="content-icon" alt="approved" th:src="@{/images/pencil.png}">
+                <img th:case="REJECTED" class="content-icon" alt="rejected" th:src="@{/images/x_mark.png}">
+                <img th:case="FINISHED" class="content-icon" alt="finished" th:src="@{/images/tick.png}">
+            </div>
+            <span class="header-text">
                     <span th:text="${exp.type.name()} == 'MAJOR' ? 'Major' : 'Minor'"></span> Exp. #<span
-                        th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>
+                    th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>
                 </span>
+        </div>
+        <div class="content__main" th:switch="${exp.status.name()}">
+            <div th:if="${exp.assistant}">
+                <b>Assistant</b>
+                <div th:text="${exp.assistant.employee.name}"></div>
             </div>
-            <div class="content__main" th:switch="${exp.status.name()}">
-                <div th:if="${exp.assistant}">
-                    <b>Assistant</b>
-                    <div th:text="${exp.assistant.employee.name}"></div>
-                </div>
-                <div th:case="PENDING">
-                    <b>Submitted on </b>
-                </div>
-                <div th:case="APPROVED">
-                    <b>Approved on </b>
-                </div>
-                <div th:case="REJECTED">
-                    <b> Rejected on </b>
-                </div>
-                <div th:case="FINISHED">
-                    <b> Finished on </b>
-                </div>
-                <div th:text="${exp.statusDate}"></div>
-                <b>Description</b>
-                <div th:text="${exp.description}"></div>
+            <div th:case="PENDING">
+                <b>Submitted on </b>
             </div>
+            <div th:case="APPROVED">
+                <b>Approved on </b>
+            </div>
+            <div th:case="REJECTED">
+                <b> Rejected on </b>
+            </div>
+            <div th:case="FINISHED">
+                <b> Finished on </b>
+            </div>
+            <div th:text="${exp.statusDate}"></div>
+            <b>Description</b>
+            <div th:text="${exp.description}"></div>
         </div>
     </div>
 </div>
+<script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
 </body>
 </html>
