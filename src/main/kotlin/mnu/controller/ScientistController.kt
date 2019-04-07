@@ -190,49 +190,72 @@ class ScientistController : ApplicationController() {
         return "Article added."
     }
 
+    fun choiceError(experimentId: Long, principal: Principal): String? {
+        val experiment = experimentRepository?.findById(experimentId)!!
+        val user = userRepository?.findByLogin(principal.name)
+        val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
+        if (!experiment.isPresent)
+            return "Experiment with such id does not exist."
+        val checkedExperiment = experiment.get()
+        if (checkedExperiment.type == ExperimentType.MINOR)
+            return "Major experiment requests are handled by administrators."
+        if (checkedExperiment.examinator!!.employee!!.level!! >= currentScientist!!.employee!!.level!!)
+            return "Examinators' level is equal to or higher than yours."
+
+        return null
+    }
+
     @PostMapping("/acceptExperiment/{id}")
     @ResponseBody
-    fun acceptExperiment(@PathVariable id: Long) : String {
-        val experiment = experimentRepository?.findById(id)!!
-        return if (!experiment.isPresent)
-            "Experiment with such id does not exist."
-        else {
-            val checkedExperiment = experiment.get()
-            return if (checkedExperiment.type == ExperimentType.MAJOR)
-                "Major experiment requests are handled by administrators."
+    fun acceptExperiment(@PathVariable id: Long, principal: Principal): String {
+        val error = choiceError(id, principal)
+        return if (error == null) {
+            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+
+            if (checkedExperiment.status != ExperimentStatus.PENDING)
+                "Request has already been handled."
             else {
-                if (checkedExperiment.status != ExperimentStatus.PENDING)
-                    "Request has already been handled."
-                else {
-                    checkedExperiment.statusDate = LocalDateTime.now()
-                    checkedExperiment.status = ExperimentStatus.APPROVED
-                    experimentRepository?.save(checkedExperiment)
-                    "Request accepted."
-                }
+                checkedExperiment.statusDate = LocalDateTime.now()
+                checkedExperiment.status = ExperimentStatus.APPROVED
+                experimentRepository?.save(checkedExperiment)
+                "Request accepted."
             }
-        }
+
+        } else error
     }
+
 
     @PostMapping("/rejectExperiment/{id}")
     @ResponseBody
-    fun rejectExperiment(@PathVariable id: Long) : String {
-        val experiment = experimentRepository?.findById(id)!!
-        return if (!experiment.isPresent)
-            "Experiment with such id does not exist."
-        else {
-            val checkedExperiment = experiment.get()
-            return if (checkedExperiment.type == ExperimentType.MINOR)
-                "Minor experiment requests are handled by high-level scientists."
+    fun rejectExperiment(@PathVariable id: Long, principal: Principal): String {
+        val error = choiceError(id, principal)
+        return if (error == null) {
+            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+
+            if (checkedExperiment.status != ExperimentStatus.PENDING)
+                "Request has already been handled."
             else {
-                if (checkedExperiment.status != ExperimentStatus.PENDING)
-                    "Request has already been handled."
-                else {
-                    checkedExperiment.statusDate = LocalDateTime.now()
-                    checkedExperiment.status = ExperimentStatus.REJECTED
-                    experimentRepository?.save(checkedExperiment)
-                    "Request rejected."
-                }
+                checkedExperiment.statusDate = LocalDateTime.now()
+                checkedExperiment.status = ExperimentStatus.REJECTED
+                experimentRepository?.save(checkedExperiment)
+                "Request rejected."
             }
-        }
+
+        } else error
+    }
+
+    @PostMapping("/undoExperimentChoice/{id}")
+    @ResponseBody
+    fun undoExpChoice(@PathVariable id: Long, principal: Principal): String {
+        val error = choiceError(id, principal)
+        return if (error == null) {
+            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+
+            checkedExperiment.statusDate = LocalDateTime.now()
+            checkedExperiment.status = ExperimentStatus.PENDING
+            experimentRepository?.save(checkedExperiment)
+            "Undone."
+
+        } else error
     }
 }

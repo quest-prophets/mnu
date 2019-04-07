@@ -1,6 +1,7 @@
 package mnu.controller
 
-import mnu.form.*
+import mnu.form.EmployeeRegistrationForm
+import mnu.form.PrawnRegistrationForm
 import mnu.model.Prawn
 import mnu.model.User
 import mnu.model.employee.*
@@ -8,8 +9,13 @@ import mnu.model.enums.ExperimentStatus
 import mnu.model.enums.ExperimentType
 import mnu.model.enums.PersonStatus
 import mnu.model.enums.Role
-import mnu.repository.*
-import mnu.repository.employee.*
+import mnu.repository.ArticleRepository
+import mnu.repository.DistrictHouseRepository
+import mnu.repository.ExperimentRepository
+import mnu.repository.employee.AdministratorEmployeeRepository
+import mnu.repository.employee.ManagerEmployeeRepository
+import mnu.repository.employee.ScientistEmployeeRepository
+import mnu.repository.employee.SecurityEmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -50,7 +56,7 @@ class AdministratorController : ApplicationController() {
 
 
     @GetMapping("/employee")
-    fun adminEmployees(model: Model, @RequestParam (required = false) q: String?): String {
+    fun adminEmployees(model: Model, @RequestParam(required = false) q: String?): String {
         model.addAttribute("form", EmployeeRegistrationForm())
         if (q != null)
             model.addAttribute("employees", employeeRepository?.findAllByNameIgnoreCaseContaining(q))
@@ -63,13 +69,16 @@ class AdministratorController : ApplicationController() {
     fun adminMenu() = "administrators/admin__menu.html"
 
     @GetMapping("/experiments")
-    fun adminExperiments(model: Model) : String {
-        model.addAttribute("experiments", experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
+    fun adminExperiments(model: Model): String {
+        model.addAttribute(
+            "experiments",
+            experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR)
+        )
         return "administrators/admin__experiments.html"
     }
 
     @GetMapping("/articles")
-    fun adminArticles(model: Model) : String {
+    fun adminArticles(model: Model): String {
         model.addAttribute("articles", articleRepository?.findAll())
         return "administrators/admin__articles.html"
     }
@@ -99,19 +108,31 @@ class AdministratorController : ApplicationController() {
                     else -> return "Error"
                 }
                 val newUser = User(form.username, form.password, role)
-                val newEmployeeUser = Employee(form.name, LocalDateTime.now(),
-                    form.level.toInt(), form.salary.toLong(), form.position).apply { this.user = newUser
+                val newEmployeeUser = Employee(
+                    form.name, LocalDateTime.now(),
+                    form.level.toInt(), form.salary.toLong(), form.position
+                ).apply {
+                    this.user = newUser
                     this.status = PersonStatus.WORKING
                 }
 
                 userRepository?.save(newUser)
                 employeeRepository?.save(newEmployeeUser)
                 when (role) {
-                    Role.MANAGER -> managerEmployeeRepository?.save(ManagerEmployee().apply { this.employee = newEmployeeUser })
-                    Role.SCIENTIST -> scientistEmployeeRepository?.save(ScientistEmployee().apply { this.employee = newEmployeeUser })
-                    Role.SECURITY -> securityEmployeeRepository?.save(SecurityEmployee().apply { this.employee = newEmployeeUser })
-                    Role.ADMIN -> administratorEmployeeRepository?.save(AdministratorEmployee().apply { this.employee = newEmployeeUser })
-                    else -> {}
+                    Role.MANAGER -> managerEmployeeRepository?.save(ManagerEmployee().apply {
+                        this.employee = newEmployeeUser
+                    })
+                    Role.SCIENTIST -> scientistEmployeeRepository?.save(ScientistEmployee().apply {
+                        this.employee = newEmployeeUser
+                    })
+                    Role.SECURITY -> securityEmployeeRepository?.save(SecurityEmployee().apply {
+                        this.employee = newEmployeeUser
+                    })
+                    Role.ADMIN -> administratorEmployeeRepository?.save(AdministratorEmployee().apply {
+                        this.employee = newEmployeeUser
+                    })
+                    else -> {
+                    }
                 }
 
                 "Successfully registered a new employee."
@@ -144,7 +165,8 @@ class AdministratorController : ApplicationController() {
                 val managerIdList = managerEmployeeRepository?.getAllIds()!!
 
                 val newUser = User(form.username, form.password, Role.PRAWN)
-                val newPrawn = Prawn(form.name).apply { this.user = newUser
+                val newPrawn = Prawn(form.name).apply {
+                    this.user = newUser
                     this.districtHouse = districtHouseRepository?.findById(houseIdList.random())?.get()
                     this.manager = managerEmployeeRepository?.findById(managerIdList.random())?.get()
                 }
@@ -157,49 +179,69 @@ class AdministratorController : ApplicationController() {
         }
     }
 
+    fun choiceError(experimentId: Long): String? {
+        val experiment = experimentRepository?.findById(experimentId)!!
+        if (!experiment.isPresent)
+            return "Experiment with such id does not exist."
+        val checkedExperiment = experiment.get()
+        if (checkedExperiment.type == ExperimentType.MINOR)
+            return "Minor experiment requests are handled by high-level scientists."
+
+        return null
+    }
+
     @PostMapping("/acceptExperiment/{id}")
     @ResponseBody
-    fun acceptExperiment(@PathVariable id: Long) : String {
-        val experiment = experimentRepository?.findById(id)!!
-        return if (!experiment.isPresent)
-            "Experiment with such id does not exist."
-        else {
-            val checkedExperiment = experiment.get()
-            return if (checkedExperiment.type == ExperimentType.MINOR)
-                "Minor experiment requests are handled by high-level scientists."
+    fun acceptExperiment(@PathVariable id: Long): String {
+        val error = choiceError(id)
+        return if (error == null) {
+            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+
+            if (checkedExperiment.status != ExperimentStatus.PENDING)
+                "Request has already been handled."
             else {
-                if (checkedExperiment.status != ExperimentStatus.PENDING)
-                    "Request has already been handled."
-                else {
-                    checkedExperiment.statusDate = LocalDateTime.now()
-                    checkedExperiment.status = ExperimentStatus.APPROVED
-                    experimentRepository?.save(checkedExperiment)
-                    "Request accepted."
-                }
+                checkedExperiment.statusDate = LocalDateTime.now()
+                checkedExperiment.status = ExperimentStatus.APPROVED
+                experimentRepository?.save(checkedExperiment)
+                "Request accepted."
             }
-        }
+
+        } else error
     }
+
 
     @PostMapping("/rejectExperiment/{id}")
     @ResponseBody
-    fun rejectExperiment(@PathVariable id: Long) : String {
-        val experiment = experimentRepository?.findById(id)!!
-        return if (!experiment.isPresent)
-            "Experiment with such id does not exist."
-        else {
-            val checkedExperiment = experiment.get()
-            return if (checkedExperiment.type == ExperimentType.MINOR)
-                "Minor experiment requests are handled by high-level scientists."
+    fun rejectExperiment(@PathVariable id: Long): String {
+        val error = choiceError(id)
+        return if (error == null) {
+            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+
+            if (checkedExperiment.status != ExperimentStatus.PENDING)
+                "Request has already been handled."
             else {
-                if (checkedExperiment.status != ExperimentStatus.PENDING)
-                    "Request has already been handled."
-                else {
-                    checkedExperiment.statusDate = LocalDateTime.now()
-                    checkedExperiment.status = ExperimentStatus.REJECTED
-                    experimentRepository?.save(checkedExperiment)
-                    "Request rejected."
-                }
+                checkedExperiment.statusDate = LocalDateTime.now()
+                checkedExperiment.status = ExperimentStatus.REJECTED
+                experimentRepository?.save(checkedExperiment)
+                "Request rejected."
             }
-        }
+
+        } else error
     }
+
+    @PostMapping("/undoExperimentChoice/{id}")
+    @ResponseBody
+    fun undoExpChoice(@PathVariable id: Long): String {
+        val error = choiceError(id)
+        return if (error == null) {
+            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+
+            checkedExperiment.statusDate = LocalDateTime.now()
+            checkedExperiment.status = ExperimentStatus.PENDING
+            experimentRepository?.save(checkedExperiment)
+            "Undone."
+
+        } else error
+    }
+
 }
