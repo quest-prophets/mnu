@@ -197,9 +197,11 @@ class ScientistController : ApplicationController() {
         if (!experiment.isPresent)
             return "Experiment with such id does not exist."
         val checkedExperiment = experiment.get()
-        if (checkedExperiment.type == ExperimentType.MINOR)
+        if (checkedExperiment.type == ExperimentType.MAJOR)
             return "Major experiment requests are handled by administrators."
-        if (checkedExperiment.examinator!!.employee!!.level!! >= currentScientist!!.employee!!.level!!)
+        if ((checkedExperiment.examinator!!.employee!!.level!! >= currentScientist!!.employee!!.level!!)
+            && checkedExperiment.examinator!!.employee!!.level!! < 10
+            && currentScientist.employee!!.level!! < 10)
             return "Examinators' level is equal to or higher than yours."
 
         return null
