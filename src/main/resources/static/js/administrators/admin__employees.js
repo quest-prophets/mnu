@@ -32,8 +32,45 @@ function pressButton(button_to_press) {
     button_to_press.classList.add("button_pressed");
 }
 
+document.getElementById("employees-tbody").addEventListener('click', e => {
+    const row = e.target.closest('.employee-tbody-row');
+    if (!row) return;
+    if (row.classList.contains("selected-row")) {
+        row.classList.remove("selected-row");
+        document.getElementById("id_edit").value = "";
+        document.getElementById("name_edit").value = "";
+        document.getElementById("salary_edit").value = "";
+        document.getElementById("position_edit").value = "";
+        document.getElementById("status_edit").value = "";
+        document.getElementById("level_edit").value = "";
+    } else {
+        let selectedRows = document.getElementsByClassName("selected-row");
+        while (selectedRows.length > 0) selectedRows[0].classList.remove("selected-row");
+        row.classList.add("selected-row");
+        document.getElementById("id_edit").value = row.dataset.id;
+        document.getElementById("name_edit").value = row.dataset.name;
+        document.getElementById("salary_edit").value = row.dataset.salary;
+        document.getElementById("position_edit").value = row.dataset.position;
+        document.getElementById("status_edit").value = row.dataset.status.toLowerCase();
+        document.getElementById("level_edit").value = row.dataset.level;
+    }
+});
+
+document.getElementById("id_edit").addEventListener('input', e => {
+    let selectedRows = document.getElementsByClassName("selected-row");
+    while (selectedRows.length > 0) selectedRows[0].classList.remove("selected-row");
+    let row = document.querySelector('#employees-tbody *[data-id="' + e.target.value + '"]');
+    if (!row) return;
+    row.classList.add("selected-row");
+    document.getElementById("name_edit").value = row.dataset.name;
+    document.getElementById("salary_edit").value = row.dataset.salary;
+    document.getElementById("position_edit").value = row.dataset.position;
+    document.getElementById("status_edit").value = row.dataset.status.toLowerCase();
+    document.getElementById("level_edit").value = row.dataset.level;
+});
+
 //Dates formatting
-dates = document.getElementsByClassName("td_date");
+dates = document.getElementsByClassName("emp-doe");
 for (let i = 0; i < dates.length; ++i) {
     const date = new Date(dates[i].innerText);
     const day = date.getDate().length === 2 ? date.getDate() : "0" + date.getDate();

@@ -91,6 +91,10 @@ body {
     background: #dcefff;
 }
 
+.selected-row {
+    background: #d6ffc5;
+}
+
 .approved {
     background: #d6f5d5;
 }

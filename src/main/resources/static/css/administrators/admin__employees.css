@@ -44,7 +44,11 @@
     margin: 5px 0 auto 0;
 }
 
-@media (max-width: 600px) {
+#employees-tbody {
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
     .grid {
         grid: "header" 90px "table" "buttons" "inputs";
         grid-row-gap: 0;

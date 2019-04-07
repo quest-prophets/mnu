@@ -49,10 +49,6 @@
     cursor: pointer;
 }
 
-.selected-row {
-    background: #d6ffc5;
-}
-
 .grid__assistants-button {
     display: none;
 }

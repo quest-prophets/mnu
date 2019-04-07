@@ -43,17 +43,23 @@
                 <td>
                     D.o.E
                 </td>
+                <td>
+                    Status
+                </td>
             </tr>
             </thead>
-            <tbody>
-            <tr th:each="employee : ${employees}">
+            <tbody id="employees-tbody">
+            <tr class="employee-tbody-row" th:each="employee : ${employees}"
+                data-th-attr="data-id=${employee.id}, data-name=${employee.name}, data-position=${employee.position},
+                data-level=${employee.level}, data-salary=${employee.salary}, data-status=${employee.status}">
                 <td th:text="${employee.id}"></td>
                 <td th:text="${employee.name}"></td>
                 <td th:text="${employee.user.role}"></td>
                 <td th:text="${employee.position}"></td>
                 <td th:text="${employee.level}"></td>
                 <td th:text="${employee.salary}"></td>
-                <td th:text="${employee.dateOfEmployment}" class="td_date"></td>
+                <td class="emp-doe" th:text="${employee.dateOfEmployment}"></td>
+                <td th:text="${employee.status}"></td>
             </tr>
             </tbody>
         </table>
@@ -67,9 +73,9 @@
              th:src="@{/images/magnifier.svg}">
         <img alt="Cash Rewards" id="reward-button" class="button button_round icon" th:src="@{/images/dollar.png}">
     </div>
-    <div class="grid__inputs flex-column">
+    <div class="grid__inputs">
         <form th:classappend="${param.q} ? hidden : null" action="#" th:action="@{/admin/registerEmployee}"
-              th:object="${form}" method="post" id="add-interface" class="flex-column">
+              th:object="${form_add}" method="post" id="add-interface" class="flex-column">
             <label class="form-item_small">
                 <b>Login</b>
                 <input th:required="true" th:field="*{username}" class="input_big">
@@ -91,7 +97,7 @@
                 <input th:required="true" th:field="*{position}" class="input_big">
             </label>
             <label class="form-item_small">
-                <b>Type</b>
+                <b>Role</b>
                 <select th:field="*{type}" class="input_big">
                     <option th:value="security" th:text="Security"></option>
                     <option th:value="scientist" th:text="Scientist"></option>
@@ -105,21 +111,56 @@
             </label>
             <input type="submit" class="button form-item" value="Add employee">
         </form>
-        <form id="edit-interface" class="hidden">
-            <input type="number" placeholder="Employee id">
-            <input type="number" min="1" max="10" class="add-employees-inputs-grid__lvl" placeholder="Lvl">
-            <input type="number" step="10" class="add-employees-inputs-grid__salary" placeholder="Salary">
-            <input placeholder="Position">
-            ???
+
+        <form action="#" th:action="@{/admin/editEmployee}" th:object="${form_edit}" method="post" id="edit-interface"
+              class="hidden flex-column">
+            <label class="form-item_small">
+                <b>Employee Id</b>
+                <input type="number" th:required="true" th:field="*{id_edit}" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Name</b>
+                <input th:required="true" th:field="*{name_edit}" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Salary</b>
+                <input th:required="true" th:field="*{salary_edit}" type="number" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Position</b>
+                <input th:required="true" th:field="*{position_edit}" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Status</b>
+                <select th:field="*{status_edit}" class="input_big">
+                    <option th:value="working" th:text="Working"></option>
+                    <option th:value="fired" th:text="Fired"></option>
+                    <option th:value="dead" th:text="Dead"></option>
+                </select>
+            </label>
+            <label class="form-item_small">
+                <b>Level</b>
+                <input th:required="true" th:field="*{level_edit}" type="number" min="1" max="10" class="input_big">
+            </label>
+            <input type="submit" class="button form-item" value="Edit employee">
         </form>
+
         <form th:classappend="${param.q} ? null : hidden" action="#" th:action="@{/admin/employee}" method="get"
-              id="find-interface">
+              id="find-interface" class="flex-column">
             <input th:value="${param.q}" type="text" name="q" placeholder="Search employee by name..."
-                   class="input_big">
+                   class="input_big form-item_small">
+            <input type="submit" class="button form-item" value="Find employee">
         </form>
-        <form id="reward-interface" class="grid__inputs_reward hidden">
-            <input type="number" placeholder="Employee id">
-            <input type="number" placeholder="Reward">
+        <form action="#" method="post" id="reward-interface" class="grid__inputs_reward hidden flex-column">
+            <label class="form-item_small">
+                <b>Employee Id</b>
+                <input type="number" class="input_big">
+            </label>
+            <label class="form-item_small">
+                <b>Reward</b>
+                <input type="number" class="input_big">
+            </label>
+            <input type="submit" class="button form-item" value="Give reward">
         </form>
     </div>
 </div>

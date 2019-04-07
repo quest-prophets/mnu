@@ -1,5 +1,6 @@
 package mnu.controller
 
+import mnu.form.EmployeeEditForm
 import mnu.form.EmployeeRegistrationForm
 import mnu.form.PrawnRegistrationForm
 import mnu.model.Prawn
@@ -57,7 +58,8 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/employee")
     fun adminEmployees(model: Model, @RequestParam(required = false) q: String?): String {
-        model.addAttribute("form", EmployeeRegistrationForm())
+        model.addAttribute("form_add", EmployeeRegistrationForm())
+        model.addAttribute("form_edit", EmployeeEditForm())
         if (q != null)
             model.addAttribute("employees", employeeRepository?.findAllByNameIgnoreCaseContaining(q))
         else
