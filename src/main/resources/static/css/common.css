@@ -17,6 +17,11 @@ body {
     padding: 6px 12px 6px 12px;
 }
 
+select {
+    background: white;
+    border-radius: 6px;
+}
+
 .input_big {
     display: block;
     font-size: 16px;

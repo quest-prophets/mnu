@@ -1,4 +1,4 @@
-@import url("../common.css");
+ @import url("../common.css");
 
 .header {
     grid-area: header;
@@ -6,7 +6,7 @@
 
 .grid {
     display: grid;
-    grid: "header header" 80px "inputs table";
+    grid: "header header" 80px "inputs weapons";
     padding: 0 5px;
 }
 
@@ -23,41 +23,33 @@
     width: 350px;
 }
 
-.grid__assistants-table {
-    grid-area: table;
+.grid__weapons-table {
+    grid-area: weapons;
     margin-top: 30px;
 }
 
-.grid__assistants-table table {
+.grid__weapons-table table {
     margin: auto;
     border-collapse: collapse;
 }
 
-.grid__assistants-table td {
+.grid__weapons-table td {
     padding: 4px 10px;
     border: 1px solid black;
 }
 
-#assistants-tbody {
-    cursor: pointer;
+.grid__weapons-form {
+    grid-area: weapons;
 }
 
-.grid__assistants-button {
-    display: none;
+#weapons-tbody {
+    cursor: pointer;
 }
 
 @media (max-width: 750px) {
     .grid {
         grid: "header" 80px "inputs";
         padding: 0;
-    }
-
-    .grid__assistants-table {
-        display: none;
-    }
-
-    .grid__assistants-button {
-        display: block;
     }
 }
 

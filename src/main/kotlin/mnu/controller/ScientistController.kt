@@ -80,7 +80,7 @@ class ScientistController : ApplicationController() {
 
         experiments?.forEach {
             if (currentScientistLvl > it.examinator!!.employee!!.level!!
-                || (currentScientistLvl == 10 && it.examinator!!.employee!!.level!! == 10))
+                || (currentScientistLvl == 10))
                 validExperiments.add(it)
         }
         model.addAttribute("experiments", validExperiments)
@@ -212,6 +212,7 @@ class ScientistController : ApplicationController() {
     @PostMapping("/report")
     @ResponseBody
     fun addReport(@ModelAttribute form: NewReportForm, principal: Principal): String {
+        return form.weaponDescription
         val error = reportAccessError(form.experimentId, principal)
         return if (error == null) {
             val experiment = experimentRepository?.findById(form.experimentId)!!

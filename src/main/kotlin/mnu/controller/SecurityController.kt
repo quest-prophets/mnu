@@ -157,37 +157,37 @@ class SecurityController : ApplicationController() {
         return "redirect:main"
     }
 
-    @PostMapping("/incident/{id}")
-    fun acceptIncidentParticipation(@PathVariable id: Long, redirect: RedirectAttributes, principal: Principal) : String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        val curEmployeeLevel = employeeRepository?.findByUserId(curUser.id!!)!!.level!!
-        val possibleIncident = districtIncidentRepository?.findById(id)!!
-        if (!possibleIncident.isPresent)
-            return "Incident with such id does not exist."
-        val incident = possibleIncident.get()
-        incident.assistants = ArrayList()
-        val allSuitableIncidents =
-            districtIncidentRepository?.findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
-                0, curEmployeeLevel, curEmployeeLevel)
-        when {
-            incident.availablePlaces == 0L -> {
-                return "The amount of security is already sufficient for this incident."
-            }
-            !allSuitableIncidents?.contains(incident)!! -> {
-                return "You are not suitable for this incident."
-            }
-        }
-        incident.apply {
-            this.assistants?.add(securityEmployeeRepository?.findById(curUser.id!!)!!.get())
-            this.availablePlaces = this.availablePlaces - 1
-            if(this.availablePlaces == 0L)
-                this.dangerLevel = 0
-        }
-
-        districtIncidentRepository?.save(incident)
-        if (incident.availablePlaces == 0L)
-            return "You were appointed to the incident and have successfully resolved it."
-        return "You were appointed to the incident."
-    }
+//    @PostMapping("/incident/{id}")
+//    fun acceptIncidentParticipation(@PathVariable id: Long, redirect: RedirectAttributes, principal: Principal) : String {
+//        val curUser = userRepository?.findByLogin(principal.name)!!
+//        val curEmployeeLevel = employeeRepository?.findByUserId(curUser.id!!)!!.level!!
+//        val possibleIncident = districtIncidentRepository?.findById(id)!!
+//        if (!possibleIncident.isPresent)
+//            return "Incident with such id does not exist."
+//        val incident = possibleIncident.get()
+//        incident.assistants = ArrayList()
+//        val allSuitableIncidents =
+//            districtIncidentRepository?.findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
+//                0, curEmployeeLevel, curEmployeeLevel)
+//        when {
+//            incident.availablePlaces == 0L -> {
+//                return "The amount of security is already sufficient for this incident."
+//            }
+//            !allSuitableIncidents?.contains(incident)!! -> {
+//                return "You are not suitable for this incident."
+//            }
+//        }
+//        incident.apply {
+//            this.assistants?.add(securityEmployeeRepository?.findById(curUser.id!!)!!.get())
+//            this.availablePlaces = this.availablePlaces - 1
+//            if(this.availablePlaces == 0L)
+//                this.dangerLevel = 0
+//        }
+//
+//        districtIncidentRepository?.save(incident)
+//        if (incident.availablePlaces == 0L)
+//            return "You were appointed to the incident and have successfully resolved it."
+//        return "You were appointed to the incident."
+//    }
 
 }
