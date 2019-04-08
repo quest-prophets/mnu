@@ -47,6 +47,9 @@ class ScientistController : ApplicationController() {
         return "scientists/sci__main.html"
     }
 
+    @GetMapping("/profile")
+    fun profile() = "scientists/sci__profile.html"
+
     @GetMapping("/main/articles")
     fun mainArticles(model: Model, principal: Principal) : String {
         val user = userRepository?.findByLogin(principal.name)!!

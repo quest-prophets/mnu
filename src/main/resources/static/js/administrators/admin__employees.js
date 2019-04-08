@@ -51,7 +51,7 @@ document.getElementById("employees-tbody").addEventListener('click', e => {
         document.getElementById("name_edit").value = row.dataset.name;
         document.getElementById("salary_edit").value = row.dataset.salary;
         document.getElementById("position_edit").value = row.dataset.position;
-        document.getElementById("status_edit").value = row.dataset.status;
+        document.getElementById("status_edit").value = row.dataset.status.toLowerCase();
         document.getElementById("level_edit").value = row.dataset.level;
         document.getElementById("id_cash").value = row.dataset.id;
     }
@@ -66,7 +66,7 @@ document.getElementById("id_edit").addEventListener('input', e => {
     document.getElementById("name_edit").value = row.dataset.name;
     document.getElementById("salary_edit").value = row.dataset.salary;
     document.getElementById("position_edit").value = row.dataset.position;
-    document.getElementById("status_edit").value = row.dataset.status;
+    document.getElementById("status_edit").value = row.dataset.status.toLowerCase();
     document.getElementById("level_edit").value = row.dataset.level;
 });
 

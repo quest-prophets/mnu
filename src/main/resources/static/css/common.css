@@ -3,6 +3,19 @@ body {
     font-size: 17px;
 }
 
+.fixed-header {
+    padding: 12px 12px 20px 12px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: white;
+    border-bottom: 2px solid black;
+}
+
+.fixed-header_small {
+    padding: 6px 12px 6px 12px;
+}
+
 .input_big {
     display: block;
     font-size: 16px;
@@ -13,8 +26,24 @@ body {
     margin-top: 20px;
 }
 
-.form-item_small{
+.form-item_big {
+    margin-top: 40px;
+}
+
+.form-item_small {
     margin-top: 10px;
+}
+
+.form-item_micro {
+    margin-top: 5px;
+}
+
+.font-big {
+    font-size: 20px;
+}
+
+.gray {
+    color: #9e9e9e;
 }
 
 .button {
@@ -54,8 +83,18 @@ body {
 }
 
 .button_back {
-    margin-top: -5px;
-    margin-right: 15px;
+    width: 45px;
+    height: 45px;
+}
+
+.button_profile {
+    font-size: 18px;
+    margin: auto;
+    padding: 10px 15px;
+}
+
+.button_logout {
+    margin: auto 20px auto auto;
 }
 
 .icon {
@@ -70,7 +109,7 @@ body {
     align-items: center;
 }
 
-.flex-column-top{
+.flex-column-top {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

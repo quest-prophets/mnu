@@ -4,15 +4,6 @@ body {
     margin: 0;
 }
 
-.fixed-header {
-    padding: 12px 12px 20px 12px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: white;
-    border-bottom: 2px solid black;
-}
-
 .employee-info {
     text-align: center;
 }
@@ -122,5 +113,9 @@ body {
         width: 80vw;
         margin-top: 25px;
         font-size: 22px;
+    }
+
+    .button_profile {
+        margin-top: 25px;
     }
 }

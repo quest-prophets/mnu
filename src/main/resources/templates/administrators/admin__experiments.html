@@ -26,6 +26,9 @@
     </a>
 
     <div class="content">
+        <div class="form-item gray" th:if="${experiments == null or experiments.isEmpty()}">
+            There are no major experiment requests
+        </div>
         <div th:each="exp: ${experiments}" class=" content__item">
             <div th:id="${'exp-header-' + exp.id}" class="content__header pending">
                 <span class="header-text">

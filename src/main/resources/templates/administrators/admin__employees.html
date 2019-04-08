@@ -73,7 +73,7 @@
             </label>
             <label class="form-item_small">
                 <b>Salary</b>
-                <input th:required="true" th:field="*{salary}" type="number" class="input_big">
+                <input th:required="true" th:field="*{salary}" type="number" min="0" class="input_big">
             </label>
             <label class="form-item_small">
                 <b>Position</b>
@@ -107,7 +107,7 @@
             </label>
             <label class="form-item_small">
                 <b>Salary</b>
-                <input th:required="true" th:field="*{salary_edit}" type="number" class="input_big">
+                <input th:required="true" th:field="*{salary_edit}" type="number" min="0" class="input_big">
             </label>
             <label class="form-item_small">
                 <b>Position</b>

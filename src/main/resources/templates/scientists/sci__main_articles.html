@@ -34,9 +34,11 @@
 </div>
 
 
-<div class="content">
+<div class="content flex-column">
     <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
-
+    <div class="form-item gray" th:if="${articles == null or articles.isEmpty()}">
+        You didn't write any articles
+    </div>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
 </body>

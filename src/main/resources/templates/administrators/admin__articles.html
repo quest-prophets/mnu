@@ -26,7 +26,9 @@
     </div>
 
     <div class="content">
-
+        <div class="form-item gray" th:if="${articles == null or articles.isEmpty()}">
+            There are no articles
+        </div>
     </div>
 </div>
 </body>

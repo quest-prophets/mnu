@@ -33,8 +33,11 @@
     </div>
 </div>
 
-<div class="content">
-    <div th:each="exp: ${experiments}" class=" content__item">
+<div class="content flex-column">
+    <div class="form-item gray" th:if="${experiments == null or experiments.isEmpty()}">
+        There are no experiment requests for you
+    </div>
+    <div th:each="exp: ${experiments}" class="content__item">
         <div th:id="${'exp-header-' + exp.id}" class="content__header pending">
                 <span class="header-text">
                     <span> Minor Exp. #</span><span th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>

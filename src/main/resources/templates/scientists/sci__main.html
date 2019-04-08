@@ -14,10 +14,9 @@
         <div class="mobile-title">Experiments</div>
     </div>
     <div id="mobile-menu" class="flex-row">
-        <div class="employee-info">
-            <div th:text="${fullname}"></div>
-            <div th:text="${'Level ' + level}"></div>
-        </div>
+        <a th:href="@{/sci/profile}" class="flex-column button button_profile">
+            Profile
+        </a>
         <div class="experiments-button grid-button button button_pressed">
             Experiments
         </div>
@@ -35,6 +34,9 @@
 
 <div class="content">
     <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+    <div class="form-item gray" th:if="${experiments} == null">
+        You didn't submit any experiments
+    </div>
     <div th:each="exp: ${experiments}" class=" content__item">
         <div th:class="content__header"
              th:classappend="|${exp.status.name()=='PENDING' ? 'pending' : exp.status.name()=='APPROVED' ? 'approved' : exp.status.name()=='REJECTED' ? 'rejected' : 'finished'}|">
