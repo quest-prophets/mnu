@@ -6,13 +6,18 @@
 
 .grid {
     display: grid;
-    grid: "header header" 80px "inputs table";
+    grid: "header header" 80px "inputs-top assistants" "inputs-bottom assistants";
     padding: 0 5px;
 }
 
-.grid__inputs {
-    grid-area: inputs;
+.grid__inputs-top {
+    grid-area: inputs-top;
     margin-top: 10px;
+}
+
+.grid__inputs-bottom {
+    text-align: left;
+    grid-area: inputs-bottom;
 }
 
 .text-area_big {
@@ -20,7 +25,8 @@
 }
 
 .grid__assistants-table {
-    grid-area: table;
+    grid-area: assistants;
+    max-height: 300px;
     margin-top: 30px;
 }
 
@@ -31,6 +37,7 @@
 
 .grid__assistants-table td {
     padding: 4px 10px;
+    word-break: break-word;
     border: 1px solid black;
 }
 
@@ -51,16 +58,12 @@
 
 @media (max-width: 750px) {
     .grid {
-        grid: "header" 80px "inputs";
+        grid: "header" 80px "inputs-top" "assistants" "inputs-bottom";
         padding: 0;
     }
 
     .grid__assistants-table {
-        display: none;
-    }
-
-    .grid__assistants-button {
-        display: block;
+        font-size: 16px;
     }
 }
 

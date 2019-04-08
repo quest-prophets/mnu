@@ -15,7 +15,9 @@
             <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
         </a>
     </div>
-    <form action="#" th:action="@{/sci/experiment}" th:object="${form}" method="post" class="grid__inputs flex-column">
+
+    <form id="form" action="#" th:action="@{/sci/experiment}" th:object="${form}" method="post"
+          class="grid__inputs-top flex-column">
         <label class="form-item">
             <b>Title</b>
             <input th:required="true" th:field="*{title}" class="input_big">
@@ -27,17 +29,20 @@
                 <option th:value="major" th:text="Major"></option>
             </select>
         </label>
+    </form>
+    <div class="flex-column grid__inputs-bottom">
         <label class="form-item">
             <b>Assistant id</b>
-            <input id="assistant-id" th:field="*{assistantId}" class="input_big">
+            <input form="form" id="assistantId" name="assistantId" class="input_big">
         </label>
-        <button class="form-item grid__assistants-button button">Choose assistant</button>
         <label class="form-item">
             <b>Description</b>
-            <textarea th:required="true" th:field="*{description}" class="text-area_big input_big"></textarea>
+            <textarea form="form" th:required="true" id="description" name="description"
+                      class="text-area_big input_big"></textarea>
         </label>
-        <input type="submit" class="button form-item" value="Submit Experiment">
-    </form>
+        <input form="form" type="submit" class="button form-item" value="Submit Experiment">
+    </div>
+
     <div class="grid__assistants-table">
         <table>
             <thead>

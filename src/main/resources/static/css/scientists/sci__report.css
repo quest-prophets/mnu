@@ -29,6 +29,7 @@
 }
 
 .grid__weapons-table {
+    max-height: 300px;
     grid-area: weapons;
     margin-top: 30px;
 }
