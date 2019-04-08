@@ -117,5 +117,7 @@ body {
 
     .button_profile {
         margin-top: 25px;
+        width: 80vw;
+        font-size: 22px;
     }
 }

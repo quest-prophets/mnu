@@ -72,8 +72,8 @@
             <b>Description</b>
             <div th:text="${exp.description}"></div>
             <div class="flex-column">
-                <a th:href="@{'/sci/report/' + ${exp.id}}" th:attr="data-exp-id=${exp.id}"
-                   class="button">Write report</a>
+                <a th:if="${exp.status.name()=='APPROVED'}" th:href="@{'/sci/report?id=' + ${exp.id}}"
+                   th:attr="data-exp-id=${exp.id}" class="button">Write report</a>
             </div>
         </div>
     </div>

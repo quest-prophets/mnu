@@ -20,7 +20,7 @@
 
 .administrators-menu-grid {
     display: grid;
-    grid: "admin-header admin-header" 60px "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
+    grid: "admin-header admin-header" 70px "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
 }
 
 .administrators-menu-grid__district {
@@ -65,7 +65,7 @@
 
 @media (max-width: 700px) {
     .administrators-menu-grid {
-        grid: "admin-header" 60px "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
+        grid: "admin-header" 70px "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
     }
 
     .grid-button {

@@ -184,7 +184,7 @@ class ScientistController : ApplicationController() {
     fun reportAccessError(experimentId: Long, principal: Principal): String? {
         val user = userRepository?.findByLogin(principal.name)
         val possibleScientist = scientistEmployeeRepository?.findById(user?.id!!)!!
-        if (possibleScientist.isPresent)
+        if (!possibleScientist.isPresent)
             return "You are not a scientist."
         val currentScientist = possibleScientist.get()
         val experiment = experimentRepository?.findById(experimentId)!!
@@ -198,16 +198,15 @@ class ScientistController : ApplicationController() {
         return null
     }
 
-    @GetMapping("/report/{id}")
-    @ResponseBody
-    fun report(@PathVariable id: Long, model: Model, principal: Principal): String {
+    @GetMapping("/report")
+    fun report( @RequestParam id: Long, model: Model, principal: Principal): String {
         val error = reportAccessError(id, principal)
         if (error == null)
-            model.addAttribute("form", NewArticleForm())
+            model.addAttribute("form", NewReportForm(experimentId = id))
         else
             model.addAttribute("error", error)
 
-        return "scientists/sci__new-article.html"
+        return "scientists/sci__report.html"
     }
 
     @PostMapping("/report")
@@ -216,10 +215,8 @@ class ScientistController : ApplicationController() {
         val error = reportAccessError(form.experimentId, principal)
         return if (error == null) {
             val experiment = experimentRepository?.findById(form.experimentId)!!
-            val experimentDate =
-                LocalDateTime.parse(form.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))
             experimentRepository?.save(experiment.get().apply {
-                this.statusDate = experimentDate
+                this.statusDate = LocalDateTime.now()
                 this.result = form.result
                 this.status = ExperimentStatus.FINISHED
             })

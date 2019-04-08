@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/scientists/sci__report.css}">
+    <title>MNU</title>
+</head>
+<body>
+<div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
+<div class="grid">
+    <div class="flex-row-left header">
+        <a th:href="@{/sci/main}">
+            <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
+        </a>
+    </div>
+    <form action="#" th:action="@{/sci/report}" th:object="${form}" method="post" class="grid__inputs flex-column">
+        <label class="form-item">
+            <b>Experiment id</b>
+            <input th:required="true" th:field="*{experimentId}" disabled class="input_big">
+        </label>
+        <label class="form-item">
+            <b>Report</b>
+            <textarea th:required="true" th:field="*{result}" class="text-area_big input_big"></textarea>
+        </label>
+        <input type="submit" class="button form-item" value="Submit Experiment">
+    </form>
+    <div class="grid__assistants-table">
+        <table>
+            <thead>
+            <tr>
+                <td>
+                    id
+                </td>
+                <td>
+                    Name
+                </td>
+                <td>
+                    Position
+                </td>
+                <td>
+                    Level
+                </td>
+            </tr>
+            </thead>
+            <tbody id="assistants-tbody">
+<!--            <tr th:each="assistant : ${assistants}" th:attr="data-id=${assistant.id}">-->
+<!--                <td th:text="${assistant.id}"></td>-->
+<!--                <td th:text="${assistant.name}"></td>-->
+<!--                <td th:text="${assistant.position}"></td>-->
+<!--                <td th:text="${assistant.level}"></td>-->
+<!--            </tr>-->
+            </tbody>
+        </table>
+    </div>
+</div>
+<script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__report.js}"></script>
+</body>
+</html>

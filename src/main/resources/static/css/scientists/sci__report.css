@@ -16,7 +16,11 @@
 }
 
 .text-area_big {
-    min-height: 100px;
+    min-height: 200px;
+}
+
+.input_big {
+    width: 350px;
 }
 
 .grid__assistants-table {
@@ -32,13 +36,6 @@
 .grid__assistants-table td {
     padding: 4px 10px;
     border: 1px solid black;
-}
-
-.input_big {
-    display: block;
-    font-size: 16px;
-    height: 30px;
-    width: 300px;
 }
 
 #assistants-tbody {
