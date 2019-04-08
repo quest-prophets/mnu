@@ -1,11 +1,5 @@
 @import url("../common.css");
 
 .registration-box {
-    margin-top: 100px;
-    padding: 35px;
-}
-
-.header {
-    grid-area: admin-header;
-    margin-top: 5px;
+    margin-top: 70px;
 }

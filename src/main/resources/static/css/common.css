@@ -108,6 +108,16 @@ select {
     height: 50px;
 }
 
+.icon_big {
+    width: 100px;
+    height: 100px;
+}
+
+.icon_giant {
+    width: 200px;
+    height: 200px;
+}
+
 .flex-column {
     display: flex;
     flex-direction: column;
@@ -130,6 +140,12 @@ select {
 .flex-row {
     display: flex;
     justify-content: center;
+}
+
+.flex-row-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .pending {

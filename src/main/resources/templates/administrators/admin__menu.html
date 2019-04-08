@@ -14,6 +14,8 @@
             Profile
         </a>
     </div>
+    <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+    <div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
     <a class="flex-column administrators-menu-grid__district grid-button button">District</a>
     <a th:href="@{/admin/experiments}" class="flex-column administrators-menu-grid__experiments-articles grid-button button">Experiments
         & Articles</a>

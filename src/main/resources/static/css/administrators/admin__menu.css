@@ -16,7 +16,11 @@
 
 .administrators-menu-grid {
     display: grid;
-    grid: "admin-header admin-header" 70px "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
+    grid: "admin-header admin-header" 70px "flash flash" "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
+}
+
+.flash {
+    grid-area: flash;
 }
 
 .administrators-menu-grid__district {
@@ -61,7 +65,7 @@
 
 @media (max-width: 700px) {
     .administrators-menu-grid {
-        grid: "admin-header" 70px "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
+        grid: "admin-header" 70px "flash" "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
     }
 
     .grid-button {
@@ -78,11 +82,11 @@
 }
 
 @media (max-width: 208px) {
-    .administrators-menu-grid__synthesized-confiscated-weapons{
+    .administrators-menu-grid__synthesized-confiscated-weapons {
         height: 90px;
     }
 
-    .administrators-menu-grid__clients-manufacturers{
+    .administrators-menu-grid__clients-manufacturers {
         height: 80px;
     }
 }

@@ -8,14 +8,17 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="flex-row-left header">
+<div class="flex-row-left">
     <a th:href="@{/admin/main}">
         <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
     </a>
 </div>
+<div th:if="${status}" th:text="${status}" class="form-item_small flash flash_success"></div>
+<div th:if="${error}" th:text="${error}" class="form-item_small flash flash_error"></div>
 <form action="#" th:action="@{/admin/registerPrawn}" th:object="${form}" method="post"
       class="flex-column registration-box">
-    <label class="form-item">
+    <b>Prawn registration</b>
+    <label class="form-item_big">
         <b>Name</b>
         <input required th:field="*{name}" class="input_big">
     </label>

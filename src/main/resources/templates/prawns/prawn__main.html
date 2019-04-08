@@ -8,25 +8,34 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="prawn-header">
-    <b>Name</b>
-    Job name
-    Logout <img alt="logout" th:src="@{/images/logout.png}">
-</div>
-<div class="flex-column">
-    <img alt="karma" th:src="@{/images/karma.png}"> 999999
-    <button>
-        <img alt="vacancies" th:src="@{/images/job.png}">
-        Apply for a job
-    </button>
-</div>
-<div class="flex-column">
-    <img alt="money" th:src="@{/images/gold_coin.png}"> 99999
-    <button>
-        <img alt="store" th:src="@{/images/prawn_cart.png}">
-        Buy items
-    </button>
+<div class="flex-row-left">
+    <a th:href="@{/prawn/profile}" class="flex-row-center button">
+        <img alt="profile" th:src="@{/images/profile.png}" class="icon">
+        Profile
+    </a>
 </div>
 
+<div class="flex-row-center">
+    <div class="flex-column">
+        <div class="flex-row-center">
+            <img alt="karma" th:src="@{/images/karma.png}" class="icon_big">
+            <div>999999</div>
+        </div>
+        <a class="flex-column button">
+            <img alt="vacancies" th:src="@{/images/job.png}" class="icon_giant">
+            Apply for a job
+        </a>
+    </div>
+    <div class="flex-column">
+        <div class="flex-row-center">
+            <img alt="money" th:src="@{/images/gold_coin.png}" class="icon_big">
+            <div>99999</div>
+        </div>
+        <a class="flex-column button">
+            <img alt="store" th:src="@{/images/prawn_cart.png}" class="icon_giant">
+            Buy items
+        </a>
+    </div>
+</div>
 </body>
 </html>
