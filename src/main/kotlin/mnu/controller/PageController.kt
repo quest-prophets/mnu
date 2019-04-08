@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
@@ -22,22 +23,22 @@ class PageController {
     }
 
     @GetMapping("/")
-    fun home(model: Model, session: HttpSession) : String {
+    fun home(model: Model, session: HttpSession, redirect: RedirectAttributes) : String {
         val authentication = SecurityContextHolder.getContext().authentication
         val roles = AuthorityUtils.authorityListToSet(authentication.authorities)
         if (authentication != null && authentication.isAuthenticated) {
             if (roles.contains("ADMIN"))
-                return "administrators/admin__menu.html"
+                return "redirect:admin/main"
             if (roles.contains("MANAGER"))
-                return "managers/manager__main.html"
+                return "redirect:man/main"
             if (roles.contains("SCIENTIST"))
-                return "scientists/sci__main.html"
+                return "redirect:sci/main"
             if (roles.contains("SECURITY"))
-                return "security/sec__main.html"
+                return "redirect:sec/main"
             if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
-                return "customers/customer__shop.html"
+                return "redirect:clientsShop"
             if (roles.contains("PRAWN"))
-                return "prawns/prawn__main.html"
+                return "redirect:prawnMain"
         }
         model.addAttribute("form", LoginForm())
         if (session.getAttribute("loginFailed") == true) {

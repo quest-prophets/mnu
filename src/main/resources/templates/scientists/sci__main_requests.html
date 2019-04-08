@@ -33,7 +33,7 @@
 </div>
 
 <div class="content flex-column">
-    <div class="form-item gray" th:if="${experiments == null or experiments.isEmpty()}">
+    <div class="form-item_big gray" th:if="${experiments == null or experiments.isEmpty()}">
         There are no experiment requests for you
     </div>
     <div th:each="exp: ${experiments}" class="content__item">

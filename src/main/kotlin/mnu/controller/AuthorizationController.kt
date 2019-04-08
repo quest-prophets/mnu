@@ -33,22 +33,22 @@ class AuthorizationController {
     private val managerEmployeeRepository: ManagerEmployeeRepository? = null
 
     @GetMapping("/login")
-    fun login(model: Model, session: HttpSession): String {
+    fun login(model: Model, session: HttpSession, redirect: RedirectAttributes): String {
         val authentication = SecurityContextHolder.getContext().authentication
         val roles = AuthorityUtils.authorityListToSet(authentication.authorities)
         if (authentication != null && authentication.isAuthenticated) {
             if (roles.contains("ADMIN"))
-                return "administrators/admin__menu.html"
+                return "redirect:admin/main"
             if (roles.contains("MANAGER"))
-                return "managers/manager__main.html"
+                return "redirect:man/main"
             if (roles.contains("SCIENTIST"))
-                return "scientists/sci__main.html"
+                return "redirect:sci/main"
             if (roles.contains("SECURITY"))
-                return "security/sec__main.html"
+                return "redirect:sec/main"
             if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
-                return "customers/customer__shop.html"
+                return "redirect:clientsShop"
             if (roles.contains("PRAWN"))
-                return "prawns/prawn__main.html"
+                return "redirect:prawnMain"
         }
         model.addAttribute("form", LoginForm())
         if (session.getAttribute("loginFailed") == true) {
