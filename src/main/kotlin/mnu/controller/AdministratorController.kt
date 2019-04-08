@@ -1,9 +1,6 @@
 package mnu.controller
 
-import mnu.form.CashRewardForm
-import mnu.form.EmployeeEditForm
-import mnu.form.EmployeeRegistrationForm
-import mnu.form.PrawnRegistrationForm
+import mnu.form.*
 import mnu.model.CashReward
 import mnu.model.Prawn
 import mnu.model.User
@@ -72,6 +69,15 @@ class AdministratorController : ApplicationController() {
         return "administrators/admin__employees.html"
     }
 
+    @GetMapping("/profile")
+    fun adminProfile(model: Model, principal: Principal) : String {
+        val currentEmployee = employeeRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
+        val cashRewards = cashRewardRepository?.findAllByEmployee(currentEmployee!!)
+        model.addAttribute("user", currentEmployee)
+        model.addAttribute("cashRewards", cashRewards)
+        return "administrators/admin__profile.html"
+    }
+
     @GetMapping("/prawns")
     fun prawnRegister(model: Model): String {
         model.addAttribute("form", PrawnRegistrationForm())
@@ -96,14 +102,45 @@ class AdministratorController : ApplicationController() {
         return "administrators/admin__articles.html"
     }
 
+    @PostMapping("/profile/changePass")
+    fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes) : String {
+        val curUser = userRepository?.findByLogin(principal.name)!!
+        val regex = """[a-zA-Z0-9_.]+""".toRegex()
+        val passwordEncoder = BCryptPasswordEncoder()
+        when {
+            !regex.matches(form.newPass) -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
+                return "redirect:profile"
+            }
+            form.prevPass == "" || form.newPass == "" -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
+                return "redirect:profile"
+            }
+            passwordEncoder.encode(form.prevPass) != curUser.password -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Previous password is incorrect. Please try again.")
+                return "redirect:profile"
+            }
+        }
+        curUser.password = passwordEncoder.encode(form.newPass)
+        userRepository?.save(curUser)
+
+        redirect.addFlashAttribute("form", form)
+        redirect.addFlashAttribute("status", "Password changed successfully.")
+        return "redirect:main"
+    }
+
     @PostMapping("/registerEmployee")
-    @ResponseBody
-    fun addEmployee(@ModelAttribute form: EmployeeRegistrationForm): String {
+    fun addEmployee(@ModelAttribute form: EmployeeRegistrationForm, redirect: RedirectAttributes): String {
         val existingUser = userRepository?.findByLogin(form.username)
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
 
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
-            "Only latin letters, numbers, \"_\" and \".\" are supported."
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
+            "redirect:employee"
         } else {
 
             val passwordEncoder = BCryptPasswordEncoder()
@@ -111,7 +148,9 @@ class AdministratorController : ApplicationController() {
             form.password = encodedPassword
 
             return if (existingUser != null) {
-                "Username '${form.username}' is already taken. Please try again."
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Username '${form.username}' is already taken. Please try again.")
+                return "redirect:employee"
             } else {
                 val role = when (form.type) {
                     "manager" -> Role.MANAGER
@@ -148,13 +187,14 @@ class AdministratorController : ApplicationController() {
                     }
                 }
 
-                "Successfully registered a new employee."
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("status", "Successfully registered a new employee.")
+                "redirect:main"
             }
         }
     }
 
     @PostMapping("/editEmployee")
-    @ResponseBody
     fun editEmployee(@ModelAttribute form: EmployeeEditForm, redirect: RedirectAttributes): String {
         val existingEmployee = employeeRepository?.findById(form.id_edit.toLong())!!
         if (!existingEmployee.isPresent)
@@ -194,7 +234,6 @@ class AdministratorController : ApplicationController() {
     }
 
     @PostMapping("/giveReward")
-    @ResponseBody
     fun awardCash(@ModelAttribute form: CashRewardForm, redirect: RedirectAttributes) : String {
         val existingEmployee = employeeRepository?.findById(form.id_cash.toLong())!!
         if (!existingEmployee.isPresent) {
@@ -218,7 +257,6 @@ class AdministratorController : ApplicationController() {
     }
 
     @PostMapping("/registerPrawn")
-    @ResponseBody
     fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, redirect: RedirectAttributes): String {
         val existingUser = userRepository?.findByLogin(form.username)
         val regex = """[a-zA-Z0-9_.]+""".toRegex()

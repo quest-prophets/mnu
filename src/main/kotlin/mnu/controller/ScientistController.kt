@@ -2,6 +2,7 @@ package mnu.controller
 
 import mnu.form.NewArticleForm
 import mnu.form.NewExperimentForm
+import mnu.form.NewPasswordForm
 import mnu.form.NewReportForm
 import mnu.model.Article
 import mnu.model.Experiment
@@ -9,9 +10,11 @@ import mnu.model.employee.ScientistEmployee
 import mnu.model.enums.ExperimentStatus
 import mnu.model.enums.ExperimentType
 import mnu.repository.ArticleRepository
+import mnu.repository.CashRewardRepository
 import mnu.repository.ExperimentRepository
 import mnu.repository.employee.ScientistEmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -39,6 +42,9 @@ class ScientistController : ApplicationController() {
     @Autowired
     val experimentRepository: ExperimentRepository? = null
 
+    @Autowired
+    val cashRewardRepository: CashRewardRepository? = null
+
 
     @GetMapping("/main")
     fun main(model: Model, principal: Principal): String {
@@ -48,7 +54,13 @@ class ScientistController : ApplicationController() {
     }
 
     @GetMapping("/profile")
-    fun profile() = "scientists/sci__profile.html"
+    fun sciProfile(model: Model, principal: Principal) : String {
+        val currentEmployee = employeeRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
+        val cashRewards = cashRewardRepository?.findAllByEmployee(currentEmployee!!)
+        model.addAttribute("user", currentEmployee)
+        model.addAttribute("cashRewards", cashRewards)
+        return "scientists/sci__profile.html"
+    }
 
     @GetMapping("/main/articles")
     fun mainArticles(model: Model, principal: Principal) : String {
@@ -88,6 +100,36 @@ class ScientistController : ApplicationController() {
         if (!model.containsAttribute("form"))
             model.addAttribute("form", NewExperimentForm())
         return "/scientists/sci__new-experiment.html"
+    }
+
+    @PostMapping("/profile/changePass")
+    fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes) : String {
+        val curUser = userRepository?.findByLogin(principal.name)!!
+        val regex = """[a-zA-Z0-9_.]+""".toRegex()
+        val passwordEncoder = BCryptPasswordEncoder()
+        when {
+            !regex.matches(form.newPass) -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
+                return "redirect:profile"
+            }
+            form.prevPass == "" || form.newPass == "" -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
+                return "redirect:profile"
+            }
+            passwordEncoder.encode(form.prevPass) != curUser.password -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Previous password is incorrect. Please try again.")
+                return "redirect:profile"
+            }
+        }
+        curUser.password = passwordEncoder.encode(form.newPass)
+        userRepository?.save(curUser)
+
+        redirect.addFlashAttribute("form", form)
+        redirect.addFlashAttribute("status", "Password changed successfully.")
+        return "redirect:main"
     }
 
     @PostMapping("/experiment")
