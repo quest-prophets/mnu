@@ -10,12 +10,12 @@ data class Weapon (@Column(nullable = false) var name: String = "",
                    @Enumerated(EnumType.STRING) var type: WeaponType = WeaponType.PISTOL,
                    var description: String = "",
                    @Min(0) var price: Double = 0.0,
-                   var requiredAccessLvl: Short = 0) {
+                   var requiredAccessLvl: Int = 0) {
     @Id
     @GeneratedValue
     var id: Long? = null
 
     @Min(0)
-    var quantity: Long? = null
+    var quantity: Long = 0
 
 }

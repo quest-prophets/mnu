@@ -9,10 +9,16 @@ import mnu.model.Experiment
 import mnu.model.employee.ScientistEmployee
 import mnu.model.enums.ExperimentStatus
 import mnu.model.enums.ExperimentType
+import mnu.model.enums.RequestStatus
+import mnu.model.enums.WeaponType
+import mnu.model.request.NewWeaponRequest
+import mnu.model.request.Request
 import mnu.repository.ArticleRepository
 import mnu.repository.CashRewardRepository
 import mnu.repository.ExperimentRepository
+import mnu.repository.WeaponRepository
 import mnu.repository.employee.ScientistEmployeeRepository
+import mnu.repository.request.NewWeaponRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -44,6 +50,12 @@ class ScientistController : ApplicationController() {
 
     @Autowired
     val cashRewardRepository: CashRewardRepository? = null
+
+    @Autowired
+    val weaponRepository: WeaponRepository? = null
+
+    @Autowired
+    val newWeaponRequestRepository: NewWeaponRequestRepository? = null
 
 
     @GetMapping("/main")
@@ -199,10 +211,12 @@ class ScientistController : ApplicationController() {
     }
 
     @GetMapping("/report")
-    fun report( @RequestParam id: Long, model: Model, principal: Principal): String {
+    fun report(@RequestParam id: Long, model: Model, principal: Principal): String {
         val error = reportAccessError(id, principal)
-        if (error == null)
+        if (error == null) {
             model.addAttribute("form", NewReportForm(experimentId = id))
+            model.addAttribute("weapons", weaponRepository?.findAll())
+        }
         else
             model.addAttribute("error", error)
 
@@ -212,18 +226,76 @@ class ScientistController : ApplicationController() {
     @PostMapping("/report")
     @ResponseBody
     fun addReport(@ModelAttribute form: NewReportForm, principal: Principal): String {
-        return form.weaponDescription
         val error = reportAccessError(form.experimentId, principal)
-        return if (error == null) {
+        if (error == null) {
             val experiment = experimentRepository?.findById(form.experimentId)!!
-            experimentRepository?.save(experiment.get().apply {
-                this.statusDate = LocalDateTime.now()
-                this.result = form.result
-                this.status = ExperimentStatus.FINISHED
-            })
-            "Report submitted."
+            when (form.isSynthesized.toInt()) {
+                0 -> {
+                    experimentRepository?.save(experiment.get().apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.result = form.result
+                        this.status = ExperimentStatus.FINISHED
+                    })
+                    return "Report submitted."
+                }
+
+                1 -> {
+                    val possibleWeapon = weaponRepository?.findById(form.weaponId.toLong())!!
+                    return if (!possibleWeapon.isPresent)
+                        "Such weapon does not exist."
+                    else {
+                        val weapon = possibleWeapon.get()
+                        weapon.quantity+=form.weaponQuantity1.toLong()
+                        weaponRepository?.save(weapon)
+                        experimentRepository?.save(experiment.get().apply {
+                            this.statusDate = LocalDateTime.now()
+                            this.result = form.result
+                            this.status = ExperimentStatus.FINISHED
+                        })
+                        "Report submitted and weapon added to the arsenal."
+                    }
+                }
+
+                2 -> {
+                    val user = userRepository?.findByLogin(principal.name)
+                    val newRequest = Request().apply { this.status = RequestStatus.PENDING }
+                    val weaponType = when (form.weaponType) {
+                        "melee" -> WeaponType.MELEE
+                        "pistol" -> WeaponType.PISTOL
+                        "submachine_gun" -> WeaponType.SUBMACHINE_GUN
+                        "assault_rifle" -> WeaponType.ASSAULT_RIFLE
+                        "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
+                        "sniper_rifle" -> WeaponType.SNIPER_RIFLE
+                        "alien" -> WeaponType.ALIEN
+                        else -> return "Such weapon type does not exist."
+                    }
+
+                    when {
+                        form.weaponLevel.toInt()<1 || form.weaponLevel.toInt()>10 ->
+                            return "Please enter weapon access level between 1-10."
+                        form.weaponQuantity2.toLong() < 1 ->
+                            return "Please enter a valid quantity of this weapon."
+                        form.weaponPrice.toDouble() < 1 ->
+                            return "Please enter a valid price for this weapon."
+                    }
+
+                    val newWeaponRequest = NewWeaponRequest(form.weaponName, weaponType, form.weaponDescription,
+                        form.weaponQuantity2.toLong(), form.weaponLevel.toInt(), form.weaponPrice.toDouble(), user)
+
+                    newWeaponRequestRepository?.save(newWeaponRequest.apply { this.request = newRequest })
+                    experimentRepository?.save(experiment.get().apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.result = form.result
+                        this.status = ExperimentStatus.FINISHED
+                    })
+                    return "Report submitted. Await for supervisor's decision."
+
+                }
+            }
+
         } else
-            error
+            return error
+        return "An error occurred."
     }
 
     @PostMapping("/article")
