@@ -43,11 +43,12 @@ class ManagerController : ApplicationController() {
         val currentEmployee = employeeRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         val cashRewards = cashRewardRepository?.findAllByEmployee(currentEmployee!!)
         model.addAttribute("user", currentEmployee)
+        model.addAttribute("form", NewPasswordForm())
         model.addAttribute("cashRewards", cashRewards)
         return "managers/manager__profile.html"
     }
 
-    @PostMapping("/profile/changePass")
+    @PostMapping("/changePass")
     fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes) : String {
         val curUser = userRepository?.findByLogin(principal.name)!!
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
@@ -63,7 +64,7 @@ class ManagerController : ApplicationController() {
                 redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
                 return "redirect:profile"
             }
-            passwordEncoder.encode(form.prevPass) != curUser.password -> {
+            !passwordEncoder.matches(form.prevPass, curUser.password) -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Previous password is incorrect. Please try again.")
                 return "redirect:profile"
@@ -74,7 +75,7 @@ class ManagerController : ApplicationController() {
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Password changed successfully.")
-        return "redirect:main"
+        return "redirect:profile"
     }
 
     @PostMapping("/registerPrawn")

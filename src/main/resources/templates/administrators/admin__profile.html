@@ -19,21 +19,21 @@
 
 <div class="content flex-column">
     <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
-    <div th:if="${error}" th:text="${error}" class="flash flash_success"></div>
+    <div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
 
     <div class="form-item_micro" th:text="${user.name}"></div>
     <div class="form-item_micro" th:text="${'Level: ' + user.level}"></div>
     <div class="form-item_micro" th:text="${'Salary: ' + user.salary}"></div>
     <div class="form-item_micro" th:text="${'Position: ' + user.position}"></div>
 
-    <form action="#" th:action="@{/sci/changePassword}" method="post" class="flex-column">
+    <form action="#" th:action="@{/admin/changePass}" th:object="${form}" method="post" class="flex-column">
         <label class="form-item">
             <b>Old password</b>
-            <input th:required="true" type="password" class="input_big">
+            <input th:field="*{prevPass}" th:required="true" type="password" class="input_big">
         </label>
         <label class="form-item">
             <b>New Password</b>
-            <input th:required="true" type="password" class="input_big">
+            <input th:field="*{newPass}" th:required="true" type="password" class="input_big">
         </label>
         <input type="submit" class="button form-item" value="Change password">
     </form>
