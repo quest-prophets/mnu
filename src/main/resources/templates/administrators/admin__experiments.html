@@ -8,53 +8,55 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="grid">
-    <div class="employee-header flex-row-left">
+<div id="header" class="fixed-header fixed-header_small">
+    <div id="header_mobile" class="flex-row-left">
+        <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
+        <div class="mobile-title">Experiments</div>
+    </div>
+    <div id="mobile-menu" class="flex-row">
         <a th:href="@{/admin/main}">
             <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
         </a>
+        <a th:href="@{/admin/main}" class="grid-button button button_back_mobile">Main menu</a>
+        <div class="grid-button button button_pressed"> Experiments</div>
+        <a th:href="@{/admin/articles}" class="grid-button button"> Articles</a>
     </div>
-    <div class="grid__experiments grid-button button button_pressed">
-        Experiments
-    </div>
-    <a th:href="@{/admin/articles}" class="grid__articles grid-button button">
-        Articles
-    </a>
+</div>
 
-    <div class="content">
-        <div class="form-item gray" th:if="${experiments == null or experiments.isEmpty()}">
-            There are no major experiment requests
-        </div>
-        <div th:each="exp: ${experiments}" class=" content__item">
-            <div th:id="${'exp-header-' + exp.id}" class="content__header pending">
+<div class="content">
+    <div class="form-item gray" th:if="${experiments == null or experiments.isEmpty()}">
+        There are no major experiment requests
+    </div>
+    <div th:each="exp: ${experiments}" class=" content__item">
+        <div th:id="${'exp-header-' + exp.id}" class="content__header pending">
                 <span class="header-text">
                     <span> Major Exp. #</span><span th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>
                 </span>
+        </div>
+        <div th:id="${'exp-content-' + exp.id}" class="content__main">
+            <b>Examinator</b>
+            <div th:text="${exp.examinator.employee.name}"></div>
+            <div th:if="${exp.assistant}">
+                <b>Assistant</b>
+                <div th:text="${exp.assistant.employee.name}"></div>
             </div>
-            <div th:id="${'exp-content-' + exp.id}" class="content__main">
-                <b>Examinator</b>
-                <div th:text="${exp.examinator.employee.name}"></div>
-                <div th:if="${exp.assistant}">
-                    <b>Assistant</b>
-                    <div th:text="${exp.assistant.employee.name}"></div>
-                </div>
-                <b>Submitted on </b>
-                <div th:text="${exp.statusDate}"></div>
-                <b>Description</b>
-                <div th:text="${exp.description}"></div>
-                <div class="flex-row">
-                    <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved button_row">Accept</a>
-                    <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected button_row">Reject</a>
-                </div>
+            <b>Submitted on </b>
+            <div th:text="${exp.statusDate}"></div>
+            <b>Description</b>
+            <div th:text="${exp.description}"></div>
+            <div class="form-item button-flex-row">
+                <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved">Accept</a>
+                <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected">Reject</a>
             </div>
-            <div th:id="${'exp-flash-' + exp.id}" class="flash hidden">
-                <div th:id="${'exp-flash-message-' + exp.id}"></div>
-                <button th:id="${'exp-undo-' + exp.id}" th:attr="data-exp-id=${exp.id}" data-action="undo"
-                   class="form-item button">Undo 10</button>
-            </div>
+        </div>
+        <div th:id="${'exp-flash-' + exp.id}" class="flash hidden">
+            <div th:id="${'exp-flash-message-' + exp.id}"></div>
+            <button th:id="${'exp-undo-' + exp.id}" th:attr="data-exp-id=${exp.id}" data-action="undo"
+                    class="form-item button">Undo 10
+            </button>
         </div>
     </div>
 </div>
-<script rel="script" type="text/javascript" th:src="@{/js/administrators/admin__experiments.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/administrators/admin__experiments-articles.js}"></script>
 </body>
 </html>

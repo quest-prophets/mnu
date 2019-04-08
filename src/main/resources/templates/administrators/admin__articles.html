@@ -8,24 +8,49 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="grid">
-    <div class="employee-header flex-row-left">
+<div id="header" class="fixed-header fixed-header_small">
+    <div id="header_mobile" class="flex-row-left">
+        <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
+        <div class="mobile-title">Articles</div>
+    </div>
+    <div id="mobile-menu" class="flex-row">
         <a th:href="@{/admin/main}">
-            <img alt="back" th:src="@{/images/back.png}" class="icon button button_back button_round">
+            <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
         </a>
+        <a th:href="@{/admin/main}" class="grid-button button button_back_mobile">Main menu</a>
+        <a th:href="@{/admin/experiments}" class="grid-button button"> Experiments</a>
+        <div class="grid-button button button_pressed"> Articles</div>
     </div>
-    <a th:href="@{/admin/experiments}" class="grid__experiments grid-button button">
-        Experiments
-    </a>
-    <div class="grid__articles grid-button button button_pressed">
-        Articles
-    </div>
+</div>
 
-    <div class="content">
-        <div class="form-item gray" th:if="${articles == null or articles.isEmpty()}">
-            There are no articles
+<div class="content">
+    <div class="form-item gray" th:if="${articles == null or articles.isEmpty()}">
+        There are no articles
+    </div>
+    <div th:each="article : ${articles}" class="content__item">
+        <div class="content__header finished">
+            <div class="header-text">
+                <span th:text="${'Article #' + article.id + ' '}"></span> <b th:text="${article.title}"></b> <br>
+                <span th:text="${'Written by ' + article.scientist.employee.name + ' on '}"></span>
+                <span class="date-to-format" th:text="${article.creationDate}"> </span>
+            </div>
+        </div>
+        <div class="content__main content__main_article">
+            <div th:text="${article.text}"></div>
+            <form th:id="${'reward-form-' + article.scientist.id}" class="form-item flex-column" action="#"
+                  method="post" th:action="@{/admin/giveReward}" th:object="${form}">
+                <input type="hidden" th:id="${'empId-input-' + article.scientist.id}"
+                       value="${article.scientist.id}">
+                <input th:id="${'reward-input-' + article.scientist.id}" required class="hidden input_big"
+                       type="number" min="0"
+                       placeholder="Reward">
+                <input type="submit" th:attr="data-empId=${article.scientist.id}" data-action="reward"
+                       class="button approved form-item_small" value="Give Reward">
+            </form>
         </div>
     </div>
 </div>
+<script rel="script" type="text/javascript" th:src="@{/js/administrators/admin__experiments-articles.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/formatDateTime.js}"></script>
 </body>
 </html>

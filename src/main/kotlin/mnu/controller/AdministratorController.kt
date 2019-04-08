@@ -61,7 +61,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @GetMapping("/profile")
-    fun adminProfile(model: Model, principal: Principal) : String {
+    fun adminProfile(model: Model, principal: Principal): String {
         val currentEmployee = employeeRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         val cashRewards = cashRewardRepository?.findAllByEmployee(currentEmployee!!)
         model.addAttribute("user", currentEmployee)
@@ -91,11 +91,12 @@ class AdministratorController : ApplicationController() {
     @GetMapping("/articles")
     fun adminArticles(model: Model): String {
         model.addAttribute("articles", articleRepository?.findAll())
+        model.addAttribute("form", CashRewardForm())
         return "administrators/admin__articles.html"
     }
 
     @PostMapping("/changePass")
-    fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes) : String {
+    fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes): String {
         val curUser = userRepository?.findByLogin(principal.name)!!
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
         val passwordEncoder = BCryptPasswordEncoder()
@@ -195,7 +196,8 @@ class AdministratorController : ApplicationController() {
         if (form.name_edit == "" || form.level_edit == ""
             || form.position_edit == ""
             || form.salary_edit == ""
-            || form.status_edit == "") {
+            || form.status_edit == ""
+        ) {
             redirect.addFlashAttribute("form", form)
             redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
             return "redirect:employee"
@@ -205,7 +207,7 @@ class AdministratorController : ApplicationController() {
             "working" -> PersonStatus.WORKING
             "fired" -> PersonStatus.FIRED
             "dead" -> PersonStatus.DEAD
-            else ->  {
+            else -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such status does not exist.")
                 return "redirect:employee"
@@ -226,7 +228,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @PostMapping("/giveReward")
-    fun awardCash(@ModelAttribute form: CashRewardForm, redirect: RedirectAttributes) : String {
+    fun awardCash(@ModelAttribute form: CashRewardForm, redirect: RedirectAttributes): String {
         val existingEmployee = employeeRepository?.findById(form.id_cash.toLong())!!
         if (!existingEmployee.isPresent) {
             redirect.addFlashAttribute("form", form)
@@ -355,7 +357,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @PostMapping("/appointResolvers")
-    fun appointResolversForIncident(@ModelAttribute form: AppointResolversForm, redirect: RedirectAttributes) : String {
+    fun appointResolversForIncident(@ModelAttribute form: AppointResolversForm, redirect: RedirectAttributes): String {
         val incident = districtIncidentRepository?.findById(form.incidentId.toLong())!!
         when {
             form.incidentId == "" || form.securityNeeded == "" || form.levelFrom == "" || form.levelTo == "" -> {
@@ -369,7 +371,7 @@ class AdministratorController : ApplicationController() {
                 return "redirect:district"
             }
         }
-        
+
         val newIncident = incident.get().apply {
             this.availablePlaces = form.securityNeeded.toLong()
             this.levelFrom = form.levelFrom.toInt()
@@ -378,7 +380,10 @@ class AdministratorController : ApplicationController() {
 
         districtIncidentRepository?.save(newIncident)
         redirect.addFlashAttribute("form", form)
-        redirect.addFlashAttribute("status", "Success. All security employees will be notified of the occurred incident.")
+        redirect.addFlashAttribute(
+            "status",
+            "Success. All security employees will be notified of the occurred incident."
+        )
         return "redirect:district"
     }
 
