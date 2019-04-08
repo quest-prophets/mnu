@@ -49,10 +49,6 @@ body {
     grid-area: header;
 }
 
-.employee-info {
-    margin: auto 0 auto 0;
-}
-
 .grid-button {
     text-align: center;
     font-size: 22px;
@@ -87,10 +83,6 @@ body {
     margin-top: 10px;
 }
 
-.hidden {
-    display: none;
-}
-
 @media (max-width: 900px) {
     .security-grid {
         grid: "header" 50px "security-buttons" 80px "content";
@@ -99,10 +91,6 @@ body {
     .grid-button {
         width: auto;
         font-size: 20px;
-    }
-
-    .employee-info{
-        margin-top: 0;
     }
 
     .security-buttons_report {

@@ -19,7 +19,7 @@
           class="grid__inputs-top flex-column">
         <label class="form-item">
             <b>Experiment id</b>
-            <input th:required="true" id="experimentId" name="experimentId" th:value="${param.id}" readonly class="input_big">
+            <input required id="experimentId" name="experimentId" th:value="${param.id}" readonly class="input_big">
         </label>
         <label class="form-item">
             <b>Did you synthesize a weapon?</b>
@@ -41,8 +41,7 @@
         </label>
         <label class="form-item">
             <b>Report</b>
-            <textarea form="report-form" th:required="true" id="result" name="result"
-                      class="text-area_big input_big"></textarea>
+            <textarea form="report-form" required id="result" name="result" class="text-area_big input_big"></textarea>
         </label>
         <input form="report-form" type="submit" class="button form-item" value="Submit report">
     </div>

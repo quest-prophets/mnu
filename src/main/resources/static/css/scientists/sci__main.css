@@ -4,10 +4,6 @@ body {
     margin: 0;
 }
 
-.employee-info {
-    text-align: center;
-}
-
 .grid-button {
     margin: auto;
     text-align: center;
@@ -44,6 +40,10 @@ body {
     word-break: break-word;
     text-align: left;
     padding: 12px;
+}
+
+.content__main_article {
+    text-align: center;
 }
 
 .content-icon {
@@ -103,10 +103,6 @@ body {
 
     .content__item {
         width: 92%
-    }
-
-    .employee-info {
-        margin-top: 12px;
     }
 
     .grid-button {

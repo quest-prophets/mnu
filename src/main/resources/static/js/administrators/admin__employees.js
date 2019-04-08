@@ -79,13 +79,3 @@ roles = document.getElementsByClassName("emp-role");
 for (let i = 0; i < roles.length; ++i) {
     roles[i].innerText = roles[i].innerText.substr(0, 3);
 }
-
-//Dates formatting
-dates = document.getElementsByClassName("emp-doe");
-for (let i = 0; i < dates.length; ++i) {
-    const date = new Date(dates[i].innerText);
-    const day = date.getDate().length === 2 ? date.getDate() : "0" + date.getDate();
-    const month = (date.getMonth() + 1).length === 2 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1);
-    const year = date.getFullYear();
-    dates[i].innerText = day + "." + month + "." + year;
-}

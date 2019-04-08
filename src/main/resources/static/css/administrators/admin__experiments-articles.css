@@ -4,10 +4,6 @@
     grid-area: header;
 }
 
-.employee-info {
-    margin: 5px 0 auto 0;
-}
-
 .grid {
     display: grid;
     grid: "header expButton artButton nothing" 50px "content content content content";
@@ -102,9 +98,5 @@
 
     .grid-button {
         margin: auto;
-    }
-
-    .employee-info {
-        margin-top: 0;
     }
 }

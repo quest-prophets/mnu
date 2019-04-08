@@ -17,15 +17,15 @@
       class="flex-column registration-box">
     <label class="form-item">
         <b>Name</b>
-        <input th:required="true" th:field="*{name}" class="input_big">
+        <input required th:field="*{name}" class="input_big">
     </label>
     <label class="form-item">
         <b>Login</b>
-        <input th:required="true" th:field="*{username}" class="input_big">
+        <input required th:field="*{username}" class="input_big">
     </label>
     <label class="form-item">
         <b>Password</b>
-        <input th:required="true" th:field="*{password}" type="password" class="input_big">
+        <input required th:field="*{password}" type="password" class="input_big">
     </label>
     <input type="submit" class="form-item button" value="Register">
 </form>

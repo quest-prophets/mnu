@@ -38,7 +38,19 @@
     <div class="form-item_big gray" th:if="${articles == null or articles.isEmpty()}">
         You didn't write any articles
     </div>
+    <div th:each="article : ${articles}" class="content__item">
+        <div class="content__header finished">
+            <div class="header-text">
+                <span th:text="${'Article #' + article.id + ' '}"></span> <b th:text="${article.title}"></b>
+                <div class="date-to-format" th:text="${article.creationDate}"></div>
+            </div>
+        </div>
+        <div class="content__main content__main_article">
+            <div th:text="${article.text}"></div>
+        </div>
+    </div>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/formatDateTime.js}"></script>
 </body>
 </html>

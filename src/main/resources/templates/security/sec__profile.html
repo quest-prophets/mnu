@@ -29,11 +29,11 @@
     <form action="#" th:action="@{/sec/changePass}" th:object="${form}" method="post" class="flex-column">
         <label class="form-item">
             <b>Old password</b>
-            <input th:field="*{prevPass}" th:required="true" type="password" class="input_big">
+            <input th:field="*{prevPass}" required type="password" class="input_big">
         </label>
         <label class="form-item">
             <b>New Password</b>
-            <input th:field="*{newPass}" th:required="true" type="password" class="input_big">
+            <input th:field="*{newPass}" required type="password" class="input_big">
         </label>
         <input type="submit" class="button form-item" value="Change password">
     </form>
