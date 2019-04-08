@@ -1,22 +1,11 @@
 package mnu.controller
 
 import mnu.form.*
-import mnu.model.CashReward
-import mnu.model.Prawn
-import mnu.model.User
+import mnu.model.*
 import mnu.model.employee.*
-import mnu.model.enums.ExperimentStatus
-import mnu.model.enums.ExperimentType
-import mnu.model.enums.PersonStatus
-import mnu.model.enums.Role
-import mnu.repository.ArticleRepository
-import mnu.repository.CashRewardRepository
-import mnu.repository.DistrictHouseRepository
-import mnu.repository.ExperimentRepository
-import mnu.repository.employee.AdministratorEmployeeRepository
-import mnu.repository.employee.ManagerEmployeeRepository
-import mnu.repository.employee.ScientistEmployeeRepository
-import mnu.repository.employee.SecurityEmployeeRepository
+import mnu.model.enums.*
+import mnu.repository.*
+import mnu.repository.employee.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -38,6 +27,8 @@ class AdministratorController : ApplicationController() {
 
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
+    @Autowired
+    val districtIncidentRepository: DistrictIncidentRepository? = null
 
     @Autowired
     val cashRewardRepository: CashRewardRepository? = null
@@ -361,6 +352,34 @@ class AdministratorController : ApplicationController() {
             "Undone."
 
         } else error
+    }
+
+    @PostMapping("/appointResolvers")
+    fun appointResolversForIncident(@ModelAttribute form: AppointResolversForm, redirect: RedirectAttributes) : String {
+        val incident = districtIncidentRepository?.findById(form.incidentId.toLong())!!
+        when {
+            form.incidentId == "" || form.securityNeeded == "" || form.levelFrom == "" || form.levelTo == "" -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
+                return "redirect:district"
+            }
+            !incident.isPresent -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Such incident does not exist.")
+                return "redirect:district"
+            }
+        }
+        
+        val newIncident = incident.get().apply {
+            this.availablePlaces = form.securityNeeded.toLong()
+            this.levelFrom = form.levelFrom.toInt()
+            this.levelTo = form.levelTo.toInt()
+        }
+
+        districtIncidentRepository?.save(newIncident)
+        redirect.addFlashAttribute("form", form)
+        redirect.addFlashAttribute("status", "Success. All security employees will be notified of the occurred incident.")
+        return "redirect:district"
     }
 
 }
