@@ -1,7 +1,7 @@
 package mnu.controller
 
-import mnu.form.LoginForm
 import mnu.form.ClientRegistrationForm
+import mnu.form.LoginForm
 import mnu.model.Client
 import mnu.model.User
 import mnu.model.enums.ClientType
@@ -10,11 +10,13 @@ import mnu.repository.ClientRepository
 import mnu.repository.UserRepository
 import mnu.repository.employee.ManagerEmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.authority.AuthorityUtils
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import javax.servlet.http.HttpServletRequest
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import javax.servlet.http.HttpSession
 
 @Controller
@@ -32,12 +34,29 @@ class AuthorizationController {
 
     @GetMapping("/login")
     fun login(model: Model, session: HttpSession): String {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val roles = AuthorityUtils.authorityListToSet(authentication.authorities)
+        if (authentication != null && authentication.isAuthenticated) {
+            if (roles.contains("ADMIN"))
+                return "administrators/admin__menu.html"
+            if (roles.contains("MANAGER"))
+                return "managers/manager__main.html"
+            if (roles.contains("SCIENTIST"))
+                return "scientists/sci__main.html"
+            if (roles.contains("SECURITY"))
+                return "security/sec__main.html"
+            if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
+                return "customers/customer__shop.html"
+            if (roles.contains("PRAWN"))
+                return "prawns/prawn__main.html"
+        }
         model.addAttribute("form", LoginForm())
         if (session.getAttribute("loginFailed") == true) {
             session.removeAttribute("loginFailed")
             model.addAttribute("loginFailed", true)
         }
         return "/login.html"
+
     }
 
     @GetMapping("/register")
@@ -83,7 +102,9 @@ class AuthorizationController {
                 val managerIdList = managerEmployeeRepository?.getAllIds()!!
 
                 if (clientType == ClientType.CUSTOMER)
-                    newClientUser.apply { this.manager = managerEmployeeRepository.findById(managerIdList.random()).get() }
+                    newClientUser.apply {
+                        this.manager = managerEmployeeRepository.findById(managerIdList.random()).get()
+                    }
 
                 userRepository?.save(newUser)
                 clientRepository?.save(newClientUser)
