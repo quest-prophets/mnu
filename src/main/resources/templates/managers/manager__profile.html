@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/managers/manager__profile.css}">
+    <title>MNU</title>
+</head>
+<body>
+<div class="fixed-header fixed-header_small flex-row">
+    <a th:href="@{/man/main}">
+        <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
+    </a>
+    <a th:href="@{/auth/logout}" class="button button_logout">
+        Logout
+    </a>
+</div>
+
+<div class="content flex-column">
+    <div class="form-item_micro" th:text="${fullname}"></div>
+    <div class="form-item_micro" th:text="${'Level: ' + level}"></div>
+    <div class="form-item_micro" th:text="${'Salary: ' + level}"></div>
+    <div class="form-item_micro" th:text="${'Position: ' + level}"></div>
+
+    <form action="#" th:action="@{/sci/changePassword}" method="post" class="flex-column">
+        <label class="form-item">
+            <b>Old password</b>
+            <input th:required="true" type="password" class="input_big">
+        </label>
+        <label class="form-item">
+            <b>New Password</b>
+            <input th:required="true" type="password" class="input_big">
+        </label>
+        <input type="submit" class="button form-item" value="Change password">
+    </form>
+    <b class="form-item_big font-big">Your cash rewards</b>
+    <div class="form-item gray" th:if="${rewards} == null">
+        You don't have any rewards yet...
+    </div>
+    <div th:each="reward: ${rewards}" class=" content__item">
+
+    </div>
+</div>
+</body>
+</html>

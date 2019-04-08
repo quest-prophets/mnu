@@ -14,10 +14,9 @@
         <div class="mobile-title">Articles</div>
     </div>
     <div id="mobile-menu" class="flex-row">
-        <div class="employee-info">
-            <div th:text="${fullname}"></div>
-            <div th:text="${'Level ' + level}"></div>
-        </div>
+        <a th:href="@{/sci/profile}" class="flex-column button button_profile">
+            Profile
+        </a>
         <a th:href="@{/sci/main}" id="experiments-button" class="experiments-button grid-button button">
             Experiments
         </a>

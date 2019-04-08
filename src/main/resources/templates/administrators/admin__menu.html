@@ -10,10 +10,9 @@
 <body>
 <div class="administrators-menu-grid">
     <div class="header">
-        <div class="employee-info">
-            <div th:text="${fullname}"></div>
-            <div th:text="${'Level ' + level}"></div>
-        </div>
+        <a th:href="@{/admin/profile}" class="button button_profile">
+            Profile
+        </a>
     </div>
     <a class="flex-column administrators-menu-grid__district grid-button button">District</a>
     <a th:href="@{/admin/experiments}" class="flex-column administrators-menu-grid__experiments-articles grid-button button">Experiments

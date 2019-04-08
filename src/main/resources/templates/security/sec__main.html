@@ -9,9 +9,10 @@
 </head>
 <body>
 <div class="security-grid">
-    <div class="employee-info">
-        <div th:text="${fullname}"></div>
-        <div th:text="${'Level ' + level}"></div>
+    <div>
+        <a th:href="@{/sec/profile}" class="flex-column button button_profile">
+            Profile
+        </a>
     </div>
     <div class="security-flex-row security-grid__security-buttons">
         <a class="security-buttons__change grid-button button">Change <br> equipment</a>

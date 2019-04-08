@@ -10,10 +10,9 @@
 <body>
 <div class="managers-grid">
     <div class="managers-grid__header">
-        <div class="employee-info">
-            <div th:text="${fullname}"></div>
-            <div th:text="${'Level ' + level}"></div>
-        </div>
+        <a th:href="@{/man/profile}" class="flex-column button button_profile">
+            Profile
+        </a>
         <img alt="Clients list" class="clientsListButton" th:src="@{/images/human_list_icon.png}">
         <img alt="Prawns list" class="prawnsListButton" th:src="@{/images/alien_list_icon.png}">
     </div>
