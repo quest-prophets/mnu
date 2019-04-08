@@ -53,6 +53,8 @@
         <img alt="Cash Rewards" id="reward-button" class="button button_round icon" th:src="@{/images/dollar.png}">
     </div>
     <div class="grid__inputs">
+        <div th:if="${status}" th:text="${status}" class="flash flash_small flash_success"></div>
+        <div th:if="${error}" th:text="${error}" class="flash flash_small flash_error"></div>
         <form th:classappend="${param.q} ? hidden : null" action="#" th:action="@{/admin/registerEmployee}"
               th:object="${form_add}" method="post" id="add-interface" class="flex-column">
             <label class="form-item_small">

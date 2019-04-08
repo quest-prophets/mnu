@@ -50,7 +50,7 @@
                 <div th:text="${exp.assistant.employee.name}"></div>
             </div>
             <b>Submitted on </b>
-            <div th:text="${exp.statusDate}"></div>
+            <div class="datetime-to-format" th:text="${exp.statusDate}"></div>
             <b>Description</b>
             <div th:text="${exp.description}"></div>
             <div class="flex-row">
@@ -67,5 +67,6 @@
     </div>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/formatDateTime.js}"></script>
 </body>
 </html>

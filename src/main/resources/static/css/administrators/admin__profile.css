@@ -8,3 +8,15 @@ body {
     text-align: center;
     margin-top: 100px;
 }
+
+.content__item {
+    margin: 20px auto auto auto;
+    border: 2px solid black;
+    width: 70%;
+}
+
+.content__main {
+    word-break: break-word;
+    text-align: left;
+    padding: 12px;
+}

@@ -152,6 +152,11 @@ body {
     font-weight: bold;
 }
 
+.flash_small {
+    margin: auto;
+    width: 50%;
+}
+
 .flash_success {
     background: #d6f5d5;
 }

@@ -18,10 +18,13 @@
 </div>
 
 <div class="content flex-column">
-    <div class="form-item_micro" th:text="${fullname}"></div>
-    <div class="form-item_micro" th:text="${'Level: ' + level}"></div>
-    <div class="form-item_micro" th:text="${'Salary: ' + level}"></div>
-    <div class="form-item_micro" th:text="${'Position: ' + level}"></div>
+    <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+    <div th:if="${error}" th:text="${error}" class="flash flash_success"></div>
+
+    <div class="form-item_micro" th:text="${user.name}"></div>
+    <div class="form-item_micro" th:text="${'Level: ' + user.level}"></div>
+    <div class="form-item_micro" th:text="${'Salary: ' + user.salary}"></div>
+    <div class="form-item_micro" th:text="${'Position: ' + user.position}"></div>
 
     <form action="#" th:action="@{/sci/changePassword}" method="post" class="flex-column">
         <label class="form-item">
@@ -35,12 +38,18 @@
         <input type="submit" class="button form-item" value="Change password">
     </form>
     <b class="form-item_big font-big">Your cash rewards</b>
-    <div class="form-item gray" th:if="${rewards} == null">
+    <div class="form-item gray" th:if="${cashRewards} == null">
         You don't have any rewards yet...
     </div>
-    <div th:each="reward: ${rewards}" class=" content__item">
-
+    <div th:each="reward: ${cashRewards}" class="content__item">
+        <div class="content__main finished">
+            <b>Date</b>
+            <div class="datetime-to-format" th:text="${reward.issueDate}"></div>
+            <b>Reward</b>
+            <div th:text="${reward.reward}"></div>
+        </div>
     </div>
 </div>
+<script rel="script" type="text/javascript" th:src="@{/js/formatDateTime.js}"></script>
 </body>
 </html>

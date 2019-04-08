@@ -129,7 +129,7 @@ class AdministratorController : ApplicationController() {
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Password changed successfully.")
-        return "redirect:main"
+        return "redirect:profile"
     }
 
     @PostMapping("/registerEmployee")
@@ -189,7 +189,7 @@ class AdministratorController : ApplicationController() {
 
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("status", "Successfully registered a new employee.")
-                "redirect:main"
+                "redirect:employee"
             }
         }
     }
@@ -229,7 +229,7 @@ class AdministratorController : ApplicationController() {
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Successfully edited.")
-        return "redirect:main"
+        return "redirect:employee"
 
     }
 
@@ -253,7 +253,7 @@ class AdministratorController : ApplicationController() {
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Reward given.")
-        return "redirect:main"
+        return "redirect:employee"
     }
 
     @PostMapping("/registerPrawn")
