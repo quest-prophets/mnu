@@ -4,6 +4,7 @@ import mnu.form.CashRewardForm
 import mnu.form.EmployeeEditForm
 import mnu.form.EmployeeRegistrationForm
 import mnu.form.PrawnRegistrationForm
+import mnu.model.CashReward
 import mnu.model.Prawn
 import mnu.model.User
 import mnu.model.employee.*
@@ -12,6 +13,7 @@ import mnu.model.enums.ExperimentType
 import mnu.model.enums.PersonStatus
 import mnu.model.enums.Role
 import mnu.repository.ArticleRepository
+import mnu.repository.CashRewardRepository
 import mnu.repository.DistrictHouseRepository
 import mnu.repository.ExperimentRepository
 import mnu.repository.employee.AdministratorEmployeeRepository
@@ -23,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
 import java.time.LocalDateTime
 
@@ -39,8 +42,8 @@ class AdministratorController : ApplicationController() {
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
 
-//    @Autowired
-//    val cashRewardRepository: CashRewardRepository? = null
+    @Autowired
+    val cashRewardRepository: CashRewardRepository? = null
 
     @Autowired
     val articleRepository: ArticleRepository? = null
@@ -63,10 +66,16 @@ class AdministratorController : ApplicationController() {
         model.addAttribute("form_edit", EmployeeEditForm())
         model.addAttribute("form_reward", CashRewardForm())
         if (q != null)
-            model.addAttribute("employees", employeeRepository?.findAllByNameIgnoreCaseContaining(q))
+            model.addAttribute("employees", employeeRepository?.findAllByNameIgnoreCaseContainingOrderByIdAsc(q))
         else
-            model.addAttribute("employees", employeeRepository?.findAll())
+            model.addAttribute("employees", employeeRepository?.findAllByOrderByIdAsc())
         return "administrators/admin__employees.html"
+    }
+
+    @GetMapping("/prawns")
+    fun prawnRegister(model: Model): String {
+        model.addAttribute("form", PrawnRegistrationForm())
+        return "administrators/admin__prawn-registration.html"
     }
 
     @GetMapping("/main")
@@ -143,18 +152,81 @@ class AdministratorController : ApplicationController() {
             }
         }
     }
-//    @PostMapping("/editEmployee")
-//    @ResponseBody
-//    fun editEmployee()
+
+    @PostMapping("/editEmployee")
+    @ResponseBody
+    fun editEmployee(@ModelAttribute form: EmployeeEditForm, redirect: RedirectAttributes): String {
+        val existingEmployee = employeeRepository?.findById(form.id_edit.toLong())!!
+        if (!existingEmployee.isPresent)
+            return "Employee with such id does not exist."
+        val totallyExistingEmployee = existingEmployee.get()
+        if (form.name_edit == "" || form.level_edit == ""
+            || form.position_edit == ""
+            || form.salary_edit == ""
+            || form.status_edit == "") {
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
+            return "redirect:employee"
+        }
+
+        val newStatus = when (form.status_edit) {
+            "working" -> PersonStatus.WORKING
+            "fired" -> PersonStatus.FIRED
+            "dead" -> PersonStatus.DEAD
+            else ->  {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Such status does not exist.")
+                return "redirect:employee"
+            }
+        }
+        totallyExistingEmployee.name = form.name_edit
+        totallyExistingEmployee.level = form.level_edit.toInt()
+        totallyExistingEmployee.position = form.position_edit
+        totallyExistingEmployee.salary = form.salary_edit.toLong()
+        totallyExistingEmployee.status = newStatus
+
+        employeeRepository?.save(totallyExistingEmployee)
+
+        redirect.addFlashAttribute("form", form)
+        redirect.addFlashAttribute("status", "Successfully edited.")
+        return "redirect:main"
+
+    }
+
+    @PostMapping("/giveReward")
+    @ResponseBody
+    fun awardCash(@ModelAttribute form: CashRewardForm, redirect: RedirectAttributes) : String {
+        val existingEmployee = employeeRepository?.findById(form.id_cash.toLong())!!
+        if (!existingEmployee.isPresent) {
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "Employee with such id does not exist.")
+            return "redirect:employee"
+        }
+        val totallyExistingEmployee = existingEmployee.get()
+        if (form.reward == "") {
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "Please fill the reward field.")
+            return "redirect:employee"
+        }
+        val newReward = CashReward(totallyExistingEmployee, form.reward.toLong())
+
+        cashRewardRepository?.save(newReward)
+
+        redirect.addFlashAttribute("form", form)
+        redirect.addFlashAttribute("status", "Reward given.")
+        return "redirect:main"
+    }
 
     @PostMapping("/registerPrawn")
     @ResponseBody
-    fun addPrawn(@ModelAttribute form: PrawnRegistrationForm): String {
+    fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, redirect: RedirectAttributes): String {
         val existingUser = userRepository?.findByLogin(form.username)
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
 
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
-            "Only latin letters, numbers, \"_\" and \".\" are supported."
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
+            "redirect:prawns"
         } else {
 
             val passwordEncoder = BCryptPasswordEncoder()
@@ -162,7 +234,9 @@ class AdministratorController : ApplicationController() {
             form.password = encodedPassword
 
             return if (existingUser != null) {
-                "Username '${form.username}' is already taken. Please try again."
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Username '${form.username}' is already taken. Please try again.")
+                "redirect:prawns"
             } else {
                 val houseIdList = districtHouseRepository?.getAllIds()!!
 
@@ -178,7 +252,9 @@ class AdministratorController : ApplicationController() {
                 userRepository?.save(newUser)
                 prawnRepository?.save(newPrawn)
 
-                "Successfully registered a new prawn."
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("status", "Successfully registered a new prawn.")
+                "redirect:main"
             }
         }
     }

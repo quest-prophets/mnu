@@ -119,7 +119,7 @@ class ScientistController : ApplicationController() {
                 requestedAssistant.employee!!.level!! >= currentScientist!!.employee!!.level!! -> {
                     redirect.addFlashAttribute("form", form)
                     redirect.addFlashAttribute("error", "Requested assistant's level is higher than yours.")
-                    return "redirect:main"
+                    return "redirect:experiment"
                 }
                 else -> requestedAssistant
             }
