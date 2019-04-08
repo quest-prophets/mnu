@@ -9,7 +9,7 @@
 .grid__table {
     grid-area: table;
     min-height: 200px;
-    max-height: 500px;
+    max-height: 350px;
     overflow-y: scroll;
 }
 

@@ -1,5 +1,6 @@
 package mnu.controller
 
+import mnu.form.CashRewardForm
 import mnu.form.EmployeeEditForm
 import mnu.form.EmployeeRegistrationForm
 import mnu.form.PrawnRegistrationForm
@@ -60,6 +61,7 @@ class AdministratorController : ApplicationController() {
     fun adminEmployees(model: Model, @RequestParam(required = false) q: String?): String {
         model.addAttribute("form_add", EmployeeRegistrationForm())
         model.addAttribute("form_edit", EmployeeEditForm())
+        model.addAttribute("form_reward", CashRewardForm())
         if (q != null)
             model.addAttribute("employees", employeeRepository?.findAllByNameIgnoreCaseContaining(q))
         else

@@ -22,30 +22,14 @@
         <table>
             <thead>
             <tr>
-                <td>
-                    id
-                </td>
-                <td>
-                    Name
-                </td>
-                <td>
-                    Role
-                </td>
-                <td>
-                    Position
-                </td>
-                <td>
-                    Lvl
-                </td>
-                <td>
-                    Salary
-                </td>
-                <td>
-                    D.o.E
-                </td>
-                <td>
-                    Status
-                </td>
+                <td> Id</td>
+                <td> Name</td>
+                <td> Role</td>
+                <td> Position</td>
+                <td> Lvl</td>
+                <td> Salary</td>
+                <td> D.o.E</td>
+                <td> Status</td>
             </tr>
             </thead>
             <tbody id="employees-tbody">
@@ -54,12 +38,12 @@
                 data-level=${employee.level}, data-salary=${employee.salary}, data-status=${employee.status}">
                 <td th:text="${employee.id}"></td>
                 <td th:text="${employee.name}"></td>
-                <td th:text="${employee.user.role}"></td>
+                <td class="emp-role" th:text="${employee.user.role}"></td>
                 <td th:text="${employee.position}"></td>
                 <td th:text="${employee.level}"></td>
                 <td th:text="${employee.salary}"></td>
                 <td class="emp-doe" th:text="${employee.dateOfEmployment}"></td>
-                <td th:text="${employee.status}"></td>
+                <td class="emp-status" th:text="${employee.status}"></td>
             </tr>
             </tbody>
         </table>
@@ -69,8 +53,7 @@
              class="button button_round icon" th:src="@{/images/plus.png}">
         <img alt="Edit employees" id="edit-button" class="button button_round icon" th:src="@{/images/edit.svg}">
         <img th:classappend="${param.q} ? button_pressed : null" alt="Find employees" id="find-button"
-             class="button button_round icon"
-             th:src="@{/images/magnifier.svg}">
+             class="button button_round icon" th:src="@{/images/magnifier.svg}">
         <img alt="Cash Rewards" id="reward-button" class="button button_round icon" th:src="@{/images/dollar.png}">
     </div>
     <div class="grid__inputs">
@@ -140,7 +123,8 @@
             </label>
             <label class="form-item_small">
                 <b>Level</b>
-                <input th:required="true" th:field="*{level_edit}" type="number" min="1" max="10" class="input_big">
+                <input th:required="true" th:field="*{level_edit}" type="number" min="1" max="10" step="1"
+                       class="input_big">
             </label>
             <input type="submit" class="button form-item" value="Edit employee">
         </form>
@@ -151,14 +135,16 @@
                    class="input_big form-item_small">
             <input type="submit" class="button form-item" value="Find employee">
         </form>
-        <form action="#" method="post" id="reward-interface" class="grid__inputs_reward hidden flex-column">
+
+        <form action="#" th:action="@{/admin/giveReward}" th:object="${form_reward}" method="post" id="reward-interface"
+              class="grid__inputs_reward hidden flex-column">
             <label class="form-item_small">
                 <b>Employee Id</b>
-                <input type="number" class="input_big">
+                <input th:required="true" th:field="*{id_cash}" type="number" class="input_big">
             </label>
             <label class="form-item_small">
                 <b>Reward</b>
-                <input type="number" class="input_big">
+                <input th:required="true" th:field="*{reward}" type="number" min="0" class="input_big">
             </label>
             <input type="submit" class="button form-item" value="Give reward">
         </form>

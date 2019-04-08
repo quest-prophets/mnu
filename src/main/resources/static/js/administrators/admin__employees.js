@@ -41,7 +41,7 @@ document.getElementById("employees-tbody").addEventListener('click', e => {
         document.getElementById("name_edit").value = "";
         document.getElementById("salary_edit").value = "";
         document.getElementById("position_edit").value = "";
-        document.getElementById("status_edit").value = "";
+        document.getElementById("status_edit").value = "working";
         document.getElementById("level_edit").value = "";
     } else {
         let selectedRows = document.getElementsByClassName("selected-row");
@@ -51,8 +51,9 @@ document.getElementById("employees-tbody").addEventListener('click', e => {
         document.getElementById("name_edit").value = row.dataset.name;
         document.getElementById("salary_edit").value = row.dataset.salary;
         document.getElementById("position_edit").value = row.dataset.position;
-        document.getElementById("status_edit").value = row.dataset.status.toLowerCase();
+        document.getElementById("status_edit").value = row.dataset.status;
         document.getElementById("level_edit").value = row.dataset.level;
+        document.getElementById("id_cash").value = row.dataset.id;
     }
 });
 
@@ -65,9 +66,19 @@ document.getElementById("id_edit").addEventListener('input', e => {
     document.getElementById("name_edit").value = row.dataset.name;
     document.getElementById("salary_edit").value = row.dataset.salary;
     document.getElementById("position_edit").value = row.dataset.position;
-    document.getElementById("status_edit").value = row.dataset.status.toLowerCase();
+    document.getElementById("status_edit").value = row.dataset.status;
     document.getElementById("level_edit").value = row.dataset.level;
 });
+
+statuses = document.getElementsByClassName("emp-status");
+for (let i = 0; i < statuses.length; ++i) {
+    statuses[i].innerText = statuses[i].innerText.toLowerCase();
+}
+
+roles = document.getElementsByClassName("emp-role");
+for (let i = 0; i < roles.length; ++i) {
+    roles[i].innerText = roles[i].innerText.substr(0, 3);
+}
 
 //Dates formatting
 dates = document.getElementsByClassName("emp-doe");
