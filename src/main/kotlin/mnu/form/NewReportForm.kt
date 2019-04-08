@@ -1,7 +1,7 @@
 package mnu.form
 
 data class NewReportForm(
-    val experimentId: Long = 0,
+    val experimentId: String = "",
     val result: String = "",
     val isSynthesized: String = "", // 0 - No; 1 - Yes, by Id; 2 - Brand-new weapon
     val weaponId: String = "", //if isSynthesized == 1

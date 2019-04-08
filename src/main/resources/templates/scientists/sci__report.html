@@ -19,7 +19,7 @@
           class="grid__inputs-top flex-column">
         <label class="form-item">
             <b>Experiment id</b>
-            <input th:required="true" th:field="*{experimentId}" disabled class="input_big">
+            <input th:required="true" id="experimentId" name="experimentId" th:value="${param.id}" readonly class="input_big">
         </label>
         <label class="form-item">
             <b>Did you synthesize a weapon?</b>
@@ -33,11 +33,11 @@
     <div class="flex-column grid__inputs-bottom">
         <label id="weapon-id-label" class="form-item hidden">
             <b> Weapon Id</b>
-            <input type="number" id="weaponId" name="weaponId" class="input_big">
+            <input form="report-form" type="number" id="weaponId" name="weaponId" class="input_big">
         </label>
         <label id="weapon-quantity-label" class="form-item hidden">
             <b> Quantity</b>
-            <input type="number" id="weaponQuantity1" name="weaponQuantity1" class="input_big">
+            <input form="report-form" type="number" id="weaponQuantity1" name="weaponQuantity1" class="input_big">
         </label>
         <label class="form-item">
             <b>Report</b>

@@ -66,7 +66,7 @@ class ScientistController : ApplicationController() {
     }
 
     @GetMapping("/profile")
-    fun sciProfile(model: Model, principal: Principal) : String {
+    fun sciProfile(model: Model, principal: Principal): String {
         val currentEmployee = employeeRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         val cashRewards = cashRewardRepository?.findAllByEmployee(currentEmployee!!)
         model.addAttribute("user", currentEmployee)
@@ -76,14 +76,14 @@ class ScientistController : ApplicationController() {
     }
 
     @GetMapping("/main/articles")
-    fun mainArticles(model: Model, principal: Principal) : String {
+    fun mainArticles(model: Model, principal: Principal): String {
         val user = userRepository?.findByLogin(principal.name)!!
         model.addAttribute("articles", articleRepository?.findAllByScientistId(user.id!!))
         return "scientists/sci__main_articles.html"
     }
 
     @GetMapping("/main/requests")
-    fun mainRequests(model: Model, principal: Principal) : String {
+    fun mainRequests(model: Model, principal: Principal): String {
         val experiments = experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
         val validExperiments = ArrayList<Experiment>()
 
@@ -92,7 +92,8 @@ class ScientistController : ApplicationController() {
 
         experiments?.forEach {
             if (currentScientistLvl > it.examinator!!.employee!!.level!!
-                || (currentScientistLvl == 10))
+                || (currentScientistLvl == 10)
+            )
                 validExperiments.add(it)
         }
         model.addAttribute("experiments", validExperiments)
@@ -116,7 +117,7 @@ class ScientistController : ApplicationController() {
     }
 
     @PostMapping("/changePass")
-    fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes) : String {
+    fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes): String {
         val curUser = userRepository?.findByLogin(principal.name)!!
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
         val passwordEncoder = BCryptPasswordEncoder()
@@ -211,13 +212,12 @@ class ScientistController : ApplicationController() {
     }
 
     @GetMapping("/report")
-    fun report(@RequestParam id: Long, model: Model, principal: Principal): String {
-        val error = reportAccessError(id, principal)
+    fun report(@RequestParam id: String, model: Model, principal: Principal): String {
+        val error = reportAccessError(id.toLong(), principal)
         if (error == null) {
-            model.addAttribute("form", NewReportForm(experimentId = id))
+            model.addAttribute("form", NewReportForm())
             model.addAttribute("weapons", weaponRepository?.findAll())
-        }
-        else
+        } else
             model.addAttribute("error", error)
 
         return "scientists/sci__report.html"
@@ -226,9 +226,9 @@ class ScientistController : ApplicationController() {
     @PostMapping("/report")
     @ResponseBody
     fun addReport(@ModelAttribute form: NewReportForm, principal: Principal): String {
-        val error = reportAccessError(form.experimentId, principal)
+        val error = reportAccessError(form.experimentId.toLong(), principal)
         if (error == null) {
-            val experiment = experimentRepository?.findById(form.experimentId)!!
+            val experiment = experimentRepository?.findById(form.experimentId.toLong())!!
             when (form.isSynthesized.toInt()) {
                 0 -> {
                     experimentRepository?.save(experiment.get().apply {
@@ -245,7 +245,7 @@ class ScientistController : ApplicationController() {
                         "Such weapon does not exist."
                     else {
                         val weapon = possibleWeapon.get()
-                        weapon.quantity+=form.weaponQuantity1.toLong()
+                        weapon.quantity += form.weaponQuantity1.toLong()
                         weaponRepository?.save(weapon)
                         experimentRepository?.save(experiment.get().apply {
                             this.statusDate = LocalDateTime.now()
@@ -271,7 +271,7 @@ class ScientistController : ApplicationController() {
                     }
 
                     when {
-                        form.weaponLevel.toInt()<1 || form.weaponLevel.toInt()>10 ->
+                        form.weaponLevel.toInt() < 1 || form.weaponLevel.toInt() > 10 ->
                             return "Please enter weapon access level between 1-10."
                         form.weaponQuantity2.toLong() < 1 ->
                             return "Please enter a valid quantity of this weapon."
@@ -279,8 +279,10 @@ class ScientistController : ApplicationController() {
                             return "Please enter a valid price for this weapon."
                     }
 
-                    val newWeaponRequest = NewWeaponRequest(form.weaponName, weaponType, form.weaponDescription,
-                        form.weaponQuantity2.toLong(), form.weaponLevel.toInt(), form.weaponPrice.toDouble(), user)
+                    val newWeaponRequest = NewWeaponRequest(
+                        form.weaponName, weaponType, form.weaponDescription,
+                        form.weaponQuantity2.toLong(), form.weaponLevel.toInt(), form.weaponPrice.toDouble(), user
+                    )
 
                     newWeaponRequestRepository?.save(newWeaponRequest.apply { this.request = newRequest })
                     experimentRepository?.save(experiment.get().apply {
@@ -318,7 +320,8 @@ class ScientistController : ApplicationController() {
             return "Major experiment requests are handled by administrators."
         if ((checkedExperiment.examinator!!.employee!!.level!! >= currentScientist!!.employee!!.level!!)
             && checkedExperiment.examinator!!.employee!!.level!! < 10
-            && currentScientist.employee!!.level!! < 10)
+            && currentScientist.employee!!.level!! < 10
+        )
             return "Examinators' level is equal to or higher than yours."
 
         return null
