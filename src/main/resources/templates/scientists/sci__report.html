@@ -16,7 +16,7 @@
         </a>
     </div>
     <form id="report-form" action="#" th:action="@{/sci/report}" th:object="${form}" method="post"
-          class="grid__inputs flex-column">
+          class="grid__inputs-top flex-column">
         <label class="form-item">
             <b>Experiment id</b>
             <input th:required="true" th:field="*{experimentId}" disabled class="input_big">
@@ -29,13 +29,24 @@
                 <option value="2"> Yes, a brand-new one</option>
             </select>
         </label>
+    </form>
+    <div class="flex-column grid__inputs-bottom">
+        <label id="weapon-id-label" class="form-item hidden">
+            <b> Weapon Id</b>
+            <input type="number" id="weaponId" name="weaponId" class="input_big">
+        </label>
+        <label id="weapon-quantity-label" class="form-item hidden">
+            <b> Quantity</b>
+            <input type="number" id="weaponQuantity1" name="weaponQuantity1" class="input_big">
+        </label>
         <label class="form-item">
             <b>Report</b>
-            <textarea th:required="true" th:field="*{result}" class="text-area_big input_big"></textarea>
+            <textarea form="report-form" th:required="true" id="result" name="result"
+                      class="text-area_big input_big"></textarea>
         </label>
-        <input type="submit" class="button form-item" value="Submit report">
-    </form>
-    <div class="grid__weapons-table hidden">
+        <input form="report-form" type="submit" class="button form-item" value="Submit report">
+    </div>
+    <div id="weapons-table" class="grid__weapons-table hidden">
         <table>
             <thead>
             <tr>
@@ -55,7 +66,7 @@
             </tbody>
         </table>
     </div>
-    <div class="grid__weapons-form hidden">
+    <div id="weapons-form" class="flex-column grid__weapons-form hidden">
         <b class="form-item">New weapon</b>
         <label class="form-item_small">
             <b>Name</b>
@@ -88,7 +99,7 @@
         </label>
         <label class="form-item_small">
             <b>Quantity</b>
-            <input class="input_big" id="weaponQuantity" name="weaponQuantity" type="number" min="1" step="1"
+            <input class="input_big" id="weaponQuantity2" name="weaponQuantity2" type="number" min="1" step="1"
                    form="report-form">
         </label>
     </div>
