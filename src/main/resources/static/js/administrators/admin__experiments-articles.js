@@ -6,9 +6,10 @@ document.getElementById("burger").addEventListener('click', e => {
     }
 });
 
-document.addEventListener('click', (e) => {
+document.addEventListener('click', async (e) => {
     const experimentId = e.target.dataset.expId;
-    const action = experimentId && e.target.dataset.action;
+    const empId = e.target.dataset.empid;
+    const action = (experimentId || empId) && e.target.dataset.action;
 
     if (action === "accept") {
         fetch("/admin/acceptExperiment/" + experimentId, {method: 'POST'})
@@ -20,8 +21,35 @@ document.addEventListener('click', (e) => {
             .then(() => {
                 dealWithExperiment(false, experimentId);
             })
+    } else if (action === "reward") {
+        let rewardInput = document.getElementById(`reward-input-${empId}`);
+        if (rewardInput.classList.contains('hidden')) {
+            rewardInput.classList.remove('hidden');
+        } else {
+            const response = await post({employeeId: empId, reward: rewardInput.value});
+            const json = await response.json();
+            if (json.error) {
+                document.getElementById(`reward-message-${empId}`).classList.remove('hidden');
+                document.getElementById(`reward-message-${empId}`).classList.add('rejected');
+                document.getElementById(`reward-message-${empId}`).innerText = json.message;
+            } else {
+                document.getElementById(`reward-form-${empId}`).classList.add('hidden');
+                document.getElementById(`reward-message-${empId}`).classList.remove('hidden');
+                document.getElementById(`reward-message-${empId}`).classList.remove('rejected');
+                document.getElementById(`reward-message-${empId}`).classList.add('approved');
+                document.getElementById(`reward-message-${empId}`).innerText = json.message;
+            }
+        }
     }
 });
+
+function post(json) {
+    return fetch("/admin/giveRewardAjax", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(json)
+    })
+}
 
 function dealWithExperiment(isAccept, experimentId) {
     document.getElementById("exp-content-" + experimentId).classList.add("hidden");

@@ -73,6 +73,14 @@ body {
     display: none;
 }
 
+.reward-input {
+    margin: 20px auto 10px auto;
+}
+
+.reward-message {
+    padding: 12px;
+}
+
 @media (max-width: 1000px) {
     .grid-button {
         width: 25vw;
