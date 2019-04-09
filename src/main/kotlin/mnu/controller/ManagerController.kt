@@ -6,6 +6,7 @@ import mnu.model.User
 import mnu.model.Weapon
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.Role
+import mnu.model.request.NewWeaponRequest
 import mnu.repository.*
 import mnu.repository.employee.ManagerEmployeeRepository
 import mnu.repository.employee.SecurityEmployeeRepository
@@ -60,6 +61,18 @@ class ManagerController : ApplicationController() {
         val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
         model.addAttribute("clients", prawnRepository?.findAllByManager(curManager))
         return "managers/manager__prawn-list.html"
+    }
+
+    @GetMapping("/newWeapons")
+    fun manNewWeapons(principal: Principal, model: Model) : String {
+        val weaponRequests = newWeaponRequestRepository?.findAll()
+        val requestsForManager = ArrayList<NewWeaponRequest>()
+        weaponRequests!!.forEach {
+            if ((it.user!!.role == Role.SECURITY || it.user!!.role == Role.SCIENTIST) && it.request!!.status == RequestStatus.PENDING)
+                requestsForManager.add(it)
+        }
+        model.addAttribute("requests", requestsForManager)
+        return "managers/manager__new-weapons.html"
     }
 
 

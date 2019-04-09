@@ -59,9 +59,9 @@ class PageController : ApplicationController() {
     fun clientsShop() = "customers/customer__shop.html"
 
     @GetMapping("/profile")
-    fun sciProfile(model: Model, principal: Principal): String {
+    fun profile(model: Model, principal: Principal): String {
         val currentEmployee = employeeRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
-        val cashRewards = cashRewardRepository?.findAllByEmployee(currentEmployee!!)
+        val cashRewards = cashRewardRepository?.findAllByEmployeeOrderByIssueDateDesc(currentEmployee!!)
         model.addAttribute("user", currentEmployee)
         model.addAttribute("form", NewPasswordForm())
         model.addAttribute("cashRewards", cashRewards)

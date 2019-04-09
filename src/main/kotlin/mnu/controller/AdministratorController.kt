@@ -4,6 +4,7 @@ import mnu.form.*
 import mnu.model.*
 import mnu.model.employee.*
 import mnu.model.enums.*
+import mnu.model.request.NewWeaponRequest
 import mnu.repository.*
 import mnu.repository.employee.*
 import mnu.repository.request.NewWeaponRequestRepository
@@ -79,6 +80,18 @@ class AdministratorController : ApplicationController() {
     fun adminArticles(model: Model): String {
         model.addAttribute("articles", articleRepository?.findAllByOrderByCreationDateDesc())
         return "administrators/admin__articles.html"
+    }
+
+    @GetMapping("/newWeapons")
+    fun manNewWeapons(principal: Principal, model: Model) : String {
+        val weaponRequests = newWeaponRequestRepository?.findAll()
+        val requestsForAdmin = ArrayList<NewWeaponRequest>()
+        weaponRequests!!.forEach {
+            if (it.request!!.status == RequestStatus.PENDING)
+                requestsForAdmin.add(it)
+        }
+        model.addAttribute("requests", requestsForAdmin)
+        return "managers/manager__new-weapons.html"
     }
 
     @PostMapping("/registerEmployee")
