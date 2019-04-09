@@ -6,7 +6,11 @@ import mnu.model.User
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.Role
 import mnu.repository.DistrictHouseRepository
+import mnu.repository.TransportRepository
+import mnu.repository.WeaponRepository
 import mnu.repository.employee.ManagerEmployeeRepository
+import mnu.repository.employee.SecurityEmployeeRepository
+import mnu.repository.request.ChangeEquipmentRequestRepository
 import mnu.repository.request.NewWeaponRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -28,12 +32,22 @@ class ManagerController : ApplicationController() {
 
     @Autowired
     val managerEmployeeRepository: ManagerEmployeeRepository? = null
+    @Autowired
+    val securityEmployeeRepository: SecurityEmployeeRepository? = null
+
+    @Autowired
+    val weaponRepository: WeaponRepository? = null
+    @Autowired
+    val transportRepository: TransportRepository? = null
 
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
 
     @Autowired
     val newWeaponRequestRepository: NewWeaponRequestRepository? = null
+
+    @Autowired
+    val changeEquipmentRequestRepository: ChangeEquipmentRequestRepository? = null
 
     @GetMapping("/main")
     fun manMenu() = "managers/manager__main.html"
@@ -78,7 +92,124 @@ class ManagerController : ApplicationController() {
         }
     }
 
-    fun choiceError(newWeaponRequestId: Long, principal: Principal): String? {
+    fun newEquipmentChoiceError(newEquipmentRequestId: Long, principal: Principal) : String? {
+        val request = changeEquipmentRequestRepository?.findById(newEquipmentRequestId)!!
+        if (!request.isPresent)
+            return "Request with such id does not exist."
+        return null
+    }
+
+    @PostMapping("/acceptNewEquipment/{id}")
+    fun acceptNewEquipment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentManager = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = newEquipmentChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = changeEquipmentRequestRepository?.findById(id)!!.get()
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:main/requests" //todo
+            } else {
+                when {
+                    checkedRequest.weapon?.quantity!! == 0L -> {
+                        checkedRequest.request!!.apply {
+                            this.statusDate = LocalDateTime.now()
+                            this.status = RequestStatus.REJECTED
+                            this.resolver = currentManager
+                        }
+                        changeEquipmentRequestRepository?.save(checkedRequest)
+                        redirect.addFlashAttribute("error", "Weapon is out of stock, request cannot be satisfied.")
+                        return "redirect:equipment" //todo
+                    }
+                    checkedRequest.transport?.quantity!! == 0L -> {
+                        checkedRequest.request!!.apply {
+                            this.statusDate = LocalDateTime.now()
+                            this.status = RequestStatus.REJECTED
+                            this.resolver = currentManager
+                        }
+                        changeEquipmentRequestRepository?.save(checkedRequest)
+                        redirect.addFlashAttribute("error", "Transport is out of stock, request cannot be satisfied.")
+                        return "redirect:equipment" //todo
+                    }
+                }
+
+                val securityEmployee = checkedRequest.employee!!
+
+                val employeeLastWeapon = securityEmployee.weapon
+                val employeeLastTransport = securityEmployee.transport
+                if (employeeLastWeapon != null) {
+                    employeeLastWeapon.quantity++
+                    weaponRepository?.save(employeeLastWeapon)
+                }
+                if (employeeLastTransport != null) {
+                    employeeLastTransport.quantity++
+                    transportRepository?.save(employeeLastTransport)
+                }
+
+                val employeeNewWeapon = checkedRequest.weapon
+                val employeeNewTransport = checkedRequest.transport
+                if (employeeNewWeapon != null) {
+                    employeeNewWeapon.quantity--
+                    weaponRepository?.save(employeeNewWeapon)
+                }
+                if (employeeNewTransport != null) {
+                    employeeNewTransport.quantity--
+                    transportRepository?.save(employeeNewTransport)
+                }
+
+                securityEmployee.weapon = checkedRequest.weapon
+                securityEmployee.transport = checkedRequest.transport
+
+                checkedRequest.request!!.apply {
+                    this.statusDate = LocalDateTime.now()
+                    this.status = RequestStatus.ACCEPTED
+                    this.resolver = currentManager
+                }
+                securityEmployeeRepository?.save(securityEmployee)
+                changeEquipmentRequestRepository?.save(checkedRequest)
+                redirect.addFlashAttribute("status", "Request accepted.")
+                "redirect:main/requests"
+            }
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:main/requests" //todo
+        }
+    }
+
+    @PostMapping("/rejectNewEquipment/{id}")
+    fun rejectNewEquipment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentManager = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = newEquipmentChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = changeEquipmentRequestRepository?.findById(id)!!.get()
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:main/requests"
+            } else {
+                checkedRequest.request!!.apply {
+                    this.statusDate = LocalDateTime.now()
+                    this.status = RequestStatus.REJECTED
+                    this.resolver = currentManager
+                }
+                changeEquipmentRequestRepository?.save(checkedRequest)
+
+                redirect.addFlashAttribute("status", "Request rejected.")
+                "redirect:main/requests"
+            }
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:main/requests"
+        }
+    }
+
+    fun newWeaponChoiceError(newWeaponRequestId: Long, principal: Principal): String? {
         val request = newWeaponRequestRepository?.findById(newWeaponRequestId)!!
         if (!request.isPresent)
             return "Request with such id does not exist."
@@ -90,7 +221,7 @@ class ManagerController : ApplicationController() {
         val user = userRepository?.findByLogin(principal.name)
         val currentManager = employeeRepository?.findById(user?.id!!)?.get()
 
-        val error = choiceError(id, principal)
+        val error = newWeaponChoiceError(id, principal)
         return if (error == null) {
             val checkedRequest = newWeaponRequestRepository?.findById(id)!!.get()
 
@@ -121,7 +252,7 @@ class ManagerController : ApplicationController() {
         val user = userRepository?.findByLogin(principal.name)
         val currentManager = employeeRepository?.findById(user?.id!!)?.get()
 
-        val error = choiceError(id, principal)
+        val error = newWeaponChoiceError(id, principal)
         return if (error == null) {
             val checkedRequest = newWeaponRequestRepository?.findById(id)!!.get()
 
@@ -151,7 +282,7 @@ class ManagerController : ApplicationController() {
         val user = userRepository?.findByLogin(principal.name)
         val currentManager = employeeRepository?.findById(user?.id!!)?.get()
 
-        val error = choiceError(id, principal)
+        val error = newWeaponChoiceError(id, principal)
         return if (error == null) {
             val checkedRequest = newWeaponRequestRepository?.findById(id)!!.get()
 

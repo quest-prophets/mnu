@@ -17,5 +17,5 @@ data class Transport (@Column(nullable = false) var name: String = "",
     var id: Long? = null
 
     @Min(0)
-    var quantity: Long? = null
+    var quantity: Long = 0
 }

@@ -65,7 +65,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                     if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
                         response.sendRedirect("/clientsShop")
                     if (roles.contains("PRAWN"))
-                        response.sendRedirect("/prawnMain")
+                        response.sendRedirect("/prawn/main")
                 }}
                 .failureHandler { request, response, exception ->
                     request.session.setAttribute("loginFailed", true)

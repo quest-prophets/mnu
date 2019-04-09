@@ -274,7 +274,7 @@ class ScientistController : ApplicationController() {
         articleRepository?.save(Article(form.title, form.article).apply { this.scientist = currentScientist })
 
         redirect.addFlashAttribute("status", "Article added.")
-        return "redirect:main"
+        return "redirect:main/articles"
     }
 
     fun choiceError(experimentId: Long, principal: Principal): String? {

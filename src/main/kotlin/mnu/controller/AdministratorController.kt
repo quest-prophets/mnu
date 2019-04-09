@@ -207,6 +207,27 @@ class AdministratorController : ApplicationController() {
         return "redirect:employee"
     }
 
+    data class ScientistRewardForArticle (var employeeId: String = "", var reward: String = "")
+    data class RewardResponse (var isError: Boolean = false, var message: String = "")
+
+    @PostMapping("/giveRewardAjax")
+    @ResponseBody
+    fun awardCashForArticle(@RequestBody data: ScientistRewardForArticle): RewardResponse {
+        val existingEmployee = employeeRepository?.findById(data.employeeId.toLong())!!
+        if (!existingEmployee.isPresent) {
+            return RewardResponse(true, "Employee with such id does not exist.")
+        }
+        val totallyExistingEmployee = existingEmployee.get()
+        if (data.reward == "") {
+            return RewardResponse(true, "Please fill the reward field.")
+        }
+        val newReward = CashReward(totallyExistingEmployee, data.reward.toLong())
+
+        cashRewardRepository?.save(newReward)
+
+        return RewardResponse(false, "Reward given.")
+    }
+
     @PostMapping("/registerPrawn")
     fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, redirect: RedirectAttributes): String {
         val existingUser = userRepository?.findByLogin(form.username)
@@ -248,7 +269,7 @@ class AdministratorController : ApplicationController() {
         }
     }
 
-    fun choiceError(experimentId: Long): String? {
+    fun experimentChoiceError(experimentId: Long): String? {
         val experiment = experimentRepository?.findById(experimentId)!!
         if (!experiment.isPresent)
             return "Experiment with such id does not exist."
@@ -261,7 +282,7 @@ class AdministratorController : ApplicationController() {
 
     @PostMapping("/acceptExperiment/{id}")
     fun acceptExperiment(@PathVariable id: Long, redirect: RedirectAttributes): String {
-        val error = choiceError(id)
+        val error = experimentChoiceError(id)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
 
@@ -287,7 +308,7 @@ class AdministratorController : ApplicationController() {
 
     @PostMapping("/rejectExperiment/{id}")
     fun rejectExperiment(@PathVariable id: Long, redirect: RedirectAttributes): String {
-        val error = choiceError(id)
+        val error = experimentChoiceError(id)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
 
@@ -313,7 +334,7 @@ class AdministratorController : ApplicationController() {
     @PostMapping("/undoExperimentChoice/{id}")
     @ResponseBody
     fun undoExpChoice(@PathVariable id: Long, redirect: RedirectAttributes): String {
-        val error = choiceError(id)
+        val error = experimentChoiceError(id)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
 
