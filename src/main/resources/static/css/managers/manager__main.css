@@ -31,25 +31,8 @@
     grid-area: buttons;
 }
 
-@media (max-width: 400px) {
-    .grid__header {
-        text-align: center;
-        flex-direction: column;
-    }
-
-    .grid {
-        grid-template-rows: 120px auto;
-    }
-}
-
 @media (max-width: 300px) {
     .grid-button {
         width: 75vw;
-    }
-}
-
-@media (max-width: 277px) {
-    .grid-button {
-        height: auto;
     }
 }

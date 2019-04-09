@@ -13,8 +13,12 @@
         <a th:href="@{/profile}" class="flex-column button button_profile">
             Profile
         </a>
-        <img alt="Clients list" class="icon_b header__icon" th:src="@{/images/human_list_icon.png}">
-        <img alt="Prawns list" class="icon_b header__icon" th:src="@{/images/alien_list_icon.png}">
+        <a th:href="@{/man/clients}">
+            <img alt="Clients list" class="icon_b header__icon" th:src="@{/images/human_list_icon.png}">
+        </a>
+        <a th:href="@{/man/prawns}">
+            <img alt="Prawns list" class="icon_b header__icon" th:src="@{/images/alien_list_icon.png}">
+        </a>
     </div>
     <div class="managers-grid__buttons">
         <a class="flex-column grid-button button">Purchase requests</a>
