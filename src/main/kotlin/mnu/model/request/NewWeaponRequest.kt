@@ -15,9 +15,10 @@ data class NewWeaponRequest (@Column(nullable = false) var name: String = "",
                              var requiredAccessLvl: Int = 0,
                              @Min(0) var price: Double = 0.0,
 
-                             @ManyToOne(fetch = FetchType.EAGER)
-                             @JoinColumn(name = "requester_id", referencedColumnName = "id")
-                             var user: User? = null) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "requester_id", referencedColumnName = "id")
+    var user: User? = null
+) {
 
     @Id
     var id: Long? = null
