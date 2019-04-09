@@ -32,10 +32,12 @@
     </div>
 </div>
 
-<div class="content flex-column">
+<div class="content">
     <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
-    <div class="form-item_big gray" th:if="${experiments == null or experiments.isEmpty()}">
-        You didn't submit any experiments
+    <div class="flex-column">
+        <div class="form-item_big gray" th:if="${experiments == null or experiments.isEmpty()}">
+            You didn't submit any experiments
+        </div>
     </div>
     <div th:each="exp: ${experiments}" class=" content__item">
         <div class="content__header"
@@ -57,22 +59,22 @@
                     <b class="form-item_micro">Assistant</b>
                     <div th:text="${exp.assistant.employee.name}"></div>
                 </div>
-                <div th:case="PENDING">
+                <div class="form-item_micro" th:case="PENDING">
                     <b>Submitted on </b>
                 </div>
-                <div th:case="APPROVED">
+                <div class="form-item_micro" th:case="APPROVED">
                     <b>Approved on </b>
                 </div>
-                <div th:case="REJECTED">
+                <div class="form-item_micro" th:case="REJECTED">
                     <b> Rejected on </b>
                 </div>
-                <div th:case="FINISHED">
+                <div class="form-item_micro" th:case="FINISHED">
                     <b> Finished on </b>
                 </div>
                 <div class="datetime-to-format" th:text="${exp.statusDate}"></div>
                 <b class="form-item_micro">Description</b>
                 <div th:text="${exp.description}"></div>
-                <div th:if="${exp.status.name() == 'FINISHED'}">
+                <div th:if="${exp.status.name() == 'FINISHED'}" class="flex-column-left">
                     <b class="form-item_micro"> Report </b>
                     <div th:text="${exp.result}"></div>
                 </div>

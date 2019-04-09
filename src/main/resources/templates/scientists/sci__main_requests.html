@@ -14,7 +14,7 @@
         <div id="mobile-title" class="mobile-title">Requests</div>
     </div>
     <div id="mobile-menu" class="flex-row">
-        <a th:href="@{/sci/profile}" class="flex-column button button_profile">
+        <a th:href="@{/profile}" class="flex-column button button_profile">
             Profile
         </a>
         <a th:href="@{/sci/main}" class="experiments-button grid-button button">
@@ -32,9 +32,11 @@
     </div>
 </div>
 
-<div class="content flex-column">
-    <div class="form-item_big gray" th:if="${experiments == null or experiments.isEmpty()}">
-        There are no experiment requests for you
+<div class="content">
+    <div class="flex-column">
+        <div class="form-item_big gray" th:if="${experiments == null or experiments.isEmpty()}">
+            There are no experiment requests for you
+        </div>
     </div>
     <div th:each="exp: ${experiments}" class="content__item">
         <div th:id="${'exp-header-' + exp.id}" class="content__header pending">
