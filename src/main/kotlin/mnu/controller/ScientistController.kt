@@ -259,9 +259,12 @@ class ScientistController : ApplicationController() {
                 }
             }
 
-        } else
-            return error
-        return "An error occurred."
+        } else {
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", error)
+            return "redirect:report"
+        }
+        return "redirect:report"
     }
 
     @PostMapping("/article")

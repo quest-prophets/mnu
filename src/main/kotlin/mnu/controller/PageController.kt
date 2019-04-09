@@ -58,9 +58,6 @@ class PageController : ApplicationController() {
     @GetMapping("/clientsShop")
     fun clientsShop() = "customers/customer__shop.html"
 
-    @GetMapping("/prawnMain")
-    fun prawnMain() = "prawns/prawn__main.html"
-
     @GetMapping("/profile")
     fun sciProfile(model: Model, principal: Principal): String {
         val currentEmployee = employeeRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
@@ -100,12 +97,6 @@ class PageController : ApplicationController() {
         redirect.addFlashAttribute("status", "Password changed successfully.")
         return "redirect:profile"
     }
-
-//    @GetMapping("/prawnRegister")
-//    fun prawnRegister(model: Model): String {
-//        model.addAttribute("form", PrawnRegistrationForm())
-//        return "administrators/admin__prawn-registration.html"
-//    }
 
 
 }

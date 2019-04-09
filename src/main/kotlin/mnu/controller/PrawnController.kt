@@ -11,15 +11,14 @@ import java.time.LocalDateTime
 @Controller("/prawn")
 class PrawnController {
 
-    data class NewIncident(var dangerLevel: Short = 0, var row: Int = 0, var column: Int = 0,
-                           var description: String = "", var appearanceTime: LocalDateTime = LocalDateTime.now())
-
-
     @Autowired
     val districtIncidentRepository: DistrictIncidentRepository? = null
 
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
 
-
+    @GetMapping("/main")
+    fun prawnMain() : String {
+        return "prawns/prawn__main.html"
+    }
 }

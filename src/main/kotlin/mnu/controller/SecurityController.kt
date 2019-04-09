@@ -1,22 +1,21 @@
 package mnu.controller
 
 import mnu.form.NewEquipmentForm
-import mnu.form.NewPasswordForm
-import mnu.model.employee.SecurityEmployee
+import mnu.form.NewSearchForm
 import mnu.model.enums.RequestStatus
+import mnu.model.enums.WeaponType
 import mnu.model.request.ChangeEquipmentRequest
+import mnu.model.request.NewWeaponRequest
 import mnu.model.request.Request
-import mnu.repository.CashRewardRepository
 import mnu.repository.DistrictIncidentRepository
 import mnu.repository.TransportRepository
 import mnu.repository.WeaponRepository
 import mnu.repository.employee.SecurityEmployeeRepository
 import mnu.repository.request.ChangeEquipmentRequestRepository
+import mnu.repository.request.NewWeaponRequestRepository
 import mnu.repository.request.RequestRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
@@ -35,6 +34,8 @@ class SecurityController : ApplicationController() {
 
     @Autowired
     val weaponRepository: WeaponRepository? = null
+    @Autowired
+    val newWeaponRequestRepository: NewWeaponRequestRepository? = null
 
     @Autowired
     val transportRepository: TransportRepository? = null
@@ -145,6 +146,123 @@ class SecurityController : ApplicationController() {
         if (incident.availablePlaces == 0L)
             return "You were appointed to the incident and have successfully resolved it."
         return "You were appointed to the incident."
+    }
+
+    fun searchReportAccessError(incidentId: Long, principal: Principal): String? {
+        val user = userRepository?.findByLogin(principal.name)
+        val possibleSecurity = securityEmployeeRepository?.findById(user?.id!!)!!
+        if (!possibleSecurity.isPresent)
+            return "You are not a security employee."
+        val currentSecurity = possibleSecurity.get()
+        val incident = districtIncidentRepository?.findById(incidentId)!!
+        if (!incident.isPresent)
+            return "Incident with such id does not exist."
+        if (!incident.get().assistants!!.contains(currentSecurity))
+            return "You are not allowed to write a report on incident you did not participate in."
+
+        return null
+    }
+
+    @PostMapping("/report")
+    fun addSearchReport(@ModelAttribute form: NewSearchForm, principal: Principal, redirect: RedirectAttributes): String {
+        val error = searchReportAccessError(form.incidentId.toLong(), principal)
+        if (error == null) {
+            val incident = districtIncidentRepository?.findById(form.incidentId.toLong())!!
+            when (form.isNew.toInt()) {
+                0 -> {
+                    districtIncidentRepository?.save(incident.get().apply {
+                        this.description += "\n\n${form.result}"
+                        this.dangerLevel = 0
+                        this.levelFrom = 0
+                        this.levelTo = 0
+                    })
+                    redirect.addFlashAttribute("status", "Report submitted.")
+                    return "redirect:main"
+                }
+
+                1 -> {
+                    val possibleWeapon = weaponRepository?.findById(form.weaponId.toLong())!!
+                    return if (!possibleWeapon.isPresent) {
+                        redirect.addFlashAttribute("form", form)
+                        redirect.addFlashAttribute("error", "Such weapon does not exist.")
+                        "redirect:report"
+                    }
+                    else {
+                        val weapon = possibleWeapon.get()
+                        weapon.quantity += form.weaponQuantity1.toLong()
+                        weaponRepository?.save(weapon)
+                        districtIncidentRepository?.save(incident.get().apply {
+                            this.description += "\n\n${form.result}"
+                            this.dangerLevel = 0
+                            this.levelFrom = 0
+                            this.levelTo = 0
+                        })
+                        redirect.addFlashAttribute("status", "Report submitted and weapon added to the arsenal.")
+                        "redirect:main"
+
+                    }
+                }
+
+                2 -> {
+                    val user = userRepository?.findByLogin(principal.name)
+                    val newRequest = Request().apply { this.status = RequestStatus.PENDING }
+                    val weaponType = when (form.weaponType) {
+                        "melee" -> WeaponType.MELEE
+                        "pistol" -> WeaponType.PISTOL
+                        "submachine_gun" -> WeaponType.SUBMACHINE_GUN
+                        "assault_rifle" -> WeaponType.ASSAULT_RIFLE
+                        "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
+                        "sniper_rifle" -> WeaponType.SNIPER_RIFLE
+                        "alien" -> WeaponType.ALIEN
+                        else -> {
+                            redirect.addFlashAttribute("form", form)
+                            redirect.addFlashAttribute("error", "Such weapon type does not exist.")
+                            return "redirect:report"
+                        }
+                    }
+
+                    when {
+                        form.weaponLevel.toInt() < 1 || form.weaponLevel.toInt() > 10 -> {
+                            redirect.addFlashAttribute("form", form)
+                            redirect.addFlashAttribute("error", "Please enter weapon access level between 1-10.")
+                            return "redirect:report"
+                        }
+                        form.weaponQuantity2.toLong() < 1 -> {
+                            redirect.addFlashAttribute("form", form)
+                            redirect.addFlashAttribute("error", "Please enter a valid quantity of this weapon.")
+                            return "redirect:report"
+                        }
+                        form.weaponPrice.toDouble() < 1 -> {
+                            redirect.addFlashAttribute("form", form)
+                            redirect.addFlashAttribute("error", "Please enter a valid price for this weapon.")
+                            return "redirect:report"
+                        }
+                    }
+
+                    val newWeaponRequest = NewWeaponRequest(
+                        form.weaponName, weaponType, form.weaponDescription,
+                        form.weaponQuantity2.toLong(), form.weaponLevel.toInt(), form.weaponPrice.toDouble(), user
+                    )
+
+                    newWeaponRequestRepository?.save(newWeaponRequest.apply { this.request = newRequest })
+                    districtIncidentRepository?.save(incident.get().apply {
+                        this.description += "\n\n${form.result}"
+                        this.dangerLevel = 0
+                        this.levelFrom = 0
+                        this.levelTo = 0
+                    })
+                    redirect.addFlashAttribute("status", "Report submitted. Await for supervisor's decision.")
+                    return "redirect:main"
+
+                }
+            }
+
+        } else {
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", error)
+            return "redirect:report"
+        }
+        return "redirect:report"
     }
 
 }
