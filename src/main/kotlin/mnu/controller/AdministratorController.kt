@@ -83,7 +83,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @GetMapping("/newWeapons")
-    fun manNewWeapons(principal: Principal, model: Model) : String {
+    fun adminNewWeapons(principal: Principal, model: Model) : String {
         val weaponRequests = newWeaponRequestRepository?.findAll()
         val requestsForAdmin = ArrayList<NewWeaponRequest>()
         weaponRequests!!.forEach {
