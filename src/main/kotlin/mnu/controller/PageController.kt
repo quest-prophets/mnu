@@ -42,7 +42,7 @@ class PageController : ApplicationController() {
             if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
                 return "redirect:/clientsShop"
             if (roles.contains("PRAWN"))
-                return "redirect:/prawnMain"
+                return "redirect:/prawn/main"
         }
         model.addAttribute("form", LoginForm())
         if (session.getAttribute("loginFailed") == true) {

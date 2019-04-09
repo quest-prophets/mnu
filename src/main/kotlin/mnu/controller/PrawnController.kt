@@ -8,7 +8,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
-@Controller("/prawn")
+@Controller
+@RequestMapping("/prawn")
 class PrawnController {
 
     @Autowired
@@ -18,7 +19,7 @@ class PrawnController {
     val districtHouseRepository: DistrictHouseRepository? = null
 
     @GetMapping("/main")
-    fun prawnMain() : String {
+    fun prawnMain(): String {
         return "prawns/prawn__main.html"
     }
 }
