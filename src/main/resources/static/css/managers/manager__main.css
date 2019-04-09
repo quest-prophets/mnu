@@ -2,7 +2,7 @@
 
 .grid {
     display: grid;
-    grid: "header" 60px "buttons";
+    grid: "header" 75px "buttons";
 }
 
 .grid__header {
