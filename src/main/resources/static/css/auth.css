@@ -1,39 +1,12 @@
 @import url("common.css");
 
-body {
-    font-family: "Helvetica", sans-serif;
-    font-size: 17px;
+
+.lower {
+    margin-top: 25vh;
 }
 
-.login-page {
-    overflow: hidden;
-}
-
-.login-page__box {
-    margin-top: -200px;
-    border: 1px solid black;
-    padding: 35px;
-}
-
-.login-page__item {
-    margin-top: 15px;
-}
-
-.login-page__item:first-child{
-    margin-top: 0;
-}
-
-.login-page__checkbox {
-    font-size: 16px;
-}
-
-.checkbox {
-    width: 16px;
-    height: 16px;
-}
-
-.registration-checkbox {
-    margin-right: 15px;
+.reg-lower {
+    margin-top: 20vh;
 }
 
 .login-page__back-link {
@@ -47,50 +20,15 @@ body {
     text-decoration: underline;
 }
 
-.checkbox-flex {
-    display: flex;
-}
-
-.input_big {
-    display: block;
-    font-size: 16px;
-    height: 25px;
-}
-
-.hidden {
-    display: none;
-}
-
-@media (max-height: 850px) {
-    .login-page__box {
-        margin-top: 0;
-    }
-}
 
 @media (max-width: 350px) {
-    .login-page__box {
-        border: none;
-    }
-
     .input_big {
         width: 75vw;
         height: 40px;
     }
 
-    .checkbox-flex {
-        flex-direction: column;
-    }
-
     .login-page__back-link {
         margin-right: 55vw
-    }
-
-    .login-page__box {
-        padding: 0;
-    }
-
-    .registration-checkbox {
-        margin-right: 0;
     }
 }
 
