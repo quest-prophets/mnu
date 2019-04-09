@@ -19,10 +19,15 @@ def start(update, context):
     return ENTER_HOUSE
 
 def entered_house(update, context):
-    text = update.message.text
-    context.user_data['house'] = text 
-    update.message.reply_text(f"Reporting incident for house {text}. How would you assess the danger level?")
-    return ENTER_DANGER_LEVEL
+    try:
+        row_column = update.message.text.split(", ", 2)
+        context.user_data['row'] = int(row_column[0])
+        context.user_data['column'] = int(row_column[1])
+        update.message.reply_text(f"Reporting incident for house {row_column[0]}, {row_column[1]}. How would you assess the danger level?")
+        return ENTER_DANGER_LEVEL
+    except:
+        update.message.reply_text("Please enter houses' row and column correctly, as follows: \"1, 2\"")
+        return ENTER_HOUSE
 
 def entered_danger_level(update, context):
     text = update.message.text
@@ -32,19 +37,20 @@ def entered_danger_level(update, context):
 
 def entered_description(update, context):
     text = update.message.text
-    context.user_data['description'] = text 
-    update.message.reply_text("Got your message. Stay safe!")
-    send_report(context.user_data)
+    context.user_data['description'] = text
+    reply = send_report(context.user_data)
+    update.message.reply_text(reply)
     context.user_data.clear()
     return ConversationHandler.END
 
 def send_report(report):
-    data_json = json.dumps(data)
     r = requests.post(REPORT_URL, data={
-        'house': report['house'],
+        'row': report['row'],
+        'column': report['column'],
         'dangerLevel': report['danger_level'],
         'description': report['description']
     })
+    return r.text
 
 if __name__ == '__main__':
     bot_token = os.environ["BOT_TOKEN"]
