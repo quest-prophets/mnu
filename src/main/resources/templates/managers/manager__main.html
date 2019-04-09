@@ -4,21 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/managers/manager__menu.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/managers/manager__main.css}">
     <title>MNU</title>
 </head>
 <body>
-<div class="managers-grid">
-    <div class="managers-grid__header">
+<div class="grid">
+    <div class="grid__header flex-row-left">
         <a th:href="@{/profile}" class="flex-column button button_profile">
             Profile
         </a>
-        <img alt="Clients list" class="clientsListButton" th:src="@{/images/human_list_icon.png}">
-        <img alt="Prawns list" class="prawnsListButton" th:src="@{/images/alien_list_icon.png}">
+        <img alt="Clients list" class="icon_b header__icon" th:src="@{/images/human_list_icon.png}">
+        <img alt="Prawns list" class="icon_b header__icon" th:src="@{/images/alien_list_icon.png}">
     </div>
     <div class="managers-grid__buttons flexColumn">
         <a class="flex-column grid-button button">Purchase requests</a>
-        <a th:href="@{/prawnRegister}"
+        <a th:href="@{/man/prawnRegister}"
            class="flex-column administrators-menu-grid__prawn-registration grid-button button">Prawns
             registrations</a>
         <a class="flex-column administrators-menu-grid__synthesized-confiscated-weapons grid-button button">Synthesized

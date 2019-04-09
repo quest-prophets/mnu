@@ -1,7 +1,7 @@
 @import url("../common.css");
 
 .header {
-    grid-area: admin-header;
+    grid-area: header;
     margin-top: 5px;
     padding: 12px;
 }
@@ -14,58 +14,58 @@
     width: 220px;
 }
 
-.administrators-menu-grid {
+.grid {
     display: grid;
-    grid: "admin-header admin-header" 70px "flash flash" "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
+    grid: "header header" 70px "flash flash" "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
 }
 
 .flash {
     grid-area: flash;
 }
 
-.administrators-menu-grid__district {
+.district {
     grid-area: district;
     margin-right: 30px;
 }
 
-.administrators-menu-grid__experiments-articles {
+.experiments-articles {
     grid-area: experiments-articles;
     margin-left: 30px;
 }
 
-.administrators-menu-grid__clients-manufacturers {
+.clients-manufacturers {
     grid-area: client-manufacturers;
     margin-right: 30px;
 }
 
-.administrators-menu-grid__employees {
+.employees {
     grid-area: employees;
     margin-left: 30px;
 }
 
-.administrators-menu-grid__prawn-vacancies {
+.prawn-vacancies {
     grid-area: prawn-vacancies;
     margin-right: 30px;
 }
 
-.administrators-menu-grid__synthesized-confiscated-weapons {
+.synthesized-confiscated-weapons {
     grid-area: synthesized-confiscated-weapons;
     margin-left: 30px;
 }
 
-.administrators-menu-grid__prawn-registration {
+.prawn-registration {
     grid-area: prawn-registration;
     margin-right: 30px;
 }
 
-.administrators-menu-grid__prawn-job-applications {
+.prawn-job-applications {
     grid-area: prawn-job-applications;
     margin-left: 30px;
 }
 
 @media (max-width: 700px) {
-    .administrators-menu-grid {
-        grid: "admin-header" 70px "flash" "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
+    .grid {
+        grid: "header" 70px "flash" "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
     }
 
     .grid-button {
@@ -76,17 +76,17 @@
 }
 
 @media (max-width: 290px) {
-    .administrators-menu-grid__synthesized-confiscated-weapons {
+    .synthesized-confiscated-weapons {
         height: 60px;
     }
 }
 
 @media (max-width: 208px) {
-    .administrators-menu-grid__synthesized-confiscated-weapons {
+    .synthesized-confiscated-weapons {
         height: 90px;
     }
 
-    .administrators-menu-grid__clients-manufacturers {
+    .clients-manufacturers {
         height: 80px;
     }
 }
