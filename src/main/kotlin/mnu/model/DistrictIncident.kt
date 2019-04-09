@@ -34,6 +34,6 @@ data class DistrictIncident (@Min(0) @Max(3) var dangerLevel: Short = 0,
     @JoinTable(name = "security_in_incidents",
         joinColumns = [JoinColumn(name = "incident_id")],
         inverseJoinColumns = [JoinColumn(name = "security_id")])
-    var assistants: List<SecurityEmployee>? = null
+    var assistants: MutableList<SecurityEmployee>? = null
 
 }

@@ -8,4 +8,6 @@ import java.util.*
 interface DistrictHouseRepository : JpaRepository<DistrictHouse, Long> {
     @Query("select dt.id from district_houses dt;", nativeQuery = true)
     fun getAllIds(): List<Long>
+
+    fun findByShelterColumnAndShelterRow(shelterColumn: Int, shelterRow: Int) : DistrictHouse
 }
