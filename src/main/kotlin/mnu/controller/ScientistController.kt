@@ -49,9 +49,6 @@ class ScientistController : ApplicationController() {
     val experimentRepository: ExperimentRepository? = null
 
     @Autowired
-    val cashRewardRepository: CashRewardRepository? = null
-
-    @Autowired
     val weaponRepository: WeaponRepository? = null
 
     @Autowired
@@ -63,16 +60,6 @@ class ScientistController : ApplicationController() {
         val user = userRepository?.findByLogin(principal.name)!!
         model.addAttribute("experiments", experimentRepository?.findAllByExaminatorIdOrderByStatusAsc(user.id!!))
         return "scientists/sci__main.html"
-    }
-
-    @GetMapping("/profile")
-    fun sciProfile(model: Model, principal: Principal): String {
-        val currentEmployee = employeeRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
-        val cashRewards = cashRewardRepository?.findAllByEmployee(currentEmployee!!)
-        model.addAttribute("user", currentEmployee)
-        model.addAttribute("form", NewPasswordForm())
-        model.addAttribute("cashRewards", cashRewards)
-        return "scientists/sci__profile.html"
     }
 
     @GetMapping("/main/articles")
@@ -114,36 +101,6 @@ class ScientistController : ApplicationController() {
         if (!model.containsAttribute("form"))
             model.addAttribute("form", NewExperimentForm())
         return "/scientists/sci__new-experiment.html"
-    }
-
-    @PostMapping("/changePass")
-    fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes): String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        val regex = """[a-zA-Z0-9_.]+""".toRegex()
-        val passwordEncoder = BCryptPasswordEncoder()
-        when {
-            !regex.matches(form.newPass) -> {
-                redirect.addFlashAttribute("form", form)
-                redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
-                return "redirect:profile"
-            }
-            form.prevPass == "" || form.newPass == "" -> {
-                redirect.addFlashAttribute("form", form)
-                redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
-                return "redirect:profile"
-            }
-            !passwordEncoder.matches(form.prevPass, curUser.password) -> {
-                redirect.addFlashAttribute("form", form)
-                redirect.addFlashAttribute("error", "Previous password is incorrect. Please try again.")
-                return "redirect:profile"
-            }
-        }
-        curUser.password = passwordEncoder.encode(form.newPass)
-        userRepository?.save(curUser)
-
-        redirect.addFlashAttribute("form", form)
-        redirect.addFlashAttribute("status", "Password changed successfully.")
-        return "redirect:profile"
     }
 
     @PostMapping("/experiment")

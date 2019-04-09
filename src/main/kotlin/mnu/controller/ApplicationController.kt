@@ -1,6 +1,7 @@
 package mnu.controller
 
 import mnu.model.enums.Role
+import mnu.repository.CashRewardRepository
 import mnu.repository.ClientRepository
 import mnu.repository.PrawnRepository
 import mnu.repository.UserRepository
@@ -24,22 +25,8 @@ class ApplicationController {
     @Autowired
     val employeeRepository: EmployeeRepository? = null
 
-    @ModelAttribute("fullname")
-    fun getFullname(principal: Principal): String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        return if (curUser.role == Role.PRAWN) {
-            val name = prawnRepository?.findById(curUser.id!!)?.get()!!.name
-            name
-        } else {
-            if (curUser.role == Role.CUSTOMER || curUser.role == Role.MANUFACTURER) {
-                val name = clientRepository?.findById(curUser.id!!)?.get()!!.name
-                name
-            } else {
-                val name = employeeRepository?.findById(curUser.id!!)?.get()!!.name
-                name
-            }
-        }
-    }
+    @Autowired
+    val cashRewardRepository: CashRewardRepository? = null
 
 //    @ModelAttribute("karma")
 //    fun getKarma(principal: Principal) : String {

@@ -38,17 +38,17 @@ class AuthorizationController {
         val roles = AuthorityUtils.authorityListToSet(authentication.authorities)
         if (authentication != null && authentication.isAuthenticated) {
             if (roles.contains("ADMIN"))
-                return "redirect:admin/main"
+                return "redirect:/admin/main"
             if (roles.contains("MANAGER"))
-                return "redirect:man/main"
+                return "redirect:/man/main"
             if (roles.contains("SCIENTIST"))
-                return "redirect:sci/main"
+                return "redirect:/sci/main"
             if (roles.contains("SECURITY"))
-                return "redirect:sec/main"
+                return "redirect:/sec/main"
             if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
-                return "redirect:clientsShop"
+                return "redirect:/clientsShop"
             if (roles.contains("PRAWN"))
-                return "redirect:prawnMain"
+                return "redirect:/prawnMain"
         }
         model.addAttribute("form", LoginForm())
         if (session.getAttribute("loginFailed") == true) {

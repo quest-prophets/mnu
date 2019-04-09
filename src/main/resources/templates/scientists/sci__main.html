@@ -14,7 +14,7 @@
         <div class="mobile-title">Experiments</div>
     </div>
     <div id="mobile-menu" class="flex-row">
-        <a th:href="@{/sci/profile}" class="flex-column button button_profile">
+        <a th:href="@{/profile}" class="flex-column button button_profile">
             Profile
         </a>
         <div class="experiments-button grid-button button button_pressed">
@@ -73,7 +73,11 @@
             <div th:text="${exp.description}"></div>
             <div class="flex-column">
                 <a th:if="${exp.status.name()=='APPROVED'}" th:href="@{'/sci/report?id=' + ${exp.id}}"
-                   th:attr="data-exp-id=${exp.id}" class="button">Write report</a>
+                   th:attr="data-exp-id=${exp.id}" class="button form-item_small">Write report</a>
+            </div>
+            <div th:if="${exp.status.name() == 'FINISHED'}">
+                <b> Report </b>
+                <div th:text="${exp.result}"></div>
             </div>
         </div>
     </div>

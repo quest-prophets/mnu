@@ -12,7 +12,7 @@ body {
 
 .content {
     text-align: center;
-    margin-top: 84px;
+    margin-top: 104px;
 }
 
 .content__item {
@@ -98,7 +98,7 @@ body {
     }
 
     .content {
-        margin-top: 62px;
+        margin-top: 84px;
     }
 
     .flex-row {

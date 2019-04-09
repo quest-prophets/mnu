@@ -1,4 +1,4 @@
-@import url("../common.css");
+@import url("common.css");
 
 body {
     margin: 0;
@@ -12,11 +12,11 @@ body {
 .content__item {
     margin: 20px auto auto auto;
     border: 2px solid black;
-    width: 70%;
+    width: 350px
 }
 
 .content__main {
     word-break: break-word;
-    text-align: left;
+    text-align: center;
     padding: 12px;
 }

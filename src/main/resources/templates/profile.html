@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/scientists/sci__profile.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
     <title>MNU</title>
 </head>
 <body>
 <div class="fixed-header fixed-header_small flex-row">
-    <a th:href="@{/sci/main}">
+    <a th:href="@{/}">
         <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
     </a>
     <a th:href="@{/auth/logout}" class="button button_logout">
@@ -26,7 +26,7 @@
     <div class="form-item_micro" th:text="${'Salary: ' + user.salary}"></div>
     <div class="form-item_micro" th:text="${'Position: ' + user.position}"></div>
 
-    <form action="#" th:action="@{/sci/changePass}" th:object="${form}" method="post" class="flex-column">
+    <form action="#" th:action="@{/changePass}" th:object="${form}" method="post" class="flex-column">
         <label class="form-item">
             <b>Old password</b>
             <input th:field="*{prevPass}" required type="password" class="input_big">
@@ -43,10 +43,9 @@
     </div>
     <div th:each="reward: ${cashRewards}" class="content__item">
         <div class="content__main finished">
-            <b>Date</b>
-            <div class="datetime-to-format" th:text="${reward.issueDate}"></div>
-            <b>Reward</b>
-            <div th:text="${reward.reward}"></div>
+            <b><span th:text="${reward.reward + ' c.u.'}"></span></b>
+            <span> on </span>
+            <span class="datetime-to-format" th:text="${reward.issueDate}"></span>
         </div>
     </div>
 </div>
