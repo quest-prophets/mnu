@@ -3,6 +3,7 @@ package mnu.controller
 import mnu.form.PrawnRegistrationForm
 import mnu.model.Prawn
 import mnu.model.User
+import mnu.model.Weapon
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.Role
 import mnu.repository.*
@@ -243,8 +244,12 @@ class ManagerController : ApplicationController() {
                     this.status = RequestStatus.ACCEPTED
                     this.resolver = currentManager
                 }
-                newWeaponRequestRepository?.save(checkedRequest)
+                val newWeapon = Weapon(checkedRequest.name, checkedRequest.type,
+                    checkedRequest.description, checkedRequest.price, checkedRequest.requiredAccessLvl)
+                    .apply { this.quantity = checkedRequest.quantity }
+                weaponRepository?.save(newWeapon)
 
+                newWeaponRequestRepository?.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
                 "redirect:main/requests"
             }
@@ -300,6 +305,13 @@ class ManagerController : ApplicationController() {
                 this.status = RequestStatus.PENDING
                 this.resolver = currentManager
             }
+            val weapons = weaponRepository?.findAll()!!.asReversed()
+            for(i in 0 until weapons.size) {
+                if (weapons[i].name == checkedRequest.name)
+                    weaponRepository?.delete(weapons[i])
+                break
+            }
+
             newWeaponRequestRepository?.save(checkedRequest)
 
             redirect.addFlashAttribute("status", "Undone.")
