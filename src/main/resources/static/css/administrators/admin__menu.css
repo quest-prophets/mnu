@@ -16,7 +16,7 @@
 
 .grid {
     display: grid;
-    grid: "header header" 70px "flash flash" "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration synthesized-confiscated-weapons"
+    grid: "header header" 70px "flash flash" "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration new-weapons"
 }
 
 .flash {
@@ -48,8 +48,8 @@
     margin-right: 30px;
 }
 
-.synthesized-confiscated-weapons {
-    grid-area: synthesized-confiscated-weapons;
+.new-weapons {
+    grid-area: new-weapons;
     margin-left: 30px;
 }
 
@@ -65,7 +65,7 @@
 
 @media (max-width: 700px) {
     .grid {
-        grid: "header" 70px "flash" "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "synthesized-confiscated-weapons"
+        grid: "header" 70px "flash" "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "new-weapons"
     }
 
     .grid-button {
@@ -76,13 +76,13 @@
 }
 
 @media (max-width: 290px) {
-    .synthesized-confiscated-weapons {
+    .new-weapons {
         height: 60px;
     }
 }
 
 @media (max-width: 208px) {
-    .synthesized-confiscated-weapons {
+    .new-weapons {
         height: 90px;
     }
 
