@@ -60,6 +60,16 @@ class SecurityController : ApplicationController() {
         val user = userRepository?.findByLogin(principal.name)
         val newRequest = Request().apply { this.status = RequestStatus.PENDING }
         val currentSecurity = securityEmployeeRepository?.findById(user?.id!!)?.get()!!
+        val allChangeRequests = changeEquipmentRequestRepository?.findAllByEmployee(currentSecurity)
+
+        allChangeRequests?.forEach {
+            if (it.request!!.status == RequestStatus.PENDING) {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "You cannot have more than 1 pending equipment change request.")
+                return "redirect:equipment"
+            }
+        }
+
 
         val requestedWeapon = when (form.weaponId) {
             null -> null
