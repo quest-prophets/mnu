@@ -5,9 +5,7 @@ import mnu.model.Prawn
 import mnu.model.User
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.Role
-import mnu.repository.DistrictHouseRepository
-import mnu.repository.TransportRepository
-import mnu.repository.WeaponRepository
+import mnu.repository.*
 import mnu.repository.employee.ManagerEmployeeRepository
 import mnu.repository.employee.SecurityEmployeeRepository
 import mnu.repository.request.ChangeEquipmentRequestRepository
@@ -15,6 +13,7 @@ import mnu.repository.request.NewWeaponRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
@@ -23,12 +22,6 @@ import java.time.LocalDateTime
 @Controller
 @RequestMapping("/man")
 class ManagerController : ApplicationController() {
-
-    @ModelAttribute("level")
-    fun getLevel(principal: Principal): String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        return employeeRepository?.findById(curUser.id!!)?.get()!!.level.toString()
-    }
 
     @Autowired
     val managerEmployeeRepository: ManagerEmployeeRepository? = null
@@ -51,6 +44,22 @@ class ManagerController : ApplicationController() {
 
     @GetMapping("/main")
     fun manMenu() = "managers/manager__main.html"
+
+    @GetMapping("/clients")
+    fun manClients(principal: Principal, model: Model) : String {
+        val user = userRepository?.findByLogin(principal.name)!!
+        val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
+        model.addAttribute("clients", clientRepository?.findAllByManager(curManager))
+        return "managers/manager__client-list.html"
+    }
+
+    @GetMapping("/prawns")
+    fun manPrawns(principal: Principal, model: Model) : String {
+        val user = userRepository?.findByLogin(principal.name)!!
+        val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
+        model.addAttribute("clients", prawnRepository?.findAllByManager(curManager))
+        return "managers/manager__prawn-list.html"
+    }
 
 
     @PostMapping("/registerPrawn")

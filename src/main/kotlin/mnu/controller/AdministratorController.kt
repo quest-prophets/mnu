@@ -19,12 +19,6 @@ import java.time.LocalDateTime
 @RequestMapping("/admin")
 class AdministratorController : ApplicationController() {
 
-    @ModelAttribute("level")
-    fun getLevel(principal: Principal): String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        return employeeRepository?.findById(curUser.id!!)?.get()!!.level.toString()
-    }
-
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
     @Autowired

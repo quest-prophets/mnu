@@ -21,12 +21,6 @@ import java.time.LocalDateTime
 @RequestMapping("/sci")
 class ScientistController : ApplicationController() {
 
-    @ModelAttribute("level")
-    fun getLevel(principal: Principal): String {
-        val curUser = userRepository?.findByLogin(principal.name)!!
-        return employeeRepository?.findById(curUser.id!!)?.get()!!.level.toString()
-    }
-
     @Autowired
     val scientistEmployeeRepository: ScientistEmployeeRepository? = null
 
