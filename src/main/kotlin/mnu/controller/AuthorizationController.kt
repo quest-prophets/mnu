@@ -65,9 +65,6 @@ class AuthorizationController {
         return "/register.html"
     }
 
-    @GetMapping("/logout")
-    fun logout() = "/index.html"
-
     @PostMapping("/register")
     @ResponseBody
     fun addUser(@ModelAttribute form: ClientRegistrationForm): String {
@@ -109,7 +106,7 @@ class AuthorizationController {
                 userRepository?.save(newUser)
                 clientRepository?.save(newClientUser)
 
-                "redirect:index.html"
+                "redirect:index.html" // ЧТО ЭТО ТАКОЕ
             }
         }
     }

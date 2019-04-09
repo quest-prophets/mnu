@@ -25,15 +25,15 @@
         <div th:switch="${user.user.role.name()}">
             <div class="font-big" th:case="SCIENTIST" th:text="${'Research Department, ' + user.position}"></div>
             <div class="font-big" th:case="SECURITY" th:text="${'Security and Protection, ' + user.position}"></div>
-            <div class="font-big" th:case="MANAGER" th:text="${'Branch of Management' + user.position}"></div>
-            <div class="font-big" th:case="ADMINISTRATOR" th:text="${'Administrative Branch' + user.position}"></div>
+            <div class="font-big" th:case="MANAGER" th:text="${'Branch of Management, ' + user.position}"></div>
+            <div class="font-big" th:case="ADMIN" th:text="${'Administrative Branch, ' + user.position}"></div>
         </div>
         <h2>Stats</h2>
         <div class="stats-item font-big">
             <div>Level</div>
             <b th:text="${user.level}"></b>
         </div>
-        <div class="stats-item font-big">
+        <div class="stats-item font-big form-item_small">
             <div>Salary</div>
             <b th:text="${user.salary}"></b>
         </div>

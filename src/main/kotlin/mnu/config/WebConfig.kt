@@ -49,8 +49,4 @@ class WebConfig : WebMvcConfigurer {
 
         return viewResolver
     }
-
-    override fun addViewControllers(registry: ViewControllerRegistry) {
-        registry.addViewController("/").setViewName("index")
-    }
 }

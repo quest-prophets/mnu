@@ -42,17 +42,19 @@
                     <span> Minor Exp. #</span><span th:text="${exp.id}"></span> <b><span th:text="${exp.title}"></span></b>
                 </span>
         </div>
-        <div th:id="${'exp-content-' + exp.id}" class="content__main">
-            <b>Examinator</b>
-            <div th:text="${exp.examinator.employee.name}"></div>
-            <div th:if="${exp.assistant}">
-                <b>Assistant</b>
-                <div th:text="${exp.assistant.employee.name}"></div>
+        <div class="flex-column-left">
+            <div th:id="${'exp-content-' + exp.id}" class="content__main">
+                <b>Examinator</b>
+                <div th:text="${exp.examinator.employee.name}"></div>
+                <div th:if="${exp.assistant}">
+                    <b class="form-item_micro">Assistant</b>
+                    <div th:text="${exp.assistant.employee.name}"></div>
+                </div>
+                <b class="form-item_micro">Submitted on </b>
+                <div class="datetime-to-format" th:text="${exp.statusDate}"></div>
+                <b class="form-item_micro">Description</b>
+                <div th:text="${exp.description}"></div>
             </div>
-            <b>Submitted on </b>
-            <div class="datetime-to-format" th:text="${exp.statusDate}"></div>
-            <b>Description</b>
-            <div th:text="${exp.description}"></div>
             <div class="flex-row">
                 <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved button_row">Accept</a>
                 <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected button_row">Reject</a>

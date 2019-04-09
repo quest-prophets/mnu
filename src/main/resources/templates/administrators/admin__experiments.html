@@ -34,16 +34,18 @@
                 </span>
         </div>
         <div th:id="${'exp-content-' + exp.id}" class="content__main">
-            <b>Examinator</b>
-            <div th:text="${exp.examinator.employee.name}"></div>
-            <div th:if="${exp.assistant}">
-                <b>Assistant</b>
-                <div th:text="${exp.assistant.employee.name}"></div>
+            <div class="flex-column-left">
+                <b>Examinator</b>
+                <div th:text="${exp.examinator.employee.name}"></div>
+                <div th:if="${exp.assistant}">
+                    <b class="form-item_micro">Assistant</b>
+                    <div th:text="${exp.assistant.employee.name}"></div>
+                </div>
+                <b class="form-item_micro">Submitted on </b>
+                <div class="datetime-to-format" th:text="${exp.statusDate}"></div>
+                <b class="form-item_micro">Description</b>
+                <div th:text="${exp.description}"></div>
             </div>
-            <b>Submitted on </b>
-            <div th:text="${exp.statusDate}"></div>
-            <b>Description</b>
-            <div th:text="${exp.description}"></div>
             <div class="form-item button-flex-row">
                 <a th:attr="data-exp-id=${exp.id}" data-action="accept" class="button approved">Accept</a>
                 <a th:attr="data-exp-id=${exp.id}" data-action="reject" class="button rejected">Reject</a>
