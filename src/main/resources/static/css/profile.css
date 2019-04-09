@@ -5,8 +5,23 @@ body {
 }
 
 .content {
-    text-align: center;
     margin-top: 100px;
+}
+
+.profile {
+    text-align: left;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+h2 {
+    margin-top: 40px;
+}
+
+.stats-item {
+    display: flex;
+    justify-content: space-between;
+    line-height: 32px;
 }
 
 .content__item {
@@ -16,7 +31,41 @@ body {
 }
 
 .content__main {
+    display: flex;
     word-break: break-word;
     text-align: center;
     padding: 12px;
+    justify-content: space-between;
+}
+
+@media (max-width: 450px) {
+    .profile {
+        max-width: 350px;
+    }
+
+    .content__item {
+        width: 330px;
+    }
+}
+
+@media (max-width: 380px) {
+    .profile {
+        max-width: 270px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .font-big {
+        font-size: 18px;
+    }
+
+    .content__item {
+        width: 250px;
+    }
+
+    .content__main {
+        flex-direction: column;
+    }
 }
