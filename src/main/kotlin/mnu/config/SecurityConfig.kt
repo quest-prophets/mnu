@@ -44,7 +44,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             .csrf().disable()
                 .authorizeRequests()
             // TODO requests for every authority (admin, client etc.)
-                .antMatchers( "/auth/login", "/auth/register", "/", "/*.ico", "/img/**", "/*.js").permitAll()
+                .antMatchers( "/auth/login", "/auth/register", "/", "/*.ico", "/img/**", "/*.js", "/bot/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
