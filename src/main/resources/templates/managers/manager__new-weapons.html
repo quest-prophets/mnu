@@ -16,10 +16,10 @@
 
 <div class="content">
     <h1>New weapon requests</h1>
-    <div class="form-item gray" th:if="${weapons == null or weapons.isEmpty()}">
+    <div class="form-item gray" th:if="${requests == null or requests.isEmpty()}">
         There are no new requests
     </div>
-    <div th:each="client: ${clients}" class="content__item content__main finished">
+    <div th:each="request: ${requests}" class="content__item content__main finished">
         <div th:text="${'Customer #' + client.id + ' ' + client.name}"></div>
         <div> Email <b th:text="${client.email}"></b></div>
     </div>

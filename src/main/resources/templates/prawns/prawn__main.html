@@ -8,12 +8,14 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="flex-column">
-    <h3>Name Name</h3>
-    <b class="font-big">JOb JOB</b>
+<div class="flex-row-left">
+    <a th:href="@{/prawn/profile}" class="flex-row-center button">
+        <img alt="profile" th:src="@{/images/profile.png}" class="icon">
+        Profile
+    </a>
 </div>
 
-<div class="flex-row-center menu-content">
+<div class="flex-row menu-content">
     <div class="flex-column">
         <div class="flex-row-center">
             <img alt="karma" th:src="@{/images/karma.png}" class="menu-item icon_big">
@@ -21,7 +23,7 @@
         </div>
         <a class="flex-column button menu-item">
             <img alt="vacancies" th:src="@{/images/job.png}" class="icon_giant">
-            Apply for a job
+            <div class="font-huge"> Apply for a job</div>
         </a>
     </div>
     <div class="flex-column">
@@ -31,7 +33,7 @@
         </div>
         <a class="flex-column button menu-item">
             <img alt="store" th:src="@{/images/prawn_cart.png}" class="icon_giant">
-            Buy items
+            <div class="font-huge"> Buy items</div>
         </a>
     </div>
 </div>

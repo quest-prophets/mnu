@@ -8,7 +8,7 @@ import javax.validation.constraints.Min
 
 @Entity
 @Table(name = "prawns")
-data class Prawn (@Column(nullable = false) var name: String = "") {
+data class Prawn(@Column(nullable = false) var name: String = "") {
     @Id
     var id: Long? = null
 
@@ -28,7 +28,8 @@ data class Prawn (@Column(nullable = false) var name: String = "") {
     @JoinColumn(name = "job_id", referencedColumnName = "id")
     var job: Vacancy? = null
 
-    @Min(0) var balance: Long = 0
+    @Min(0)
+    var balance: Long = 0
     var karma: Long = 0
     var dateOfDeath: LocalDateTime? = null
     var deathReason: DeathReason? = null
