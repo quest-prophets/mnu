@@ -260,47 +260,59 @@ class AdministratorController : ApplicationController() {
     }
 
     @PostMapping("/acceptExperiment/{id}")
-    @ResponseBody
-    fun acceptExperiment(@PathVariable id: Long): String {
+    fun acceptExperiment(@PathVariable id: Long, redirect: RedirectAttributes): String {
         val error = choiceError(id)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
 
-            if (checkedExperiment.status != ExperimentStatus.PENDING)
-                "Request has already been handled."
+            if (checkedExperiment.status != ExperimentStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:main/requests"
+            }
             else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.APPROVED
                 experimentRepository?.save(checkedExperiment)
-                "Request accepted."
+
+                redirect.addFlashAttribute("status", "Request accepted.")
+                "redirect:main/requests"
             }
 
-        } else error
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:main/requests"
+        }
     }
 
 
     @PostMapping("/rejectExperiment/{id}")
-    @ResponseBody
-    fun rejectExperiment(@PathVariable id: Long): String {
+    fun rejectExperiment(@PathVariable id: Long, redirect: RedirectAttributes): String {
         val error = choiceError(id)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
 
-            if (checkedExperiment.status != ExperimentStatus.PENDING)
-                "Request has already been handled."
+            if (checkedExperiment.status != ExperimentStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:main/requests"
+            }
             else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.REJECTED
                 experimentRepository?.save(checkedExperiment)
-                "Request rejected."
+
+                redirect.addFlashAttribute("status", "Request rejected.")
+                "redirect:main/requests"
             }
 
-        } else error
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:main/requests"
+        }
     }
 
     @PostMapping("/undoExperimentChoice/{id}")
     @ResponseBody
-    fun undoExpChoice(@PathVariable id: Long): String {
+    fun undoExpChoice(@PathVariable id: Long, redirect: RedirectAttributes): String {
         val error = choiceError(id)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
@@ -308,9 +320,14 @@ class AdministratorController : ApplicationController() {
             checkedExperiment.statusDate = LocalDateTime.now()
             checkedExperiment.status = ExperimentStatus.PENDING
             experimentRepository?.save(checkedExperiment)
-            "Undone."
 
-        } else error
+            redirect.addFlashAttribute("status", "Undone.")
+            "redirect:main/requests"
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:main/requests"
+        }
     }
 
     @PostMapping("/appointResolvers")

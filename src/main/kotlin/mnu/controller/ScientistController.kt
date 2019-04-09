@@ -1,33 +1,21 @@
 package mnu.controller
 
-import mnu.form.NewArticleForm
-import mnu.form.NewExperimentForm
-import mnu.form.NewPasswordForm
-import mnu.form.NewReportForm
+import mnu.form.*
 import mnu.model.Article
 import mnu.model.Experiment
-import mnu.model.employee.ScientistEmployee
-import mnu.model.enums.ExperimentStatus
-import mnu.model.enums.ExperimentType
-import mnu.model.enums.RequestStatus
-import mnu.model.enums.WeaponType
+import mnu.model.enums.*
 import mnu.model.request.NewWeaponRequest
 import mnu.model.request.Request
-import mnu.repository.ArticleRepository
-import mnu.repository.CashRewardRepository
-import mnu.repository.ExperimentRepository
-import mnu.repository.WeaponRepository
+import mnu.repository.*
 import mnu.repository.employee.ScientistEmployeeRepository
 import mnu.repository.request.NewWeaponRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Controller
 @RequestMapping("/sci")
@@ -181,8 +169,7 @@ class ScientistController : ApplicationController() {
     }
 
     @PostMapping("/report")
-    @ResponseBody
-    fun addReport(@ModelAttribute form: NewReportForm, principal: Principal): String {
+    fun addReport(@ModelAttribute form: NewReportForm, principal: Principal, redirect: RedirectAttributes): String {
         val error = reportAccessError(form.experimentId.toLong(), principal)
         if (error == null) {
             val experiment = experimentRepository?.findById(form.experimentId.toLong())!!
@@ -193,13 +180,17 @@ class ScientistController : ApplicationController() {
                         this.result = form.result
                         this.status = ExperimentStatus.FINISHED
                     })
-                    return "Report submitted."
+                    redirect.addFlashAttribute("status", "Report submitted.")
+                    return "redirect:main"
                 }
 
                 1 -> {
                     val possibleWeapon = weaponRepository?.findById(form.weaponId.toLong())!!
-                    return if (!possibleWeapon.isPresent)
-                        "Such weapon does not exist."
+                    return if (!possibleWeapon.isPresent) {
+                        redirect.addFlashAttribute("form", form)
+                        redirect.addFlashAttribute("error", "Such weapon does not exist.")
+                        "redirect:report"
+                    }
                     else {
                         val weapon = possibleWeapon.get()
                         weapon.quantity += form.weaponQuantity1.toLong()
@@ -209,7 +200,9 @@ class ScientistController : ApplicationController() {
                             this.result = form.result
                             this.status = ExperimentStatus.FINISHED
                         })
-                        "Report submitted and weapon added to the arsenal."
+                        redirect.addFlashAttribute("status", "Report submitted and weapon added to the arsenal.")
+                        "redirect:main"
+
                     }
                 }
 
@@ -224,16 +217,29 @@ class ScientistController : ApplicationController() {
                         "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
                         "sniper_rifle" -> WeaponType.SNIPER_RIFLE
                         "alien" -> WeaponType.ALIEN
-                        else -> return "Such weapon type does not exist."
+                        else -> {
+                            redirect.addFlashAttribute("form", form)
+                            redirect.addFlashAttribute("error", "Such weapon type does not exist.")
+                            return "redirect:report"
+                        }
                     }
 
                     when {
-                        form.weaponLevel.toInt() < 1 || form.weaponLevel.toInt() > 10 ->
-                            return "Please enter weapon access level between 1-10."
-                        form.weaponQuantity2.toLong() < 1 ->
-                            return "Please enter a valid quantity of this weapon."
-                        form.weaponPrice.toDouble() < 1 ->
-                            return "Please enter a valid price for this weapon."
+                        form.weaponLevel.toInt() < 1 || form.weaponLevel.toInt() > 10 -> {
+                            redirect.addFlashAttribute("form", form)
+                            redirect.addFlashAttribute("error", "Please enter weapon access level between 1-10.")
+                            return "redirect:report"
+                        }
+                        form.weaponQuantity2.toLong() < 1 -> {
+                            redirect.addFlashAttribute("form", form)
+                            redirect.addFlashAttribute("error", "Please enter a valid quantity of this weapon.")
+                            return "redirect:report"
+                        }
+                        form.weaponPrice.toDouble() < 1 -> {
+                            redirect.addFlashAttribute("form", form)
+                            redirect.addFlashAttribute("error", "Please enter a valid price for this weapon.")
+                            return "redirect:report"
+                        }
                     }
 
                     val newWeaponRequest = NewWeaponRequest(
@@ -247,7 +253,8 @@ class ScientistController : ApplicationController() {
                         this.result = form.result
                         this.status = ExperimentStatus.FINISHED
                     })
-                    return "Report submitted. Await for supervisor's decision."
+                    redirect.addFlashAttribute("status", "Report submitted. Await for supervisor's decision.")
+                    return "redirect:main"
 
                 }
             }
@@ -258,12 +265,13 @@ class ScientistController : ApplicationController() {
     }
 
     @PostMapping("/article")
-    @ResponseBody
-    fun addArticle(@ModelAttribute form: NewArticleForm, principal: Principal): String {
+    fun addArticle(@ModelAttribute form: NewArticleForm, principal: Principal, redirect: RedirectAttributes): String {
         val user = userRepository?.findByLogin(principal.name)
         val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
         articleRepository?.save(Article(form.title, form.article).apply { this.scientist = currentScientist })
-        return "Article added."
+
+        redirect.addFlashAttribute("status", "Article added.")
+        return "redirect:main"
     }
 
     fun choiceError(experimentId: Long, principal: Principal): String? {
@@ -285,47 +293,57 @@ class ScientistController : ApplicationController() {
     }
 
     @PostMapping("/acceptExperiment/{id}")
-    @ResponseBody
-    fun acceptExperiment(@PathVariable id: Long, principal: Principal): String {
+    fun acceptExperiment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val error = choiceError(id, principal)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
 
-            if (checkedExperiment.status != ExperimentStatus.PENDING)
-                "Request has already been handled."
-            else {
+            if (checkedExperiment.status != ExperimentStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:main/requests"
+            } else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.APPROVED
                 experimentRepository?.save(checkedExperiment)
-                "Request accepted."
+
+                redirect.addFlashAttribute("status", "Request accepted.")
+                "redirect:main/requests"
             }
 
-        } else error
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:main/requests"
+        }
     }
 
 
     @PostMapping("/rejectExperiment/{id}")
-    @ResponseBody
-    fun rejectExperiment(@PathVariable id: Long, principal: Principal): String {
+    fun rejectExperiment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val error = choiceError(id, principal)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
 
-            if (checkedExperiment.status != ExperimentStatus.PENDING)
-                "Request has already been handled."
+            if (checkedExperiment.status != ExperimentStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:main/requests"
+            }
             else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.REJECTED
                 experimentRepository?.save(checkedExperiment)
-                "Request rejected."
+
+                redirect.addFlashAttribute("status", "Request rejected.")
+                "redirect:main/requests"
             }
 
-        } else error
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:main/requests"
+        }
     }
 
     @PostMapping("/undoExperimentChoice/{id}")
-    @ResponseBody
-    fun undoExpChoice(@PathVariable id: Long, principal: Principal): String {
+    fun undoExpChoice(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val error = choiceError(id, principal)
         return if (error == null) {
             val checkedExperiment = experimentRepository?.findById(id)!!.get()
@@ -333,8 +351,13 @@ class ScientistController : ApplicationController() {
             checkedExperiment.statusDate = LocalDateTime.now()
             checkedExperiment.status = ExperimentStatus.PENDING
             experimentRepository?.save(checkedExperiment)
-            "Undone."
 
-        } else error
+            redirect.addFlashAttribute("status", "Undone.")
+            "redirect:main/requests"
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:main/requests"
+        }
     }
 }
