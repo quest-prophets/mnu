@@ -47,7 +47,7 @@ class ScientistController : ApplicationController() {
     @GetMapping("/main/articles")
     fun mainArticles(model: Model, principal: Principal): String {
         val user = userRepository?.findByLogin(principal.name)!!
-        model.addAttribute("articles", articleRepository?.findAllByScientistId(user.id!!))
+        model.addAttribute("articles", articleRepository?.findAllByScientistIdOrderByCreationDateDesc(user.id!!))
         return "scientists/sci__main_articles.html"
     }
 

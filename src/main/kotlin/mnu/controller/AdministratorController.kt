@@ -71,8 +71,7 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/articles")
     fun adminArticles(model: Model): String {
-        model.addAttribute("articles", articleRepository?.findAll())
-        model.addAttribute("form", CashRewardForm())
+        model.addAttribute("articles", articleRepository?.findAllByOrderByCreationDateDesc())
         return "administrators/admin__articles.html"
     }
 
