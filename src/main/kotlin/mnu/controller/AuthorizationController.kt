@@ -69,12 +69,14 @@ class AuthorizationController {
 
     @PostMapping("/register")
     @ResponseBody
-    fun addUser(@ModelAttribute form: ClientRegistrationForm): String {
+    fun addUser(@ModelAttribute form: ClientRegistrationForm, redirect: RedirectAttributes): String {
         val existingUser = userRepository?.findByLogin(form.username)
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
 
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
-            "Only latin letters, numbers and underscore are supported."
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
+            "redirect:/auth/register"
         } else {
 
             val passwordEncoder = BCryptPasswordEncoder()
@@ -82,7 +84,9 @@ class AuthorizationController {
             form.password = encodedPassword
 
             return if (existingUser != null) {
-                "Username '${form.username}' is already taken. Please try again."
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Username '${form.username}' is already taken. Please try again.")
+                "redirect:/auth/register"
             } else {
                 val role = when (form.type) {
                     "customer" -> Role.CUSTOMER
@@ -108,7 +112,9 @@ class AuthorizationController {
                 userRepository?.save(newUser)
                 clientRepository?.save(newClientUser)
 
-                "redirect:index.html" // ЧТО ЭТО ТАКОЕ
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("status", "Successfully registered. You may now login.")
+                "redirect:/auth/login"
             }
         }
     }

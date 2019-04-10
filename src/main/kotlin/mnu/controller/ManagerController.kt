@@ -84,17 +84,22 @@ class ManagerController : ApplicationController() {
 
     @PostMapping("/registerPrawn")
     @ResponseBody
-    fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, principal: Principal): String {
+    fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, principal: Principal, redirect: RedirectAttributes): String {
         val curUser = userRepository?.findByLogin(principal.name)!!
         val possibleManager = managerEmployeeRepository?.findById(curUser.id!!)!!
-        if (possibleManager.isPresent)
-            return "You are not a manager."
+        if (possibleManager.isPresent) {
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "You are not a manager.")
+            return "redirect:/"
+        }
 
         val existingUser = userRepository?.findByLogin(form.username)
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
 
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
-            "Only latin letters, numbers, \"_\" and \".\" are supported."
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
+            "redirect:/man/prawns"
         } else {
 
             val passwordEncoder = BCryptPasswordEncoder()
@@ -102,7 +107,9 @@ class ManagerController : ApplicationController() {
             form.password = encodedPassword
 
             return if (existingUser != null) {
-                "Username '${form.username}' is already taken. Please try again."
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Username '${form.username}' is already taken. Please try again.")
+                "redirect:/man/prawns"
             } else {
                 val houseIdList = districtHouseRepository?.getAllIds()!!
 
@@ -118,7 +125,9 @@ class ManagerController : ApplicationController() {
                 userRepository?.save(newUser)
                 prawnRepository?.save(newPrawn)
 
-                "Successfully registered a new prawn."
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("status", "Successfully registered a new prawn.")
+                "redirect:/man/main"
             }
         }
     }
