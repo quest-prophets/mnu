@@ -1,3 +1,5 @@
+@import "../common.css";
+
 body {
     font-family: "Helvetica", sans-serif;
     font-size: 17px;
@@ -55,7 +57,7 @@ body {
     width: 220px;
 }
 
-.security-grid__security-buttons{
+.security-grid__security-buttons {
     grid-area: security-buttons;
     margin-top: 10px;
 }
@@ -64,7 +66,7 @@ body {
     margin-right: 30px;
 }
 
-.security-buttons_report{
+.security-buttons_report {
     margin-right: 10px;
 }
 
@@ -97,7 +99,7 @@ body {
         margin-right: 0;
     }
 
-    .security-flex-row{
+    .security-flex-row {
         justify-content: center;
     }
 }
@@ -107,11 +109,11 @@ body {
         grid: "header" 60px "security-buttons" 160px "content";
     }
 
-    .security-flex-row{
+    .security-flex-row {
         flex-direction: column;
     }
 
-    .security-buttons__change{
+    .security-buttons__change {
         margin: 15px auto 20px auto;
     }
 }

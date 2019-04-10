@@ -1,5 +1,5 @@
-@import url("../common.css");
-@import url("../mobile-burger.css");
+@import "../common.css";
+@import "../mobile-burger.css";
 
 body {
     margin: 0;

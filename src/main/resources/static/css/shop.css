@@ -107,6 +107,10 @@ a:hover {
         width: 20vw;
     }
 
+    .shop-icon {
+        margin: 0;
+    }
+
     .header-mobile-border {
         border-bottom: 2px solid black;
     }

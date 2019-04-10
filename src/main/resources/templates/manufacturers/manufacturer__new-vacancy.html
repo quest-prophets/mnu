@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/manufacturers/manufacturer__new-item.css}">
+    <title>MNU</title>
+</head>
+<body>
+<div class="fixed-header fixed-header_small">
+    <div id="header_mobile" class="flex-row-center-left">
+        <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
+        <div class="mobile-title">Suggest vacancy</div>
+    </div>
+    <div id="mobile-menu" class="mobile-buttons-row">
+        <a th:href="@{/}">
+            <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
+        </a>
+        <a th:href="@{/}" class="grid-button button button_back_mobile">Market</a>
+        <a th:href="@{/manufacturer/newProduct}" class="grid-button button"> Suggest product</a>
+        <div class="grid-button button button_pressed"> Suggest vacancy</div>
+    </div>
+</div>
+
+<script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
+</body>
+</html>
