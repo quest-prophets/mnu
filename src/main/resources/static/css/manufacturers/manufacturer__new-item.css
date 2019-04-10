@@ -17,7 +17,7 @@ body {
 }
 
 .submit{
-    margin: auto;
+    margin: 20px auto;
 }
 
 .content {
@@ -40,5 +40,9 @@ body {
     .grid-button {
         width: 80vw;
         margin: 15px auto;
+    }
+
+    .content{
+        margin: 120px auto auto;
     }
 }

@@ -25,7 +25,7 @@
 
 <div class="content flex-column">
     <div class="font-big">
-        You can suggest a new product here and it will appear on the market after our manager's approval.
+        You can suggest a new product here and it will appear on the market after our administrator's approval.
     </div>
     <form action="#" th:action="@{/UNKNOWN}" th:object="${form}" method="post" class="content_form flex-column-left">
         <label class="form-item_big">
@@ -58,7 +58,7 @@
             <b>Access level</b>
             <input id="accessLvl" name="accessLvl" class="input_big" required type="number" min="1" max="10" step="1">
         </label>
-        <input type="submit" class="button form-item submit" value="Suggest">
+        <input type="submit" class="button submit" value="Suggest">
     </form>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
