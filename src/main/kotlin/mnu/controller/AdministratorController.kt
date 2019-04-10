@@ -8,6 +8,7 @@ import mnu.model.request.NewWeaponRequest
 import mnu.repository.*
 import mnu.repository.employee.*
 import mnu.repository.request.NewWeaponRequestRepository
+import mnu.repository.request.VacancyApplicationRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -30,6 +31,11 @@ class AdministratorController : ApplicationController() {
     val weaponRepository: WeaponRepository? = null
     @Autowired
     val newWeaponRequestRepository: NewWeaponRequestRepository? = null
+
+    @Autowired
+    val vacancyRepository: VacancyRepository? = null
+    @Autowired
+    val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository? = null
 
     @Autowired
     val articleRepository: ArticleRepository? = null
@@ -496,6 +502,101 @@ class AdministratorController : ApplicationController() {
             "Success. All security employees will be notified of the occurred incident."
         )
         return "redirect:/admin/district"
+    }
+
+    fun jobApplicationChoiceError(jobAppRequestId: Long, principal: Principal): String? {
+        val request = vacancyApplicationRequestRepository?.findById(jobAppRequestId)!!
+        if (!request.isPresent)
+            return "Request with such id does not exist."
+        return null
+    }
+
+    @PostMapping("/acceptJobApplication/{id}")
+    fun acceptJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = jobApplicationChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = vacancyApplicationRequestRepository?.findById(id)!!.get()
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:/admin/jobApplications"
+            } else {
+
+                if (checkedRequest.vacancy?.vacantPlaces!! == 0L) {
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.REJECTED
+                        this.resolver = currentAdmin
+                    }
+                    vacancyApplicationRequestRepository?.save(checkedRequest)
+                    redirect.addFlashAttribute("error", "No vacant places left, request cannot be satisfied.")
+                    return "redirect:/admin/jobApplications"
+                }
+
+                val prawn = checkedRequest.prawn!!
+
+                val prawnLastJob = prawn.job
+                if (prawnLastJob != null) {
+                    prawnLastJob.vacantPlaces++
+                    vacancyRepository?.save(prawnLastJob)
+                }
+
+                val prawnNewJob = checkedRequest.vacancy
+                if (prawnNewJob != null) {
+                    prawnNewJob.vacantPlaces--
+                    vacancyRepository?.save(prawnNewJob)
+                }
+
+                prawn.job = checkedRequest.vacancy
+
+                checkedRequest.request!!.apply {
+                    this.statusDate = LocalDateTime.now()
+                    this.status = RequestStatus.ACCEPTED
+                    this.resolver = currentAdmin
+                }
+                prawnRepository?.save(prawn)
+                vacancyApplicationRequestRepository?.save(checkedRequest)
+                redirect.addFlashAttribute("status", "Request accepted.")
+                "redirect:/admin/jobApplications"
+            }
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/admin/jobApplications"
+        }
+    }
+
+    @PostMapping("/rejectJobApplication/{id}")
+    fun rejectJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = jobApplicationChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = vacancyApplicationRequestRepository?.findById(id)!!.get()
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:/admin/jobApplications"
+            } else {
+                checkedRequest.request!!.apply {
+                    this.statusDate = LocalDateTime.now()
+                    this.status = RequestStatus.REJECTED
+                    this.resolver = currentAdmin
+                }
+                vacancyApplicationRequestRepository?.save(checkedRequest)
+
+                redirect.addFlashAttribute("status", "Request rejected.")
+                "redirect:/admin/jobApplications"
+            }
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/admin/jobApplications"
+        }
     }
 
 }

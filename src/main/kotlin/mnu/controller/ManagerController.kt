@@ -12,6 +12,7 @@ import mnu.repository.employee.ManagerEmployeeRepository
 import mnu.repository.employee.SecurityEmployeeRepository
 import mnu.repository.request.ChangeEquipmentRequestRepository
 import mnu.repository.request.NewWeaponRequestRepository
+import mnu.repository.request.VacancyApplicationRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -43,6 +44,11 @@ class ManagerController : ApplicationController() {
 
     @Autowired
     val changeEquipmentRequestRepository: ChangeEquipmentRequestRepository? = null
+
+    @Autowired
+    val vacancyRepository: VacancyRepository? = null
+    @Autowired
+    val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository? = null
 
     @GetMapping("/main")
     fun manMenu() = "managers/manager__main.html"
@@ -133,7 +139,7 @@ class ManagerController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:requests" //todo
+                "redirect:/man/newEquipment" //todo
             } else {
                 when {
                     checkedRequest.weapon?.quantity!! == 0L -> {
@@ -144,7 +150,7 @@ class ManagerController : ApplicationController() {
                         }
                         changeEquipmentRequestRepository?.save(checkedRequest)
                         redirect.addFlashAttribute("error", "Weapon is out of stock, request cannot be satisfied.")
-                        return "redirect:equipment" //todo
+                        return "redirect:/man/newEquipment" //todo
                     }
                     checkedRequest.transport?.quantity!! == 0L -> {
                         checkedRequest.request!!.apply {
@@ -154,7 +160,7 @@ class ManagerController : ApplicationController() {
                         }
                         changeEquipmentRequestRepository?.save(checkedRequest)
                         redirect.addFlashAttribute("error", "Transport is out of stock, request cannot be satisfied.")
-                        return "redirect:equipment" //todo
+                        return "redirect:/man/newEquipment" //todo
                     }
                 }
 
@@ -193,12 +199,12 @@ class ManagerController : ApplicationController() {
                 securityEmployeeRepository?.save(securityEmployee)
                 changeEquipmentRequestRepository?.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
-                "redirect:requests"
+                "redirect:/man/newEquipment"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:requests" //todo
+            "redirect:/man/newEquipment" //todo
         }
     }
 
@@ -213,7 +219,7 @@ class ManagerController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:requests"
+                "redirect:/man/newEquipment"
             } else {
                 checkedRequest.request!!.apply {
                     this.statusDate = LocalDateTime.now()
@@ -223,12 +229,12 @@ class ManagerController : ApplicationController() {
                 changeEquipmentRequestRepository?.save(checkedRequest)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
-                "redirect:requests"
+                "redirect:/man/newEquipment"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:requests"
+            "redirect:/man/newEquipment"
         }
     }
 
@@ -333,6 +339,110 @@ class ManagerController : ApplicationController() {
         } else {
             redirect.addFlashAttribute("error", error)
             "redirect:/man/newWeapons"
+        }
+    }
+
+    fun jobApplicationChoiceError(jobAppRequestId: Long, principal: Principal): String? {
+        val request = vacancyApplicationRequestRepository?.findById(jobAppRequestId)!!
+        if (!request.isPresent)
+            return "Request with such id does not exist."
+        return null
+    }
+
+    @PostMapping("/acceptJobApplication/{id}")
+    fun acceptJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentManager = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = jobApplicationChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = vacancyApplicationRequestRepository?.findById(id)!!.get()
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:/man/jobApplications"
+            } else {
+                if (checkedRequest.prawn!!.manager != managerEmployeeRepository?.findById(currentManager!!.id!!)!!.get()) {
+                    redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
+                    return "redirect:/man/jobApplications"
+                }
+
+                if (checkedRequest.vacancy?.vacantPlaces!! == 0L) {
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.REJECTED
+                        this.resolver = currentManager
+                    }
+                    vacancyApplicationRequestRepository?.save(checkedRequest)
+                    redirect.addFlashAttribute("error", "No vacant places left, request cannot be satisfied.")
+                    return "redirect:/man/jobApplications"
+                }
+
+                val prawn = checkedRequest.prawn!!
+
+                val prawnLastJob = prawn.job
+                if (prawnLastJob != null) {
+                    prawnLastJob.vacantPlaces++
+                    vacancyRepository?.save(prawnLastJob)
+                }
+
+                val prawnNewJob = checkedRequest.vacancy
+                if (prawnNewJob != null) {
+                    prawnNewJob.vacantPlaces--
+                    vacancyRepository?.save(prawnNewJob)
+                }
+
+                prawn.job = checkedRequest.vacancy
+
+                checkedRequest.request!!.apply {
+                    this.statusDate = LocalDateTime.now()
+                    this.status = RequestStatus.ACCEPTED
+                    this.resolver = currentManager
+                }
+                prawnRepository?.save(prawn)
+                vacancyApplicationRequestRepository?.save(checkedRequest)
+                redirect.addFlashAttribute("status", "Request accepted.")
+                "redirect:/man/jobApplications"
+            }
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/man/jobApplications"
+        }
+    }
+
+    @PostMapping("/rejectJobApplication/{id}")
+    fun rejectJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentManager = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = jobApplicationChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = vacancyApplicationRequestRepository?.findById(id)!!.get()
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:/man/jobApplications"
+            } else {
+                if (checkedRequest.prawn!!.manager != managerEmployeeRepository?.findById(currentManager!!.id!!)!!.get()) {
+                    redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
+                    return "redirect:/man/jobApplications"
+                }
+
+                checkedRequest.request!!.apply {
+                    this.statusDate = LocalDateTime.now()
+                    this.status = RequestStatus.REJECTED
+                    this.resolver = currentManager
+                }
+                vacancyApplicationRequestRepository?.save(checkedRequest)
+
+                redirect.addFlashAttribute("status", "Request rejected.")
+                "redirect:/man/jobApplications"
+            }
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/man/jobApplications"
         }
     }
 
