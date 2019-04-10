@@ -102,7 +102,7 @@ class AdministratorController : ApplicationController() {
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
             redirect.addFlashAttribute("form", form)
             redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
-            "redirect:employee"
+            "redirect:/admin/employee"
         } else {
 
             val passwordEncoder = BCryptPasswordEncoder()
@@ -112,7 +112,7 @@ class AdministratorController : ApplicationController() {
             return if (existingUser != null) {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Username '${form.username}' is already taken. Please try again.")
-                return "redirect:employee"
+                return "redirect:/admin/employee"
             } else {
                 val role = when (form.type) {
                     "manager" -> Role.MANAGER
@@ -151,7 +151,7 @@ class AdministratorController : ApplicationController() {
 
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("status", "Successfully registered a new employee.")
-                "redirect:employee"
+                "redirect:/admin/employee"
             }
         }
     }
@@ -169,7 +169,7 @@ class AdministratorController : ApplicationController() {
         ) {
             redirect.addFlashAttribute("form", form)
             redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
-            return "redirect:employee"
+            return "redirect:/admin/employee"
         }
 
         val newStatus = when (form.status_edit) {
@@ -179,7 +179,7 @@ class AdministratorController : ApplicationController() {
             else -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such status does not exist.")
-                return "redirect:employee"
+                return "redirect:/admin/employee"
             }
         }
         totallyExistingEmployee.name = form.name_edit
@@ -192,7 +192,7 @@ class AdministratorController : ApplicationController() {
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Successfully edited.")
-        return "redirect:employee"
+        return "redirect:/admin/employee"
 
     }
 
@@ -202,13 +202,13 @@ class AdministratorController : ApplicationController() {
         if (!existingEmployee.isPresent) {
             redirect.addFlashAttribute("form", form)
             redirect.addFlashAttribute("error", "Employee with such id does not exist.")
-            return "redirect:employee"
+            return "redirect:/admin/employee"
         }
         val totallyExistingEmployee = existingEmployee.get()
         if (form.reward == "") {
             redirect.addFlashAttribute("form", form)
             redirect.addFlashAttribute("error", "Please fill the reward field.")
-            return "redirect:employee"
+            return "redirect:/admin/employee"
         }
         val newReward = CashReward(totallyExistingEmployee, form.reward.toLong())
 
@@ -216,7 +216,7 @@ class AdministratorController : ApplicationController() {
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Reward given.")
-        return "redirect:employee"
+        return "redirect:/admin/employee"
     }
 
     data class ScientistRewardForArticle (var employeeId: String = "", var reward: String = "")
@@ -248,7 +248,7 @@ class AdministratorController : ApplicationController() {
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
             redirect.addFlashAttribute("form", form)
             redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
-            "redirect:prawns"
+            "redirect:/admin/prawns"
         } else {
 
             val passwordEncoder = BCryptPasswordEncoder()
@@ -258,7 +258,7 @@ class AdministratorController : ApplicationController() {
             return if (existingUser != null) {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Username '${form.username}' is already taken. Please try again.")
-                "redirect:prawns"
+                "redirect:/admin/prawns"
             } else {
                 val houseIdList = districtHouseRepository?.getAllIds()!!
 
@@ -276,7 +276,7 @@ class AdministratorController : ApplicationController() {
 
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("status", "Successfully registered a new prawn.")
-                "redirect:main"
+                "redirect:/admin/main"
             }
         }
     }
@@ -300,7 +300,7 @@ class AdministratorController : ApplicationController() {
 
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/experiments"
+                "redirect:/admin/experiments"
             }
             else {
                 checkedExperiment.statusDate = LocalDateTime.now()
@@ -308,12 +308,12 @@ class AdministratorController : ApplicationController() {
                 experimentRepository?.save(checkedExperiment)
 
                 redirect.addFlashAttribute("status", "Request accepted.")
-                "redirect:main/experiments"
+                "redirect:/admin/experiments"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/experiments"
+            "redirect:/admin/experiments"
         }
     }
 
@@ -326,7 +326,7 @@ class AdministratorController : ApplicationController() {
 
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/experiments"
+                "redirect:/admin/experiments"
             }
             else {
                 checkedExperiment.statusDate = LocalDateTime.now()
@@ -334,12 +334,12 @@ class AdministratorController : ApplicationController() {
                 experimentRepository?.save(checkedExperiment)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
-                "redirect:main/experiments"
+                "redirect:/admin/experiments"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/experiments"
+            "redirect:/admin/experiments"
         }
     }
 
@@ -355,11 +355,11 @@ class AdministratorController : ApplicationController() {
             experimentRepository?.save(checkedExperiment)
 
             redirect.addFlashAttribute("status", "Undone.")
-            "redirect:main/experiments"
+            "redirect:/admin/experiments"
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/experiments"
+            "redirect:/admin/experiments"
         }
     }
 
@@ -381,7 +381,7 @@ class AdministratorController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/newWeapons"
+                "redirect:/admin/newWeapons"
             } else {
                 checkedRequest.request!!.apply {
                     this.statusDate = LocalDateTime.now()
@@ -395,12 +395,12 @@ class AdministratorController : ApplicationController() {
 
                 newWeaponRequestRepository?.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
-                "redirect:main/newWeapons"
+                "redirect:/admin/newWeapons"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/newWeapons"
+            "redirect:/admin/newWeapons"
         }
     }
 
@@ -416,7 +416,7 @@ class AdministratorController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/newWeapons"
+                "redirect:/admin/newWeapons"
             } else {
                 checkedRequest.request!!.apply {
                     this.statusDate = LocalDateTime.now()
@@ -426,12 +426,12 @@ class AdministratorController : ApplicationController() {
                 newWeaponRequestRepository?.save(checkedRequest)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
-                "redirect:main/newWeapons"
+                "redirect:/admin/newWeapons"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/newWeapons"
+            "redirect:/admin/newWeapons"
         }
     }
 
@@ -459,11 +459,11 @@ class AdministratorController : ApplicationController() {
             newWeaponRequestRepository?.save(checkedRequest)
 
             redirect.addFlashAttribute("status", "Undone.")
-            "redirect:main/newWeapons"
+            "redirect:/admin/newWeapons"
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/newWeapons"
+            "redirect:/admin/newWeapons"
         }
     }
 
@@ -474,12 +474,12 @@ class AdministratorController : ApplicationController() {
             form.incidentId == "" || form.securityNeeded == "" || form.levelFrom == "" || form.levelTo == "" -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
-                return "redirect:district"
+                return "redirect:/admin/district"
             }
             !incident.isPresent -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such incident does not exist.")
-                return "redirect:district"
+                return "redirect:/admin/district"
             }
         }
 
@@ -495,7 +495,7 @@ class AdministratorController : ApplicationController() {
             "status",
             "Success. All security employees will be notified of the occurred incident."
         )
-        return "redirect:district"
+        return "redirect:/admin/district"
     }
 
 }
