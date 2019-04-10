@@ -7,45 +7,63 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/customers/customer__shop.css}">
     <title>MNU</title>
 </head>
-<body style="margin: 7px 0">
-<div class="shop-header">
+<body>
+<div class="desktop-header fixed-header fixed-header_small flex-row-between">
     <a class="feedback">Feedback</a>
-    <span class="shop-header-flex-row">You are logged in as ****
-            <img alt="Profile settings" class="shop-icon" th:src="@{/images/profile.png}">
-            <img alt="History" class="shop-icon" th:src="@{/images/history.svg}">
-            <img alt="Cart" class="shop-icon cart" th:src="@{/images/cart.png}">
+    <span class="flex-row-center">You are logged in as ****
+            <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
+            <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
+            <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
         </span>
 </div>
-<div class="shop-grid">
-    <div class="shop-grid__departments-title flex-column">
+
+<div id="header_mobile" class="flex-row-center-left">
+    <img id="burger" alt="departments" class="shop-icon icon burger" th:src="@{/images/burger.png}">
+    <div class="mobile-title">CATEGORY</div>
+</div>
+
+<div class="grid">
+    <div class="grid__departments-title flex-column">
         Departments
     </div>
-    <div class="shop-grid__departments">
-        <div></div>
-    </div>
-    <div class="shop-grid__search-bar">
+    <div class="grid__search-bar flex-row-between">
         <span>
-            <input type="search" class="shop-grid__search-bar_input input_big" placeholder="Search..."
-            ><button class="shop-grid__search-bar_button button">Go!</button>
+            <input type="search" class="search-bar-input" placeholder="Search..."
+            ><button class="search-bar-button button">Go!</button>
         </span>
-        <span class="shop-grid__search-bar_sorter">Sort by: <select class="input_big">
-            <option selected>Price (asc.)</option>
-            <option>Price (desc.)</option>
-            <option>???</option>
-            <option>???</option>
-        </select>
-        </span>
+        <label class="search-bar-sorter flex-row-center">
+            Sort by: &nbsp;
+            <select class="input_big">
+                <option selected>Price (asc.)</option>
+                <option>Price (desc.)</option>
+                <option>???</option>
+                <option>???</option>
+            </select>
+        </label>
     </div>
-    <div class="shop-grid__shop-catalogue">
+
+    <div id="mobile-menu" class="grid__departments flex-column">
+        <a th:href="@{/}"> Melee weapons </a>
+        <a th:href="@{/}" class="form-item_big"> Pistols </a>
+        <a th:href="@{/}" class="form-item_big"> SMGs </a>
+        <a th:href="@{/}" class="form-item_big"> Assault riffles </a>
+        <a th:href="@{/}" class="form-item_big"> Light machine guns </a>
+        <a th:href="@{/}" class="form-item_big"> Sniper rifles </a>
+        <a th:href="@{/}" class="form-item_big"> Alien weapon </a>
+        <a th:href="@{/}" class="form-item_big"> Land transport </a>
+        <a th:href="@{/}" class="form-item_big"> Air transport </a>
     </div>
-    <img alt="departments" class="shop-icon burger" th:src="@{/images/burger.png}">
-    <div class="flex-column department-title">Light weapons</div>
+
+    <div class="grid__catalogue">
+    </div>
 </div>
-<div class="shop-mobile-footer">
-    <img alt="Profile settings" class="shop-icon profile_mobile" th:src="@{/images/profile.png}">
-    <img alt="History" class="shop-icon history_mobile" th:src="@{/images/history.svg}">
-    <img alt="Cart" class="shop-icon cart_mobile" th:src="@{/images/cart.png}">
-    <img alt="Feedback" class="shop-icon feedback_mobile" th:src="@{/images/feedback.png}">
+
+<div class="mobile-footer flex-row-around">
+    <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
+    <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
+    <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
+    <img alt="Feedback" class="shop-icon icon" th:src="@{/images/feedback.png}">
 </div>
+<script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
 </html>

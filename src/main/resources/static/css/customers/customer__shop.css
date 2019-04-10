@@ -1,213 +1,130 @@
 @import url("../common.css");
+@import url("../mobile-burger.css");
 
-.shop-header-flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    float: right;
+body {
+    margin: 0;
 }
 
-.shop-grid {
+.grid {
+    margin-top: 64px;
     display: grid;
-    padding: 0 20px;
     grid: "departments-title search-bar" 60px "departments catalogue";
     grid-template-columns: 1.5fr 8.5fr;
-    column-gap: 15px;
 }
 
-.shop-grid__departments-title {
+.grid__departments-title {
     grid-area: departments-title;
-    border: 2px solid black;
-    border-top: none;
+    border-right: 2px solid black;
 }
 
-.shop-grid__search-bar {
+.grid__search-bar {
+    padding: 0 20px;
     grid-area: search-bar;
-    margin-top: 15px;
 }
 
-.shop-grid__search-bar_input {
-    margin-left: 15px;
+.search-bar-input {
+    height: 35px;
     border-radius: 10px 0 0 10px;
+    display: inline;
+    font-size: 18px;
 }
 
-.shop-grid__search-bar_button {
+.search-bar-button {
     border-radius: 0 10px 10px 0;
     padding: 3px 15px;
 }
 
-.shop-grid__search-bar_sorter {
-    float: right;
-    margin-right: 15px;
-}
-
-.shop-header {
-    border-bottom: 2px solid black;
-    height: 55px;
-}
-
-.shop-mobile-footer {
+.mobile-footer {
     display: none;
-    grid: "profile history cart feedback";
-    column-gap: 15px;
     border-top: 2px solid black;
     position: fixed;
-    left: 0;
     bottom: 0;
     width: 100%;
 }
 
-.shop-mobile-footer img {
-    margin: 5px auto auto auto;
-}
-
-.shop-grid__departments {
+.grid__departments {
+    padding: 25px 0;
     grid-area: departments;
-    overflow-y: auto;
+    border: 2px solid black;
+    border-left: none;
+    text-align: center;
 }
 
 .shop-icon {
     cursor: pointer;
-    width: 50px;
-    height: 50px;
-    margin-left: 15px;
+    margin: 0 20px
 }
 
-.cart {
-    margin-right: 20px;
-}
-
-.feedback {
-    margin-left: 20px;
+a {
     color: blue;
     font-style: italic;
     text-decoration: none;
-    top: 10px;
-    position: relative;
 }
 
-.feedback:hover {
+a:hover {
     text-decoration: underline;
 }
 
-.feedback_mobile {
-    grid-area: feedback;
-}
-
-.cart_mobile {
-    grid-area: cart;
-}
-
-.history_mobile {
-    grid-area: history;
-}
-
-.profile_mobile {
-    grid-area: profile;
-}
-
-.shop-grid__shop-catalogue {
+.grid__catalogue {
     grid-area: catalogue;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
-.burger {
-    display: none;
-    margin: auto auto auto 10px;
+#header_mobile {
+    grid-area: mobile-header;
     position: fixed;
-    top: 5px;
-    left: 0;
-}
-
-.department-title {
-    display: none;
-    text-align: center;
-    font-size: 20px;
-    grid-area: department-title;
-    height: 60px;
+    top: 0;
+    width: 100%;
 }
 
 @media (max-width: 700px) {
-    .shop-grid {
-        grid: "department-title" "search-bar" "catalogue";
+    .grid {
+        grid: "mobile-header" "search-bar" "catalogue";
         grid-template-columns: 100%;
         grid-column-gap: 0;
         padding: 0;
     }
 
-    .shop-header {
+    .desktop-header {
         display: none;
     }
 
-    .shop-mobile-footer {
-        display: grid;
-    }
-
-    .department-title {
+    .mobile-footer {
         display: flex;
     }
 
-    .burger {
-        display: block;
+    .grid__departments {
+        border: none;
+        border-bottom: 2px solid black;
+        grid-area: mobile-header;
     }
 
-    .shop-grid__departments-title {
+    .grid__departments-title {
         display: none;
     }
 
-    .shop-grid__search-bar_input {
+    .search-bar-input {
         width: 20vw;
+    }
+
+    .header-mobile-border {
+        border-bottom: 2px solid black;
     }
 }
 
 @media (max-width: 360px) {
-    .shop-grid__search-bar {
+    .grid__search-bar {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
     }
 
-    .shop-grid__search-bar_sorter {
+    .search-bar-sorter {
         margin-top: 10px;
     }
 
-    .shop-grid__search-bar_input {
+    .search-bar-input {
         width: 40vw;
-    }
-
-    .department-title {
-        margin-left: 40px;
-    }
-}
-
-@media (max-width: 260px) {
-    .shop-mobile-footer {
-        grid-column-gap: 0;
-    }
-
-    .shop-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .burger {
-        top: 10px;
-    }
-}
-
-@media (max-width: 240px) {
-    .department-title {
-        margin-top: 35px;
-        margin-left: 0;
-    }
-
-    .shop-grid__search-bar_sorter {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin-right: 0;
     }
 }
