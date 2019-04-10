@@ -24,8 +24,30 @@
     </div>
 </div>
 
-<div class="content">
-
+<div class="content flex-column">
+    <form action="#" th:action="@{/admin/addVacancy}" th:object="${form}" method="post" class="content_form flex-column-left">
+        <label class="form-item_big">
+            <b>Title</b>
+            <input id="title" name="title" class="input_big" required>
+        </label>
+        <label class="form-item">
+            <b>Salary</b>
+            <input id="salary" name="salary" class="input_big" required type="number" min="0">
+        </label>
+        <label class="form-item">
+            <b>Required karma</b>
+            <input id="requiredKarma" name="requiredKarma" class="input_big" required type="number">
+        </label>
+        <label class="form-item">
+            <b>Working hours per week</b>
+            <input id="workHoursPerWeek" name="workHoursPerWeek" class="input_big" required type="number" min="1">
+        </label>
+        <label class="form-item">
+            <b>Vacant places</b>
+            <input id="vacantPlaces" name="vacantPlaces" class="input_big" required type="number" min="1">
+        </label>
+        <input type="submit" class="button submit" value="Suggest">
+    </form>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
