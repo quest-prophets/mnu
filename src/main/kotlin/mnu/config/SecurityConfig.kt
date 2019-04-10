@@ -63,7 +63,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                     if (roles.contains("SECURITY"))
                         response.sendRedirect("/sec/main")
                     if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
-                        response.sendRedirect("/clientsShop")
+                        response.sendRedirect("/client/Shop")
                     if (roles.contains("PRAWN"))
                         response.sendRedirect("/prawn/main")
                 }}

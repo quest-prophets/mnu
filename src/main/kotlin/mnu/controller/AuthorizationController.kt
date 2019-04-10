@@ -46,7 +46,7 @@ class AuthorizationController {
             if (roles.contains("SECURITY"))
                 return "redirect:/sec/main"
             if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
-                return "redirect:/clientsShop"
+                return "redirect:/client/Shop"
             if (roles.contains("PRAWN"))
                 return "redirect:/prawn/main"
         }

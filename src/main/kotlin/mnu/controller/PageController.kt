@@ -40,7 +40,7 @@ class PageController : ApplicationController() {
             if (roles.contains("SECURITY"))
                 return "redirect:/sec/main"
             if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
-                return "redirect:/clientsShop"
+                return "redirect:/client/Shop"
             if (roles.contains("PRAWN"))
                 return "redirect:/prawn/main"
         }
@@ -55,8 +55,6 @@ class PageController : ApplicationController() {
     @GetMapping("/register")
     fun register() = "register.html"
 
-    @GetMapping("/clientsShop")
-    fun clientsShop() = "customers/customer__shop.html"
 
     @GetMapping("/profile")
     fun profile(model: Model, principal: Principal): String {
