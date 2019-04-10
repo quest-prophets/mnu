@@ -8,11 +8,19 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="flex-row-center fixed-header fixed-header_small">
-    <a th:href="@{/}">
-        <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
-    </a>
-    <h1>New weapon requests</h1>
+<div class="fixed-header fixed-header_small">
+    <div id="header_mobile" class="flex-row-center-left">
+        <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
+        <div class="mobile-title">New transport</div>
+    </div>
+    <div id="mobile-menu" class="mobile-buttons-row">
+        <a th:href="@{/}">
+            <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
+        </a>
+        <a th:href="@{/}" class="grid-button button button_back_mobile">Main menu</a>
+        <a th:href="@{/admin/newWeapons}" class="grid-button button"> New weapons</a>
+        <div class="grid-button button button_pressed"> New transport</div>
+    </div>
 </div>
 
 <div class="content">
@@ -52,10 +60,6 @@
                     <b>Quantity</b>
                     <span th:text="${request.quantity}"></span>
                 </div>
-                <div class="form-item_small" th:switch="${request.user.role.name()}">
-                    <b th:case="SCIENTIST">Synthesized</b>
-                    <b th:case="SECURITY">Confiscated</b>
-                </div>
                 <div th:id="${'weapon-buttons-' + request.id}" class="form-item button-flex-row">
                     <a th:attr="data-weapon-id=${request.id}" data-action="accept" class="button approved">Accept</a>
                     <a th:attr="data-weapon-id=${request.id}" data-action="reject" class="button rejected">Reject</a>
@@ -71,5 +75,6 @@
     </div>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/adm-man/adm-man__new-weapons.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
 </html>

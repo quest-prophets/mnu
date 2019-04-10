@@ -1,4 +1,5 @@
 @import url("../common.css");
+@import url("../mobile-burger.css");
 
 body {
     margin: 0;
@@ -51,19 +52,6 @@ body {
     height: 25px;
 }
 
-.mobile-title {
-    margin-left: 30px;
-    font-size: 20px;
-}
-
-.burger {
-    cursor: pointer;
-}
-
-#header_mobile {
-    display: none;
-}
-
 @media (max-width: 1000px) {
     .grid-button {
         font-size: 18px;
@@ -85,22 +73,6 @@ body {
 }
 
 @media (max-width: 700px) {
-    #header_mobile {
-        display: flex;
-    }
-
-    .flex-row-left {
-        align-items: center;
-    }
-
-    #mobile-menu {
-        display: none;
-    }
-
-    .flex-row {
-        flex-direction: column;
-    }
-
     .flex-row-center {
         flex-direction: column;
     }

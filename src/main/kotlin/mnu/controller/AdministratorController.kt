@@ -89,7 +89,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @GetMapping("/newWeapons")
-    fun adminNewWeapons(principal: Principal, model: Model) : String {
+    fun adminNewWeapons(principal: Principal, model: Model): String {
         val weaponRequests = newWeaponRequestRepository?.findAll()
         val requestsForAdmin = ArrayList<NewWeaponRequest>()
         weaponRequests!!.forEach {
@@ -97,7 +97,13 @@ class AdministratorController : ApplicationController() {
                 requestsForAdmin.add(it)
         }
         model.addAttribute("requests", requestsForAdmin)
-        return "managers/manager__new-weapons.html"
+        return "administrators/admin__new-weapons.html"
+    }
+
+    @GetMapping("/newTransport")
+    fun adminNewTransport(principal: Principal, model: Model): String {
+        //todo
+        return "administrators/admin__new-transport.html"
     }
 
     @PostMapping("/registerEmployee")
@@ -225,8 +231,8 @@ class AdministratorController : ApplicationController() {
         return "redirect:/admin/employee"
     }
 
-    data class ScientistRewardForArticle (var employeeId: String = "", var reward: String = "")
-    data class RewardResponse (var isError: Boolean = false, var message: String = "")
+    data class ScientistRewardForArticle(var employeeId: String = "", var reward: String = "")
+    data class RewardResponse(var isError: Boolean = false, var message: String = "")
 
     @PostMapping("/giveRewardAjax")
     @ResponseBody
@@ -307,8 +313,7 @@ class AdministratorController : ApplicationController() {
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
                 "redirect:/admin/experiments"
-            }
-            else {
+            } else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.APPROVED
                 experimentRepository?.save(checkedExperiment)
@@ -333,8 +338,7 @@ class AdministratorController : ApplicationController() {
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
                 "redirect:/admin/experiments"
-            }
-            else {
+            } else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.REJECTED
                 experimentRepository?.save(checkedExperiment)
@@ -394,8 +398,10 @@ class AdministratorController : ApplicationController() {
                     this.status = RequestStatus.ACCEPTED
                     this.resolver = currentAdmin
                 }
-                val newWeapon = Weapon(checkedRequest.name, checkedRequest.type,
-                    checkedRequest.description, checkedRequest.price, checkedRequest.requiredAccessLvl)
+                val newWeapon = Weapon(
+                    checkedRequest.name, checkedRequest.type,
+                    checkedRequest.description, checkedRequest.price, checkedRequest.requiredAccessLvl
+                )
                     .apply { this.quantity = checkedRequest.quantity }
                 weaponRepository?.save(newWeapon)
 
@@ -456,7 +462,7 @@ class AdministratorController : ApplicationController() {
                 this.resolver = currentAdmin
             }
             val weapons = weaponRepository?.findAll()!!.asReversed()
-            for(i in 0 until weapons.size) {
+            for (i in 0 until weapons.size) {
                 if (weapons[i].name == checkedRequest.name)
                     weaponRepository?.delete(weapons[i])
                 break

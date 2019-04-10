@@ -1,11 +1,3 @@
-document.getElementById("burger").addEventListener('click', e => {
-    if (document.getElementById('mobile-menu').style.display === 'none' || document.getElementById('mobile-menu').style.display === "") {
-        document.getElementById('mobile-menu').style.display = 'flex';
-    } else {
-        document.getElementById('mobile-menu').style.display = 'none';
-    }
-});
-
 document.addEventListener('click', async (e) => {
     const experimentId = e.target.dataset.expId;
     const empId = e.target.dataset.empid;

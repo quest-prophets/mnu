@@ -8,12 +8,12 @@
     <title>MNU</title>
 </head>
 <body>
-<div id="header" class="fixed-header">
-    <div id="header_mobile" class="flex-row-left">
+<div class="fixed-header">
+    <div id="header_mobile" class="flex-row-center-left">
         <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
         <div class="mobile-title">Articles</div>
     </div>
-    <div id="mobile-menu" class="flex-row">
+    <div id="mobile-menu" class="mobile-buttons-row">
         <a th:href="@{/profile}" class="flex-column button button_profile">
             Profile
         </a>
@@ -54,5 +54,6 @@
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__main.js}"></script>
 <script rel="script" type="text/javascript" th:src="@{/js/formatDateTime.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
 </html>

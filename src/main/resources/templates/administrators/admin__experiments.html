@@ -8,12 +8,12 @@
     <title>MNU</title>
 </head>
 <body>
-<div id="header" class="fixed-header fixed-header_small">
-    <div id="header_mobile" class="flex-row-left">
+<div class="fixed-header fixed-header_small">
+    <div id="header_mobile" class="flex-row-center-left">
         <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
         <div class="mobile-title">Experiments</div>
     </div>
-    <div id="mobile-menu" class="flex-row">
+    <div id="mobile-menu" class="mobile-buttons-row">
         <a th:href="@{/admin/main}">
             <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
         </a>
@@ -61,5 +61,6 @@
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/administrators/admin__experiments-articles.js}"></script>
 <script rel="script" type="text/javascript" th:src="@{/js/formatDateTime.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
 </html>
