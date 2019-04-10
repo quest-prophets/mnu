@@ -62,8 +62,10 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                         response.sendRedirect("/sci/main")
                     if (roles.contains("SECURITY"))
                         response.sendRedirect("/sec/main")
-                    if (roles.contains("CUSTOMER") || roles.contains("MANUFACTURER"))
-                        response.sendRedirect("/client/Shop")
+                    if (roles.contains("CUSTOMER"))
+                        response.sendRedirect("/client/shop")
+                    if (roles.contains("MANUFACTURER"))
+                        response.sendRedirect("/manufacturer/market")
                     if (roles.contains("PRAWN"))
                         response.sendRedirect("/prawn/main")
                 }}
@@ -93,6 +95,4 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             .usersByUsernameQuery("select login, password, 1 from users where login=?")
             .authoritiesByUsernameQuery("select u.login, u.role from users u where u.login=?")
     }
-
-
 }
