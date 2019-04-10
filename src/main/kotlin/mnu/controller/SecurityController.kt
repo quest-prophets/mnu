@@ -107,6 +107,16 @@ class SecurityController : ApplicationController() {
                 redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another transport.")
                 return "redirect:equipment"
             }
+            existingWeapon.requiredAccessLvl > currentSecurity.employee!!.level!! -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Requested weapon's access level is higher than yours.")
+                return "redirect:equipment"
+            }
+            existingTransport.requiredAccessLvl > currentSecurity.employee!!.level!! -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Requested transport's access level is higher than yours.")
+                return "redirect:equipment"
+            }
         }
 
         requestRepository?.save(newRequest)
@@ -114,8 +124,7 @@ class SecurityController : ApplicationController() {
             ChangeEquipmentRequest(currentSecurity, existingWeapon, existingTransport)
             .apply { this.request = newRequest }
         )
-
-
+        
         redirect.addFlashAttribute("status", "Request sent. Wait for supervisor's decision.")
         return "redirect:main"
     }
