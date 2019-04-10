@@ -33,7 +33,7 @@ body {
 }
 
 .button_row {
-    margin: 0 15px;
+    margin: 10px 15px;
 }
 
 .content__main {
@@ -101,6 +101,10 @@ body {
         flex-direction: column;
     }
 
+    .flex-row-center {
+        flex-direction: column;
+    }
+
     .content__item {
         width: 92%
     }
@@ -109,6 +113,10 @@ body {
         width: 80vw;
         margin-top: 25px;
         font-size: 22px;
+    }
+
+    .button_row {
+        margin: 7px 15px;
     }
 
     .button_profile {

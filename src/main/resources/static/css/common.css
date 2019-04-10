@@ -121,6 +121,11 @@ select {
     height: 55px;
 }
 
+.icon_middle {
+    width: 70px;
+    height: 70px;
+}
+
 .icon_big {
     width: 100px;
     height: 100px;
@@ -208,5 +213,5 @@ select {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
