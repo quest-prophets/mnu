@@ -108,20 +108,20 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/vacancies")
     fun allVacancies(model: Model): String {
-        //todo
+        //todo добавить в модель vacancies
         return "administrators/admin__vacancies.html"
     }
 
     @GetMapping("/vacancies/requests")
     fun vacancyRequests(model: Model): String {
-        //todo
-        return "administrators/admin__vacancies.html"
+        //todo добавить в модель requests
+        return "administrators/admin__vacancy-requests.html"
     }
 
     @GetMapping("/vacancies/new")
     fun newVacancy(model: Model): String {
         model.addAttribute("form", NewVacancyForm())
-        return "administrators/admin__vacancies.html"
+        return "administrators/admin__new-vacancy.html"
     }
 
     @PostMapping("/registerEmployee")

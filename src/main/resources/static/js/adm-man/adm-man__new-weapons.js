@@ -1,14 +1,15 @@
 document.addEventListener('click', (e) => {
     const weaponId = e.target.dataset.weaponId;
     const action = weaponId && e.target.dataset.action;
+    const role = document.getElementsByTagName("body")[0].dataset.role;
 
     if (action === "accept") {
-        fetch("/man/acceptNewWeapon/" + weaponId, {method: 'POST'})
+        fetch(`/${role}/acceptNewWeapon/` + weaponId, {method: 'POST'})
             .then(() => {
                 dealWithWeapon(true, weaponId);
             })
     } else if (action === "reject") {
-        fetch("/man/rejectNewWeapon/" + weaponId, {method: 'POST'})
+        fetch(`/${role}/rejectNewWeapon/` + weaponId, {method: 'POST'})
             .then(() => {
                 dealWithWeapon(false, weaponId);
             })
