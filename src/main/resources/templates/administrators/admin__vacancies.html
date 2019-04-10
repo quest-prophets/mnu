@@ -8,11 +8,49 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="flex-row-left">
-    <a th:href="@{/}">
-        <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
-    </a>
+<div class="fixed-header fixed-header_small">
+    <div id="header_mobile" class="flex-row-center-left">
+        <img th:src="@{/images/burger.png}" id="burger" class="burger icon">
+        <div class="mobile-title">Vacancies</div>
+    </div>
+    <div id="mobile-menu" class="mobile-buttons-row">
+        <a th:href="@{/admin/main}">
+            <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
+        </a>
+        <a th:href="@{/admin/main}" class="grid-button button button_back_mobile">Main menu</a>
+        <div class="grid-button button button_pressed"> All vacancies</div>
+        <a th:href="@{/admin/vacancies/request}" class="grid-button button"> Requests</a>
+        <a th:href="@{/admin/vacancies/new}" class="grid-button button"> New vacancy</a>
+    </div>
 </div>
 
+<div class="content">
+    <div class="flex-column form-item gray" th:if="${vacancies == null or vacancies.isEmpty()}">
+        There are no vacancies
+    </div>
+    <div class="vacancy-item" th:each="vacancy : ${vacancies}">
+        <div class="flex-column-no-center">
+            <div class="font-big" th:text="${vacancy.title}">
+            </div>
+            <div class="form-item_big flex-row-between">
+                <b>Salary</b>
+                <div th:text="${vacancy.salary}"></div>
+            </div>
+            <div class="form-item flex-row-between">
+                <b>Required karma</b>
+                <div th:text="${vacancy.requiredKarma}"></div>
+            </div>
+            <div class="form-item flex-row-between">
+                <b>Working hours/week</b>
+                <div th:text="${vacancy.workHoursPerWeek}"></div>
+            </div>
+            <div class="form-item flex-row-between">
+                <b>Places</b>
+                <div th:text="${vacancy.vacantPlaces}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
 </html>

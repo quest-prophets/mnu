@@ -143,6 +143,13 @@ select {
     align-items: center;
 }
 
+.flex-column-no-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
 .flex-column-left {
     display: flex;
     flex-direction: column;

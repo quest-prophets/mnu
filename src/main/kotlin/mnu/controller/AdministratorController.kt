@@ -89,7 +89,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @GetMapping("/newWeapons")
-    fun adminNewWeapons(principal: Principal, model: Model): String {
+    fun newWeapons(principal: Principal, model: Model): String {
         val weaponRequests = newWeaponRequestRepository?.findAll()
         val requestsForAdmin = ArrayList<NewWeaponRequest>()
         weaponRequests!!.forEach {
@@ -101,9 +101,27 @@ class AdministratorController : ApplicationController() {
     }
 
     @GetMapping("/newTransport")
-    fun adminNewTransport(principal: Principal, model: Model): String {
+    fun newTransport(principal: Principal, model: Model): String {
         //todo
         return "administrators/admin__new-transport.html"
+    }
+
+    @GetMapping("/vacancies")
+    fun allVacancies(model: Model): String {
+        //todo
+        return "administrators/admin__vacancies.html"
+    }
+
+    @GetMapping("/vacancies/requests")
+    fun vacancyRequests(model: Model): String {
+        //todo
+        return "administrators/admin__vacancies.html"
+    }
+
+    @GetMapping("/vacancies/new")
+    fun newVacancy(model: Model): String {
+        model.addAttribute("form", NewVacancyForm())
+        return "administrators/admin__vacancies.html"
     }
 
     @PostMapping("/registerEmployee")
@@ -520,7 +538,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @PostMapping("/acceptJobApplication/{id}")
-    fun acceptJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+    fun acceptJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val user = userRepository?.findByLogin(principal.name)
         val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
 
@@ -578,7 +596,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @PostMapping("/rejectJobApplication/{id}")
-    fun rejectJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+    fun rejectJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val user = userRepository?.findByLogin(principal.name)
         val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
 
@@ -608,15 +626,16 @@ class AdministratorController : ApplicationController() {
     }
 
     @PostMapping("/addVacancy")
-    fun addVacancy(@ModelAttribute form: NewVacancyForm, redirect: RedirectAttributes) : String {
+    fun addVacancy(@ModelAttribute form: NewVacancyForm, redirect: RedirectAttributes): String {
 
         if (form.title == "" || form.salary == "" || form.requiredKarma == "" || form.workHoursPerWeek == "" || form.vacantPlaces == "") {
             redirect.addFlashAttribute("form", form)
             redirect.addFlashAttribute("error", "One of the fields isn't filled.")
             return "redirect:/admin/vacancies"
         }
-        val newVacancy = Vacancy(form.title, form.salary.toLong(), form.requiredKarma.toLong(), form.workHoursPerWeek.toInt())
-            .apply { this.vacantPlaces = form.vacantPlaces.toLong() }
+        val newVacancy =
+            Vacancy(form.title, form.salary.toLong(), form.requiredKarma.toLong(), form.workHoursPerWeek.toInt())
+                .apply { this.vacantPlaces = form.vacantPlaces.toLong() }
 
         vacancyRepository?.save(newVacancy)
 
