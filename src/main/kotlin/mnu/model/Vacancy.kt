@@ -18,6 +18,6 @@ data class Vacancy (@Column(nullable = false) var title: String = "",
     var workers: MutableList<Prawn>? = null
 
     @Min(0)
-    var vacantPlaces: Long? = null
+    var vacantPlaces: Long = 0
 
 }

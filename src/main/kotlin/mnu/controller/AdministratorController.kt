@@ -300,7 +300,7 @@ class AdministratorController : ApplicationController() {
 
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/requests"
+                "redirect:main/experiments"
             }
             else {
                 checkedExperiment.statusDate = LocalDateTime.now()
@@ -308,12 +308,12 @@ class AdministratorController : ApplicationController() {
                 experimentRepository?.save(checkedExperiment)
 
                 redirect.addFlashAttribute("status", "Request accepted.")
-                "redirect:main/requests"
+                "redirect:main/experiments"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/requests"
+            "redirect:main/experiments"
         }
     }
 
@@ -326,7 +326,7 @@ class AdministratorController : ApplicationController() {
 
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/requests"
+                "redirect:main/experiments"
             }
             else {
                 checkedExperiment.statusDate = LocalDateTime.now()
@@ -334,12 +334,12 @@ class AdministratorController : ApplicationController() {
                 experimentRepository?.save(checkedExperiment)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
-                "redirect:main/requests"
+                "redirect:main/experiments"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/requests"
+            "redirect:main/experiments"
         }
     }
 
@@ -355,11 +355,11 @@ class AdministratorController : ApplicationController() {
             experimentRepository?.save(checkedExperiment)
 
             redirect.addFlashAttribute("status", "Undone.")
-            "redirect:main/requests"
+            "redirect:main/experiments"
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/requests"
+            "redirect:main/experiments"
         }
     }
 
@@ -381,7 +381,7 @@ class AdministratorController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/weapons"
+                "redirect:main/newWeapons"
             } else {
                 checkedRequest.request!!.apply {
                     this.statusDate = LocalDateTime.now()
@@ -395,12 +395,12 @@ class AdministratorController : ApplicationController() {
 
                 newWeaponRequestRepository?.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
-                "redirect:main/weapons"
+                "redirect:main/newWeapons"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/weapons"
+            "redirect:main/newWeapons"
         }
     }
 
@@ -416,7 +416,7 @@ class AdministratorController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/weapons"
+                "redirect:main/newWeapons"
             } else {
                 checkedRequest.request!!.apply {
                     this.statusDate = LocalDateTime.now()
@@ -426,12 +426,12 @@ class AdministratorController : ApplicationController() {
                 newWeaponRequestRepository?.save(checkedRequest)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
-                "redirect:main/weapons"
+                "redirect:main/newWeapons"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/weapons"
+            "redirect:main/newWeapons"
         }
     }
 
@@ -459,11 +459,11 @@ class AdministratorController : ApplicationController() {
             newWeaponRequestRepository?.save(checkedRequest)
 
             redirect.addFlashAttribute("status", "Undone.")
-            "redirect:main/weapons"
+            "redirect:main/newWeapons"
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/weapons"
+            "redirect:main/newWeapons"
         }
     }
 

@@ -14,9 +14,9 @@ data class VacancyApplicationRequest (@ManyToOne(fetch = FetchType.EAGER)
                                       @JoinColumn(name = "vacancy_id", referencedColumnName = "id")
                                       var vacancy: Vacancy? = null) {
     @Id
-    private var id: Long? = null
+    var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    private val request: Request? = null
+    var request: Request? = null
 }

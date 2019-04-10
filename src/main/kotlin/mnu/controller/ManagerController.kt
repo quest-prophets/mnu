@@ -250,7 +250,7 @@ class ManagerController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/requests"
+                "redirect:main/newWeapons"
             } else {
                 checkedRequest.request!!.apply {
                     this.statusDate = LocalDateTime.now()
@@ -264,12 +264,12 @@ class ManagerController : ApplicationController() {
 
                 newWeaponRequestRepository?.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
-                "redirect:main/requests"
+                "redirect:main/newWeapons"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/requests"
+            "redirect:main/newWeapons"
         }
     }
 
@@ -285,7 +285,7 @@ class ManagerController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:main/requests"
+                "redirect:main/newWeapons"
             } else {
                 checkedRequest.request!!.apply {
                     this.statusDate = LocalDateTime.now()
@@ -295,12 +295,12 @@ class ManagerController : ApplicationController() {
                 newWeaponRequestRepository?.save(checkedRequest)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
-                "redirect:main/requests"
+                "redirect:main/newWeapons"
             }
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/requests"
+            "redirect:main/newWeapons"
         }
     }
 
@@ -328,11 +328,11 @@ class ManagerController : ApplicationController() {
             newWeaponRequestRepository?.save(checkedRequest)
 
             redirect.addFlashAttribute("status", "Undone.")
-            "redirect:main/requests"
+            "redirect:main/newWeapons"
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:main/requests"
+            "redirect:main/newWeapons"
         }
     }
 

@@ -124,7 +124,7 @@ class SecurityController : ApplicationController() {
             ChangeEquipmentRequest(currentSecurity, existingWeapon, existingTransport)
             .apply { this.request = newRequest }
         )
-        
+
         redirect.addFlashAttribute("status", "Request sent. Wait for supervisor's decision.")
         return "redirect:main"
     }
