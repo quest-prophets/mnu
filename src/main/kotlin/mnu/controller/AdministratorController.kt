@@ -605,4 +605,22 @@ class AdministratorController : ApplicationController() {
         }
     }
 
+    @PostMapping("/addVacancy")
+    fun addVacancy(@ModelAttribute form: NewVacancyForm, redirect: RedirectAttributes) : String {
+
+        if (form.title == "" || form.salary == "" || form.requiredKarma == "" || form.workHoursPerWeek == "" || form.vacantPlaces == "") {
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "One of the fields isn't filled.")
+            return "redirect:/admin/vacancies"
+        }
+        val newVacancy = Vacancy(form.title, form.salary.toLong(), form.requiredKarma.toLong(), form.workHoursPerWeek.toInt())
+            .apply { this.vacantPlaces = form.vacantPlaces.toLong() }
+
+        vacancyRepository?.save(newVacancy)
+
+        redirect.addFlashAttribute("form", form)
+        redirect.addFlashAttribute("status", "Vacancy added.")
+        return "redirect:/admin/vacancies"
+    }
+
 }
