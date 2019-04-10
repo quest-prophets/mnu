@@ -111,6 +111,8 @@ class ManagerController : ApplicationController() {
                     this.user = newUser
                     this.districtHouse = districtHouseRepository?.findById(houseIdList.random())?.get()
                     this.manager = possibleManager.get()
+                    this.karma = 50
+                    this.balance = 350
                 }
 
                 userRepository?.save(newUser)

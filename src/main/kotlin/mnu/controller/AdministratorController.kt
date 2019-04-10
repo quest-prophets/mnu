@@ -281,6 +281,8 @@ class AdministratorController : ApplicationController() {
                     this.user = newUser
                     this.districtHouse = districtHouseRepository?.findById(houseIdList.random())?.get()
                     this.manager = managerEmployeeRepository?.findById(managerIdList.random())?.get()
+                    this.karma = 50
+                    this.balance = 350
                 }
 
                 userRepository?.save(newUser)
