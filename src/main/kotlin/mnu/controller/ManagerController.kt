@@ -83,7 +83,6 @@ class ManagerController : ApplicationController() {
 
 
     @PostMapping("/registerPrawn")
-    @ResponseBody
     fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, principal: Principal, redirect: RedirectAttributes): String {
         val curUser = userRepository?.findByLogin(principal.name)!!
         val possibleManager = managerEmployeeRepository?.findById(curUser.id!!)!!

@@ -68,9 +68,9 @@ class AuthorizationController {
     }
 
     @PostMapping("/register")
-    @ResponseBody
     fun addUser(@ModelAttribute form: ClientRegistrationForm, redirect: RedirectAttributes): String {
         val existingUser = userRepository?.findByLogin(form.username)
+        val clients = clientRepository?.findAll()
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
 
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
@@ -83,6 +83,13 @@ class AuthorizationController {
             val encodedPassword = passwordEncoder.encode(form.password)
             form.password = encodedPassword
 
+            clients?.forEach {
+                if (form.email == it.email) {
+                    redirect.addFlashAttribute("form", form)
+                    redirect.addFlashAttribute("error", "Email '${form.email}' is already taken.")
+                    return "redirect:/auth/register"
+                }
+            }
             return if (existingUser != null) {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Username '${form.username}' is already taken. Please try again.")
