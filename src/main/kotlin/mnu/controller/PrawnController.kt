@@ -63,7 +63,7 @@ class PrawnController : ApplicationController() {
             }
         }
 
-        var allVacancies = vacancyRepository?.findAll()
+        var allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc()
         if (sort != null) {
             when (sort) {
                 "salaryAsc" -> allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc()
