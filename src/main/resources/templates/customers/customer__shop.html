@@ -26,9 +26,8 @@
 </div>
 
 <div class="grid">
-    <div class="grid__departments-title flex-column">
-        Departments
-    </div>
+    <div class="grid__departments-title flex-column"> Departments</div>
+
     <div class="grid__search-bar flex-row-between">
         <span>
             <input type="search" class="search-bar-input" placeholder="Search..."
@@ -37,13 +36,12 @@
         <label class="search-bar-sorter flex-row-center">
             Sort by: &nbsp;
             <select class="input_big">
-                <option selected>Price (asc.)</option>
+                <option>Price (asc.)</option>
                 <option>Price (desc.)</option>
-                <option>???</option>
-                <option>???</option>
             </select>
         </label>
     </div>
+
 
     <div id="mobile-menu" class="grid__departments flex-column">
         <a th:href="@{/}"> All </a>
@@ -59,6 +57,20 @@
     </div>
 
     <div class="grid__catalogue">
+        <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+        <div class="shop-item" th:each="item: ${items}"
+             th:classappend="|${item.type.name()=='MELEE' ? 'shop-item_melee' : item.type.name()=='PISTOL' ? 'shop-item_pistol' :
+              item.type.name()=='SUBMACHINE_GUN' ? 'shop-item_smg' : item.type.name()=='ASSAULT_RIFLE' ? 'shop-item_assault' :
+              item.type.name()=='LIGHT_MACHINE_GUN' ? 'shop-item_lmg' : item.type.name()=='SNIPER_RIFLE' ? 'shop-item_sniper' :
+              item.type.name()=='ALIEN' ? 'shop-item_alien' : item.type.name()=='LAND' ? 'shop-item_land' :
+              item.type.name()=='AIR' ? 'shop-item_air'}|">
+            <div class="flex-column-no-center">
+                <div class="font-big" th:text="${item.name}"></div>
+                <div class="form-item" th:text="${item.description}"></div>
+                <div class="form-item_small" th:text="${item.price + ' c.u.'}"></div>
+                <div class="form-item_small" th:text="${item.quantity + ' pieces'}"></div>
+            </div>
+        </div>
     </div>
 </div>
 
