@@ -75,6 +75,7 @@ class PrawnController : ApplicationController() {
             }
         }
 
+        model.addAttribute("user", currentPrawn)
         model.addAttribute("current_job", currentPrawn.job)
         model.addAttribute("current_application", currentVacancyRequest)
         model.addAttribute("all_vacancies", allVacancies)
