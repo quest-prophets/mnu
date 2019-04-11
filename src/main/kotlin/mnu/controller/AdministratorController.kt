@@ -105,7 +105,7 @@ class AdministratorController : ApplicationController() {
 
         model.addAttribute("new_weap_count", nwPendingRequests.size)
         model.addAttribute("vac_appl_count", vaPendingRequests.size)
-        model.addAttribute("experiment_сount",
+        model.addAttribute("experiment_count",
             experimentRepository?.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
         return "administrators/admin__menu.html"
     }

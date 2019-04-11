@@ -55,12 +55,12 @@
 
 .prawn-registration {
     grid-area: prawn-registration;
-    margin-right: 30px;
+    margin-left: 30px;
 }
 
 .prawn-job-applications {
     grid-area: prawn-job-applications;
-    margin-left: 30px;
+    margin-right: 30px;
 }
 
 @media (max-width: 700px) {

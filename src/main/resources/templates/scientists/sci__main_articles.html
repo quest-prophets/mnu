@@ -25,7 +25,7 @@
         </div>
         <a th:href="@{/sci/main/requests}" class="grid-button button">
             Requests
-            <div class="notification-number"></div>
+            <div class="notification-number" th:if="${experimentCount > 0}" th:text="${experimentCount}"></div>
         </a>
         <a th:href="@{/sci/article}" class="add-button grid-button button">
             Write article
