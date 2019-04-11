@@ -18,4 +18,6 @@ interface ExperimentRepository : JpaRepository<Experiment, Long> {
     fun findAllByExaminatorAndType(examinator: ScientistEmployee, type: ExperimentType) : List<Experiment>
 
     fun findAllByAssistant(assistant: ScientistEmployee) : List<Experiment>
+
+    fun countAllByStatusAndType(status: ExperimentStatus, type: ExperimentType) : Long
 }

@@ -40,7 +40,16 @@ class ScientistController : ApplicationController() {
     @GetMapping("/main")
     fun main(model: Model, principal: Principal): String {
         val user = userRepository?.findByLogin(principal.name)!!
+        val scientist = employeeRepository?.findByUserId(user.id!!)!!
+        val allPendingMinor = experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
+        val allValidPendingMinor = ArrayList<Experiment>()
+        allPendingMinor?.forEach {
+            if (scientist.level!! > it.examinator!!.employee!!.level!! || scientist.level == 10)
+                allValidPendingMinor.add(it)
+        }
+
         model.addAttribute("experiments", experimentRepository?.findAllByExaminatorIdOrderByStatusAsc(user.id!!))
+        model.addAttribute("experimentCount", allValidPendingMinor.size)
         return "scientists/sci__main.html"
     }
 

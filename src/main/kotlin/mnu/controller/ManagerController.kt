@@ -6,12 +6,15 @@ import mnu.model.User
 import mnu.model.Weapon
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.Role
+import mnu.model.request.ChangeEquipmentRequest
 import mnu.model.request.NewWeaponRequest
+import mnu.model.request.VacancyApplicationRequest
 import mnu.repository.*
 import mnu.repository.employee.ManagerEmployeeRepository
 import mnu.repository.employee.SecurityEmployeeRepository
 import mnu.repository.request.ChangeEquipmentRequestRepository
 import mnu.repository.request.NewWeaponRequestRepository
+import mnu.repository.request.RequestRepository
 import mnu.repository.request.VacancyApplicationRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -30,6 +33,9 @@ class ManagerController : ApplicationController() {
     val managerEmployeeRepository: ManagerEmployeeRepository? = null
     @Autowired
     val securityEmployeeRepository: SecurityEmployeeRepository? = null
+
+    @Autowired
+    val requestRepository: RequestRepository? = null
 
     @Autowired
     val weaponRepository: WeaponRepository? = null
@@ -51,7 +57,42 @@ class ManagerController : ApplicationController() {
     val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository? = null
 
     @GetMapping("/main")
-    fun manMenu() = "managers/manager__main.html"
+    fun manMenu(model: Model) : String {
+        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
+
+        val equipmentChangeRequests = changeEquipmentRequestRepository?.findAll()
+        val ecPendingRequests = ArrayList<ChangeEquipmentRequest>()
+        for (i in 0 until pendingRequests!!.size) {
+            for (j in 0 until equipmentChangeRequests!!.size) {
+                if (equipmentChangeRequests[j].request == pendingRequests[i])
+                    ecPendingRequests.add(equipmentChangeRequests[j])
+            }
+        }
+
+        val newWeaponRequests = newWeaponRequestRepository?.findAll()
+        val nwPendingRequests = ArrayList<NewWeaponRequest>()
+        for (i in 0 until pendingRequests.size) {
+            for (j in 0 until newWeaponRequests!!.size) {
+                if (newWeaponRequests[j].request == pendingRequests[i] &&
+                    (newWeaponRequests[j].user!!.role == Role.SECURITY || newWeaponRequests[j].user!!.role == Role.SCIENTIST))
+                    nwPendingRequests.add(newWeaponRequests[j])
+            }
+        }
+
+        val vacApplicationRequests = vacancyApplicationRequestRepository?.findAll()
+        val vaPendingRequests = ArrayList<VacancyApplicationRequest>()
+        for (i in 0 until pendingRequests.size) {
+            for (j in 0 until vacApplicationRequests!!.size) {
+                if (vacApplicationRequests[j].request == pendingRequests[i])
+                    vaPendingRequests.add(vacApplicationRequests[j])
+            }
+        }
+
+        model.addAttribute("eq_change_count", ecPendingRequests.size)
+        model.addAttribute("new_weap_count", nwPendingRequests.size)
+        model.addAttribute("vac_appl_count", vaPendingRequests.size)
+        return "managers/manager__main.html"
+    }
 
     @GetMapping("/clients")
     fun manClients(principal: Principal, model: Model) : String {

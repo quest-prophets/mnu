@@ -4,12 +4,15 @@ import mnu.form.*
 import mnu.model.*
 import mnu.model.employee.*
 import mnu.model.enums.*
+import mnu.model.request.ChangeEquipmentRequest
 import mnu.model.request.NewVacancyRequest
 import mnu.model.request.NewWeaponRequest
+import mnu.model.request.VacancyApplicationRequest
 import mnu.repository.*
 import mnu.repository.employee.*
 import mnu.repository.request.NewVacancyRequestRepository
 import mnu.repository.request.NewWeaponRequestRepository
+import mnu.repository.request.RequestRepository
 import mnu.repository.request.VacancyApplicationRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -28,6 +31,9 @@ class AdministratorController : ApplicationController() {
     val districtHouseRepository: DistrictHouseRepository? = null
     @Autowired
     val districtIncidentRepository: DistrictIncidentRepository? = null
+
+    @Autowired
+    val requestRepository: RequestRepository? = null
 
     @Autowired
     val weaponRepository: WeaponRepository? = null
@@ -75,7 +81,34 @@ class AdministratorController : ApplicationController() {
     }
 
     @GetMapping("/main")
-    fun adminMenu() = "administrators/admin__menu.html"
+    fun adminMenu(model: Model) : String {
+        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
+
+        val newWeaponRequests = newWeaponRequestRepository?.findAll()
+        val nwPendingRequests = ArrayList<NewWeaponRequest>()
+        for (i in 0 until pendingRequests!!.size) {
+            for (j in 0 until newWeaponRequests!!.size) {
+                if (newWeaponRequests[j].request == pendingRequests[i] &&
+                    (newWeaponRequests[j].user!!.role == Role.SECURITY || newWeaponRequests[j].user!!.role == Role.SCIENTIST))
+                    nwPendingRequests.add(newWeaponRequests[j])
+            }
+        }
+
+        val vacApplicationRequests = vacancyApplicationRequestRepository?.findAll()
+        val vaPendingRequests = ArrayList<VacancyApplicationRequest>()
+        for (i in 0 until pendingRequests.size) {
+            for (j in 0 until vacApplicationRequests!!.size) {
+                if (vacApplicationRequests[j].request == pendingRequests[i])
+                    vaPendingRequests.add(vacApplicationRequests[j])
+            }
+        }
+
+        model.addAttribute("new_weap_count", nwPendingRequests.size)
+        model.addAttribute("vac_appl_count", vaPendingRequests.size)
+        model.addAttribute("experiment_сount",
+            experimentRepository?.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
+        return "administrators/admin__menu.html"
+    }
 
     @GetMapping("/experiments")
     fun adminExperiments(model: Model): String {
