@@ -131,6 +131,7 @@ class PrawnController : ApplicationController() {
     @PostMapping("/quitJob")
     fun withdrawMembership(principal: Principal, redirect: RedirectAttributes) : String {
         val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
+        currentPrawn.job!!.vacantPlaces++
         currentPrawn.job = null
         prawnRepository?.save(currentPrawn)
         redirect.addFlashAttribute("status", "You have left your current job. You may now apply for other vacancies.")
