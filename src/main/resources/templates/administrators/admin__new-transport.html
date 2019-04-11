@@ -18,7 +18,10 @@
             <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
         </a>
         <a th:href="@{/}" class="grid-button button button_back_mobile">Main menu</a>
-        <a th:href="@{/admin/newWeapons}" class="grid-button button"> New weapons</a>
+        <a th:href="@{/admin/newWeapons}" class="grid-button button">
+            New weapons
+            <div class="notification-number" th:if="${new_weap_count > 0}" th:text="${new_weap_count}"></div>
+        </a>
         <div class="grid-button button button_pressed"> New transport</div>
     </div>
 </div>

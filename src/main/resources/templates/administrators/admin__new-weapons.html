@@ -19,7 +19,10 @@
         </a>
         <a th:href="@{/}" class="grid-button button button_back_mobile">Main menu</a>
         <div class="grid-button button button_pressed"> New weapons</div>
-        <a th:href="@{/admin/newTransport}" class="grid-button button"> New transport</a>
+        <a th:href="@{/admin/newTransport}" class="grid-button button">
+            New transport
+            <div class="notification-number" th:if="${new_tran_count > 0}" th:text="${new_tran_count}"></div>
+        </a>
     </div>
 </div>
 

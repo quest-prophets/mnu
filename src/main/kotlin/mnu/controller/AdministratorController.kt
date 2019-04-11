@@ -139,6 +139,8 @@ class AdministratorController : ApplicationController() {
     @GetMapping("/articles")
     fun adminArticles(model: Model): String {
         model.addAttribute("articles", articleRepository?.findAllByOrderByCreationDateDesc())
+        model.addAttribute("experiment_count",
+            experimentRepository?.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
         return "administrators/admin__articles.html"
     }
 

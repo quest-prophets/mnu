@@ -19,7 +19,10 @@
         </a>
         <a th:href="@{/admin/main}" class="grid-button button button_back_mobile">Main menu</a>
         <div class="grid-button button button_pressed"> All vacancies</div>
-        <a th:href="@{/admin/vacancies/requests}" class="grid-button button"> Requests</a>
+        <a th:href="@{/admin/vacancies/requests}" class="grid-button button">
+            Requests
+            <div class="notification-number" th:if="${new_vac_count > 0}" th:text="${new_vac_count}"></div>
+        </a>
         <a th:href="@{/admin/vacancies/new}" class="grid-button button"> New vacancy</a>
     </div>
 </div>

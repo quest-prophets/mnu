@@ -18,7 +18,10 @@
             <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
         </a>
         <a th:href="@{/admin/main}" class="grid-button button button_back_mobile">Main menu</a>
-        <a th:href="@{/admin/experiments}" class="grid-button button"> Experiments</a>
+        <a th:href="@{/admin/experiments}" class="grid-button button">
+            Experiments
+            <div class="notification-number" th:if="${experiment_count > 0}" th:text="${experiment_count}"></div>
+        </a>
         <div class="grid-button button button_pressed"> Articles</div>
     </div>
 </div>
