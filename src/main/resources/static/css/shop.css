@@ -8,13 +8,8 @@ body {
 .grid {
     margin-top: 64px;
     display: grid;
-    grid: "departments-title search-bar" 60px "departments catalogue";
+    grid: "departments search-bar" 60px "departments catalogue";
     grid-template-columns: 1.5fr 8.5fr;
-}
-
-.grid__departments-title {
-    grid-area: departments-title;
-    border-right: 2px solid black;
 }
 
 .grid__search-bar {
@@ -45,8 +40,6 @@ body {
 .grid__departments {
     padding: 25px 0;
     grid-area: departments;
-    border: 2px solid black;
-    border-left: none;
     text-align: center;
 }
 
@@ -55,14 +48,8 @@ body {
     margin: 0 20px
 }
 
-a {
-    color: blue;
-    font-style: italic;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
+.shop-icon:hover {
+    transform: scale(1.15);
 }
 
 .grid__catalogue {
@@ -128,6 +115,24 @@ a:hover {
     background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/air.png");
 }
 
+.department-button {
+    padding: 12px;
+    border: 2px solid black;
+    border-left: none;
+    color: black;
+    display: block;
+    margin: 10px 0;
+    text-decoration: none;
+}
+
+.department-button:hover {
+    background: #b9e9ff;
+}
+
+.chosen-department {
+    background: #b9e9ff;
+}
+
 @media (max-width: 700px) {
     .grid {
         grid: "mobile-header" "search-bar" "catalogue";
@@ -148,10 +153,6 @@ a:hover {
         border: none;
         border-bottom: 2px solid black;
         grid-area: mobile-header;
-    }
-
-    .grid__departments-title {
-        display: none;
     }
 
     .search-bar-input {

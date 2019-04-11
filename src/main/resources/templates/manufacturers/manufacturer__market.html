@@ -30,8 +30,6 @@
 </div>
 
 <div class="grid">
-    <div class="grid__departments-title flex-column"> Departments</div>
-
     <div class="grid__search-bar flex-row-between">
         <span>
             <input type="search" class="search-bar-input" placeholder="Search..."
@@ -46,17 +44,17 @@
         </label>
     </div>
 
-    <div id="mobile-menu" class="grid__departments flex-column">
-        <a th:href="@{/}"> All </a>
-        <a th:href="@{/}" class="form-item_big"> Melee weapons </a>
-        <a th:href="@{/}" class="form-item_big"> Pistols </a>
-        <a th:href="@{/}" class="form-item_big"> SMGs </a>
-        <a th:href="@{/}" class="form-item_big"> Assault riffles </a>
-        <a th:href="@{/}" class="form-item_big"> Light machine guns </a>
-        <a th:href="@{/}" class="form-item_big"> Sniper rifles </a>
-        <a th:href="@{/}" class="form-item_big"> Alien weapon </a>
-        <a th:href="@{/}" class="form-item_big"> Land transport </a>
-        <a th:href="@{/}" class="form-item_big"> Air transport </a>
+    <div id="mobile-menu" class="grid__departments flex-column-no-center">
+        <a class="department-button" th:href="@{/}"> All </a>
+        <a class="department-button" th:href="@{/}"> Melee weapons </a>
+        <a class="department-button" th:href="@{/}"> Pistols </a>
+        <a class="department-button" th:href="@{/}"> SMGs </a>
+        <a class="department-button" th:href="@{/}"> Assault riffles </a>
+        <a class="department-button" th:href="@{/}"> Light machine guns </a>
+        <a class="department-button" th:href="@{/}"> Sniper rifles </a>
+        <a class="department-button" th:href="@{/}"> Alien weapon </a>
+        <a class="department-button" th:href="@{/}"> Land transport </a>
+        <a class="department-button" th:href="@{/}"> Air transport </a>
     </div>
 
     <div class="grid__catalogue">
