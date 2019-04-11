@@ -279,4 +279,23 @@ class SecurityController : ApplicationController() {
         return "redirect:report"
     }
 
+    @PostMapping("/withdrawChange")
+    fun withdrawApplication (principal: Principal, redirect: RedirectAttributes) : String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentSecurity = securityEmployeeRepository?.findById(user?.id!!)?.get()!!
+        val allChangeRequests = changeEquipmentRequestRepository?.findAllByEmployee(currentSecurity)
+
+        allChangeRequests?.forEach {
+            if (it.request!!.status == RequestStatus.PENDING) {
+                it.request!!.status = RequestStatus.REJECTED
+                changeEquipmentRequestRepository?.save(it)
+                redirect.addFlashAttribute("status", "Request withdrawn.")
+                return "redirect:equipment"
+            }
+        }
+
+        redirect.addFlashAttribute("error", "You have no active equipment change requests.")
+        return "redirect:equipment"
+    }
+
 }
