@@ -8,13 +8,16 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="desktop-header fixed-header fixed-header_small flex-row-between">
-    <a class="feedback">Feedback</a>
-    <div class="flex-row-center">You are logged in as ****
+<div class="desktop-header fixed-header fixed-header_small flex-row-right">You are logged in as ****
+    <a th:href="@{/}">
         <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
+    </a>
+    <a th:href="@{/}">
         <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
+    </a>
+    <a th:href="@{/}">
         <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
-    </div>
+    </a>
 </div>
 
 <div id="header_mobile" class="flex-row-center-left">
@@ -60,10 +63,15 @@
 </div>
 
 <div class="mobile-footer flex-row-around">
-    <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
-    <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
-    <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
-    <img alt="Feedback" class="shop-icon icon" th:src="@{/images/feedback.png}">
+    <a th:href="@{/}">
+        <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
+    </a>
+    <a th:href="@{/}">
+        <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
+    </a>
+    <a th:href="@{/}">
+        <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
+    </a>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>

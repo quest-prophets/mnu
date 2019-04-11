@@ -16,7 +16,7 @@
 
 .grid {
     display: grid;
-    grid: "header header" 70px "flash flash" "district employees" "client-manufacturers experiments-articles" "prawn-vacancies prawn-job-applications" "prawn-registration new-weapons"
+    grid: "header header" 70px "flash flash" "district employees" "client-manufacturers experiments-articles" "prawn-vacancies new-weapons" "prawn-job-applications prawn-registration"
 }
 
 .flash {
@@ -65,7 +65,7 @@
 
 @media (max-width: 700px) {
     .grid {
-        grid: "header" 70px "flash" "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "prawn-job-applications" "prawn-registration" "new-weapons"
+        grid: "header" 70px "flash" "district" "employees" "client-manufacturers" "experiments-articles" "prawn-vacancies" "new-weapons" "prawn-job-applications" "prawn-registration"
     }
 
     .grid-button {

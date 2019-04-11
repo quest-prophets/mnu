@@ -18,12 +18,13 @@ body {
     text-align: center;
     padding: 12px;
     word-break: break-word;
-    margin: 15px;
+    margin: 20px;
+    float: left;
 }
 
 .content {
     text-align: center;
-    padding: 0 20px;
+    padding: 0 60px;
     margin-top: 120px;
 }
 
