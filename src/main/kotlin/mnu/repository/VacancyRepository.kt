@@ -11,4 +11,12 @@ interface VacancyRepository : JpaRepository<Vacancy, Long> {
     fun findAllByOrderBySalaryAsc() : List<Vacancy>
 
     fun findAllByOrderBySalaryDesc() : List<Vacancy>
+
+    fun findAllByOrderByWorkHoursPerWeekAsc() : List<Vacancy>
+
+    fun findAllByOrderByWorkHoursPerWeekDesc() : List<Vacancy>
+
+    fun findAllByOrderByRequiredKarmaAsc() : List<Vacancy>
+
+    fun findAllByOrderByRequiredKarmaDesc() : List<Vacancy>
 }

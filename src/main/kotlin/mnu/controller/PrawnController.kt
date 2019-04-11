@@ -52,9 +52,8 @@ class PrawnController : ApplicationController() {
     }
 
     @GetMapping("/vacancies")
-    fun prawnVacancies(model: Model, principal: Principal) : String {
+    fun prawnVacancies(@RequestParam (required = false) sort: String?, model: Model, principal: Principal) : String {
         val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
-        val allVacancies = vacancyRepository?.findAll()
         val allVacancyRequests = vacancyApplicationRequestRepository?.findAllByPrawn(currentPrawn)
         var currentVacancyRequest = VacancyApplicationRequest()
 
@@ -64,22 +63,21 @@ class PrawnController : ApplicationController() {
             }
         }
 
-        val allAvailableVacancies = ArrayList<Vacancy>()
-        val allUnavailableVacancies = ArrayList<Vacancy>()
-
-        allVacancies?.forEach {
-            if(currentPrawn.job != it && currentVacancyRequest.vacancy != it
-                && currentPrawn.karma >= it.requiredKarma && it.vacantPlaces > 0)
-                    allAvailableVacancies.add(it)
-            else if (currentPrawn.karma < it.requiredKarma && it.vacantPlaces == 0L)
-                    allUnavailableVacancies.add(it)
+        var allVacancies = vacancyRepository?.findAll()
+        if (sort != null) {
+            when (sort) {
+                "salaryAsc" -> allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc()
+                "salaryDesc" -> allVacancies = vacancyRepository?.findAllByOrderBySalaryDesc()
+                "karmaAsc" -> allVacancies = vacancyRepository?.findAllByOrderByRequiredKarmaAsc()
+                "karmaDesc" -> allVacancies = vacancyRepository?.findAllByOrderByRequiredKarmaDesc()
+                "workHoursAsc" -> allVacancies = vacancyRepository?.findAllByOrderByWorkHoursPerWeekAsc()
+                "workHoursDesc" -> allVacancies = vacancyRepository?.findAllByOrderByWorkHoursPerWeekDesc()
+            }
         }
 
         model.addAttribute("current_job", currentPrawn.job)
         model.addAttribute("current_application", currentVacancyRequest)
         model.addAttribute("all_vacancies", allVacancies)
-        model.addAttribute("available_vacancies", allAvailableVacancies)
-        model.addAttribute("unavailable_vacancies", allUnavailableVacancies)
         return "prawns/prawn__vacancies.html"
     }
 
