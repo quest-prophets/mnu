@@ -63,15 +63,48 @@ class PrawnController : ApplicationController() {
             }
         }
 
-        var allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc()
+        var allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc() as MutableList<Vacancy>
+        allVacancies.remove(currentPrawn.job)
+        if (currentVacancyRequest.vacancy != null)
+            allVacancies.remove(currentVacancyRequest.vacancy!!)
         if (sort != null) {
             when (sort) {
-                "salaryAsc" -> allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc()
-                "salaryDesc" -> allVacancies = vacancyRepository?.findAllByOrderBySalaryDesc()
-                "karmaAsc" -> allVacancies = vacancyRepository?.findAllByOrderByRequiredKarmaAsc()
-                "karmaDesc" -> allVacancies = vacancyRepository?.findAllByOrderByRequiredKarmaDesc()
-                "workHoursAsc" -> allVacancies = vacancyRepository?.findAllByOrderByWorkHoursPerWeekAsc()
-                "workHoursDesc" -> allVacancies = vacancyRepository?.findAllByOrderByWorkHoursPerWeekDesc()
+                "salaryAsc" -> {
+                    allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc() as MutableList<Vacancy>
+                    allVacancies.remove(currentPrawn.job)
+                    if (currentVacancyRequest.vacancy != null)
+                        allVacancies.remove(currentVacancyRequest.vacancy!!)
+                }
+                "salaryDesc" -> {
+                    allVacancies = vacancyRepository?.findAllByOrderBySalaryDesc() as MutableList<Vacancy>
+                    allVacancies.remove(currentPrawn.job)
+                    if (currentVacancyRequest.vacancy != null)
+                        allVacancies.remove(currentVacancyRequest.vacancy!!)
+                }
+                "karmaAsc" -> {
+                    allVacancies = vacancyRepository?.findAllByOrderByRequiredKarmaAsc() as MutableList<Vacancy>
+                    allVacancies.remove(currentPrawn.job)
+                    if (currentVacancyRequest.vacancy != null)
+                        allVacancies.remove(currentVacancyRequest.vacancy!!)
+                }
+                "karmaDesc" -> {
+                    allVacancies = vacancyRepository?.findAllByOrderByRequiredKarmaDesc() as MutableList<Vacancy>
+                    allVacancies.remove(currentPrawn.job)
+                    if (currentVacancyRequest.vacancy != null)
+                        allVacancies.remove(currentVacancyRequest.vacancy!!)
+                }
+                "workHoursAsc" -> {
+                    allVacancies = vacancyRepository?.findAllByOrderByWorkHoursPerWeekAsc() as MutableList<Vacancy>
+                    allVacancies.remove(currentPrawn.job)
+                    if (currentVacancyRequest.vacancy != null)
+                        allVacancies.remove(currentVacancyRequest.vacancy!!)
+                }
+                "workHoursDesc" -> {
+                    allVacancies = vacancyRepository?.findAllByOrderByWorkHoursPerWeekDesc() as MutableList<Vacancy>
+                    allVacancies.remove(currentPrawn.job)
+                    if (currentVacancyRequest.vacancy != null)
+                        allVacancies.remove(currentVacancyRequest.vacancy!!)
+                }
             }
         }
 
