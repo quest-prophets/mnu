@@ -10,7 +10,7 @@ data class Transport (@Column(nullable = false) var name: String = "",
                       @Enumerated(EnumType.STRING) var type: TransportType = TransportType.LAND,
                       var description: String = "",
                       @Min(0) var price: Double = 0.0,
-                      var requiredAccessLvl: Short = 0){
+                      var requiredAccessLvl: Int = 0){
 
     @Id
     @GeneratedValue

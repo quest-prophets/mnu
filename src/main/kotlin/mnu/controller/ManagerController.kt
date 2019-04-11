@@ -122,6 +122,12 @@ class ManagerController : ApplicationController() {
         return "managers/manager__new-weapons.html"
     }
 
+    @GetMapping("/registerPrawn")
+    fun registerPrawn(model: Model) : String {
+        model.addAttribute("form", PrawnRegistrationForm())
+        return "managers/manager__prawn-registration.html"
+    }
+
 
     @PostMapping("/registerPrawn")
     fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, principal: Principal, redirect: RedirectAttributes): String {

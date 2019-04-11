@@ -4,16 +4,11 @@ import mnu.form.*
 import mnu.model.*
 import mnu.model.employee.*
 import mnu.model.enums.*
-import mnu.model.request.ChangeEquipmentRequest
-import mnu.model.request.NewVacancyRequest
 import mnu.model.request.NewWeaponRequest
 import mnu.model.request.VacancyApplicationRequest
 import mnu.repository.*
 import mnu.repository.employee.*
-import mnu.repository.request.NewVacancyRequestRepository
-import mnu.repository.request.NewWeaponRequestRepository
-import mnu.repository.request.RequestRepository
-import mnu.repository.request.VacancyApplicationRequestRepository
+import mnu.repository.request.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -39,6 +34,11 @@ class AdministratorController : ApplicationController() {
     val weaponRepository: WeaponRepository? = null
     @Autowired
     val newWeaponRequestRepository: NewWeaponRequestRepository? = null
+
+    @Autowired
+    val transportRepository: TransportRepository? = null
+    @Autowired
+    val newTransportRequestRepository: NewTransportRequestRepository? = null
 
     @Autowired
     val vacancyRepository: VacancyRepository? = null
@@ -535,6 +535,113 @@ class AdministratorController : ApplicationController() {
             "redirect:/admin/newWeapons"
         }
     }
+
+    fun newTransportChoiceError(newTransportRequestId: Long, principal: Principal): String? {
+        val request = newWeaponRequestRepository?.findById(newTransportRequestId)!!
+        if (!request.isPresent)
+            return "Request with such id does not exist."
+        return null
+    }
+
+    @PostMapping("/acceptNewTransport/{id}")
+    fun acceptNewTransport(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = newTransportChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = newTransportRequestRepository?.findById(id)!!.get()
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:/admin/newTransport"
+            } else {
+                checkedRequest.request!!.apply {
+                    this.statusDate = LocalDateTime.now()
+                    this.status = RequestStatus.ACCEPTED
+                    this.resolver = currentAdmin
+                }
+                val newTransport = Transport(
+                    checkedRequest.name, checkedRequest.type,
+                    checkedRequest.description, checkedRequest.price, checkedRequest.requiredAccessLvl
+                )
+                    .apply { this.quantity = checkedRequest.quantity }
+                transportRepository?.save(newTransport)
+
+                newTransportRequestRepository?.save(checkedRequest)
+                redirect.addFlashAttribute("status", "Request accepted.")
+                "redirect:/admin/newTransport"
+            }
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/admin/newTransport"
+        }
+    }
+
+
+    @PostMapping("/rejectNewTransport/{id}")
+    fun rejectNewTransport(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = newTransportChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = newTransportRequestRepository?.findById(id)!!.get()
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                "redirect:/admin/newTransport"
+            } else {
+                checkedRequest.request!!.apply {
+                    this.statusDate = LocalDateTime.now()
+                    this.status = RequestStatus.REJECTED
+                    this.resolver = currentAdmin
+                }
+                newTransportRequestRepository?.save(checkedRequest)
+
+                redirect.addFlashAttribute("status", "Request rejected.")
+                "redirect:/admin/newTransport"
+            }
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/admin/newTransport"
+        }
+    }
+
+    @PostMapping("/undoTransportChoice/{id}")
+    fun undoTranChoice(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = newTransportChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = newTransportRequestRepository?.findById(id)!!.get()
+
+            checkedRequest.request!!.apply {
+                this.statusDate = LocalDateTime.now()
+                this.status = RequestStatus.PENDING
+                this.resolver = currentAdmin
+            }
+            val transport = transportRepository?.findAll()!!.asReversed()
+            for (i in 0 until transport.size) {
+                if (transport[i].name == checkedRequest.name)
+                    transportRepository?.delete(transport[i])
+                break
+            }
+
+            newTransportRequestRepository?.save(checkedRequest)
+
+            redirect.addFlashAttribute("status", "Undone.")
+            "redirect:/admin/newTransport"
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/admin/newTransport"
+        }
+    }
+    
 
     @PostMapping("/appointResolvers")
     fun appointResolversForIncident(@ModelAttribute form: AppointResolversForm, redirect: RedirectAttributes): String {

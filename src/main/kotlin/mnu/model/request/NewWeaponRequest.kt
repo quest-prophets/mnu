@@ -11,14 +11,13 @@ import javax.validation.constraints.Min
 data class NewWeaponRequest (@Column(nullable = false) var name: String = "",
                              @Enumerated(EnumType.STRING) var type: WeaponType = WeaponType.PISTOL,
                              var description: String = "",
-                             @Min(1) var quantity: Long = 1,
+                             @Min(1) var quantity: Long = 0,
                              var requiredAccessLvl: Int = 0,
                              @Min(0) var price: Double = 0.0,
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "requester_id", referencedColumnName = "id")
-    var user: User? = null
-) {
+                             @ManyToOne(fetch = FetchType.EAGER)
+                             @JoinColumn(name = "requester_id", referencedColumnName = "id")
+                             var user: User? = null) {
 
     @Id
     var id: Long? = null

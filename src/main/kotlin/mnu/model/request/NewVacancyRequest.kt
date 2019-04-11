@@ -16,9 +16,9 @@ data class NewVacancyRequest (@Column(nullable = false) var title: String = "",
                               @JoinColumn(name = "requester_id", referencedColumnName = "user_id")
                               var client: Client? = null) {
     @Id
-    private var id: Long? = null
+    var id: Long? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    private val request: Request? = null
+    var request: Request? = null
 }
