@@ -28,39 +28,38 @@
     <div class="form-item gray" th:if="${requests == null or requests.isEmpty()}">
         There are no new requests
     </div>
-    <div th:each="request: ${requests}" class="content__item">
-        <div th:id="${'request-content-' + request.id}" class="content__main light-gray-bg">
-            <div class="request-description">
-                <div class="form-item_small">
-                    <b>Salary</b>
-                    <div th:text="${request.salary}"></div>
-                </div>
-                <div class="form-item_small">
-                    <b>Salary</b>
-                    <div th:text="${request.salary}"></div>
-                </div>
-                <div class="form-item_small">
-                    <b>Required karma</b>
-                    <div th:text="${request.requiredKarma}"></div>
-                </div>
-                <div class="form-item_small">
-                    <b>Working hours/week</b>
-                    <div th:text="${request.workHoursPerWeek}"></div>
-                </div>
-                <div class="form-item_small">
-                    <b>Vacant places</b>
-                    <div th:text="${request.vacantPlaces}"></div>
-                </div>
-                <div th:id="${'request-buttons-' + request.id}" class="form-item button-flex-row">
-                    <a th:attr="data-request-id=${request.id}" data-action="accept" class="button approved">Accept</a>
-                    <a th:attr="data-request-id=${request.id}" data-action="reject" class="button rejected">Reject</a>
-                </div>
-                <div th:id="${'request-flash-' + request.id}" class="flash hidden">
-                    <div th:id="${'request-flash-message-' + request.id}"></div>
-                    <button th:id="${'request-undo-' + request.id}" th:attr="data-request-id=${request.id}"
-                            data-action="undo" class="form-item button">Undo 10
-                    </button>
-                </div>
+    <div th:each="request: ${requests}" th:id="${'request-content-' + request.id}"
+         class="vacancy-item vacancy-item_big light-gray-bg">
+        <div class="font-big" th:text="${request.title}"></div>
+        <div class="flex-column-no-center">
+            <div class="form-item flex-row-between">
+                <b>Salary</b>
+                <div th:text="${request.salary}"></div>
+            </div>
+            <div class="form-item flex-row-between">
+                <b>Required karma</b>
+                <div th:text="${request.requiredKarma}"></div>
+            </div>
+            <div class="form-item flex-row-between">
+                <b>Working hours/week</b>
+                <div th:text="${request.workHoursPerWeek}"></div>
+            </div>
+            <div class="form-item flex-row-between">
+                <b>Vacant places</b>
+                <div th:text="${request.vacantPlaces}"></div>
+            </div>
+            <div class="form-item">
+                <b th:text="${'Suggested by ' + request.client.name}"></b>
+            </div>
+            <div th:id="${'request-buttons-' + request.id}" class="form-item button-flex-row">
+                <a th:attr="data-request-id=${request.id}" data-action="accept" class="button approved">Accept</a>
+                <a th:attr="data-request-id=${request.id}" data-action="reject" class="button rejected">Reject</a>
+            </div>
+            <div th:id="${'request-flash-' + request.id}" class="flash hidden">
+                <div th:id="${'request-flash-message-' + request.id}"></div>
+                <button th:id="${'request-undo-' + request.id}" th:attr="data-request-id=${request.id}"
+                        data-action="undo" class="form-item_small button">Undo 10
+                </button>
             </div>
         </div>
     </div>

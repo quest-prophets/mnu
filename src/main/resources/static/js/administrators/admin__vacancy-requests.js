@@ -4,12 +4,12 @@ document.addEventListener('click', (e) => {
 
     if (action === "accept") {
 
-        fetch("/man/acceptNewVacancy/" + requestId, {method: 'POST'})
+        fetch("/admin/acceptNewVacancy/" + requestId, {method: 'POST'})
             .then(() => {
                 dealWithRequest(true, requestId);
             })
     } else if (action === "reject") {
-        fetch("/man/rejectNewVacancy/" + requestId, {method: 'POST'})
+        fetch("/admin/rejectNewVacancy/" + requestId, {method: 'POST'})
             .then(() => {
                 dealWithRequest(false, requestId);
             })
@@ -21,12 +21,12 @@ function dealWithRequest(isAccept, requestId) {
     document.getElementById("request-flash-" + requestId).classList.remove('hidden');
     if (isAccept) {
         document.getElementById("request-content-" + requestId).classList.add('approved');
-        document.getElementById("request-content-" + requestId).classList.remove('finished');
+        document.getElementById("request-content-" + requestId).classList.remove('light-gray-bg');
         document.getElementById("request-content-" + requestId).classList.remove('rejected');
         document.getElementById("request-flash-message-" + requestId).innerHTML = "Accepted";
     } else {
         document.getElementById("request-content-" + requestId).classList.add('rejected');
-        document.getElementById("request-content-" + requestId).classList.remove('finished');
+        document.getElementById("request-content-" + requestId).classList.remove('light-gray-bg');
         document.getElementById("request-content-" + requestId).classList.remove('approved');
         document.getElementById("request-flash-message-" + requestId).innerHTML = "Rejected";
     }
@@ -44,11 +44,11 @@ function dealWithRequest(isAccept, requestId) {
     undoButton.addEventListener('click', () => {
         clearInterval(timer);
         clearTimeout(timeout);
-        fetch("/man/undoVacancyChoice/" + requestId, {method: 'POST'})
+        fetch("/admin/undoVacancyChoice/" + requestId, {method: 'POST'})
             .then(() => {
                 document.getElementById("request-buttons-" + requestId).classList.remove("hidden");
                 document.getElementById("request-flash-" + requestId).classList.add('hidden');
-                document.getElementById("request-content-" + requestId).classList.add('finished');
+                document.getElementById("request-content-" + requestId).classList.add('light-gray-bg');
                 document.getElementById("request-content-" + requestId).classList.remove('approved');
                 document.getElementById("request-content-" + requestId).classList.remove('rejected');
                 undoButton.innerHTML = "Undo 10";
