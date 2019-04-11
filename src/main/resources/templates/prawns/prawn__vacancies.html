@@ -19,17 +19,17 @@
     <form id="form" action="#" th:action="@{/prawn/vacancies}" method="get" class="flex-row-right font-big">
         <label>
             Hide unavailable jobs
-            <input class="checkbox" name="hide" type="checkbox">
+            <input th:checked="${param.hide}" id="hider" class="checkbox" name="hide" type="checkbox">
         </label>
         <label class="sorter">
             Sort by:
-            <select name="sort" class="input_big">
+            <select id="sorter" name="sort">
                 <option value="salaryAsc"> Salary (asc.)</option>
-                <option value="salaryDesc"> Salary (desc.)</option>
-                <option value="workHoursAsc"> Working hours (asc.)</option>
-                <option value="workHoursDesc"> Working hours (desc.)</option>
-                <option value="karmaAsc"> Karma (asc.)</option>
-                <option value="karmaDesc"> Karma (desc.)</option>
+                <option th:selected="${param.sort != null ? param.sort[0] == 'salaryDesc' : false}" value="salaryDesc"> Salary (desc.)</option>
+                <option th:selected="${param.sort != null ? param.sort[0] == 'workHoursAsc' : false}" value="workHoursAsc"> Working hours (asc.)</option>
+                <option th:selected="${param.sort != null ? param.sort[0] == 'workHoursDesc' : false}" value="workHoursDesc"> Working hours (desc.)</option>
+                <option th:selected="${param.sort != null ? param.sort[0] == 'karmaAsc' : false}" value="karmaAsc"> Karma (asc.)</option>
+                <option th:selected="${param.sort != null ? param.sort[0] == 'karmaDesc' : false}" value="karmaDesc"> Karma (desc.)</option>
             </select>
         </label>
         <input id="submit-sort-button" type="submit" class="hidden">
@@ -58,6 +58,10 @@
                 <b>Vacant places</b>
                 <div th:text="${current_job.vacantPlaces}"></div>
             </div>
+            <div class="form-item_middle">
+                <a th:href="@{/prawn}" th:if="${user.karma >= vacancy.requiredKarma and vacancy.vacantPlaces > 0}"
+                   class="button rejected">Quit</a>
+            </div>
         </div>
     </div>
 
@@ -79,6 +83,10 @@
             <div class="form-item flex-row-between">
                 <b>Vacant places</b>
                 <div th:text="${current_application.vacancy.vacantPlaces}"></div>
+            </div>
+            <div class="form-item_middle">
+                <a th:href="@{/prawn}" th:if="${user.karma >= vacancy.requiredKarma and vacancy.vacantPlaces > 0}"
+                   class="button rejected">Withdraw</a>
             </div>
         </div>
     </div>
@@ -103,8 +111,13 @@
                 <b>Vacant places</b>
                 <div th:text="${vacancy.vacantPlaces}"></div>
             </div>
+            <div class="form-item_middle">
+                <a th:href="@{/prawn}" th:if="${user.karma >= vacancy.requiredKarma and vacancy.vacantPlaces > 0}"
+                   class="button approved">Apply</a>
+            </div>
         </div>
     </div>
 </div>
+<script rel="script" type="text/javascript" th:src="@{/js/prawns/prawn__vacancies.js}"></script>
 </body>
 </html>

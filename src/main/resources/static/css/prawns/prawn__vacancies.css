@@ -19,7 +19,7 @@ body {
 .vacancy-item {
     display: inline-block;
     width: 240px;
-    height: 240px;
+    height: 270px;
     border: 2px solid black;
     border-radius: 30px;
     text-align: center;
@@ -41,7 +41,11 @@ body {
 }
 
 .sorter {
-    margin: 0 20px;
+    margin: 0 25px;
+}
+
+#sorter {
+    font-size: 18px;
 }
 
 #form {

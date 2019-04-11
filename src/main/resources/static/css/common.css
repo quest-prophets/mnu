@@ -40,6 +40,10 @@ select {
     margin-top: 40px;
 }
 
+.form-item_middle {
+    margin-top: 30px;
+}
+
 .form-item_small {
     margin-top: 10px;
 }
