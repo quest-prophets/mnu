@@ -4,10 +4,7 @@ import mnu.form.*
 import mnu.model.*
 import mnu.model.employee.*
 import mnu.model.enums.*
-import mnu.model.request.NewTransportRequest
-import mnu.model.request.NewVacancyRequest
-import mnu.model.request.NewWeaponRequest
-import mnu.model.request.VacancyApplicationRequest
+import mnu.model.request.*
 import mnu.repository.*
 import mnu.repository.employee.*
 import mnu.repository.request.*
@@ -95,6 +92,24 @@ class AdministratorController : ApplicationController() {
             }
         }
 
+        val newTransportRequests = newTransportRequestRepository?.findAll()
+        val ntPendingRequests = ArrayList<NewTransportRequest>()
+        for (i in 0 until pendingRequests.size) {
+            for (j in 0 until newTransportRequests!!.size) {
+                if (newTransportRequests[j].request == pendingRequests[i])
+                    ntPendingRequests.add(newTransportRequests[j])
+            }
+        }
+
+        val newVacancyRequests = newVacancyRequestRepository?.findAll()
+        val nvPendingRequests = ArrayList<NewVacancyRequest>()
+        for (i in 0 until pendingRequests.size) {
+            for (j in 0 until newVacancyRequests!!.size) {
+                if (newVacancyRequests[j].request == pendingRequests[i])
+                    nvPendingRequests.add(newVacancyRequests[j])
+            }
+        }
+
         val vacApplicationRequests = vacancyApplicationRequestRepository?.findAll()
         val vaPendingRequests = ArrayList<VacancyApplicationRequest>()
         for (i in 0 until pendingRequests.size) {
@@ -104,7 +119,8 @@ class AdministratorController : ApplicationController() {
             }
         }
 
-        model.addAttribute("new_weap_count", nwPendingRequests.size)
+        model.addAttribute("new_prod_count", nwPendingRequests.size + ntPendingRequests.size)
+        model.addAttribute("new_vac_count", nvPendingRequests.size)
         model.addAttribute("vac_appl_count", vaPendingRequests.size)
         model.addAttribute("experiment_count",
             experimentRepository?.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
@@ -134,7 +150,18 @@ class AdministratorController : ApplicationController() {
             if (it.request!!.status == RequestStatus.PENDING)
                 requestsForAdmin.add(it)
         }
+
+        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
+        val newTransportRequests = newTransportRequestRepository?.findAll()
+        val ntPendingRequests = ArrayList<NewTransportRequest>()
+        for (i in 0 until pendingRequests!!.size) {
+            for (j in 0 until newTransportRequests!!.size) {
+                if (newTransportRequests[j].request == pendingRequests[i])
+                    ntPendingRequests.add(newTransportRequests[j])
+            }
+        }
         model.addAttribute("requests", requestsForAdmin)
+        model.addAttribute("new_tran_count", ntPendingRequests.size)
         return "administrators/admin__new-weapons.html"
     }
 
@@ -146,13 +173,35 @@ class AdministratorController : ApplicationController() {
             if (it.request!!.status == RequestStatus.PENDING)
                 requestsForAdmin.add(it)
         }
+
+        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
+        val newWeaponRequests = newWeaponRequestRepository?.findAll()
+        val nwPendingRequests = ArrayList<NewWeaponRequest>()
+        for (i in 0 until pendingRequests!!.size) {
+            for (j in 0 until newWeaponRequests!!.size) {
+                if (newWeaponRequests[j].request == pendingRequests[i])
+                    nwPendingRequests.add(newWeaponRequests[j])
+            }
+        }
         model.addAttribute("requests", requestsForAdmin)
+        model.addAttribute("new_weap_count", nwPendingRequests.size)
         return "administrators/admin__new-transport.html"
     }
 
     @GetMapping("/vacancies")
     fun allVacancies(model: Model): String {
+        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
+        val newVacancyRequests = newVacancyRequestRepository?.findAll()
+        val nvPendingRequests = ArrayList<NewVacancyRequest>()
+        for (i in 0 until pendingRequests!!.size) {
+            for (j in 0 until newVacancyRequests!!.size) {
+                if (newVacancyRequests[j].request == pendingRequests[i])
+                    nvPendingRequests.add(newVacancyRequests[j])
+            }
+        }
+
         model.addAttribute("vacancies", vacancyRepository?.findAll())
+        model.addAttribute("new_vac_count", nvPendingRequests.size)
         return "administrators/admin__vacancies.html"
     }
 
@@ -170,7 +219,18 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/vacancies/new")
     fun newVacancy(model: Model): String {
+        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
+        val newVacancyRequests = newVacancyRequestRepository?.findAll()
+        val nvPendingRequests = ArrayList<NewVacancyRequest>()
+        for (i in 0 until pendingRequests!!.size) {
+            for (j in 0 until newVacancyRequests!!.size) {
+                if (newVacancyRequests[j].request == pendingRequests[i])
+                    nvPendingRequests.add(newVacancyRequests[j])
+            }
+        }
+        
         model.addAttribute("form", NewVacancyForm())
+        model.addAttribute("new_vac_count", nvPendingRequests.size)
         return "administrators/admin__new-vacancy.html"
     }
 
