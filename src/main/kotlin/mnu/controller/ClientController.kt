@@ -28,7 +28,9 @@ class ClientController : ApplicationController() {
     val newVacancyRequestRepository: NewVacancyRequestRepository? = null
 
     @GetMapping("/shop")
-    fun clientsShop(): String {
+    fun clientsShop(model: Model, principal: Principal): String {
+        val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
+        model.addAttribute("user", currentClient)
         return "customers/customer__shop.html"
     }
 }

@@ -38,7 +38,9 @@ class ManufacturerController : ApplicationController() {
     val newVacancyRequestRepository: NewVacancyRequestRepository? = null
 
     @GetMapping("/market")
-    fun market(): String {
+    fun market(model: Model, principal: Principal): String {
+        val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
+        model.addAttribute("user", currentClient)
         return "manufacturers/manufacturer__market.html"
     }
 
