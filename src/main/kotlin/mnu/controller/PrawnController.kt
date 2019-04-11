@@ -123,4 +123,22 @@ class PrawnController : ApplicationController() {
         redirect.addFlashAttribute("status", "Request sent. Wait for supervisor's decision.")
         return "redirect:main"
     }
+
+    @PostMapping("/withdrawApplication")
+    fun withdrawApplication (principal: Principal, redirect: RedirectAttributes) : String {
+        val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
+        val allVacancyRequests = vacancyApplicationRequestRepository?.findAllByPrawn(currentPrawn)
+
+        allVacancyRequests?.forEach {
+            if (it.request!!.status == RequestStatus.PENDING) {
+                it.request!!.status = RequestStatus.REJECTED
+                vacancyApplicationRequestRepository?.save(it)
+                redirect.addFlashAttribute("status", "Application withdrawn.")
+                return "redirect:vacancies"
+            }
+        }
+
+        redirect.addFlashAttribute("error", "You have no active vacancy applications.")
+        return "redirect:vacancies"
+    }
 }
