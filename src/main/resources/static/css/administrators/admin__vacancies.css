@@ -67,6 +67,7 @@ body {
 @media (max-width: 700px) {
     .content {
         margin-top: 85px;
+        padding: 0 1vw;
     }
 
     .grid-button {
@@ -78,6 +79,11 @@ body {
     .button-flex-row * {
         font-size: 18px;
         margin: 0 6px;
+    }
+
+    .vacancy-item {
+        float: none;
+        margin: 10px;
     }
 }
 

@@ -19,7 +19,7 @@
     <div class="flex-column">
         <div class="flex-row-center">
             <img alt="karma" th:src="@{/images/karma.png}" class="menu-item icon_big">
-            <div class="font-huge">999999</div>
+            <div class="font-huge" th:text="${user.karma}"></div>
         </div>
         <a class="flex-column button menu-item">
             <img alt="vacancies" th:src="@{/images/job.png}" class="icon_giant">
@@ -29,7 +29,7 @@
     <div class="flex-column">
         <div class="flex-row-center">
             <img alt="money" th:src="@{/images/gold_coin.png}" class="menu-item icon_big">
-            <div class="font-huge">99999</div>
+            <div class="font-huge" th:text="${user.balance}"></div>
         </div>
         <a class="flex-column button menu-item">
             <img alt="store" th:src="@{/images/prawn_cart.png}" class="icon_giant">

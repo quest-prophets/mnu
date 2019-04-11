@@ -36,7 +36,9 @@ class PrawnController : ApplicationController() {
 
 
     @GetMapping("/main")
-    fun prawnMain(): String {
+    fun prawnMain(model: Model, principal: Principal): String {
+        val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
+        model.addAttribute("user", currentPrawn)
         return "prawns/prawn__main.html"
     }
 
