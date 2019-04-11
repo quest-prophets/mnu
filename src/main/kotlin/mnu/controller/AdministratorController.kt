@@ -236,6 +236,19 @@ class AdministratorController : ApplicationController() {
         return "administrators/admin__new-vacancy.html"
     }
 
+    @GetMapping("/jobApplications")
+    fun manJobApplications(principal: Principal, model: Model) : String {
+        val vacancyApplicationRequests = vacancyApplicationRequestRepository?.findAll()
+        val validVacAppRequests = ArrayList<VacancyApplicationRequest>()
+        vacancyApplicationRequests?.forEach {
+            if (it.request!!.status == RequestStatus.PENDING)
+                validVacAppRequests.add(it)
+        }
+        model.addAttribute("requests", validVacAppRequests)
+        return "administrators/admin__job-applications.html"
+    }
+
+
     @PostMapping("/registerEmployee")
     fun addEmployee(@ModelAttribute form: EmployeeRegistrationForm, redirect: RedirectAttributes): String {
         val existingUser = userRepository?.findByLogin(form.username)

@@ -38,7 +38,7 @@
         <div class="notification-number" th:if="${new_prod_count > 0}" th:text="${new_prod_count}"></div>
     </a>
     <a th:href="@{/admin/prawns}" class="flex-column prawn-registration grid-button button">Prawn registration</a>
-    <a class="flex-column prawn-job-applications grid-button button">
+    <a th:href="@{/admin/jobApplications}" class="flex-column prawn-job-applications grid-button button">
         Prawns' job applications
         <div class="notification-number" th:if="${vac_appl_count > 0}" th:text="${vac_appl_count}"></div>
     </a>

@@ -128,6 +128,21 @@ class ManagerController : ApplicationController() {
         return "managers/manager__prawn-registration.html"
     }
 
+    @GetMapping("/jobApplications")
+    fun manJobApplications(principal: Principal, model: Model) : String {
+        val user = userRepository?.findByLogin(principal.name)!!
+        val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
+
+        val vacancyApplicationRequests = vacancyApplicationRequestRepository?.findAll()
+        val validVacAppRequests = ArrayList<VacancyApplicationRequest>()
+        vacancyApplicationRequests?.forEach {
+            if (it.request!!.status == RequestStatus.PENDING && it.prawn!!.manager == curManager)
+                validVacAppRequests.add(it)
+        }
+        model.addAttribute("requests", validVacAppRequests)
+        return "managers/manager__job-applications.html"
+    }
+
 
     @PostMapping("/registerPrawn")
     fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, principal: Principal, redirect: RedirectAttributes): String {

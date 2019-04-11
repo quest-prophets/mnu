@@ -37,7 +37,7 @@ body {
 .content {
     text-align: center;
     padding: 0 4vw;
-    margin-top: 110px;
+    margin-top: 90px;
 }
 
 .sorter {
@@ -49,6 +49,7 @@ body {
 }
 
 #form {
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -60,12 +61,15 @@ h1 {
 
 @media (max-width: 700px) {
     .content {
-        margin-top: 85px;
         padding: 0 1vw;
     }
 
     .flex-row-right {
         flex-direction: column;
+    }
+
+    .sorter {
+        margin-top: 15px;
     }
 
     .vacancy-item {

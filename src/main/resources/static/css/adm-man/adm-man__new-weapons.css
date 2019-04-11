@@ -63,6 +63,11 @@ h1 {
     border-bottom: 2px solid;
 }
 
+.button_back_dont-remove {
+    width: 45px;
+    height: 45px;
+}
+
 @media (max-width: 750px) {
     .content__item {
         width: 90vw;
