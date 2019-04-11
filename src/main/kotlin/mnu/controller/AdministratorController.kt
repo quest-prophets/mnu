@@ -88,8 +88,7 @@ class AdministratorController : ApplicationController() {
         val nwPendingRequests = ArrayList<NewWeaponRequest>()
         for (i in 0 until pendingRequests!!.size) {
             for (j in 0 until newWeaponRequests!!.size) {
-                if (newWeaponRequests[j].request == pendingRequests[i] &&
-                    (newWeaponRequests[j].user!!.role == Role.SECURITY || newWeaponRequests[j].user!!.role == Role.SCIENTIST))
+                if (newWeaponRequests[j].request == pendingRequests[i])
                     nwPendingRequests.add(newWeaponRequests[j])
             }
         }
@@ -641,7 +640,7 @@ class AdministratorController : ApplicationController() {
             "redirect:/admin/newTransport"
         }
     }
-    
+
 
     @PostMapping("/appointResolvers")
     fun appointResolversForIncident(@ModelAttribute form: AppointResolversForm, redirect: RedirectAttributes): String {
