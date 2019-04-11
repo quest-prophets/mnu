@@ -228,7 +228,7 @@ class AdministratorController : ApplicationController() {
                     nvPendingRequests.add(newVacancyRequests[j])
             }
         }
-        
+
         model.addAttribute("form", NewVacancyForm())
         model.addAttribute("new_vac_count", nvPendingRequests.size)
         return "administrators/admin__new-vacancy.html"
@@ -862,7 +862,7 @@ class AdministratorController : ApplicationController() {
     }
 
     fun newVacancyChoiceError(newVacancyRequestId: Long, principal: Principal): String? {
-        val request = newWeaponRequestRepository?.findById(newVacancyRequestId)!!
+        val request = newVacancyRequestRepository?.findById(newVacancyRequestId)!!
         if (!request.isPresent)
             return "Request with such id does not exist."
         return null
