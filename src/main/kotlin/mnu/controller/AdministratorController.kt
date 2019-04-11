@@ -4,9 +4,11 @@ import mnu.form.*
 import mnu.model.*
 import mnu.model.employee.*
 import mnu.model.enums.*
+import mnu.model.request.NewVacancyRequest
 import mnu.model.request.NewWeaponRequest
 import mnu.repository.*
 import mnu.repository.employee.*
+import mnu.repository.request.NewVacancyRequestRepository
 import mnu.repository.request.NewWeaponRequestRepository
 import mnu.repository.request.VacancyApplicationRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,6 +36,8 @@ class AdministratorController : ApplicationController() {
 
     @Autowired
     val vacancyRepository: VacancyRepository? = null
+    @Autowired
+    val newVacancyRequestRepository: NewVacancyRequestRepository? = null
     @Autowired
     val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository? = null
 
@@ -108,7 +112,7 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/vacancies")
     fun allVacancies(model: Model): String {
-        //todo добавить в модель vacancies
+        model.addAttribute("vacancies", vacancyRepository?.findAll())
         return "administrators/admin__vacancies.html"
     }
 
