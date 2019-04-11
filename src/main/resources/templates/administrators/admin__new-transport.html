@@ -31,18 +31,12 @@
         There are no new requests
     </div>
     <div th:each="request: ${requests}" class="content__item">
-        <div th:id="${'weapon-content-' + request.id}" class="content__main weapon-flex finished">
+        <div th:id="${'transport-content-' + request.id}" class="content__main transport-flex finished">
             <div th:switch="${request.type.name()}">
-                <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">
-                <img class="icon_middle" th:case="PISTOL" alt="pistol" th:src="@{/images/pistol.svg}">
-                <img class="icon_middle" th:case="SUBMACHINE_GUN" alt="submachine gun" th:src="@{/images/smg.png}">
-                <img class="icon_middle" th:case="ASSAULT_RIFLE" alt="assault rifle" th:src="@{/images/assault.png}">
-                <img class="icon_middle" th:case="LIGHT_MACHINE_GUN" alt="light machine gun"
-                     th:src="@{/images/minigun.png}">
-                <img class="icon_middle" th:case="SNIPER_RIFLE" alt="sniper rifle" th:src="@{/images/sniper.png}">
-                <img class="icon_middle" th:case="ALIEN" alt="alien" th:src="@{/images/alien.png}">
+                <img class="icon_middle" th:case="LAND" alt="sniper rifle" th:src="@{/images/land.png}">
+                <img class="icon_middle" th:case="AIR" alt="alien" th:src="@{/images/air.png}">
             </div>
-            <div class="weapon-description">
+            <div class="transport-description">
                 <div class="form-item_small">
                     <b>Name</b>
                     <span th:text="${request.name}"></span>
@@ -59,17 +53,13 @@
                     <b>Price</b>
                     <span th:text="${request.price}"></span>
                 </div>
-                <div class="form-item_small">
-                    <b>Quantity</b>
-                    <span th:text="${request.quantity}"></span>
+                <div th:id="${'transport-buttons-' + request.id}" class="form-item button-flex-row">
+                    <a th:attr="data-transport-id=${request.id}" data-action="accept" class="button approved">Accept</a>
+                    <a th:attr="data-transport-id=${request.id}" data-action="reject" class="button rejected">Reject</a>
                 </div>
-                <div th:id="${'weapon-buttons-' + request.id}" class="form-item button-flex-row">
-                    <a th:attr="data-weapon-id=${request.id}" data-action="accept" class="button approved">Accept</a>
-                    <a th:attr="data-weapon-id=${request.id}" data-action="reject" class="button rejected">Reject</a>
-                </div>
-                <div th:id="${'weapon-flash-' + request.id}" class="flash hidden">
-                    <div th:id="${'weapon-flash-message-' + request.id}"></div>
-                    <button th:id="${'weapon-undo-' + request.id}" th:attr="data-weapon-id=${request.id}"
+                <div th:id="${'transport-flash-' + request.id}" class="flash hidden">
+                    <div th:id="${'transport-flash-message-' + request.id}"></div>
+                    <button th:id="${'transport-undo-' + request.id}" th:attr="data-transport-id=${request.id}"
                             data-action="undo" class="form-item button">Undo 10
                     </button>
                 </div>
@@ -77,7 +67,7 @@
         </div>
     </div>
 </div>
-<script rel="script" type="text/javascript" th:src="@{/js/adm-man/adm-man__new-weapons.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/administrators/admin__new-transport.js}"></script>
 <script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
 </html>

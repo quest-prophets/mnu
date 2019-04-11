@@ -625,7 +625,7 @@ class AdministratorController : ApplicationController() {
     }
 
     fun newTransportChoiceError(newTransportRequestId: Long, principal: Principal): String? {
-        val request = newWeaponRequestRepository?.findById(newTransportRequestId)!!
+        val request = newTransportRequestRepository?.findById(newTransportRequestId)!!
         if (!request.isPresent)
             return "Request with such id does not exist."
         return null

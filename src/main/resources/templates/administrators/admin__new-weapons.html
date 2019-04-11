@@ -59,7 +59,7 @@
                     <b>Price</b>
                     <span th:text="${request.price}"></span>
                 </div>
-                <div class="form-item_small">
+                <div th:if="${request.quantity > 0}" class="form-item_small">
                     <b>Quantity</b>
                     <span th:text="${request.quantity}"></span>
                 </div>
