@@ -1,6 +1,7 @@
 package mnu.controller
 
 import mnu.form.NewPasswordForm
+import mnu.model.Vacancy
 import mnu.model.enums.RequestStatus
 import mnu.model.request.Request
 import mnu.model.request.VacancyApplicationRequest
@@ -48,6 +49,38 @@ class PrawnController : ApplicationController() {
         model.addAttribute("user", currentPrawn)
         model.addAttribute("form", NewPasswordForm())
         return "prawns/prawn__profile.html"
+    }
+
+    @GetMapping("/vacancies")
+    fun prawnVacancies(model: Model, principal: Principal) : String {
+        val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
+        val allVacancies = vacancyRepository?.findAll()
+        val allVacancyRequests = vacancyApplicationRequestRepository?.findAllByPrawn(currentPrawn)
+        var currentVacancyRequest = VacancyApplicationRequest()
+
+        allVacancyRequests?.forEach {
+            if (it.request!!.status == RequestStatus.PENDING) {
+                currentVacancyRequest = it
+            }
+        }
+
+        val allAvailableVacancies = ArrayList<Vacancy>()
+        val allUnavailableVacancies = ArrayList<Vacancy>()
+
+        allVacancies?.forEach {
+            if(currentPrawn.job != it && currentVacancyRequest.vacancy != it
+                && currentPrawn.karma >= it.requiredKarma && it.vacantPlaces > 0)
+                    allAvailableVacancies.add(it)
+            else if (currentPrawn.karma < it.requiredKarma && it.vacantPlaces == 0L)
+                    allUnavailableVacancies.add(it)
+        }
+
+        model.addAttribute("current_job", currentPrawn.job)
+        model.addAttribute("current_application", currentVacancyRequest)
+        model.addAttribute("all_vacancies", allVacancies)
+        model.addAttribute("available_vacancies", allAvailableVacancies)
+        model.addAttribute("unavailable_vacancies", allUnavailableVacancies)
+        return "prawns/prawn__vacancies.html"
     }
 
     @PostMapping("/vacancyApplication/{id}")

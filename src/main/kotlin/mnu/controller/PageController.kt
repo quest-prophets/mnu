@@ -4,6 +4,7 @@ import mnu.form.LoginForm
 import mnu.form.NewEmailForm
 import mnu.form.NewPasswordForm
 import mnu.form.PrawnRegistrationForm
+import mnu.model.enums.Role
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -87,17 +88,32 @@ class PageController : ApplicationController() {
             !regex.matches(form.newPass) -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
-                return "redirect:profile"
+                return when (curUser.role) {
+                    Role.PRAWN -> "redirect:/prawn/profile"
+                    Role.CUSTOMER, Role.MANUFACTURER -> "redirect:/profileClient"
+                    Role.ADMIN, Role.MANAGER, Role.SECURITY, Role.SCIENTIST -> "redirect:/profile"
+                    else -> "redirect:/auth/login"
+                }
             }
             form.prevPass == "" || form.newPass == "" -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "One of the fields is empty. Please fill all fields.")
-                return "redirect:profile"
+                return when (curUser.role) {
+                    Role.PRAWN -> "redirect:/prawn/profile"
+                    Role.CUSTOMER, Role.MANUFACTURER -> "redirect:/profileClient"
+                    Role.ADMIN, Role.MANAGER, Role.SECURITY, Role.SCIENTIST -> "redirect:/profile"
+                    else -> "redirect:/auth/login"
+                }
             }
             !passwordEncoder.matches(form.prevPass, curUser.password) -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Previous password is incorrect. Please try again.")
-                return "redirect:profile"
+                return when (curUser.role) {
+                    Role.PRAWN -> "redirect:/prawn/profile"
+                    Role.CUSTOMER, Role.MANUFACTURER -> "redirect:/profileClient"
+                    Role.ADMIN, Role.MANAGER, Role.SECURITY, Role.SCIENTIST -> "redirect:/profile"
+                    else -> "redirect:/auth/login"
+                }
             }
         }
         curUser.password = passwordEncoder.encode(form.newPass)
@@ -105,7 +121,12 @@ class PageController : ApplicationController() {
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Password changed successfully.")
-        return "redirect:profile"
+        return when (curUser.role) {
+            Role.PRAWN -> "redirect:/prawn/profile"
+            Role.CUSTOMER, Role.MANUFACTURER -> "redirect:/profileClient"
+            Role.ADMIN, Role.MANAGER, Role.SECURITY, Role.SCIENTIST -> "redirect:/profile"
+            else -> "redirect:/auth/login"
+        }
     }
 
     @PostMapping("/changeEmail")
