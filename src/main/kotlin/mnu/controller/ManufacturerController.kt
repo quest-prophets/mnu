@@ -1,5 +1,7 @@
 package mnu.controller
 
+import mnu.form.NewEmailForm
+import mnu.form.NewPasswordForm
 import mnu.form.NewProductForm
 import mnu.form.NewVacancyForm
 import mnu.repository.request.*
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @Controller
 @RequestMapping("/manufacturer")

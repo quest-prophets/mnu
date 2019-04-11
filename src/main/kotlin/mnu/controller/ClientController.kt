@@ -1,10 +1,14 @@
 package mnu.controller
 
+import mnu.form.NewEmailForm
+import mnu.form.NewPasswordForm
 import mnu.repository.request.*
 import mnu.repository.shop.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @Controller
 @RequestMapping("/client")
@@ -24,7 +28,7 @@ class ClientController : ApplicationController() {
     val newVacancyRequestRepository: NewVacancyRequestRepository? = null
 
     @GetMapping("/shop")
-    fun clientsShop() : String {
+    fun clientsShop(): String {
         return "customers/customer__shop.html"
     }
 }

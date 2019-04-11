@@ -1,6 +1,7 @@
 package mnu.controller
 
 import mnu.form.LoginForm
+import mnu.form.NewEmailForm
 import mnu.form.NewPasswordForm
 import mnu.form.PrawnRegistrationForm
 import org.springframework.security.core.authority.AuthorityUtils
@@ -68,6 +69,15 @@ class PageController : ApplicationController() {
         return "profile.html"
     }
 
+    @GetMapping("/profileClient")
+    fun profileClient(model: Model, principal: Principal): String {
+        val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
+        model.addAttribute("user", currentClient)
+        model.addAttribute("form_password", NewPasswordForm())
+        model.addAttribute("form_email", NewEmailForm())
+        return "profile_client.html"
+    }
+
     @PostMapping("/changePass")
     fun changePass(@ModelAttribute form: NewPasswordForm, principal: Principal, redirect: RedirectAttributes): String {
         val curUser = userRepository?.findByLogin(principal.name)!!
@@ -98,5 +108,9 @@ class PageController : ApplicationController() {
         return "redirect:profile"
     }
 
-
+    @PostMapping("/changeEmail")
+    fun changeEmail(@ModelAttribute form: NewEmailForm, principal: Principal, redirect: RedirectAttributes): String {
+        //todo
+        return ""
+    }
 }

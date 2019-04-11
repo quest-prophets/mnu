@@ -38,6 +38,10 @@ h2 {
     justify-content: space-between;
 }
 
+#change-email-button {
+    display: block;
+}
+
 @media (max-width: 450px) {
     .profile {
         max-width: 350px;
@@ -54,7 +58,7 @@ h2 {
     }
 
     h1 {
-        font-size: 26px;
+        font-size: 28px;
     }
 
     .font-big {
