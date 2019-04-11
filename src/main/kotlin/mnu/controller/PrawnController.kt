@@ -91,14 +91,14 @@ class PrawnController : ApplicationController() {
         allVacancyRequests?.forEach {
             if (it.request!!.status == RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "You cannot have more than 1 pending vacancy application request.")
-                return "redirect:vacancies"
+                return "redirect:/prawn/vacancies"
             }
         }
 
         val applicationVacancy = vacancyRepository?.findById(id)!!
         if (!vacancyRepository?.findById(id)!!.isPresent) {
             redirect.addFlashAttribute("error", "Such vacancy does not exist.")
-            return "redirect:vacancies"
+            return "redirect:/prawn/vacancies"
         }
 
         val existingVacancy = applicationVacancy.get()
@@ -106,11 +106,11 @@ class PrawnController : ApplicationController() {
         when {
             existingVacancy.vacantPlaces == 0L -> {
                 redirect.addFlashAttribute("error", "No vacant places left. Check back later or choose another vacancy.")
-                return "redirect:vacancies"
+                return "redirect:/prawn/vacancies"
             }
             existingVacancy.requiredKarma > currentPrawn.karma -> {
                 redirect.addFlashAttribute("error", "Requested vacancy's required karma is higher than yours.")
-                return "redirect:vacancies"
+                return "redirect:/prawn/vacancies"
             }
         }
 
@@ -121,7 +121,16 @@ class PrawnController : ApplicationController() {
         )
 
         redirect.addFlashAttribute("status", "Request sent. Wait for supervisor's decision.")
-        return "redirect:main"
+        return "redirect:/prawn/vacancies"
+    }
+
+    @PostMapping("/quitJob")
+    fun withdrawMembership(principal: Principal, redirect: RedirectAttributes) : String {
+        val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
+        currentPrawn.job = null
+        prawnRepository?.save(currentPrawn)
+        redirect.addFlashAttribute("status", "You have left your current job. You may now apply for other vacancies.")
+        return "redirect:/prawn/vacancies"
     }
 
     @PostMapping("/withdrawApplication")
@@ -134,11 +143,11 @@ class PrawnController : ApplicationController() {
                 it.request!!.status = RequestStatus.REJECTED
                 vacancyApplicationRequestRepository?.save(it)
                 redirect.addFlashAttribute("status", "Application withdrawn.")
-                return "redirect:vacancies"
+                return "redirect:/prawn/vacancies"
             }
         }
 
         redirect.addFlashAttribute("error", "You have no active vacancy applications.")
-        return "redirect:vacancies"
+        return "redirect:/prawn/vacancies"
     }
 }

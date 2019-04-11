@@ -98,7 +98,7 @@ class ManagerController : ApplicationController() {
     fun manClients(principal: Principal, model: Model) : String {
         val user = userRepository?.findByLogin(principal.name)!!
         val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
-        model.addAttribute("clients", clientRepository?.findAllByManager(curManager))
+        model.addAttribute("clients", clientRepository?.findAllByManagerOrderByIdAsc(curManager))
         return "managers/manager__client-list.html"
     }
 
@@ -106,7 +106,7 @@ class ManagerController : ApplicationController() {
     fun manPrawns(principal: Principal, model: Model) : String {
         val user = userRepository?.findByLogin(principal.name)!!
         val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
-        model.addAttribute("clients", prawnRepository?.findAllByManager(curManager))
+        model.addAttribute("clients", prawnRepository?.findAllByManagerOrderByIdAsc(curManager))
         return "managers/manager__prawn-list.html"
     }
 

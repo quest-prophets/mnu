@@ -13,5 +13,7 @@ interface ClientRepository : JpaRepository<Client, Long> {
 
     fun findAllByManager(manager: ManagerEmployee): List<Client>
 
+    fun findAllByManagerOrderByIdAsc(manager: ManagerEmployee): List<Client>
+
     fun findAllByType(type: ClientType): List<Client>
 }
