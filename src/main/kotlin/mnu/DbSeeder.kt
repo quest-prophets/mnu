@@ -9,20 +9,16 @@ import javax.annotation.PostConstruct
 
 @Component
 class DbSeeder(
-    @Value("\${mnu.seed-db}")
-    private val shouldSeed: Boolean,
-
     private val districtHouseRepository: DistrictHouseRepository
 ) {
     @PostConstruct
     fun init() {
-        if (shouldSeed) {
-            for (i in 0..14)
-                for (j in 0..14)
-                    try {
-                        districtHouseRepository.save(DistrictHouse(i, j))
-                    }
-                    catch (e: Exception) {}
-        }
+        val housesExist = districtHouseRepository.existsByShelterColumnAndShelterRow(1, 1)
+        if (housesExist)
+            return
+
+        for (i in 0..14)
+            for (j in 0..14)
+                    districtHouseRepository.save(DistrictHouse(i, j))
     }
 }
