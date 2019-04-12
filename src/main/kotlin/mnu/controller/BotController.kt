@@ -26,7 +26,7 @@ class BotController {
     @ResponseBody
     fun reportOnANewIncident(@RequestBody incident: NewIncident) : ResponseEntity<String> {
         val house = districtHouseRepository?.findByShelterColumnAndShelterRow(incident.column, incident.row)
-            ?: return ResponseEntity.badRequest().body("Such house does not exist.")
+            ?: return ResponseEntity.ok().body("Such house does not exist.")
         val newIncident = DistrictIncident(incident.dangerLevel, house, incident.description, incident.appearanceTime)
         districtIncidentRepository?.save(newIncident)
 	    return ResponseEntity.ok().body("Report sent. thank you for your goodwill!")

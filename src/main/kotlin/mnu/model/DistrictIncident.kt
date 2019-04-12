@@ -19,11 +19,11 @@ data class DistrictIncident (@Min(0) @Max(3) var dangerLevel: Short = 0,
     @GeneratedValue
     var id: Long? = null
 
-    @Min(1)
+    @Min(0)
     @Max(10)
     var levelFrom: Int = 0
 
-    @Min(1)
+    @Min(0)
     @Max(10)
     var levelTo: Int = 0
 
