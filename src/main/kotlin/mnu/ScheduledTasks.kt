@@ -16,7 +16,7 @@ class ScheduledTasks {
     @Autowired
     val districtIncidentRepository: DistrictIncidentRepository? = null
 
-    @Scheduled(cron = "0 0 * * MON")
+    @Scheduled(cron = "0 0 0 ? * MON")
     fun paydayTime() {
         val allPrawns = prawnRepository?.findAll()
         val allHouses = districtHouseRepository?.findAll()
