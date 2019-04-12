@@ -44,13 +44,18 @@ def entered_description(update, context):
     return ConversationHandler.END
 
 def send_report(report):
-    r = requests.post(REPORT_URL, data={
+    data = {
         'row': report['row'],
         'column': report['column'],
         'dangerLevel': report['danger_level'],
         'description': report['description']
-    })
-    return r.text
+    }
+    r = requests.post(REPORT_URL, json=data)
+    if r.status_code == 200:
+        return r.text
+    else:
+        logger.warning("Error: %s; user data: %s", r.text, str(data))
+        return "Something's wrong. Please try again later."
 
 if __name__ == '__main__':
     bot_token = os.environ["BOT_TOKEN"]
