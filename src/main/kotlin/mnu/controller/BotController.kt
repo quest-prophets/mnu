@@ -29,6 +29,6 @@ class BotController {
             ?: return ResponseEntity.ok().body("Such house does not exist.")
         val newIncident = DistrictIncident(incident.dangerLevel, house, incident.description, incident.appearanceTime)
         districtIncidentRepository?.save(newIncident)
-	    return ResponseEntity.ok().body("Report sent. thank you for your goodwill!")
+	    return ResponseEntity.ok().body("Report sent. Thank you for your goodwill!")
     }
 }

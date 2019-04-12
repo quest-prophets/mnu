@@ -6,10 +6,14 @@ import mnu.model.User
 import mnu.model.Weapon
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.Role
+import mnu.model.enums.ShoppingCartStatus
 import mnu.model.request.ChangeEquipmentRequest
 import mnu.model.request.NewWeaponRequest
 import mnu.model.request.VacancyApplicationRequest
-import mnu.repository.*
+import mnu.repository.DistrictHouseRepository
+import mnu.repository.TransportRepository
+import mnu.repository.VacancyRepository
+import mnu.repository.WeaponRepository
 import mnu.repository.employee.ManagerEmployeeRepository
 import mnu.repository.employee.SecurityEmployeeRepository
 import mnu.repository.request.*
@@ -60,7 +64,7 @@ class ManagerController : ApplicationController() {
     val shoppingCartRepository: ShoppingCartRepository? = null
 
     @GetMapping("/main")
-    fun manMenu(model: Model) : String {
+    fun manMenu(model: Model): String {
         val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
 
         val equipmentChangeRequests = changeEquipmentRequestRepository?.findAll()
@@ -77,7 +81,8 @@ class ManagerController : ApplicationController() {
         for (i in 0 until pendingRequests.size) {
             for (j in 0 until newWeaponRequests!!.size) {
                 if (newWeaponRequests[j].request == pendingRequests[i] &&
-                    (newWeaponRequests[j].user!!.role == Role.SECURITY || newWeaponRequests[j].user!!.role == Role.SCIENTIST))
+                    (newWeaponRequests[j].user!!.role == Role.SECURITY || newWeaponRequests[j].user!!.role == Role.SCIENTIST)
+                )
                     nwPendingRequests.add(newWeaponRequests[j])
             }
         }
@@ -98,7 +103,7 @@ class ManagerController : ApplicationController() {
     }
 
     @GetMapping("/clients")
-    fun manClients(principal: Principal, model: Model) : String {
+    fun manClients(principal: Principal, model: Model): String {
         val user = userRepository?.findByLogin(principal.name)!!
         val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
         model.addAttribute("clients", clientRepository?.findAllByManagerOrderByIdAsc(curManager))
@@ -106,7 +111,7 @@ class ManagerController : ApplicationController() {
     }
 
     @GetMapping("/prawns")
-    fun manPrawns(principal: Principal, model: Model) : String {
+    fun manPrawns(principal: Principal, model: Model): String {
         val user = userRepository?.findByLogin(principal.name)!!
         val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
         model.addAttribute("clients", prawnRepository?.findAllByManagerOrderByIdAsc(curManager))
@@ -114,7 +119,7 @@ class ManagerController : ApplicationController() {
     }
 
     @GetMapping("/newWeapons")
-    fun manNewWeapons(principal: Principal, model: Model) : String {
+    fun manNewWeapons(principal: Principal, model: Model): String {
         val weaponRequests = newWeaponRequestRepository?.findAll()
         val requestsForManager = ArrayList<NewWeaponRequest>()
         weaponRequests!!.forEach {
@@ -126,13 +131,13 @@ class ManagerController : ApplicationController() {
     }
 
     @GetMapping("/registerPrawn")
-    fun registerPrawn(model: Model) : String {
+    fun registerPrawn(model: Model): String {
         model.addAttribute("form", PrawnRegistrationForm())
         return "managers/manager__prawn-registration.html"
     }
 
     @GetMapping("/jobApplications")
-    fun manJobApplications(principal: Principal, model: Model) : String {
+    fun manJobApplications(principal: Principal, model: Model): String {
         val user = userRepository?.findByLogin(principal.name)!!
         val curManager = managerEmployeeRepository?.findById(user.id!!)!!.get()
 
@@ -148,7 +153,10 @@ class ManagerController : ApplicationController() {
 
 
     @PostMapping("/registerPrawn")
-    fun addPrawn(@ModelAttribute form: PrawnRegistrationForm, principal: Principal, redirect: RedirectAttributes): String {
+    fun addPrawn(
+        @ModelAttribute form: PrawnRegistrationForm, principal: Principal,
+        redirect: RedirectAttributes
+    ): String {
         val curUser = userRepository?.findByLogin(principal.name)!!
         val possibleManager = managerEmployeeRepository?.findById(curUser.id!!)!!
         if (possibleManager.isPresent) {
@@ -196,7 +204,7 @@ class ManagerController : ApplicationController() {
         }
     }
 
-    fun newEquipmentChoiceError(newEquipmentRequestId: Long, principal: Principal) : String? {
+    fun newEquipmentChoiceError(newEquipmentRequestId: Long, principal: Principal): String? {
         val request = changeEquipmentRequestRepository?.findById(newEquipmentRequestId)!!
         if (!request.isPresent)
             return "Request with such id does not exist."
@@ -204,7 +212,7 @@ class ManagerController : ApplicationController() {
     }
 
     @PostMapping("/acceptNewEquipment/{id}")
-    fun acceptNewEquipment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+    fun acceptNewEquipment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val user = userRepository?.findByLogin(principal.name)
         val currentManager = employeeRepository?.findById(user?.id!!)?.get()
 
@@ -284,7 +292,7 @@ class ManagerController : ApplicationController() {
     }
 
     @PostMapping("/rejectNewEquipment/{id}")
-    fun rejectNewEquipment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+    fun rejectNewEquipment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val user = userRepository?.findByLogin(principal.name)
         val currentManager = employeeRepository?.findById(user?.id!!)?.get()
 
@@ -338,8 +346,10 @@ class ManagerController : ApplicationController() {
                     this.status = RequestStatus.ACCEPTED
                     this.resolver = currentManager
                 }
-                val newWeapon = Weapon(checkedRequest.name, checkedRequest.type,
-                    checkedRequest.description, checkedRequest.price, checkedRequest.requiredAccessLvl)
+                val newWeapon = Weapon(
+                    checkedRequest.name, checkedRequest.type,
+                    checkedRequest.description, checkedRequest.price, checkedRequest.requiredAccessLvl
+                )
                     .apply { this.quantity = checkedRequest.quantity }
                 weaponRepository?.save(newWeapon)
 
@@ -400,7 +410,7 @@ class ManagerController : ApplicationController() {
                 this.resolver = currentManager
             }
             val weapons = weaponRepository?.findAll()!!.asReversed()
-            for(i in 0 until weapons.size) {
+            for (i in 0 until weapons.size) {
                 if (weapons[i].name == checkedRequest.name)
                     weaponRepository?.delete(weapons[i])
                 break
@@ -425,7 +435,7 @@ class ManagerController : ApplicationController() {
     }
 
     @PostMapping("/acceptJobApplication/{id}")
-    fun acceptJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+    fun acceptJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val user = userRepository?.findByLogin(principal.name)
         val currentManager = employeeRepository?.findById(user?.id!!)?.get()
 
@@ -487,7 +497,7 @@ class ManagerController : ApplicationController() {
     }
 
     @PostMapping("/rejectJobApplication/{id}")
-    fun rejectJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
+    fun rejectJobApplication(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val user = userRepository?.findByLogin(principal.name)
         val currentManager = employeeRepository?.findById(user?.id!!)?.get()
 
@@ -518,6 +528,76 @@ class ManagerController : ApplicationController() {
         } else {
             redirect.addFlashAttribute("error", error)
             "redirect:/man/jobApplications"
+        }
+    }
+
+    fun purchaseReqChoiceError(purchaseRequestId: Long, principal: Principal): String? {
+        val request = purchaseRequestRepository?.findById(purchaseRequestId)!!
+        if (!request.isPresent)
+            return "Request with such id does not exist."
+        return null
+    }
+
+    @PostMapping("/acceptPurchaseRequest/{id}")
+    fun acceptPurchaseRequest(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentManager = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = purchaseReqChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = purchaseRequestRepository?.findById(id)!!.get()
+            val userRequestRole = checkedRequest.user!!.role
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                return "redirect:/man/purchases"
+            }
+            when (userRequestRole) {
+                Role.CUSTOMER -> {
+                    val curCustomer = clientRepository?.findByUserId(checkedRequest.user!!.id!!)
+                    if (curCustomer!!.manager != managerEmployeeRepository?.findById(currentManager!!.id!!)!!.get()) {
+                        redirect.addFlashAttribute("error", "You are not this client's supervising manager.")
+                        return "redirect:/man/purchases"
+                    }
+                    val cartItems = checkedRequest.cart!!.items
+                    cartItems!!.forEach {
+                        if (it.weapon != null) {
+                            if (it.weapon!!.quantity < it.weaponQuantity!!) {
+//                                checkedRequest.request!!.apply {
+//                                    this.statusDate = LocalDateTime.now()
+//                                    this.status = RequestStatus.REJECTED
+//                                    this.resolver = currentManager
+//                                }
+//                                val cart = checkedRequest.cart!!
+//                                cart.status = ShoppingCartStatus.REJECTED
+//                                purchaseRequestRepository?.save(checkedRequest)
+//                                shoppingCartRepository?.save(cart)
+                                redirect.addFlashAttribute("error", "No sufficient weapons, request cannot be satisfied.")
+                                return "redirect:/man/purchases"
+                            }
+                        }
+                    }
+                }
+            }
+            if (checkedRequest.prawn!!.manager != managerEmployeeRepository?.findById(currentManager!!.id!!)!!.get()) {
+                redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
+                return "redirect:/man/purchases"
+            }
+
+            checkedRequest.request!!.apply {
+                this.statusDate = LocalDateTime.now()
+                this.status = RequestStatus.REJECTED
+                this.resolver = currentManager
+            }
+            vacancyApplicationRequestRepository?.save(checkedRequest)
+
+            redirect.addFlashAttribute("status", "Request rejected.")
+            "redirect:/man/purchases"
+
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/man/purchases"
         }
     }
 
