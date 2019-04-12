@@ -16,7 +16,7 @@
     </div>
     <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
     <div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
-    <a class="flex-column district grid-button button">
+    <a th:href="@{/admin/district}" class="flex-column district grid-button button">
         District
         <div class="notification-number" th:if="${UNKNOWN > 0}"></div>
     </a>

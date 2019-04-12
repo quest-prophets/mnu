@@ -237,7 +237,7 @@ class AdministratorController : ApplicationController() {
     }
 
     @GetMapping("/jobApplications")
-    fun manJobApplications(principal: Principal, model: Model) : String {
+    fun adminJobApplications(principal: Principal, model: Model) : String {
         val vacancyApplicationRequests = vacancyApplicationRequestRepository?.findAll()
         val validVacAppRequests = ArrayList<VacancyApplicationRequest>()
         vacancyApplicationRequests?.forEach {
@@ -246,6 +246,11 @@ class AdministratorController : ApplicationController() {
         }
         model.addAttribute("requests", validVacAppRequests)
         return "administrators/admin__job-applications.html"
+    }
+
+    @GetMapping("/district")
+    fun adminDistrict(): String{
+        return "administrators/admin__district.html"
     }
 
 

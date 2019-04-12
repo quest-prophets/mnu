@@ -9,14 +9,57 @@
 </head>
 <body>
 <div class="grid">
-    <div class="flex-row header">
+    <div class="flex-row-left header">
         <a th:href="@{/admin/main}">
-            <img alt="back" th:src="@{/images/back.png}" class="button_back button_round">
+            <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
         </a>
     </div>
 
-    <div class="content">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" class="district-grid">
+        <pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse">
+            <path d="M 25 0 L 0 0 0 25" fill="none" stroke="gray"></path>
+        </pattern>
+        <rect width="100%" height="100%" fill="url(#grid)" stroke="black"></rect>
+        <g>
+            <circle cx="100" cy="100" r="12" fill="red"></circle>
+        </g>
+    </svg>
+
+
+    <div class="form flex-column-left">
+        <div class="flex-row-center">
+            <div class="danger-circle"></div>
+            <div id="incident-description">Choose incident</div>
+        </div>
+        <div id="incident-house" class="hidden"></div>
+        <div id="incident-date" class="hidden"></div>
+
+        <form class="flex-column-left">
+            <label class="form-item">
+                <b>Incident Id</b>
+                <input readonly required class="input_big">
+            </label>
+            <label class="form-item">
+                <b>Number of security employees necessary</b>
+                <input required type="number" min="1" step="1" class="input_big">
+            </label>
+            <label class="form-item">
+                <b>Min. security level</b>
+                <input required type="number" min="1" max="10" step="1" class="input_big">
+            </label>
+            <label class="form-item">
+                <b>Max. security level</b>
+                <input required type="number" min="1" max="10" step="1" class="input_big">
+            </label>
+            <input type="submit" value="Resolve" class="form-item button">
+        </form>
     </div>
+</div>
+
+<div class="mobile-error">
+    Managing district incidents on constrained devices is prohibited by law
+    due to an excessively high percentage of false resolutions.
+    Please use a desktop machine.
 </div>
 </body>
 </html>

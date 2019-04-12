@@ -63,6 +63,7 @@ select {
 .notification-number {
     position: absolute;
     background: #ffd100;
+    border: 2px solid black;
     border-radius: 100px;
     padding: 2px 10px;
     top: -8px;
