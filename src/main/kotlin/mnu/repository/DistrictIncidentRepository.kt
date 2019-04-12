@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.*
 import java.time.LocalDateTime
 
 interface DistrictIncidentRepository : JpaRepository<DistrictIncident, Long> {
-    fun findAllByDangerLevelGreaterThan(dangerLevel: Short) : List<DistrictIncident>
+    fun findAllByLevelToAndDangerLevelGreaterThan(level1: Int, dangerLevel: Short) : List<DistrictIncident>
 
     fun findAllByHouse(house: DistrictHouse): List<DistrictIncident>
 

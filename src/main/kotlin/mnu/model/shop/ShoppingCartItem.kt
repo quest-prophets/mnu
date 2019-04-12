@@ -6,9 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "shopping_cart_items")
-data class ShoppingCartItem (var dateOfCreation: LocalDateTime = LocalDateTime.now(),
-
-                             @ManyToOne(fetch = FetchType.EAGER)
+data class ShoppingCartItem (@ManyToOne(fetch = FetchType.EAGER)
                              @JoinColumn(name = "weapon_id", referencedColumnName = "id")
                              var weapon: Weapon? = null,
                              var weaponQuantity: Long? = null,

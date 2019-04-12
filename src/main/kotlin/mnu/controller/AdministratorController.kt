@@ -249,7 +249,8 @@ class AdministratorController : ApplicationController() {
     }
 
     @GetMapping("/district")
-    fun adminDistrict(): String{
+    fun adminDistrict(model: Model): String {
+        model.addAttribute("current_incidents", districtIncidentRepository?.findAllByLevelToAndDangerLevelGreaterThan(0, 0))
         return "administrators/admin__district.html"
     }
 

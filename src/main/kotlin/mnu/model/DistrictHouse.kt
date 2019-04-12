@@ -8,8 +8,8 @@ import javax.validation.constraints.*
 @Table(name = "district_houses",
     uniqueConstraints = [UniqueConstraint(columnNames = arrayOf("shelterColumn" , "shelterRow"))]
 )
-data class DistrictHouse (@Min(0) @Max(15) var shelterRow: Int = 0,
-                          @Min(0) @Max(15) var shelterColumn: Int = 0,
+data class DistrictHouse (@Min(0) @Max(14) var shelterRow: Int = 0,
+                          @Min(0) @Max(14) var shelterColumn: Int = 0,
                           var constructionDate: LocalDateTime = LocalDateTime.now()) {
     @Id
     @GeneratedValue

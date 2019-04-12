@@ -7,18 +7,18 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "shopping_carts")
-data class ShoppingCart (var dateOfCreation: LocalDateTime = LocalDateTime.now()) {
+data class ShoppingCart (@ManyToOne(fetch = FetchType.EAGER)
+                         @JoinColumn(name = "client_id", referencedColumnName = "user_id")
+                         var client: Client? = null,
+
+                         var dateOfCreation: LocalDateTime = LocalDateTime.now()) {
     @Id
     @GeneratedValue
     var id: Long? = null
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "client_id", referencedColumnName = "user_id")
-//    var client: Client? = null
-
     @Enumerated(EnumType.STRING)
     var status: ShoppingCartStatus? = null
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "cart")
+    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "cart")
     var items: MutableList<ShoppingCartItem>? = null
 }

@@ -12,10 +12,8 @@ import mnu.model.request.VacancyApplicationRequest
 import mnu.repository.*
 import mnu.repository.employee.ManagerEmployeeRepository
 import mnu.repository.employee.SecurityEmployeeRepository
-import mnu.repository.request.ChangeEquipmentRequestRepository
-import mnu.repository.request.NewWeaponRequestRepository
-import mnu.repository.request.RequestRepository
-import mnu.repository.request.VacancyApplicationRequestRepository
+import mnu.repository.request.*
+import mnu.repository.shop.ShoppingCartRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -55,6 +53,11 @@ class ManagerController : ApplicationController() {
     val vacancyRepository: VacancyRepository? = null
     @Autowired
     val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository? = null
+
+    @Autowired
+    val purchaseRequestRepository: PurchaseRequestRepository? = null
+    @Autowired
+    val shoppingCartRepository: ShoppingCartRepository? = null
 
     @GetMapping("/main")
     fun manMenu(model: Model) : String {
