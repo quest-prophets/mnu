@@ -40,15 +40,15 @@ class SecurityController (
         val curUser = userRepository?.findByLogin(principal.name)!!
         val curSecurity = securityEmployeeRepository.findById(curUser.id!!).get()
 
-//        val allSuitableIncidents = districtIncidentRepository
-//            .findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
-//                0, curSecurity.employee!!.level!!, curSecurity.employee!!.level!!)
+        val allSuitableIncidents = districtIncidentRepository
+            .findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
+                0, curSecurity.employee!!.level!!, curSecurity.employee!!.level!!) as MutableList<DistrictIncident>?
 //        var currentIncId = 0L
-//        allSuitableIncidents?.forEach {
-//            if (it.assistants!!.contains(curSecurity)) {
-//                currentIncId = it.id!!
-//            }
-//        }
+        allSuitableIncidents?.forEach {
+            if (it.assistants!!.contains(curSecurity) && it.dangerLevel > 0) {
+                allSuitableIncidents.remove(it)
+            }
+        }
 
         val allIncidents = districtIncidentRepository.findAll()
         val incidentsWithEmployee = ArrayList<DistrictIncident>()
@@ -59,8 +59,7 @@ class SecurityController (
 
 //        model.addAttribute("curr_incident", currentIncId)
         model.addAttribute("ongoing_incidents",
-            districtIncidentRepository.findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
-                0, curSecurity.employee!!.level!!, curSecurity.employee!!.level!!))
+            allSuitableIncidents)
         model.addAttribute("incidents_with_employee", incidentsWithEmployee)
 
         return "security/sec__main.html"
@@ -80,7 +79,7 @@ class SecurityController (
             if (it.request!!.status == RequestStatus.PENDING) {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "You cannot have more than 1 pending equipment change request.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
         }
 
@@ -97,17 +96,17 @@ class SecurityController (
             !requestedWeapon!!.isPresent -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such weapon does not exist.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
             !requestedTransport!!.isPresent -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such transport does not exist.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
             !requestedTransport.isPresent && !requestedWeapon.isPresent -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such weapon and transport do not exist.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
         }
 
@@ -118,22 +117,22 @@ class SecurityController (
             existingWeapon?.quantity!! == 0L -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another weapon.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
             existingTransport?.quantity!! == 0L -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another transport.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
             existingWeapon.requiredAccessLvl > currentSecurity.employee!!.level!! -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Requested weapon's access level is higher than yours.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
             existingTransport.requiredAccessLvl > currentSecurity.employee!!.level!! -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Requested transport's access level is higher than yours.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
         }
 
@@ -144,7 +143,7 @@ class SecurityController (
         )
 
         redirect.addFlashAttribute("status", "Request sent. Wait for supervisor's decision.")
-        return "redirect:main"
+        return "redirect:/sec/main"
     }
 
     @PostMapping("/incident/{id}")
@@ -168,21 +167,21 @@ class SecurityController (
         when {
             incidentAssistants.contains(curSecurity) -> {
                 redirect.addFlashAttribute("error", "You are already appointed to this incident.")
-                return "redirect:main"
+                return "redirect:/sec/main"
             }
             incident.availablePlaces == 0L -> {
                 redirect.addFlashAttribute("error", "The amount of security is already sufficient for this incident.")
-                return "redirect:main"
+                return "redirect:/sec/main"
             }
             !allSuitableIncidents?.contains(incident)!! -> {
                 redirect.addFlashAttribute("error", "You are not suitable for this incident.")
-                return "redirect:main"
+                return "redirect:/sec/main"
             }
         }
         allSuitableIncidents?.forEach {
             if (it.assistants!!.contains(curSecurity)) {
                 redirect.addFlashAttribute("error", "You are already appointed for an incident #${it.id}.")
-                return "redirect:main"
+                return "redirect:/sec/main"
             }
         }
         incidentAssistants.add(securityEmployeeRepository.findById(curUser.id!!).get())
@@ -197,11 +196,11 @@ class SecurityController (
         districtIncidentRepository.save(incident)
         if (incident.availablePlaces == 0L) {
             redirect.addFlashAttribute("status", "You were appointed to the incident and have successfully resolved it.")
-            return "redirect:main"
+            return "redirect:/sec/main"
         }
 
         redirect.addFlashAttribute("status", "You were appointed to the incident.")
-        return "redirect:main"
+        return "redirect:/sec/main"
     }
 
     fun searchReportAccessError(incidentId: Long, principal: Principal): String? {
@@ -247,7 +246,7 @@ class SecurityController (
                         this.levelTo = 0
                     })
                     redirect.addFlashAttribute("status", "Report submitted.")
-                    return "redirect:main"
+                    return "redirect:/sec/main"
                 }
 
                 1 -> {
@@ -255,7 +254,7 @@ class SecurityController (
                     return if (!possibleWeapon.isPresent) {
                         redirect.addFlashAttribute("form", form)
                         redirect.addFlashAttribute("error", "Such weapon does not exist.")
-                        "redirect:report"
+                        "redirect:/sec/report"
                     }
                     else {
                         val weapon = possibleWeapon.get()
@@ -268,7 +267,7 @@ class SecurityController (
                             this.levelTo = 0
                         })
                         redirect.addFlashAttribute("status", "Report submitted and weapon added to the arsenal.")
-                        "redirect:main"
+                        "redirect:/sec/main"
 
                     }
                 }
@@ -287,7 +286,7 @@ class SecurityController (
                         else -> {
                             redirect.addFlashAttribute("form", form)
                             redirect.addFlashAttribute("error", "Such weapon type does not exist.")
-                            return "redirect:report"
+                            return "redirect:/sec/report"
                         }
                     }
 
@@ -295,17 +294,17 @@ class SecurityController (
                         form.weaponLevel.toInt() < 1 || form.weaponLevel.toInt() > 10 -> {
                             redirect.addFlashAttribute("form", form)
                             redirect.addFlashAttribute("error", "Please enter weapon access level between 1-10.")
-                            return "redirect:report"
+                            return "redirect:/sec/report"
                         }
                         form.weaponQuantity2.toLong() < 1 -> {
                             redirect.addFlashAttribute("form", form)
                             redirect.addFlashAttribute("error", "Please enter a valid quantity of this weapon.")
-                            return "redirect:report"
+                            return "redirect:/sec/report"
                         }
                         form.weaponPrice.toDouble() < 1 -> {
                             redirect.addFlashAttribute("form", form)
                             redirect.addFlashAttribute("error", "Please enter a valid price for this weapon.")
-                            return "redirect:report"
+                            return "redirect:/sec/report"
                         }
                     }
 
@@ -322,7 +321,7 @@ class SecurityController (
                         this.levelTo = 0
                     })
                     redirect.addFlashAttribute("status", "Report submitted. Await for supervisor's decision.")
-                    return "redirect:main"
+                    return "redirect:/sec/main"
 
                 }
             }
@@ -330,9 +329,9 @@ class SecurityController (
         } else {
             redirect.addFlashAttribute("form", form)
             redirect.addFlashAttribute("error", error)
-            return "redirect:report"
+            return "redirect:/sec/report"
         }
-        return "redirect:report"
+        return "redirect:/sec/report"
     }
 
     @PostMapping("/withdrawChange")
@@ -346,12 +345,12 @@ class SecurityController (
                 it.request!!.status = RequestStatus.REJECTED
                 changeEquipmentRequestRepository.save(it)
                 redirect.addFlashAttribute("status", "Request withdrawn.")
-                return "redirect:equipment"
+                return "redirect:/sec/equipment"
             }
         }
 
         redirect.addFlashAttribute("error", "You have no active equipment change requests.")
-        return "redirect:equipment"
+        return "redirect:/sec/equipment"
     }
 
 }
