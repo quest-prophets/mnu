@@ -64,7 +64,7 @@
               item.type.name()=='SUBMACHINE_GUN' ? 'shop-item_smg' : item.type.name()=='ASSAULT_RIFLE' ? 'shop-item_assault' :
               item.type.name()=='LIGHT_MACHINE_GUN' ? 'shop-item_lmg' : item.type.name()=='SNIPER_RIFLE' ? 'shop-item_sniper' :
               item.type.name()=='ALIEN' ? 'shop-item_alien' : item.type.name()=='LAND' ? 'shop-item_land' :
-              item.type.name()=='AIR' ? 'shop-item_air'}|">
+              item.type.name()=='AIR' ? 'shop-item_air' : ''}|">
             <div class="flex-column-no-center">
                 <div class="font-big" th:text="${item.name}"></div>
                 <div class="form-item" th:text="${item.description}"></div>
