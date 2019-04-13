@@ -1,4 +1,5 @@
 @import "../common.css";
+@import "../equipment-switch.css";
 
 .equipment-item {
     background-size: cover;

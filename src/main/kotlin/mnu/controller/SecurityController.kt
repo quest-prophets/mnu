@@ -83,13 +83,13 @@ class SecurityController (
         }
 
         val allAvailableWeapons =
-            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0)
+            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(curSecurity.employee!!.level!!, 0)
                 as MutableList<Weapon>
         if (curSecurity.weapon != null)
             allAvailableWeapons.remove(curSecurity.weapon!!)
 
         val allAvailableTransport =
-            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0)
+            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(curSecurity.employee!!.level!!, 0)
                 as MutableList<Transport>
         if (curSecurity.transport != null)
             allAvailableTransport.remove(curSecurity.transport!!)
@@ -98,6 +98,7 @@ class SecurityController (
         model.addAttribute("current_request", currentChangeRequest)
         model.addAttribute("available_weapons", allAvailableWeapons)
         model.addAttribute("available_transport", allAvailableTransport)
+        model.addAttribute("form", NewEquipmentForm())
         return "security/sec__equipment-change"
     }
 
@@ -120,11 +121,11 @@ class SecurityController (
         }
 
         val requestedWeapon = when (form.weaponId) {
-            null -> null
+            null, 0L -> null
             else -> weaponRepository.findById(form.weaponId)
         }
         val requestedTransport = when (form.transportId) {
-            null -> null
+            null, 0L -> null
             else -> transportRepository.findById(form.transportId)
         }
 

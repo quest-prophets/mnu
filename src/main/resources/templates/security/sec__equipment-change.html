@@ -67,6 +67,13 @@
     <input type="submit" class="button rejected" value="Withdraw request">
 </form>
 
+<div class="onoffswitch">
+    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="equipment-switch" checked>
+    <label class="onoffswitch-label" for="equipment-switch">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
 <table>
     <thead>
     <tr>
@@ -88,17 +95,28 @@
         <td th:text="${weapon.description}"></td>
         <td th:text="${weapon.requiredAccessLvl}"></td>
     </tr>
-    <tr class="transport-rows" th:each="transport : ${available_transport}">
+    <tr class="transport-rows hidden" th:each="transport : ${available_transport}">
         <td th:text="${transport.id}"></td>
-        <td th:text="|${weapon.type.name()=='MELEE' ? 'Melee' : transport.type.name()=='PISTOL' ? 'Pistol' :
-              transport.type.name()=='SUBMACHINE_GUN' ? 'Submachine gun' : transport.type.name()=='ASSAULT_RIFLE' ? 'Assault rifle' :
-              transport.type.name()=='LIGHT_MACHINE_GUN' ? 'Light machine gun' : transport.type.name()=='SNIPER_RIFLE' ? 'Sniper rifle' :
-              transport.type.name()=='ALIEN' ? 'Alien' : ''}|"></td>
+        <td th:text="|${transport.type.name()=='LAND' ? 'Land transport' :
+         transport.type.name()=='AIR' ? 'Air transport' : ''}|"></td>
         <td th:text="${transport.name}"></td>
         <td th:text="${transport.description}"></td>
         <td th:text="${transport.requiredAccessLvl}"></td>
     </tr>
     </tbody>
 </table>
+
+<form class="flex-column form-item_big" method="post" th:object="${form}" action="#" th:action="@{/sec/equipment}">
+    <label>
+        <b>New weapon Id</b>
+        <input id="weaponId" name="weaponId" type="number" class="input_big">
+    </label>
+    <label class="form-item">
+        <b>New transport Id</b>
+        <input id="transportId" name="transportId" type="number" class="input_big">
+    </label>
+    <input type="submit" class="button form-item" value="Request new equipment">
+</form>
+<script rel="script" type="text/javascript" th:src="@{/js/security/sec__equipment-change.js}"></script>
 </body>
 </html>

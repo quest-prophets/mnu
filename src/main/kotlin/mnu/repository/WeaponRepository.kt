@@ -13,6 +13,8 @@ interface WeaponRepository : JpaRepository<Weapon, Long> {
 
     fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(accessLevel: Int, quantity: Long) : List<Weapon>?
 
+    fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(accessLevel: Int, quantity: Long) : List<Weapon>?
+
     fun findAllByTypeOrderByPriceAsc(type: WeaponType) : List<Weapon>
     fun findAllByTypeOrderByPriceDesc(type: WeaponType) : List<Weapon>
 
