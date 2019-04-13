@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.*
 import org.springframework.data.repository.query.Param
 
 interface VacancyApplicationRequestRepository : JpaRepository<VacancyApplicationRequest, Long> {
-    fun findAllByPrawn(prawn: Prawn) : List<VacancyApplicationRequest>
+    fun findAllByPrawn(prawn: Prawn) : List<VacancyApplicationRequest>?
 
-    fun findAllByVacancy(vacancy: Vacancy) : List<VacancyApplicationRequest>
+    fun findAllByVacancy(vacancy: Vacancy) : List<VacancyApplicationRequest>?
 
     @Query("select r.id, var.prawn_id, var.vacancy_id from vacancy_application_requests var" +
             " inner join requests r on (var.request_id = r.id)" +

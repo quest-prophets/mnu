@@ -22,27 +22,15 @@ import java.security.Principal
 
 @Controller
 @RequestMapping("/sec")
-class SecurityController : ApplicationController() {
-
-    @Autowired
-    val securityEmployeeRepository: SecurityEmployeeRepository? = null
-
-    @Autowired
-    val weaponRepository: WeaponRepository? = null
-    @Autowired
-    val newWeaponRequestRepository: NewWeaponRequestRepository? = null
-
-    @Autowired
-    val transportRepository: TransportRepository? = null
-
-    @Autowired
-    val requestRepository: RequestRepository? = null
-
-    @Autowired
-    val changeEquipmentRequestRepository: ChangeEquipmentRequestRepository? = null
-
-    @Autowired
-    val districtIncidentRepository: DistrictIncidentRepository? = null
+class SecurityController (
+    val securityEmployeeRepository: SecurityEmployeeRepository,
+    val weaponRepository: WeaponRepository,
+    val newWeaponRequestRepository: NewWeaponRequestRepository,
+    val transportRepository: TransportRepository,
+    val requestRepository: RequestRepository,
+    val changeEquipmentRequestRepository: ChangeEquipmentRequestRepository,
+    val districtIncidentRepository: DistrictIncidentRepository
+) : ApplicationController() {
 
     @GetMapping("/main")
     fun securityMenu() = "security/sec__main.html"
@@ -54,8 +42,8 @@ class SecurityController : ApplicationController() {
     ): String {
         val user = userRepository?.findByLogin(principal.name)
         val newRequest = Request().apply { this.status = RequestStatus.PENDING }
-        val currentSecurity = securityEmployeeRepository?.findById(user?.id!!)?.get()!!
-        val allChangeRequests = changeEquipmentRequestRepository?.findAllByEmployee(currentSecurity)
+        val currentSecurity = securityEmployeeRepository.findById(user?.id!!).get()
+        val allChangeRequests = changeEquipmentRequestRepository.findAllByEmployee(currentSecurity)
 
         allChangeRequests?.forEach {
             if (it.request!!.status == RequestStatus.PENDING) {
@@ -68,11 +56,11 @@ class SecurityController : ApplicationController() {
 
         val requestedWeapon = when (form.weaponId) {
             null -> null
-            else -> weaponRepository?.findById(form.weaponId)
+            else -> weaponRepository.findById(form.weaponId)
         }
         val requestedTransport = when (form.transportId) {
             null -> null
-            else -> transportRepository?.findById(form.transportId)
+            else -> transportRepository.findById(form.transportId)
         }
 
         when {
@@ -119,8 +107,8 @@ class SecurityController : ApplicationController() {
             }
         }
 
-        requestRepository?.save(newRequest)
-        changeEquipmentRequestRepository?.save(
+        requestRepository.save(newRequest)
+        changeEquipmentRequestRepository.save(
             ChangeEquipmentRequest(currentSecurity, existingWeapon, existingTransport)
             .apply { this.request = newRequest }
         )
@@ -133,13 +121,13 @@ class SecurityController : ApplicationController() {
     fun acceptIncidentParticipation(@PathVariable id: Long, redirect: RedirectAttributes, principal: Principal) : String {
         val curUser = userRepository?.findByLogin(principal.name)!!
         val curEmployeeLevel = employeeRepository?.findByUserId(curUser.id!!)!!.level!!
-        val possibleIncident = districtIncidentRepository?.findById(id)!!
+        val possibleIncident = districtIncidentRepository.findById(id)
         if (!possibleIncident.isPresent)
             return "Incident with such id does not exist."
         val incident = possibleIncident.get()
         incident.assistants = ArrayList()
         val allSuitableIncidents =
-            districtIncidentRepository?.findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
+            districtIncidentRepository.findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
                 0, curEmployeeLevel, curEmployeeLevel)
         when {
             incident.availablePlaces == 0L -> {
@@ -150,13 +138,13 @@ class SecurityController : ApplicationController() {
             }
         }
         incident.apply {
-            this.assistants?.add(securityEmployeeRepository?.findById(curUser.id!!)!!.get())
+            this.assistants?.add(securityEmployeeRepository.findById(curUser.id!!).get())
             this.availablePlaces = this.availablePlaces - 1
             if(this.availablePlaces == 0L)
                 this.dangerLevel = 0
         }
 
-        districtIncidentRepository?.save(incident)
+        districtIncidentRepository.save(incident)
         if (incident.availablePlaces == 0L)
             return "You were appointed to the incident and have successfully resolved it."
         return "You were appointed to the incident."
@@ -164,11 +152,11 @@ class SecurityController : ApplicationController() {
 
     fun searchReportAccessError(incidentId: Long, principal: Principal): String? {
         val user = userRepository?.findByLogin(principal.name)
-        val possibleSecurity = securityEmployeeRepository?.findById(user?.id!!)!!
+        val possibleSecurity = securityEmployeeRepository.findById(user?.id!!)
         if (!possibleSecurity.isPresent)
             return "You are not a security employee."
         val currentSecurity = possibleSecurity.get()
-        val incident = districtIncidentRepository?.findById(incidentId)!!
+        val incident = districtIncidentRepository.findById(incidentId)
         if (!incident.isPresent)
             return "Incident with such id does not exist."
         if (!incident.get().assistants!!.contains(currentSecurity))
@@ -181,10 +169,10 @@ class SecurityController : ApplicationController() {
     fun addSearchReport(@ModelAttribute form: NewSearchForm, principal: Principal, redirect: RedirectAttributes): String {
         val error = searchReportAccessError(form.incidentId.toLong(), principal)
         if (error == null) {
-            val incident = districtIncidentRepository?.findById(form.incidentId.toLong())!!
+            val incident = districtIncidentRepository.findById(form.incidentId.toLong())
             when (form.isNew.toInt()) {
                 0 -> {
-                    districtIncidentRepository?.save(incident.get().apply {
+                    districtIncidentRepository.save(incident.get().apply {
                         this.description += "\n\n${form.result}"
                         this.dangerLevel = 0
                         this.levelFrom = 0
@@ -195,7 +183,7 @@ class SecurityController : ApplicationController() {
                 }
 
                 1 -> {
-                    val possibleWeapon = weaponRepository?.findById(form.weaponId.toLong())!!
+                    val possibleWeapon = weaponRepository.findById(form.weaponId.toLong())
                     return if (!possibleWeapon.isPresent) {
                         redirect.addFlashAttribute("form", form)
                         redirect.addFlashAttribute("error", "Such weapon does not exist.")
@@ -204,8 +192,8 @@ class SecurityController : ApplicationController() {
                     else {
                         val weapon = possibleWeapon.get()
                         weapon.quantity += form.weaponQuantity1.toLong()
-                        weaponRepository?.save(weapon)
-                        districtIncidentRepository?.save(incident.get().apply {
+                        weaponRepository.save(weapon)
+                        districtIncidentRepository.save(incident.get().apply {
                             this.description += "\n\n${form.result}"
                             this.dangerLevel = 0
                             this.levelFrom = 0
@@ -258,8 +246,8 @@ class SecurityController : ApplicationController() {
                         form.weaponQuantity2.toLong(), form.weaponLevel.toInt(), form.weaponPrice.toDouble(), user
                     )
 
-                    newWeaponRequestRepository?.save(newWeaponRequest.apply { this.request = newRequest })
-                    districtIncidentRepository?.save(incident.get().apply {
+                    newWeaponRequestRepository.save(newWeaponRequest.apply { this.request = newRequest })
+                    districtIncidentRepository.save(incident.get().apply {
                         this.description += "\n\n${form.result}"
                         this.dangerLevel = 0
                         this.levelFrom = 0
@@ -282,13 +270,13 @@ class SecurityController : ApplicationController() {
     @PostMapping("/withdrawChange")
     fun withdrawApplication (principal: Principal, redirect: RedirectAttributes) : String {
         val user = userRepository?.findByLogin(principal.name)
-        val currentSecurity = securityEmployeeRepository?.findById(user?.id!!)?.get()!!
-        val allChangeRequests = changeEquipmentRequestRepository?.findAllByEmployee(currentSecurity)
+        val currentSecurity = securityEmployeeRepository.findById(user?.id!!).get()
+        val allChangeRequests = changeEquipmentRequestRepository.findAllByEmployee(currentSecurity)
 
         allChangeRequests?.forEach {
             if (it.request!!.status == RequestStatus.PENDING) {
                 it.request!!.status = RequestStatus.REJECTED
-                changeEquipmentRequestRepository?.save(it)
+                changeEquipmentRequestRepository.save(it)
                 redirect.addFlashAttribute("status", "Request withdrawn.")
                 return "redirect:equipment"
             }

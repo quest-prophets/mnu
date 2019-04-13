@@ -13,7 +13,6 @@ import mnu.model.request.NewWeaponRequest
 import mnu.model.request.Request
 import mnu.repository.request.*
 import mnu.repository.shop.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -22,20 +21,14 @@ import java.security.Principal
 
 @Controller
 @RequestMapping("/manufacturer")
-class ManufacturerController : ApplicationController() {
-    @Autowired
-    val shoppingCartItemRepository: ShoppingCartItemRepository? = null
-    @Autowired
-    val shoppingCartRepository: ShoppingCartRepository? = null
-
-    @Autowired
-    val purchaseRequestRepository: PurchaseRequestRepository? = null
-    @Autowired
-    val newWeaponRequestRepository: NewWeaponRequestRepository? = null
-    @Autowired
-    val newTransportRequestRepository: NewTransportRequestRepository? = null
-    @Autowired
-    val newVacancyRequestRepository: NewVacancyRequestRepository? = null
+class ManufacturerController (
+    val shoppingCartItemRepository: ShoppingCartItemRepository,
+    val shoppingCartRepository: ShoppingCartRepository,
+    val purchaseRequestRepository: PurchaseRequestRepository,
+    val newWeaponRequestRepository: NewWeaponRequestRepository,
+    val newTransportRequestRepository: NewTransportRequestRepository,
+    val newVacancyRequestRepository: NewVacancyRequestRepository
+) : ApplicationController() {
 
     @GetMapping("/market")
     fun market(model: Model, principal: Principal): String {
@@ -124,9 +117,9 @@ class ManufacturerController : ApplicationController() {
         }
 
         if (newProductRequest is NewWeaponRequest)
-            newWeaponRequestRepository?.save(newProductRequest.apply { this.request = newRequest })
+            newWeaponRequestRepository.save(newProductRequest.apply { this.request = newRequest })
         if (newProductRequest is NewTransportRequest)
-            newTransportRequestRepository?.save(newProductRequest.apply { this.request = newRequest })
+            newTransportRequestRepository.save(newProductRequest.apply { this.request = newRequest })
 
         redirect.addFlashAttribute("status", "Request submitted. Await for administrator's decision.")
         return "redirect:/manufacturer/market"
@@ -148,7 +141,7 @@ class ManufacturerController : ApplicationController() {
                 form.workHoursPerWeek.toInt(), form.vacantPlaces.toLong(), manufacturer)
                 .apply { this.request = newRequest }
 
-        newVacancyRequestRepository?.save(newVacancyRequest)
+        newVacancyRequestRepository.save(newVacancyRequest)
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Request submitted. Await for administrator's decision.")

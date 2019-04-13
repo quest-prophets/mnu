@@ -11,24 +11,21 @@ import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/bot")
-class BotController {
+class BotController (
+    val districtIncidentRepository: DistrictIncidentRepository,
+    val districtHouseRepository: DistrictHouseRepository
+) {
     data class NewIncident(var dangerLevel: Short = 0, var row: Int = 0, var column: Int = 0,
                            var description: String = "", var appearanceTime: LocalDateTime = LocalDateTime.now())
 
 
-    @Autowired
-    val districtIncidentRepository: DistrictIncidentRepository? = null
-
-    @Autowired
-    val districtHouseRepository: DistrictHouseRepository? = null
-
     @PostMapping("/reportIncident")
     @ResponseBody
     fun reportOnANewIncident(@RequestBody incident: NewIncident) : ResponseEntity<String> {
-        val house = districtHouseRepository?.findByShelterColumnAndShelterRow(incident.column, incident.row)
+        val house = districtHouseRepository.findByShelterColumnAndShelterRow(incident.column, incident.row)
             ?: return ResponseEntity.ok().body("Such house does not exist.")
         val newIncident = DistrictIncident(incident.dangerLevel, house, incident.description, incident.appearanceTime)
-        districtIncidentRepository?.save(newIncident)
+        districtIncidentRepository.save(newIncident)
 	    return ResponseEntity.ok().body("Report sent. Thank you for your goodwill!")
     }
 }

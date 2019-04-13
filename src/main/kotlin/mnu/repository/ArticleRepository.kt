@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.*
 import java.time.LocalDateTime
 
 interface ArticleRepository : JpaRepository<Article, Long> {
-    fun findAllByOrderByCreationDateDesc() : List<Article>
+    fun findAllByOrderByCreationDateDesc() : List<Article>?
 
     fun findAllByScientistId(scientistId: Long) : List<Article>
 
-    fun findAllByScientistIdOrderByCreationDateDesc(scientistId: Long) : List<Article>
+    fun findAllByScientistIdOrderByCreationDateDesc(scientistId: Long) : List<Article>?
 
     fun findAllByScientist(scientist: ScientistEmployee) : List<Article>
 

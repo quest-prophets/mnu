@@ -8,15 +8,15 @@ interface VacancyRepository : JpaRepository<Vacancy, Long> {
 
     fun findAllByVacantPlacesGreaterThanEqual(places: Long) : List<Vacancy>
 
-    fun findAllByOrderBySalaryAsc() : List<Vacancy>
+    fun findAllByOrderBySalaryAsc() : List<Vacancy>?
 
-    fun findAllByOrderBySalaryDesc() : List<Vacancy>
+    fun findAllByOrderBySalaryDesc() : List<Vacancy>?
 
-    fun findAllByOrderByWorkHoursPerWeekAsc() : List<Vacancy>
+    fun findAllByOrderByWorkHoursPerWeekAsc() : List<Vacancy>?
 
-    fun findAllByOrderByWorkHoursPerWeekDesc() : List<Vacancy>
+    fun findAllByOrderByWorkHoursPerWeekDesc() : List<Vacancy>?
 
-    fun findAllByOrderByRequiredKarmaAsc() : List<Vacancy>
+    fun findAllByOrderByRequiredKarmaAsc() : List<Vacancy>?
 
-    fun findAllByOrderByRequiredKarmaDesc() : List<Vacancy>
+    fun findAllByOrderByRequiredKarmaDesc() : List<Vacancy>?
 }

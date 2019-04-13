@@ -10,7 +10,6 @@ import mnu.repository.DistrictIncidentRepository
 import mnu.repository.VacancyRepository
 import mnu.repository.request.RequestRepository
 import mnu.repository.request.VacancyApplicationRequestRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -19,22 +18,13 @@ import java.security.Principal
 
 @Controller
 @RequestMapping("/prawn")
-class PrawnController : ApplicationController() {
-
-    @Autowired
-    val districtIncidentRepository: DistrictIncidentRepository? = null
-
-    @Autowired
-    val districtHouseRepository: DistrictHouseRepository? = null
-
-    @Autowired
-    val requestRepository: RequestRepository? = null
-
-    @Autowired
-    val vacancyRepository: VacancyRepository? = null
-    @Autowired
-    val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository? = null
-
+class PrawnController (
+    val districtIncidentRepository: DistrictIncidentRepository,
+    val districtHouseRepository: DistrictHouseRepository,
+    val requestRepository: RequestRepository,
+    val vacancyRepository: VacancyRepository,
+    val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository
+) : ApplicationController() {
 
     @GetMapping("/main")
     fun prawnMain(model: Model, principal: Principal): String {
@@ -54,7 +44,7 @@ class PrawnController : ApplicationController() {
     @GetMapping("/vacancies")
     fun prawnVacancies(@RequestParam (required = false) sort: String?, model: Model, principal: Principal) : String {
         val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
-        val allVacancyRequests = vacancyApplicationRequestRepository?.findAllByPrawn(currentPrawn)
+        val allVacancyRequests = vacancyApplicationRequestRepository.findAllByPrawn(currentPrawn)
         var currentVacancyRequest = VacancyApplicationRequest()
 
         allVacancyRequests?.forEach {
@@ -63,15 +53,15 @@ class PrawnController : ApplicationController() {
             }
         }
 
-        var allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc() as MutableList<Vacancy>
+        var allVacancies = vacancyRepository.findAllByOrderBySalaryAsc() as MutableList<Vacancy>
         if (sort != null) {
             when (sort) {
-                "salaryAsc" -> allVacancies = vacancyRepository?.findAllByOrderBySalaryAsc() as MutableList<Vacancy>
-                "salaryDesc" -> allVacancies = vacancyRepository?.findAllByOrderBySalaryDesc() as MutableList<Vacancy>
-                "karmaAsc" -> allVacancies = vacancyRepository?.findAllByOrderByRequiredKarmaAsc() as MutableList<Vacancy>
-                "karmaDesc" -> allVacancies = vacancyRepository?.findAllByOrderByRequiredKarmaDesc() as MutableList<Vacancy>
-                "workHoursAsc" -> allVacancies = vacancyRepository?.findAllByOrderByWorkHoursPerWeekAsc() as MutableList<Vacancy>
-                "workHoursDesc" -> allVacancies = vacancyRepository?.findAllByOrderByWorkHoursPerWeekDesc() as MutableList<Vacancy>
+                "salaryAsc" -> allVacancies = vacancyRepository.findAllByOrderBySalaryAsc() as MutableList<Vacancy>
+                "salaryDesc" -> allVacancies = vacancyRepository.findAllByOrderBySalaryDesc() as MutableList<Vacancy>
+                "karmaAsc" -> allVacancies = vacancyRepository.findAllByOrderByRequiredKarmaAsc() as MutableList<Vacancy>
+                "karmaDesc" -> allVacancies = vacancyRepository.findAllByOrderByRequiredKarmaDesc() as MutableList<Vacancy>
+                "workHoursAsc" -> allVacancies = vacancyRepository.findAllByOrderByWorkHoursPerWeekAsc() as MutableList<Vacancy>
+                "workHoursDesc" -> allVacancies = vacancyRepository.findAllByOrderByWorkHoursPerWeekDesc() as MutableList<Vacancy>
             }
         }
 
@@ -90,7 +80,7 @@ class PrawnController : ApplicationController() {
     fun applyToVacancy(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes) : String {
         val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
         val newRequest = Request().apply { this.status = RequestStatus.PENDING }
-        val allVacancyRequests = vacancyApplicationRequestRepository?.findAllByPrawn(currentPrawn)
+        val allVacancyRequests = vacancyApplicationRequestRepository.findAllByPrawn(currentPrawn)
 
         allVacancyRequests?.forEach {
             if (it.request!!.status == RequestStatus.PENDING) {
@@ -99,8 +89,8 @@ class PrawnController : ApplicationController() {
             }
         }
 
-        val applicationVacancy = vacancyRepository?.findById(id)!!
-        if (!vacancyRepository?.findById(id)!!.isPresent) {
+        val applicationVacancy = vacancyRepository.findById(id)
+        if (!vacancyRepository.findById(id).isPresent) {
             redirect.addFlashAttribute("error", "Such vacancy does not exist.")
             return "redirect:/prawn/vacancies"
         }
@@ -118,8 +108,8 @@ class PrawnController : ApplicationController() {
             }
         }
 
-        requestRepository?.save(newRequest)
-        vacancyApplicationRequestRepository?.save(
+        requestRepository.save(newRequest)
+        vacancyApplicationRequestRepository.save(
             VacancyApplicationRequest(currentPrawn, existingVacancy)
                 .apply { this.request = newRequest }
         )
@@ -141,12 +131,12 @@ class PrawnController : ApplicationController() {
     @PostMapping("/withdrawApplication")
     fun withdrawApplication (principal: Principal, redirect: RedirectAttributes) : String {
         val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
-        val allVacancyRequests = vacancyApplicationRequestRepository?.findAllByPrawn(currentPrawn)
+        val allVacancyRequests = vacancyApplicationRequestRepository.findAllByPrawn(currentPrawn)
 
         allVacancyRequests?.forEach {
             if (it.request!!.status == RequestStatus.PENDING) {
                 it.request!!.status = RequestStatus.REJECTED
-                vacancyApplicationRequestRepository?.save(it)
+                vacancyApplicationRequestRepository.save(it)
                 redirect.addFlashAttribute("status", "Application withdrawn.")
                 return "redirect:/prawn/vacancies"
             }

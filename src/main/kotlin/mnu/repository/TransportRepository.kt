@@ -9,7 +9,7 @@ interface TransportRepository : JpaRepository<Transport, Long> {
 
     fun findAllByRequiredAccessLvlLessThanEqual(accessLevel: Int) : List<Transport>
 
-    fun findAllByQuantityGreaterThanEqual(quantity: Long) : List<Transport>
+    fun findAllByQuantityGreaterThanEqual(quantity: Long) : List<Transport>?
 
     fun findAllByTypeOrderByPriceAsc(type: TransportType) : List<Transport>
     fun findAllByTypeOrderByPriceDesc(type: TransportType) : List<Transport>

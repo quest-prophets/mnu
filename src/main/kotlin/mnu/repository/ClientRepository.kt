@@ -9,11 +9,11 @@ interface ClientRepository : JpaRepository<Client, Long> {
 
     fun findByEmail(email: String): Client
 
-    fun findByUserId(id: Long): Client
+    fun findByUserId(id: Long): Client?
 
     fun findAllByManager(manager: ManagerEmployee): List<Client>
 
-    fun findAllByManagerOrderByIdAsc(manager: ManagerEmployee): List<Client>
+    fun findAllByManagerOrderByIdAsc(manager: ManagerEmployee): List<Client>?
 
     fun findAllByType(type: ClientType): List<Client>
 }

@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.*
 interface PrawnRepository : JpaRepository<Prawn, Long> {
     fun findAllByManager(manager: ManagerEmployee): List<Prawn>
 
-    fun findAllByManagerOrderByIdAsc(manager: ManagerEmployee): List<Prawn>
+    fun findAllByManagerOrderByIdAsc(manager: ManagerEmployee): List<Prawn>?
 
-    fun findByUserId(id: Long): Prawn
+    fun findByUserId(id: Long): Prawn?
 
     fun findAllByKarmaGreaterThanEqual(karma: Long): List<Prawn>
 

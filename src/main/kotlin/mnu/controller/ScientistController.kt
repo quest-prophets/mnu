@@ -19,36 +19,26 @@ import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/sci")
-class ScientistController : ApplicationController() {
-
-    @Autowired
-    val scientistEmployeeRepository: ScientistEmployeeRepository? = null
-
-    @Autowired
-    val articleRepository: ArticleRepository? = null
-
-    @Autowired
-    val experimentRepository: ExperimentRepository? = null
-
-    @Autowired
-    val weaponRepository: WeaponRepository? = null
-
-    @Autowired
-    val newWeaponRequestRepository: NewWeaponRequestRepository? = null
-
+class ScientistController (
+    val scientistEmployeeRepository: ScientistEmployeeRepository,
+    val articleRepository: ArticleRepository,
+    val experimentRepository: ExperimentRepository,
+    val weaponRepository: WeaponRepository,
+    val newWeaponRequestRepository: NewWeaponRequestRepository
+) : ApplicationController() {
 
     @GetMapping("/main")
     fun main(model: Model, principal: Principal): String {
         val user = userRepository?.findByLogin(principal.name)!!
         val scientist = employeeRepository?.findByUserId(user.id!!)!!
-        val allPendingMinor = experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
+        val allPendingMinor = experimentRepository.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
         val allValidPendingMinor = ArrayList<Experiment>()
         allPendingMinor?.forEach {
             if (scientist.level!! > it.examinator!!.employee!!.level!! || scientist.level == 10)
                 allValidPendingMinor.add(it)
         }
 
-        model.addAttribute("experiments", experimentRepository?.findAllByExaminatorIdOrderByStatusAsc(user.id!!))
+        model.addAttribute("experiments", experimentRepository.findAllByExaminatorIdOrderByStatusAsc(user.id!!))
         model.addAttribute("experimentCount", allValidPendingMinor.size)
         return "scientists/sci__main.html"
     }
@@ -57,21 +47,21 @@ class ScientistController : ApplicationController() {
     fun mainArticles(model: Model, principal: Principal): String {
         val user = userRepository?.findByLogin(principal.name)!!
         val scientist = employeeRepository?.findByUserId(user.id!!)!!
-        val allPendingMinor = experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
+        val allPendingMinor = experimentRepository.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
         val allValidPendingMinor = ArrayList<Experiment>()
         allPendingMinor?.forEach {
             if (scientist.level!! > it.examinator!!.employee!!.level!! || scientist.level == 10)
                 allValidPendingMinor.add(it)
         }
 
-        model.addAttribute("articles", articleRepository?.findAllByScientistIdOrderByCreationDateDesc(user.id!!))
+        model.addAttribute("articles", articleRepository.findAllByScientistIdOrderByCreationDateDesc(user.id!!))
         model.addAttribute("experimentCount", allValidPendingMinor.size)
         return "scientists/sci__main_articles.html"
     }
 
     @GetMapping("/main/requests")
     fun mainRequests(model: Model, principal: Principal): String {
-        val experiments = experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
+        val experiments = experimentRepository.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MINOR)
         val validExperiments = ArrayList<Experiment>()
 
         val user = userRepository?.findByLogin(principal.name)
@@ -97,7 +87,7 @@ class ScientistController : ApplicationController() {
     fun experiment(model: Model, principal: Principal): String {
         val user = userRepository?.findByLogin(principal.name)
         val currentScientistLvl = employeeRepository?.findById(user?.id!!)?.get()?.level
-        model.addAttribute("assistants", scientistEmployeeRepository?.getAssistants(currentScientistLvl!!))
+        model.addAttribute("assistants", scientistEmployeeRepository.getAssistants(currentScientistLvl!!))
         if (!model.containsAttribute("form"))
             model.addAttribute("form", NewExperimentForm())
         return "/scientists/sci__new-experiment.html"
@@ -120,16 +110,16 @@ class ScientistController : ApplicationController() {
             }
         }
 
-        val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
+        val currentScientist = scientistEmployeeRepository.findById(user?.id!!).get()
         val assistant = form.assistantId?.let { assistantId ->
-            val requestedAssistant = scientistEmployeeRepository?.findById(assistantId)?.orElse(null)
+            val requestedAssistant = scientistEmployeeRepository.findById(assistantId).orElse(null)
             when {
                 requestedAssistant == null -> {
                     redirect.addFlashAttribute("form", form)
                     redirect.addFlashAttribute("error", "Scientist does not exist.")
                     return "redirect:experiment"
                 }
-                requestedAssistant.employee!!.level!! >= currentScientist!!.employee!!.level!! -> {
+                requestedAssistant.employee!!.level!! >= currentScientist.employee!!.level!! -> {
                     redirect.addFlashAttribute("form", form)
                     redirect.addFlashAttribute("error", "Requested assistant's level is higher than yours.")
                     return "redirect:experiment"
@@ -138,7 +128,7 @@ class ScientistController : ApplicationController() {
             }
         }
 
-        experimentRepository?.save(
+        experimentRepository.save(
             Experiment(
                 form.title, experimentType,
                 form.description, currentScientist, assistant
@@ -153,11 +143,11 @@ class ScientistController : ApplicationController() {
 
     fun reportAccessError(experimentId: Long, principal: Principal): String? {
         val user = userRepository?.findByLogin(principal.name)
-        val possibleScientist = scientistEmployeeRepository?.findById(user?.id!!)!!
+        val possibleScientist = scientistEmployeeRepository.findById(user?.id!!)
         if (!possibleScientist.isPresent)
             return "You are not a scientist."
         val currentScientist = possibleScientist.get()
-        val experiment = experimentRepository?.findById(experimentId)!!
+        val experiment = experimentRepository.findById(experimentId)
         if (!experiment.isPresent)
             return "Experiment with such id does not exist."
         if (experiment.get().examinator != currentScientist)
@@ -173,7 +163,7 @@ class ScientistController : ApplicationController() {
         val error = reportAccessError(id.toLong(), principal)
         if (error == null) {
             model.addAttribute("form", NewReportForm())
-            model.addAttribute("weapons", weaponRepository?.findAll())
+            model.addAttribute("weapons", weaponRepository.findAll())
         } else
             model.addAttribute("error", error)
 
@@ -184,10 +174,10 @@ class ScientistController : ApplicationController() {
     fun addReport(@ModelAttribute form: NewReportForm, principal: Principal, redirect: RedirectAttributes): String {
         val error = reportAccessError(form.experimentId.toLong(), principal)
         if (error == null) {
-            val experiment = experimentRepository?.findById(form.experimentId.toLong())!!
+            val experiment = experimentRepository.findById(form.experimentId.toLong())
             when (form.isSynthesized.toInt()) {
                 0 -> {
-                    experimentRepository?.save(experiment.get().apply {
+                    experimentRepository.save(experiment.get().apply {
                         this.statusDate = LocalDateTime.now()
                         this.result = form.result
                         this.status = ExperimentStatus.FINISHED
@@ -197,7 +187,7 @@ class ScientistController : ApplicationController() {
                 }
 
                 1 -> {
-                    val possibleWeapon = weaponRepository?.findById(form.weaponId.toLong())!!
+                    val possibleWeapon = weaponRepository.findById(form.weaponId.toLong())
                     return if (!possibleWeapon.isPresent) {
                         redirect.addFlashAttribute("form", form)
                         redirect.addFlashAttribute("error", "Such weapon does not exist.")
@@ -206,8 +196,8 @@ class ScientistController : ApplicationController() {
                     else {
                         val weapon = possibleWeapon.get()
                         weapon.quantity += form.weaponQuantity1.toLong()
-                        weaponRepository?.save(weapon)
-                        experimentRepository?.save(experiment.get().apply {
+                        weaponRepository.save(weapon)
+                        experimentRepository.save(experiment.get().apply {
                             this.statusDate = LocalDateTime.now()
                             this.result = form.result
                             this.status = ExperimentStatus.FINISHED
@@ -259,8 +249,8 @@ class ScientistController : ApplicationController() {
                         form.weaponQuantity2.toLong(), form.weaponLevel.toInt(), form.weaponPrice.toDouble(), user
                     )
 
-                    newWeaponRequestRepository?.save(newWeaponRequest.apply { this.request = newRequest })
-                    experimentRepository?.save(experiment.get().apply {
+                    newWeaponRequestRepository.save(newWeaponRequest.apply { this.request = newRequest })
+                    experimentRepository.save(experiment.get().apply {
                         this.statusDate = LocalDateTime.now()
                         this.result = form.result
                         this.status = ExperimentStatus.FINISHED
@@ -282,23 +272,23 @@ class ScientistController : ApplicationController() {
     @PostMapping("/article")
     fun addArticle(@ModelAttribute form: NewArticleForm, principal: Principal, redirect: RedirectAttributes): String {
         val user = userRepository?.findByLogin(principal.name)
-        val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
-        articleRepository?.save(Article(form.title, form.article).apply { this.scientist = currentScientist })
+        val currentScientist = scientistEmployeeRepository.findById(user?.id!!).get()
+        articleRepository.save(Article(form.title, form.article).apply { this.scientist = currentScientist })
 
         redirect.addFlashAttribute("status", "Article added.")
         return "redirect:main/articles"
     }
 
     fun choiceError(experimentId: Long, principal: Principal): String? {
-        val experiment = experimentRepository?.findById(experimentId)!!
+        val experiment = experimentRepository.findById(experimentId)
         val user = userRepository?.findByLogin(principal.name)
-        val currentScientist = scientistEmployeeRepository?.findById(user?.id!!)?.get()
+        val currentScientist = scientistEmployeeRepository.findById(user?.id!!).get()
         if (!experiment.isPresent)
             return "Experiment with such id does not exist."
         val checkedExperiment = experiment.get()
         if (checkedExperiment.type == ExperimentType.MAJOR)
             return "Major experiment requests are handled by administrators."
-        if ((checkedExperiment.examinator!!.employee!!.level!! >= currentScientist!!.employee!!.level!!)
+        if ((checkedExperiment.examinator!!.employee!!.level!! >= currentScientist.employee!!.level!!)
             && checkedExperiment.examinator!!.employee!!.level!! < 10
             && currentScientist.employee!!.level!! < 10
         )
@@ -311,7 +301,7 @@ class ScientistController : ApplicationController() {
     fun acceptExperiment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val error = choiceError(id, principal)
         return if (error == null) {
-            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+            val checkedExperiment = experimentRepository.findById(id).get()
 
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -319,7 +309,7 @@ class ScientistController : ApplicationController() {
             } else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.APPROVED
-                experimentRepository?.save(checkedExperiment)
+                experimentRepository.save(checkedExperiment)
 
                 redirect.addFlashAttribute("status", "Request accepted.")
                 "redirect:main/requests"
@@ -336,7 +326,7 @@ class ScientistController : ApplicationController() {
     fun rejectExperiment(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
         val error = choiceError(id, principal)
         return if (error == null) {
-            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+            val checkedExperiment = experimentRepository.findById(id).get()
 
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -345,7 +335,7 @@ class ScientistController : ApplicationController() {
             else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.REJECTED
-                experimentRepository?.save(checkedExperiment)
+                experimentRepository.save(checkedExperiment)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
                 "redirect:main/requests"

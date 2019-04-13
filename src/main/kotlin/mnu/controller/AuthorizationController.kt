@@ -9,7 +9,6 @@ import mnu.model.enums.Role
 import mnu.repository.ClientRepository
 import mnu.repository.UserRepository
 import mnu.repository.employee.ManagerEmployeeRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -21,16 +20,11 @@ import javax.servlet.http.HttpSession
 
 @Controller
 @RequestMapping("/auth")
-class AuthorizationController {
-
-    @Autowired
-    private val userRepository: UserRepository? = null
-
-    @Autowired
-    private val clientRepository: ClientRepository? = null
-
-    @Autowired
-    private val managerEmployeeRepository: ManagerEmployeeRepository? = null
+class AuthorizationController (
+    private val userRepository: UserRepository,
+    private val clientRepository: ClientRepository,
+    private val managerEmployeeRepository: ManagerEmployeeRepository
+){
 
     @GetMapping("/login")
     fun login(model: Model, session: HttpSession, redirect: RedirectAttributes): String {
@@ -69,8 +63,8 @@ class AuthorizationController {
 
     @PostMapping("/register")
     fun addUser(@ModelAttribute form: ClientRegistrationForm, redirect: RedirectAttributes): String {
-        val existingUser = userRepository?.findByLogin(form.username)
-        val clients = clientRepository?.findAll()
+        val existingUser = userRepository.findByLogin(form.username)
+        val clients = clientRepository.findAll()
         val regex = """[a-zA-Z0-9_.]+""".toRegex()
 
         return if (!regex.matches(form.username) || !regex.matches(form.password)) {
@@ -83,7 +77,7 @@ class AuthorizationController {
             val encodedPassword = passwordEncoder.encode(form.password)
             form.password = encodedPassword
 
-            clients?.forEach {
+            clients.forEach {
                 if (form.email == it.email) {
                     redirect.addFlashAttribute("form", form)
                     redirect.addFlashAttribute("error", "Email '${form.email}' is already taken.")
@@ -109,15 +103,15 @@ class AuthorizationController {
                 }
                 val newClientUser = Client(form.name, form.email, clientType).apply { this.user = newUser }
 
-                val managerIdList = managerEmployeeRepository?.getAllIds()!!
+                val managerIdList = managerEmployeeRepository.getAllIds()
 
                 if (clientType == ClientType.CUSTOMER)
                     newClientUser.apply {
                         this.manager = managerEmployeeRepository.findById(managerIdList.random()).get()
                     }
 
-                userRepository?.save(newUser)
-                clientRepository?.save(newClientUser)
+                userRepository.save(newUser)
+                clientRepository.save(newClientUser)
 
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("status", "Successfully registered. You may now login.")

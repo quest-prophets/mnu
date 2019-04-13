@@ -10,7 +10,6 @@ import mnu.repository.employee.*
 import mnu.repository.request.*
 import mnu.repository.shop.ShoppingCartItemRepository
 import mnu.repository.shop.ShoppingCartRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -21,53 +20,28 @@ import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/admin")
-class AdministratorController : ApplicationController() {
+class AdministratorController (
+    val districtHouseRepository: DistrictHouseRepository,
+    val districtIncidentRepository: DistrictIncidentRepository,
+    val requestRepository: RequestRepository,
+    val purchaseRequestRepository: PurchaseRequestRepository,
+    val shoppingCartRepository: ShoppingCartRepository,
+    val shoppingCartItemRepository: ShoppingCartItemRepository,
+    val weaponRepository: WeaponRepository,
+    val newWeaponRequestRepository: NewWeaponRequestRepository,
+    val transportRepository: TransportRepository,
+    val newTransportRequestRepository: NewTransportRequestRepository,
+    val vacancyRepository: VacancyRepository,
+    val newVacancyRequestRepository: NewVacancyRequestRepository,
+    val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository,
+    val articleRepository: ArticleRepository,
+    val experimentRepository: ExperimentRepository,
+    val managerEmployeeRepository: ManagerEmployeeRepository,
+    val securityEmployeeRepository: SecurityEmployeeRepository,
+    val scientistEmployeeRepository: ScientistEmployeeRepository,
+    val administratorEmployeeRepository: AdministratorEmployeeRepository
+) : ApplicationController() {
 
-    @Autowired
-    val districtHouseRepository: DistrictHouseRepository? = null
-    @Autowired
-    val districtIncidentRepository: DistrictIncidentRepository? = null
-
-    @Autowired
-    val requestRepository: RequestRepository? = null
-
-    @Autowired
-    val purchaseRequestRepository: PurchaseRequestRepository? = null
-    @Autowired
-    val shoppingCartRepository: ShoppingCartRepository? = null
-    @Autowired
-    val shoppingCartItemRepository: ShoppingCartItemRepository? = null
-
-    @Autowired
-    val weaponRepository: WeaponRepository? = null
-    @Autowired
-    val newWeaponRequestRepository: NewWeaponRequestRepository? = null
-
-    @Autowired
-    val transportRepository: TransportRepository? = null
-    @Autowired
-    val newTransportRequestRepository: NewTransportRequestRepository? = null
-
-    @Autowired
-    val vacancyRepository: VacancyRepository? = null
-    @Autowired
-    val newVacancyRequestRepository: NewVacancyRequestRepository? = null
-    @Autowired
-    val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository? = null
-
-    @Autowired
-    val articleRepository: ArticleRepository? = null
-    @Autowired
-    val experimentRepository: ExperimentRepository? = null
-
-    @Autowired
-    val managerEmployeeRepository: ManagerEmployeeRepository? = null
-    @Autowired
-    val securityEmployeeRepository: SecurityEmployeeRepository? = null
-    @Autowired
-    val scientistEmployeeRepository: ScientistEmployeeRepository? = null
-    @Autowired
-    val administratorEmployeeRepository: AdministratorEmployeeRepository? = null
 
 
     @GetMapping("/employee")
@@ -90,39 +64,39 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/main")
     fun adminMenu(model: Model) : String {
-        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
+        val pendingRequests = requestRepository.findAllByStatus(RequestStatus.PENDING)
 
-        val newWeaponRequests = newWeaponRequestRepository?.findAll()
+        val newWeaponRequests = newWeaponRequestRepository.findAll()
         val nwPendingRequests = ArrayList<NewWeaponRequest>()
         for (i in 0 until pendingRequests!!.size) {
-            for (j in 0 until newWeaponRequests!!.size) {
+            for (j in 0 until newWeaponRequests.size) {
                 if (newWeaponRequests[j].request == pendingRequests[i])
                     nwPendingRequests.add(newWeaponRequests[j])
             }
         }
 
-        val newTransportRequests = newTransportRequestRepository?.findAll()
+        val newTransportRequests = newTransportRequestRepository.findAll()
         val ntPendingRequests = ArrayList<NewTransportRequest>()
         for (i in 0 until pendingRequests.size) {
-            for (j in 0 until newTransportRequests!!.size) {
+            for (j in 0 until newTransportRequests.size) {
                 if (newTransportRequests[j].request == pendingRequests[i])
                     ntPendingRequests.add(newTransportRequests[j])
             }
         }
 
-        val newVacancyRequests = newVacancyRequestRepository?.findAll()
+        val newVacancyRequests = newVacancyRequestRepository.findAll()
         val nvPendingRequests = ArrayList<NewVacancyRequest>()
         for (i in 0 until pendingRequests.size) {
-            for (j in 0 until newVacancyRequests!!.size) {
+            for (j in 0 until newVacancyRequests.size) {
                 if (newVacancyRequests[j].request == pendingRequests[i])
                     nvPendingRequests.add(newVacancyRequests[j])
             }
         }
 
-        val vacApplicationRequests = vacancyApplicationRequestRepository?.findAll()
+        val vacApplicationRequests = vacancyApplicationRequestRepository.findAll()
         val vaPendingRequests = ArrayList<VacancyApplicationRequest>()
         for (i in 0 until pendingRequests.size) {
-            for (j in 0 until vacApplicationRequests!!.size) {
+            for (j in 0 until vacApplicationRequests.size) {
                 if (vacApplicationRequests[j].request == pendingRequests[i])
                     vaPendingRequests.add(vacApplicationRequests[j])
             }
@@ -132,7 +106,7 @@ class AdministratorController : ApplicationController() {
         model.addAttribute("new_vac_count", nvPendingRequests.size)
         model.addAttribute("vac_appl_count", vaPendingRequests.size)
         model.addAttribute("experiment_count",
-            experimentRepository?.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
+            experimentRepository.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
         return "administrators/admin__menu.html"
     }
 
@@ -140,33 +114,33 @@ class AdministratorController : ApplicationController() {
     fun adminExperiments(model: Model): String {
         model.addAttribute(
             "experiments",
-            experimentRepository?.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR)
+            experimentRepository.findAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR)
         )
         return "administrators/admin__experiments.html"
     }
 
     @GetMapping("/articles")
     fun adminArticles(model: Model): String {
-        model.addAttribute("articles", articleRepository?.findAllByOrderByCreationDateDesc())
+        model.addAttribute("articles", articleRepository.findAllByOrderByCreationDateDesc())
         model.addAttribute("experiment_count",
-            experimentRepository?.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
+            experimentRepository.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
         return "administrators/admin__articles.html"
     }
 
     @GetMapping("/newWeapons")
     fun newWeapons(principal: Principal, model: Model): String {
-        val weaponRequests = newWeaponRequestRepository?.findAll()
+        val weaponRequests = newWeaponRequestRepository.findAll()
         val requestsForAdmin = ArrayList<NewWeaponRequest>()
-        weaponRequests!!.forEach {
+        weaponRequests.forEach {
             if (it.request!!.status == RequestStatus.PENDING)
                 requestsForAdmin.add(it)
         }
 
-        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
-        val newTransportRequests = newTransportRequestRepository?.findAll()
+        val pendingRequests = requestRepository.findAllByStatus(RequestStatus.PENDING)
+        val newTransportRequests = newTransportRequestRepository.findAll()
         val ntPendingRequests = ArrayList<NewTransportRequest>()
         for (i in 0 until pendingRequests!!.size) {
-            for (j in 0 until newTransportRequests!!.size) {
+            for (j in 0 until newTransportRequests.size) {
                 if (newTransportRequests[j].request == pendingRequests[i])
                     ntPendingRequests.add(newTransportRequests[j])
             }
@@ -178,18 +152,18 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/newTransport")
     fun newTransport(principal: Principal, model: Model): String {
-        val transportRequests = newTransportRequestRepository?.findAll()
+        val transportRequests = newTransportRequestRepository.findAll()
         val requestsForAdmin = ArrayList<NewTransportRequest>()
-        transportRequests!!.forEach {
+        transportRequests.forEach {
             if (it.request!!.status == RequestStatus.PENDING)
                 requestsForAdmin.add(it)
         }
 
-        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
-        val newWeaponRequests = newWeaponRequestRepository?.findAll()
+        val pendingRequests = requestRepository.findAllByStatus(RequestStatus.PENDING)
+        val newWeaponRequests = newWeaponRequestRepository.findAll()
         val nwPendingRequests = ArrayList<NewWeaponRequest>()
         for (i in 0 until pendingRequests!!.size) {
-            for (j in 0 until newWeaponRequests!!.size) {
+            for (j in 0 until newWeaponRequests.size) {
                 if (newWeaponRequests[j].request == pendingRequests[i])
                     nwPendingRequests.add(newWeaponRequests[j])
             }
@@ -201,26 +175,26 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/vacancies")
     fun allVacancies(model: Model): String {
-        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
-        val newVacancyRequests = newVacancyRequestRepository?.findAll()
+        val pendingRequests = requestRepository.findAllByStatus(RequestStatus.PENDING)
+        val newVacancyRequests = newVacancyRequestRepository.findAll()
         val nvPendingRequests = ArrayList<NewVacancyRequest>()
         for (i in 0 until pendingRequests!!.size) {
-            for (j in 0 until newVacancyRequests!!.size) {
+            for (j in 0 until newVacancyRequests.size) {
                 if (newVacancyRequests[j].request == pendingRequests[i])
                     nvPendingRequests.add(newVacancyRequests[j])
             }
         }
 
-        model.addAttribute("vacancies", vacancyRepository?.findAll())
+        model.addAttribute("vacancies", vacancyRepository.findAll())
         model.addAttribute("new_vac_count", nvPendingRequests.size)
         return "administrators/admin__vacancies.html"
     }
 
     @GetMapping("/vacancies/requests")
     fun vacancyRequests(model: Model): String {
-        val vacancyRequests = newVacancyRequestRepository?.findAll()
+        val vacancyRequests = newVacancyRequestRepository.findAll()
         val requestsForAdmin = ArrayList<NewVacancyRequest>()
-        vacancyRequests!!.forEach {
+        vacancyRequests.forEach {
             if (it.request!!.status == RequestStatus.PENDING)
                 requestsForAdmin.add(it)
         }
@@ -230,11 +204,11 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/vacancies/new")
     fun newVacancy(model: Model): String {
-        val pendingRequests = requestRepository?.findAllByStatus(RequestStatus.PENDING)
-        val newVacancyRequests = newVacancyRequestRepository?.findAll()
+        val pendingRequests = requestRepository.findAllByStatus(RequestStatus.PENDING)
+        val newVacancyRequests = newVacancyRequestRepository.findAll()
         val nvPendingRequests = ArrayList<NewVacancyRequest>()
         for (i in 0 until pendingRequests!!.size) {
-            for (j in 0 until newVacancyRequests!!.size) {
+            for (j in 0 until newVacancyRequests.size) {
                 if (newVacancyRequests[j].request == pendingRequests[i])
                     nvPendingRequests.add(newVacancyRequests[j])
             }
@@ -247,9 +221,9 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/jobApplications")
     fun adminJobApplications(principal: Principal, model: Model) : String {
-        val vacancyApplicationRequests = vacancyApplicationRequestRepository?.findAll()
+        val vacancyApplicationRequests = vacancyApplicationRequestRepository.findAll()
         val validVacAppRequests = ArrayList<VacancyApplicationRequest>()
-        vacancyApplicationRequests?.forEach {
+        vacancyApplicationRequests.forEach {
             if (it.request!!.status == RequestStatus.PENDING)
                 validVacAppRequests.add(it)
         }
@@ -259,7 +233,7 @@ class AdministratorController : ApplicationController() {
 
     @GetMapping("/district")
     fun adminDistrict(model: Model): String {
-        model.addAttribute("current_incidents", districtIncidentRepository?.findAllByLevelToAndDangerLevelGreaterThan(0, 0))
+        model.addAttribute("current_incidents", districtIncidentRepository.findAllByLevelToAndDangerLevelGreaterThan(0, 0))
         return "administrators/admin__district.html"
     }
 
@@ -303,16 +277,16 @@ class AdministratorController : ApplicationController() {
                 userRepository?.save(newUser)
                 employeeRepository?.save(newEmployeeUser)
                 when (role) {
-                    Role.MANAGER -> managerEmployeeRepository?.save(ManagerEmployee().apply {
+                    Role.MANAGER -> managerEmployeeRepository.save(ManagerEmployee().apply {
                         this.employee = newEmployeeUser
                     })
-                    Role.SCIENTIST -> scientistEmployeeRepository?.save(ScientistEmployee().apply {
+                    Role.SCIENTIST -> scientistEmployeeRepository.save(ScientistEmployee().apply {
                         this.employee = newEmployeeUser
                     })
-                    Role.SECURITY -> securityEmployeeRepository?.save(SecurityEmployee().apply {
+                    Role.SECURITY -> securityEmployeeRepository.save(SecurityEmployee().apply {
                         this.employee = newEmployeeUser
                     })
-                    Role.ADMIN -> administratorEmployeeRepository?.save(AdministratorEmployee().apply {
+                    Role.ADMIN -> administratorEmployeeRepository.save(AdministratorEmployee().apply {
                         this.employee = newEmployeeUser
                     })
                     else -> {
@@ -430,15 +404,15 @@ class AdministratorController : ApplicationController() {
                 redirect.addFlashAttribute("error", "Username '${form.username}' is already taken. Please try again.")
                 "redirect:/admin/prawns"
             } else {
-                val houseIdList = districtHouseRepository?.getAllIds()!!
+                val houseIdList = districtHouseRepository.getAllIds()!!
 
-                val managerIdList = managerEmployeeRepository?.getAllIds()!!
+                val managerIdList = managerEmployeeRepository.getAllIds()
 
                 val newUser = User(form.username, form.password, Role.PRAWN)
                 val newPrawn = Prawn(form.name).apply {
                     this.user = newUser
-                    this.districtHouse = districtHouseRepository?.findById(houseIdList.random())?.get()
-                    this.manager = managerEmployeeRepository?.findById(managerIdList.random())?.get()
+                    this.districtHouse = districtHouseRepository.findById(houseIdList.random()).get()
+                    this.manager = managerEmployeeRepository.findById(managerIdList.random()).get()
                     this.karma = 50
                     this.balance = 350
                 }
@@ -454,7 +428,7 @@ class AdministratorController : ApplicationController() {
     }
 
     fun experimentChoiceError(experimentId: Long): String? {
-        val experiment = experimentRepository?.findById(experimentId)!!
+        val experiment = experimentRepository.findById(experimentId)
         if (!experiment.isPresent)
             return "Experiment with such id does not exist."
         val checkedExperiment = experiment.get()
@@ -468,7 +442,7 @@ class AdministratorController : ApplicationController() {
     fun acceptExperiment(@PathVariable id: Long, redirect: RedirectAttributes): String {
         val error = experimentChoiceError(id)
         return if (error == null) {
-            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+            val checkedExperiment = experimentRepository.findById(id).get()
 
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -476,7 +450,7 @@ class AdministratorController : ApplicationController() {
             } else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.APPROVED
-                experimentRepository?.save(checkedExperiment)
+                experimentRepository.save(checkedExperiment)
 
                 redirect.addFlashAttribute("status", "Request accepted.")
                 "redirect:/admin/experiments"
@@ -493,7 +467,7 @@ class AdministratorController : ApplicationController() {
     fun rejectExperiment(@PathVariable id: Long, redirect: RedirectAttributes): String {
         val error = experimentChoiceError(id)
         return if (error == null) {
-            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+            val checkedExperiment = experimentRepository.findById(id).get()
 
             if (checkedExperiment.status != ExperimentStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -501,7 +475,7 @@ class AdministratorController : ApplicationController() {
             } else {
                 checkedExperiment.statusDate = LocalDateTime.now()
                 checkedExperiment.status = ExperimentStatus.REJECTED
-                experimentRepository?.save(checkedExperiment)
+                experimentRepository.save(checkedExperiment)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
                 "redirect:/admin/experiments"
@@ -518,11 +492,11 @@ class AdministratorController : ApplicationController() {
     fun undoExpChoice(@PathVariable id: Long, redirect: RedirectAttributes): String {
         val error = experimentChoiceError(id)
         return if (error == null) {
-            val checkedExperiment = experimentRepository?.findById(id)!!.get()
+            val checkedExperiment = experimentRepository.findById(id).get()
 
             checkedExperiment.statusDate = LocalDateTime.now()
             checkedExperiment.status = ExperimentStatus.PENDING
-            experimentRepository?.save(checkedExperiment)
+            experimentRepository.save(checkedExperiment)
 
             redirect.addFlashAttribute("status", "Undone.")
             "redirect:/admin/experiments"
@@ -534,7 +508,7 @@ class AdministratorController : ApplicationController() {
     }
 
     fun newWeaponChoiceError(newWeaponRequestId: Long, principal: Principal): String? {
-        val request = newWeaponRequestRepository?.findById(newWeaponRequestId)!!
+        val request = newWeaponRequestRepository.findById(newWeaponRequestId)
         if (!request.isPresent)
             return "Request with such id does not exist."
         return null
@@ -547,7 +521,7 @@ class AdministratorController : ApplicationController() {
 
         val error = newWeaponChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newWeaponRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newWeaponRequestRepository.findById(id).get()
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -563,9 +537,9 @@ class AdministratorController : ApplicationController() {
                     checkedRequest.description, checkedRequest.price, checkedRequest.requiredAccessLvl
                 )
                     .apply { this.quantity = checkedRequest.quantity }
-                weaponRepository?.save(newWeapon)
+                weaponRepository.save(newWeapon)
 
-                newWeaponRequestRepository?.save(checkedRequest)
+                newWeaponRequestRepository.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
                 "redirect:/admin/newWeapons"
             }
@@ -584,7 +558,7 @@ class AdministratorController : ApplicationController() {
 
         val error = newWeaponChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newWeaponRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newWeaponRequestRepository.findById(id).get()
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -595,7 +569,7 @@ class AdministratorController : ApplicationController() {
                     this.status = RequestStatus.REJECTED
                     this.resolver = currentAdmin
                 }
-                newWeaponRequestRepository?.save(checkedRequest)
+                newWeaponRequestRepository.save(checkedRequest)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
                 "redirect:/admin/newWeapons"
@@ -614,21 +588,21 @@ class AdministratorController : ApplicationController() {
 
         val error = newWeaponChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newWeaponRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newWeaponRequestRepository.findById(id).get()
 
             checkedRequest.request!!.apply {
                 this.statusDate = LocalDateTime.now()
                 this.status = RequestStatus.PENDING
                 this.resolver = currentAdmin
             }
-            val weapons = weaponRepository?.findAll()!!.asReversed()
+            val weapons = weaponRepository.findAll().asReversed()
             for (i in 0 until weapons.size) {
                 if (weapons[i].name == checkedRequest.name)
-                    weaponRepository?.delete(weapons[i])
+                    weaponRepository.delete(weapons[i])
                 break
             }
 
-            newWeaponRequestRepository?.save(checkedRequest)
+            newWeaponRequestRepository.save(checkedRequest)
 
             redirect.addFlashAttribute("status", "Undone.")
             "redirect:/admin/newWeapons"
@@ -640,7 +614,7 @@ class AdministratorController : ApplicationController() {
     }
 
     fun newTransportChoiceError(newTransportRequestId: Long, principal: Principal): String? {
-        val request = newTransportRequestRepository?.findById(newTransportRequestId)!!
+        val request = newTransportRequestRepository.findById(newTransportRequestId)
         if (!request.isPresent)
             return "Request with such id does not exist."
         return null
@@ -653,7 +627,7 @@ class AdministratorController : ApplicationController() {
 
         val error = newTransportChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newTransportRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newTransportRequestRepository.findById(id).get()
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -669,9 +643,9 @@ class AdministratorController : ApplicationController() {
                     checkedRequest.description, checkedRequest.price, checkedRequest.requiredAccessLvl
                 )
                     .apply { this.quantity = checkedRequest.quantity }
-                transportRepository?.save(newTransport)
+                transportRepository.save(newTransport)
 
-                newTransportRequestRepository?.save(checkedRequest)
+                newTransportRequestRepository.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
                 "redirect:/admin/newTransport"
             }
@@ -690,7 +664,7 @@ class AdministratorController : ApplicationController() {
 
         val error = newTransportChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newTransportRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newTransportRequestRepository.findById(id).get()
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -701,7 +675,7 @@ class AdministratorController : ApplicationController() {
                     this.status = RequestStatus.REJECTED
                     this.resolver = currentAdmin
                 }
-                newTransportRequestRepository?.save(checkedRequest)
+                newTransportRequestRepository.save(checkedRequest)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
                 "redirect:/admin/newTransport"
@@ -720,21 +694,21 @@ class AdministratorController : ApplicationController() {
 
         val error = newTransportChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newTransportRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newTransportRequestRepository.findById(id).get()
 
             checkedRequest.request!!.apply {
                 this.statusDate = LocalDateTime.now()
                 this.status = RequestStatus.PENDING
                 this.resolver = currentAdmin
             }
-            val transport = transportRepository?.findAll()!!.asReversed()
+            val transport = transportRepository.findAll().asReversed()
             for (i in 0 until transport.size) {
                 if (transport[i].name == checkedRequest.name)
-                    transportRepository?.delete(transport[i])
+                    transportRepository.delete(transport[i])
                 break
             }
 
-            newTransportRequestRepository?.save(checkedRequest)
+            newTransportRequestRepository.save(checkedRequest)
 
             redirect.addFlashAttribute("status", "Undone.")
             "redirect:/admin/newTransport"
@@ -748,7 +722,7 @@ class AdministratorController : ApplicationController() {
 
     @PostMapping("/appointResolvers")
     fun appointResolversForIncident(@ModelAttribute form: AppointResolversForm, redirect: RedirectAttributes): String {
-        val incident = districtIncidentRepository?.findById(form.incidentId.toLong())!!
+        val incident = districtIncidentRepository.findById(form.incidentId.toLong())
         when {
             form.incidentId == "" || form.securityNeeded == "" || form.levelFrom == "" || form.levelTo == "" -> {
                 redirect.addFlashAttribute("form", form)
@@ -768,7 +742,7 @@ class AdministratorController : ApplicationController() {
             this.levelTo = form.levelTo.toInt()
         }
 
-        districtIncidentRepository?.save(newIncident)
+        districtIncidentRepository.save(newIncident)
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute(
             "status",
@@ -778,7 +752,7 @@ class AdministratorController : ApplicationController() {
     }
 
     fun jobApplicationChoiceError(jobAppRequestId: Long, principal: Principal): String? {
-        val request = vacancyApplicationRequestRepository?.findById(jobAppRequestId)!!
+        val request = vacancyApplicationRequestRepository.findById(jobAppRequestId)
         if (!request.isPresent)
             return "Request with such id does not exist."
         return null
@@ -791,7 +765,7 @@ class AdministratorController : ApplicationController() {
 
         val error = jobApplicationChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = vacancyApplicationRequestRepository?.findById(id)!!.get()
+            val checkedRequest = vacancyApplicationRequestRepository.findById(id).get()
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -804,7 +778,7 @@ class AdministratorController : ApplicationController() {
                         this.status = RequestStatus.REJECTED
                         this.resolver = currentAdmin
                     }
-                    vacancyApplicationRequestRepository?.save(checkedRequest)
+                    vacancyApplicationRequestRepository.save(checkedRequest)
                     redirect.addFlashAttribute("error", "No vacant places left, request cannot be satisfied.")
                     return "redirect:/admin/jobApplications"
                 }
@@ -814,13 +788,13 @@ class AdministratorController : ApplicationController() {
                 val prawnLastJob = prawn.job
                 if (prawnLastJob != null) {
                     prawnLastJob.vacantPlaces++
-                    vacancyRepository?.save(prawnLastJob)
+                    vacancyRepository.save(prawnLastJob)
                 }
 
                 val prawnNewJob = checkedRequest.vacancy
                 if (prawnNewJob != null) {
                     prawnNewJob.vacantPlaces--
-                    vacancyRepository?.save(prawnNewJob)
+                    vacancyRepository.save(prawnNewJob)
                 }
 
                 prawn.job = checkedRequest.vacancy
@@ -831,7 +805,7 @@ class AdministratorController : ApplicationController() {
                     this.resolver = currentAdmin
                 }
                 prawnRepository?.save(prawn)
-                vacancyApplicationRequestRepository?.save(checkedRequest)
+                vacancyApplicationRequestRepository.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
                 "redirect:/admin/jobApplications"
             }
@@ -849,7 +823,7 @@ class AdministratorController : ApplicationController() {
 
         val error = jobApplicationChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = vacancyApplicationRequestRepository?.findById(id)!!.get()
+            val checkedRequest = vacancyApplicationRequestRepository.findById(id).get()
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -860,7 +834,7 @@ class AdministratorController : ApplicationController() {
                     this.status = RequestStatus.REJECTED
                     this.resolver = currentAdmin
                 }
-                vacancyApplicationRequestRepository?.save(checkedRequest)
+                vacancyApplicationRequestRepository.save(checkedRequest)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
                 "redirect:/admin/jobApplications"
@@ -884,7 +858,7 @@ class AdministratorController : ApplicationController() {
             Vacancy(form.title, form.salary.toLong(), form.requiredKarma.toLong(), form.workHoursPerWeek.toInt())
                 .apply { this.vacantPlaces = form.vacantPlaces.toLong() }
 
-        vacancyRepository?.save(newVacancy)
+        vacancyRepository.save(newVacancy)
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Vacancy added.")
@@ -892,7 +866,7 @@ class AdministratorController : ApplicationController() {
     }
 
     fun newVacancyChoiceError(newVacancyRequestId: Long, principal: Principal): String? {
-        val request = newVacancyRequestRepository?.findById(newVacancyRequestId)!!
+        val request = newVacancyRequestRepository.findById(newVacancyRequestId)
         if (!request.isPresent)
             return "Request with such id does not exist."
         return null
@@ -906,7 +880,7 @@ class AdministratorController : ApplicationController() {
 
         val error = newVacancyChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newVacancyRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newVacancyRequestRepository.findById(id).get()
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -920,9 +894,9 @@ class AdministratorController : ApplicationController() {
                 val newVacancy =
                     Vacancy(checkedRequest.title, checkedRequest.salary, checkedRequest.requiredKarma, checkedRequest.workHoursPerWeek)
                         .apply { this.vacantPlaces = checkedRequest.vacantPlaces }
-                vacancyRepository?.save(newVacancy)
+                vacancyRepository.save(newVacancy)
 
-                newVacancyRequestRepository?.save(checkedRequest)
+                newVacancyRequestRepository.save(checkedRequest)
                 redirect.addFlashAttribute("status", "Request accepted.")
                 "redirect:/admin/vacancies/requests"
             }
@@ -941,7 +915,7 @@ class AdministratorController : ApplicationController() {
 
         val error = newVacancyChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newVacancyRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newVacancyRequestRepository.findById(id).get()
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
@@ -953,7 +927,7 @@ class AdministratorController : ApplicationController() {
                     this.resolver = currentAdmin
                 }
 
-                newVacancyRequestRepository?.save(checkedRequest)
+                newVacancyRequestRepository.save(checkedRequest)
 
                 redirect.addFlashAttribute("status", "Request rejected.")
                 "redirect:/admin/vacancies/requests"
@@ -972,21 +946,21 @@ class AdministratorController : ApplicationController() {
 
         val error = newVacancyChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = newVacancyRequestRepository?.findById(id)!!.get()
+            val checkedRequest = newVacancyRequestRepository.findById(id).get()
 
             checkedRequest.request!!.apply {
                 this.statusDate = LocalDateTime.now()
                 this.status = RequestStatus.PENDING
                 this.resolver = currentAdmin
             }
-            val vacancies = vacancyRepository?.findAll()!!.asReversed()
+            val vacancies = vacancyRepository.findAll().asReversed()
             for (i in 0 until vacancies.size) {
                 if (vacancies[i].title == checkedRequest.title)
-                    vacancyRepository?.delete(vacancies[i])
+                    vacancyRepository.delete(vacancies[i])
                 break
             }
 
-            newVacancyRequestRepository?.save(checkedRequest)
+            newVacancyRequestRepository.save(checkedRequest)
 
             redirect.addFlashAttribute("status", "Undone.")
             "redirect:/admin/vacancies/requests"
@@ -998,7 +972,7 @@ class AdministratorController : ApplicationController() {
     }
 
     fun purchaseReqChoiceError(purchaseRequestId: Long, principal: Principal): String? {
-        val request = purchaseRequestRepository?.findById(purchaseRequestId)!!
+        val request = purchaseRequestRepository.findById(purchaseRequestId)
         if (!request.isPresent)
             return "Request with such id does not exist."
         return null
@@ -1011,7 +985,7 @@ class AdministratorController : ApplicationController() {
 
         val error = purchaseReqChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = purchaseRequestRepository?.findById(id)!!.get()
+            val checkedRequest = purchaseRequestRepository.findById(id).get()
             val userRequestRole = checkedRequest.user!!.role
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
@@ -1027,7 +1001,7 @@ class AdministratorController : ApplicationController() {
                         this.resolver = currentAdmin
                     }
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
-                    purchaseRequestRepository?.save(checkedRequest)
+                    purchaseRequestRepository.save(checkedRequest)
 
                     // todo mail to client
                     redirect.addFlashAttribute("status", "Request accepted.")
@@ -1042,7 +1016,7 @@ class AdministratorController : ApplicationController() {
                         this.resolver = currentAdmin
                     }
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
-                    purchaseRequestRepository?.save(checkedRequest)
+                    purchaseRequestRepository.save(checkedRequest)
 
                     // todo mail to manufacturer
                     redirect.addFlashAttribute("status", "Request accepted.")
@@ -1057,7 +1031,7 @@ class AdministratorController : ApplicationController() {
                         this.resolver = currentAdmin
                     }
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
-                    purchaseRequestRepository?.save(checkedRequest)
+                    purchaseRequestRepository.save(checkedRequest)
 
                     redirect.addFlashAttribute("status", "Request accepted.")
                     return "redirect:/admin/purchases"
@@ -1083,7 +1057,7 @@ class AdministratorController : ApplicationController() {
 
         val error = purchaseReqChoiceError(id, principal)
         return if (error == null) {
-            val checkedRequest = purchaseRequestRepository?.findById(id)!!.get()
+            val checkedRequest = purchaseRequestRepository.findById(id).get()
             val userRequestRole = checkedRequest.user!!.role
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
@@ -1097,11 +1071,11 @@ class AdministratorController : ApplicationController() {
                     cartItems!!.forEach {
                         if (it.weapon != null) {
                             it.weapon!!.quantity += it.weaponQuantity!!
-                            weaponRepository?.save(it.weapon!!)
+                            weaponRepository.save(it.weapon!!)
                         }
                         if(it.transport != null) {
                             it.transport!!.quantity += it.transportQuantity!!
-                            transportRepository?.save(it.transport!!)
+                            transportRepository.save(it.transport!!)
                         }
                     }
                     checkedRequest.request!!.apply {
@@ -1110,7 +1084,7 @@ class AdministratorController : ApplicationController() {
                         this.resolver = currentAdmin
                     }
                     checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
-                    purchaseRequestRepository?.save(checkedRequest)
+                    purchaseRequestRepository.save(checkedRequest)
 
                     // todo mail to client
                     redirect.addFlashAttribute("status", "Request rejected.")
@@ -1122,11 +1096,11 @@ class AdministratorController : ApplicationController() {
                     cartItems!!.forEach {
                         if (it.weapon != null) {
                             it.weapon!!.quantity -= it.weaponQuantity!!
-                            weaponRepository?.save(it.weapon!!)
+                            weaponRepository.save(it.weapon!!)
                         }
                         if(it.transport != null) {
                             it.transport!!.quantity -= it.transportQuantity!!
-                            transportRepository?.save(it.transport!!)
+                            transportRepository.save(it.transport!!)
                         }
                     }
                     checkedRequest.request!!.apply {
@@ -1135,7 +1109,7 @@ class AdministratorController : ApplicationController() {
                         this.resolver = currentAdmin
                     }
                     checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
-                    purchaseRequestRepository?.save(checkedRequest)
+                    purchaseRequestRepository.save(checkedRequest)
 
                     // todo mail to manufacturer
                     redirect.addFlashAttribute("status", "Request rejected.")
@@ -1144,7 +1118,7 @@ class AdministratorController : ApplicationController() {
 
                 Role.PRAWN -> {
                     val curPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
-                    if (curPrawn!!.manager != managerEmployeeRepository?.findById(currentAdmin!!.id!!)!!.get()) {
+                    if (curPrawn!!.manager != managerEmployeeRepository.findById(currentAdmin!!.id!!).get()) {
                         redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
                         return "redirect:/man/purchases"
                     }
@@ -1153,11 +1127,11 @@ class AdministratorController : ApplicationController() {
                     cartItems!!.forEach {
                         if (it.weapon != null) {
                             it.weapon!!.quantity += it.weaponQuantity!!
-                            weaponRepository?.save(it.weapon!!)
+                            weaponRepository.save(it.weapon!!)
                         }
                         if(it.transport != null) {
                             it.transport!!.quantity += it.transportQuantity!!
-                            transportRepository?.save(it.transport!!)
+                            transportRepository.save(it.transport!!)
                         }
                     }
                     checkedRequest.request!!.apply {
@@ -1166,7 +1140,7 @@ class AdministratorController : ApplicationController() {
                         this.resolver = currentAdmin
                     }
                     checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
-                    purchaseRequestRepository?.save(checkedRequest)
+                    purchaseRequestRepository.save(checkedRequest)
 
                     redirect.addFlashAttribute("status", "Request rejected.")
                     return "redirect:/admin/purchases"
