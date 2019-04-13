@@ -112,6 +112,18 @@ class ManagerController (
         return "managers/manager__new-weapons.html"
     }
 
+    @GetMapping("/newEquipment")
+    fun manNewEquipment(principal: Principal, model: Model) : String {
+        val equipmentChangeRequests = changeEquipmentRequestRepository.findAll()
+        val validEqChRequests = ArrayList<ChangeEquipmentRequest>()
+        equipmentChangeRequests.forEach {
+            if(it.request!!.status == RequestStatus.PENDING)
+                validEqChRequests.add(it)
+        }
+        model.addAttribute("requests", validEqChRequests)
+        return "managers/manager__equipment-change.html"
+    }
+
     @GetMapping("/registerPrawn")
     fun registerPrawn(model: Model): String {
         model.addAttribute("form", PrawnRegistrationForm())
