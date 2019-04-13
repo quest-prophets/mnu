@@ -130,43 +130,48 @@ class SecurityController (
         }
 
         when {
-            !requestedWeapon!!.isPresent -> {
+            !requestedWeapon!!.isPresent && requestedWeapon != null -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such weapon does not exist.")
                 return "redirect:/sec/equipment"
             }
-            !requestedTransport!!.isPresent -> {
+            !requestedTransport!!.isPresent && requestedTransport != null -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such transport does not exist.")
                 return "redirect:/sec/equipment"
             }
-            !requestedTransport.isPresent && !requestedWeapon.isPresent -> {
+            !requestedTransport.isPresent && !requestedWeapon.isPresent && requestedWeapon != null && requestedTransport != null -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such weapon and transport do not exist.")
                 return "redirect:/sec/equipment"
             }
         }
 
-        val existingWeapon = requestedWeapon?.get()
-        val existingTransport = requestedTransport?.get()
+
+        var existingWeapon = Weapon()
+        if (requestedWeapon != null)
+            existingWeapon = requestedWeapon.get()
+        var existingTransport = Transport()
+        if (requestedTransport != null)
+            existingTransport = requestedTransport.get()
 
         when {
-            existingWeapon?.quantity!! == 0L -> {
+            existingWeapon.quantity == 0L && existingWeapon.id != null -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another weapon.")
                 return "redirect:/sec/equipment"
             }
-            existingTransport?.quantity!! == 0L -> {
+            existingTransport.quantity == 0L && existingTransport.id != null -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another transport.")
                 return "redirect:/sec/equipment"
             }
-            existingWeapon.requiredAccessLvl > currentSecurity.employee!!.level!! -> {
+            existingWeapon.requiredAccessLvl > currentSecurity.employee!!.level!! && existingWeapon.id != null -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Requested weapon's access level is higher than yours.")
                 return "redirect:/sec/equipment"
             }
-            existingTransport.requiredAccessLvl > currentSecurity.employee!!.level!! -> {
+            existingTransport.requiredAccessLvl > currentSecurity.employee!!.level!! && existingTransport.id != null -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Requested transport's access level is higher than yours.")
                 return "redirect:/sec/equipment"
@@ -174,10 +179,32 @@ class SecurityController (
         }
 
         requestRepository.save(newRequest)
-        changeEquipmentRequestRepository.save(
-            ChangeEquipmentRequest(currentSecurity, existingWeapon, existingTransport)
-            .apply { this.request = newRequest }
-        )
+        when {
+            requestedWeapon == null && requestedTransport == null -> {
+                changeEquipmentRequestRepository.save(
+                    ChangeEquipmentRequest(currentSecurity, requestedWeapon, requestedTransport)
+                        .apply { this.request = newRequest }
+                )
+            }
+            requestedWeapon == null && requestedTransport != null -> {
+                changeEquipmentRequestRepository.save(
+                    ChangeEquipmentRequest(currentSecurity, requestedWeapon, existingTransport)
+                        .apply { this.request = newRequest }
+                )
+            }
+            requestedWeapon != null && requestedTransport == null -> {
+                changeEquipmentRequestRepository.save(
+                    ChangeEquipmentRequest(currentSecurity, existingWeapon, requestedTransport)
+                        .apply { this.request = newRequest }
+                )
+            }
+            requestedWeapon != null && requestedTransport != null -> {
+                changeEquipmentRequestRepository.save(
+                    ChangeEquipmentRequest(currentSecurity, existingWeapon, existingTransport)
+                        .apply { this.request = newRequest }
+                )
+            }
+        }
 
         redirect.addFlashAttribute("status", "Request sent. Wait for supervisor's decision.")
         return "redirect:/sec/main"
