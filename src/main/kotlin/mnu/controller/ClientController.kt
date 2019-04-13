@@ -155,6 +155,29 @@ class ClientController : ApplicationController() {
             return "redirect:/client/shop"
         }
 
+        val cartItems = currentCreatingCart.items
+
+        cartItems!!.forEach {
+            if (it.weapon != null) {
+                if (it.weapon!!.quantity < it.weaponQuantity!!) {
+                    redirect.addFlashAttribute("error",
+                            "No sufficient \"${it.weapon!!.name}\" weapons, request cannot be satisfied.")
+                    return "redirect:/client/cart"
+                }
+                it.weapon!!.quantity -= it.weaponQuantity!!
+                weaponRepository?.save(it.weapon!!)
+            }
+            if(it.transport != null) {
+                if(it.transport!!.quantity < it.transportQuantity!!) {
+                    redirect.addFlashAttribute("error",
+                        "No sufficient \"${it.transport!!.name}\" transport, request cannot be satisfied.")
+                    return "redirect:/client/cart"
+                }
+                it.transport!!.quantity -= it.transportQuantity!!
+                transportRepository?.save(it.transport!!)
+            }
+        }
+
         currentCreatingCart.status = ShoppingCartStatus.REQUESTED
         shoppingCartRepository?.save(currentCreatingCart)
         purchaseRequestRepository?.save(PurchaseRequest(currentUser, currentCreatingCart).apply { this.request = newRequest })

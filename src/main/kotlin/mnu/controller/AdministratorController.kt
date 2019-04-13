@@ -8,6 +8,8 @@ import mnu.model.request.*
 import mnu.repository.*
 import mnu.repository.employee.*
 import mnu.repository.request.*
+import mnu.repository.shop.ShoppingCartItemRepository
+import mnu.repository.shop.ShoppingCartRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Controller
@@ -28,6 +30,13 @@ class AdministratorController : ApplicationController() {
 
     @Autowired
     val requestRepository: RequestRepository? = null
+
+    @Autowired
+    val purchaseRequestRepository: PurchaseRequestRepository? = null
+    @Autowired
+    val shoppingCartRepository: ShoppingCartRepository? = null
+    @Autowired
+    val shoppingCartItemRepository: ShoppingCartItemRepository? = null
 
     @Autowired
     val weaponRepository: WeaponRepository? = null
@@ -985,6 +994,194 @@ class AdministratorController : ApplicationController() {
         } else {
             redirect.addFlashAttribute("error", error)
             "redirect:/admin/vacancies/requests"
+        }
+    }
+
+    fun purchaseReqChoiceError(purchaseRequestId: Long, principal: Principal): String? {
+        val request = purchaseRequestRepository?.findById(purchaseRequestId)!!
+        if (!request.isPresent)
+            return "Request with such id does not exist."
+        return null
+    }
+
+    @PostMapping("/acceptPurchaseRequest/{id}")
+    fun acceptPurchaseRequest(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = purchaseReqChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = purchaseRequestRepository?.findById(id)!!.get()
+            val userRequestRole = checkedRequest.user!!.role
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                return "redirect:/admin/purchases"
+            }
+            when (userRequestRole) {
+                Role.CUSTOMER -> {
+
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.ACCEPTED
+                        this.resolver = currentAdmin
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    // todo mail to client
+                    redirect.addFlashAttribute("status", "Request accepted.")
+                    return "redirect:/admin/purchases"
+                }
+
+                Role.MANUFACTURER -> {
+
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.ACCEPTED
+                        this.resolver = currentAdmin
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    // todo mail to manufacturer
+                    redirect.addFlashAttribute("status", "Request accepted.")
+                    return "redirect:/admin/purchases"
+                }
+
+                Role.PRAWN -> {
+
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.ACCEPTED
+                        this.resolver = currentAdmin
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    redirect.addFlashAttribute("status", "Request accepted.")
+                    return "redirect:/admin/purchases"
+                }
+
+                else -> {
+                    redirect.addFlashAttribute("error", "Error. Wrong request credentials.")
+                    return "redirect:/admin/purchases"
+                }
+            }
+
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/admin/purchases"
+        }
+    }
+
+    @PostMapping("/rejectPurchaseRequest/{id}")
+    fun rejectPurchaseRequest(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentAdmin = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = purchaseReqChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = purchaseRequestRepository?.findById(id)!!.get()
+            val userRequestRole = checkedRequest.user!!.role
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                return "redirect:/admin/purchases"
+            }
+            when (userRequestRole) {
+                Role.CUSTOMER -> {
+
+                    val cartItems = checkedRequest.cart!!.items
+                    cartItems!!.forEach {
+                        if (it.weapon != null) {
+                            it.weapon!!.quantity += it.weaponQuantity!!
+                            weaponRepository?.save(it.weapon!!)
+                        }
+                        if(it.transport != null) {
+                            it.transport!!.quantity += it.transportQuantity!!
+                            transportRepository?.save(it.transport!!)
+                        }
+                    }
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.REJECTED
+                        this.resolver = currentAdmin
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    // todo mail to client
+                    redirect.addFlashAttribute("status", "Request rejected.")
+                    "redirect:/admin/purchases"
+                }
+
+                Role.MANUFACTURER -> {
+                    val cartItems = checkedRequest.cart!!.items
+                    cartItems!!.forEach {
+                        if (it.weapon != null) {
+                            it.weapon!!.quantity -= it.weaponQuantity!!
+                            weaponRepository?.save(it.weapon!!)
+                        }
+                        if(it.transport != null) {
+                            it.transport!!.quantity -= it.transportQuantity!!
+                            transportRepository?.save(it.transport!!)
+                        }
+                    }
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.REJECTED
+                        this.resolver = currentAdmin
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    // todo mail to manufacturer
+                    redirect.addFlashAttribute("status", "Request rejected.")
+                    "redirect:/admin/purchases"
+                }
+
+                Role.PRAWN -> {
+                    val curPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
+                    if (curPrawn!!.manager != managerEmployeeRepository?.findById(currentAdmin!!.id!!)!!.get()) {
+                        redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
+                        return "redirect:/man/purchases"
+                    }
+
+                    val cartItems = checkedRequest.cart!!.items
+                    cartItems!!.forEach {
+                        if (it.weapon != null) {
+                            it.weapon!!.quantity += it.weaponQuantity!!
+                            weaponRepository?.save(it.weapon!!)
+                        }
+                        if(it.transport != null) {
+                            it.transport!!.quantity += it.transportQuantity!!
+                            transportRepository?.save(it.transport!!)
+                        }
+                    }
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.REJECTED
+                        this.resolver = currentAdmin
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    redirect.addFlashAttribute("status", "Request rejected.")
+                    return "redirect:/admin/purchases"
+                }
+
+                else -> {
+                    redirect.addFlashAttribute("error", "Error. Wrong request credentials.")
+                    return "redirect:/admin/purchases"
+                }
+            }
+
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/admin/purchases"
         }
     }
 

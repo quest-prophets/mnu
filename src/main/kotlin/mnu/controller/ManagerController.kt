@@ -222,7 +222,7 @@ class ManagerController : ApplicationController() {
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                "redirect:/man/newEquipment" //todo
+                "redirect:/man/newEquipment"
             } else {
                 when {
                     checkedRequest.weapon?.quantity!! == 0L -> {
@@ -233,7 +233,7 @@ class ManagerController : ApplicationController() {
                         }
                         changeEquipmentRequestRepository?.save(checkedRequest)
                         redirect.addFlashAttribute("error", "Weapon is out of stock, request cannot be satisfied.")
-                        return "redirect:/man/newEquipment" //todo
+                        return "redirect:/man/newEquipment"
                     }
                     checkedRequest.transport?.quantity!! == 0L -> {
                         checkedRequest.request!!.apply {
@@ -243,7 +243,7 @@ class ManagerController : ApplicationController() {
                         }
                         changeEquipmentRequestRepository?.save(checkedRequest)
                         redirect.addFlashAttribute("error", "Transport is out of stock, request cannot be satisfied.")
-                        return "redirect:/man/newEquipment" //todo
+                        return "redirect:/man/newEquipment"
                     }
                 }
 
@@ -287,7 +287,7 @@ class ManagerController : ApplicationController() {
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:/man/newEquipment" //todo
+            "redirect:/man/newEquipment"
         }
     }
 
@@ -559,40 +559,143 @@ class ManagerController : ApplicationController() {
                         redirect.addFlashAttribute("error", "You are not this client's supervising manager.")
                         return "redirect:/man/purchases"
                     }
+
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.ACCEPTED
+                        this.resolver = currentManager
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    // todo mail to client
+                    redirect.addFlashAttribute("status", "Request accepted.")
+                    return "redirect:/man/purchases"
+                }
+
+                Role.MANUFACTURER -> {
+                    redirect.addFlashAttribute("error", "You cannot process manufacturers' requests.")
+                    return "redirect:/man/purchases"
+                }
+
+                Role.PRAWN -> {
+                    val curPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
+                    if (curPrawn!!.manager != managerEmployeeRepository?.findById(currentManager!!.id!!)!!.get()) {
+                        redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
+                        return "redirect:/man/purchases"
+                    }
+
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.ACCEPTED
+                        this.resolver = currentManager
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    redirect.addFlashAttribute("status", "Request accepted.")
+                    return "redirect:/man/purchases"
+                }
+
+                else -> {
+                    redirect.addFlashAttribute("error", "Error. Wrong request credentials.")
+                    return "redirect:/man/purchases"
+                }
+            }
+
+
+        } else {
+            redirect.addFlashAttribute("error", error)
+            "redirect:/man/purchases"
+        }
+    }
+
+    @PostMapping("/rejectPurchaseRequest/{id}")
+    fun rejectPurchaseRequest(@PathVariable id: Long, principal: Principal, redirect: RedirectAttributes): String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentManager = employeeRepository?.findById(user?.id!!)?.get()
+
+        val error = purchaseReqChoiceError(id, principal)
+        return if (error == null) {
+            val checkedRequest = purchaseRequestRepository?.findById(id)!!.get()
+            val userRequestRole = checkedRequest.user!!.role
+
+            if (checkedRequest.request!!.status != RequestStatus.PENDING) {
+                redirect.addFlashAttribute("error", "Request has already been handled.")
+                return "redirect:/man/purchases"
+            }
+            when (userRequestRole) {
+                Role.CUSTOMER -> {
+                    val curCustomer = clientRepository?.findByUserId(checkedRequest.user!!.id!!)
+                    if (curCustomer!!.manager != managerEmployeeRepository?.findById(currentManager!!.id!!)!!.get()) {
+                        redirect.addFlashAttribute("error", "You are not this client's supervising manager.")
+                        return "redirect:/man/purchases"
+                    }
+
                     val cartItems = checkedRequest.cart!!.items
                     cartItems!!.forEach {
                         if (it.weapon != null) {
-                            if (it.weapon!!.quantity < it.weaponQuantity!!) {
-//                                checkedRequest.request!!.apply {
-//                                    this.statusDate = LocalDateTime.now()
-//                                    this.status = RequestStatus.REJECTED
-//                                    this.resolver = currentManager
-//                                }
-//                                val cart = checkedRequest.cart!!
-//                                cart.status = ShoppingCartStatus.REJECTED
-//                                purchaseRequestRepository?.save(checkedRequest)
-//                                shoppingCartRepository?.save(cart)
-                                redirect.addFlashAttribute("error", "No sufficient weapons, request cannot be satisfied.")
-                                return "redirect:/man/purchases"
-                            }
+                            it.weapon!!.quantity += it.weaponQuantity!!
+                            weaponRepository?.save(it.weapon!!)
+                        }
+                        if(it.transport != null) {
+                            it.transport!!.quantity += it.transportQuantity!!
+                            transportRepository?.save(it.transport!!)
                         }
                     }
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.REJECTED
+                        this.resolver = currentManager
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    // todo mail to client
+                    redirect.addFlashAttribute("status", "Request rejected.")
+                    return "redirect:/man/purchases"
+                }
+
+                Role.MANUFACTURER -> {
+                    redirect.addFlashAttribute("error", "You cannot process manufacturers' requests.")
+                    return "redirect:/man/purchases"
+                }
+
+                Role.PRAWN -> {
+                    val curPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
+                    if (curPrawn!!.manager != managerEmployeeRepository?.findById(currentManager!!.id!!)!!.get()) {
+                        redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
+                        return "redirect:/man/purchases"
+                    }
+
+                    val cartItems = checkedRequest.cart!!.items
+                    cartItems!!.forEach {
+                        if (it.weapon != null) {
+                            it.weapon!!.quantity += it.weaponQuantity!!
+                            weaponRepository?.save(it.weapon!!)
+                        }
+                        if(it.transport != null) {
+                            it.transport!!.quantity += it.transportQuantity!!
+                            transportRepository?.save(it.transport!!)
+                        }
+                    }
+                    checkedRequest.request!!.apply {
+                        this.statusDate = LocalDateTime.now()
+                        this.status = RequestStatus.REJECTED
+                        this.resolver = currentManager
+                    }
+                    checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
+                    purchaseRequestRepository?.save(checkedRequest)
+
+                    redirect.addFlashAttribute("status", "Request rejected.")
+                    return "redirect:/man/purchases"
+                }
+
+                else -> {
+                    redirect.addFlashAttribute("error", "Error. Wrong request credentials.")
+                    return "redirect:/man/purchases"
                 }
             }
-            if (checkedRequest.prawn!!.manager != managerEmployeeRepository?.findById(currentManager!!.id!!)!!.get()) {
-                redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
-                return "redirect:/man/purchases"
-            }
-
-            checkedRequest.request!!.apply {
-                this.statusDate = LocalDateTime.now()
-                this.status = RequestStatus.REJECTED
-                this.resolver = currentManager
-            }
-            vacancyApplicationRequestRepository?.save(checkedRequest)
-
-            redirect.addFlashAttribute("status", "Request rejected.")
-            "redirect:/man/purchases"
 
 
         } else {
