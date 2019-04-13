@@ -11,19 +11,19 @@
 <div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
 <div class="grid">
     <div class="flex-row-left header">
-        <a th:href="@{/sci/main}">
+        <a th:href="@{/}">
             <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
         </a>
     </div>
-    <form id="report-form" action="#" th:action="@{/sci/report}" th:object="${form}" method="post"
+    <form id="report-form" action="#" th:action="@{/sec/report}" th:object="${form}" method="post"
           class="grid__inputs-top flex-column">
         <label class="form-item">
             <b>Experiment id</b>
-            <input required id="experimentId" name="experimentId" th:value="${param.id}" readonly class="input_big">
+            <input required id="incidentId" name="incidentId" th:value="${param.id}" readonly class="input_big">
         </label>
         <label class="form-item">
-            <b>Did you synthesize a weapon?</b>
-            <select id="isSynthesized" name="isSynthesized" class="input_big">
+            <b>Did you confiscate a weapon?</b>
+            <select id="isNew" name="isNew" class="input_big">
                 <option value="0"> No</option>
                 <option value="1"> Yes</option>
                 <option value="2"> Yes, a brand-new one</option>
@@ -103,6 +103,6 @@
         </label>
     </div>
 </div>
-<script rel="script" type="text/javascript" th:src="@{/js/scientists/sci__report.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/security/sec__report.js}"></script>
 </body>
 </html>

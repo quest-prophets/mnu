@@ -34,6 +34,10 @@ body {
     padding: 12px;
 }
 
+.description {
+    white-space: pre-wrap;
+}
+
 @media (max-width: 1000px) {
     .content__item {
         width: 80%

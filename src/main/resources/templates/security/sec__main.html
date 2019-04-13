@@ -49,8 +49,9 @@
                 <div class="form-item_micro"
                      th:text="${'Level varies from ' + inc.levelFrom + ' to ' + inc.levelTo}"></div>
             </div>
-            <form action="#" th:action="@{'/sec/incident/'} + ${inc.id}" class="flex-column" method="post">
-                <input type="submit" class="button approved form-item_small" value="Apply">
+            <form action="#" th:action="@{'/sec/incident/'} + ${inc.id}" class="flex-column form-item_small"
+                  method="post">
+                <input type="submit" class="button approved" value="Apply">
             </form>
         </div>
     </div>
@@ -64,7 +65,7 @@
                 <b th:if="${inc.dangerLevel > 0}" th:text="${'Danger level ' + inc.dangerLevel}"></b>
                 <div class="form-item_micro">
                     <b>Description</b>
-                    <div th:text="${inc.description}"></div>
+                    <div class="description" th:text="${inc.description}"></div>
                 </div>
                 <div class="form-item_micro">
                     <b>House</b>
@@ -79,9 +80,12 @@
                 <div class="form-item_micro" th:if="${inc.availablePlaces > 0}"
                      th:text="${'Level varies from ' + inc.levelFrom + ' to ' + inc.levelTo}"></div>
             </div>
-            <div class="flex-column">
-                <a th:if="${inc.availablePlaces==0 and inc.dangerLevel > 0}" th:href="@{'/sec/report?id='} + ${inc.id}"
-                   class="button form-item_small">Write report</a>
+            <form th:if="${inc.availablePlaces > 0}" class="flex-column form-item_small" action="#"
+                  th:action="@{/sec/withdrawParticipation}" method="post">
+                <input type="submit" class="button rejected" value="Withdraw">
+            </form>
+            <div class="flex-column form-item_small" th:if="${inc.availablePlaces==0 and inc.dangerLevel > 0}">
+                <a th:href="@{'/sec/report?id='} + ${inc.id}" class="button">Write report</a>
             </div>
         </div>
     </div>
