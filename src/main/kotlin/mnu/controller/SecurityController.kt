@@ -68,8 +68,14 @@ class SecurityController (
     }
 
     @GetMapping("/equipment")
-    fun securityEquipment(model: Model, principal: Principal): String{
-        //todo добавь в модель сесурити...
+    fun securityEquipment(model: Model, principal: Principal): String {
+        val curUser = userRepository?.findByLogin(principal.name)!!
+        val curSecurity = securityEmployeeRepository.findById(curUser.id!!).get()
+        model.addAttribute("current_security", curSecurity)
+        model.addAttribute("available_weapons",
+            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0))
+        model.addAttribute("available_transport",
+            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0))
         return "security/sec__equipment-change"
     }
 

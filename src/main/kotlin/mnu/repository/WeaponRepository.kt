@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.*
 interface WeaponRepository : JpaRepository<Weapon, Long> {
     fun findAllByType(type: WeaponType) : List<Weapon>
 
-    fun findAllByRequiredAccessLvlLessThanEqual(accessLevel: Int) : List<Weapon>
+    fun findAllByRequiredAccessLvlLessThanEqual(accessLevel: Int) : List<Weapon>?
 
     fun findAllByQuantityGreaterThanEqual(quantity: Long) : List<Weapon>?
+
+    fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(accessLevel: Int, quantity: Long) : List<Weapon>?
 
     fun findAllByTypeOrderByPriceAsc(type: WeaponType) : List<Weapon>
     fun findAllByTypeOrderByPriceDesc(type: WeaponType) : List<Weapon>
