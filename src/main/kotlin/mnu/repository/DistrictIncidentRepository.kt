@@ -12,6 +12,8 @@ interface DistrictIncidentRepository : JpaRepository<DistrictIncident, Long> {
 
     fun findAllByHouseAndDangerLevel(house: DistrictHouse, dangerLevel: Short): List<DistrictIncident>
 
+    fun findAllByOrderByDangerLevelDesc() : List<DistrictIncident>?
+
     fun findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual
                 (availablePlaces: Long, level1: Int, level2: Int) : List<DistrictIncident>?
 

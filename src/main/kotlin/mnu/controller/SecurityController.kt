@@ -52,9 +52,9 @@ class SecurityController (
 
         allSuitableIncidents?.remove(currentInc)
 
-        val allIncidents = districtIncidentRepository.findAll()
+        val allIncidents = districtIncidentRepository.findAllByOrderByDangerLevelDesc()
         val incidentsWithEmployee = ArrayList<DistrictIncident>()
-        allIncidents.forEach {
+        allIncidents?.forEach {
             if(it.assistants!!.contains(curSecurity))
                 incidentsWithEmployee.add(it)
         }
