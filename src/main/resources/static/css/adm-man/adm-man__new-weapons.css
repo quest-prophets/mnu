@@ -16,10 +16,6 @@ body {
     margin-top: 106px;
 }
 
-.content_prawns {
-    text-align: left;
-}
-
 .content__item {
     word-break: break-word;
     width: 650px;
@@ -46,7 +42,6 @@ body {
     margin: 0 15px;
 }
 
-
 .content__main {
     padding: 12px;
 }
@@ -55,12 +50,6 @@ h1 {
     margin: 0;
     width: 100%;
     text-align: center;
-}
-
-.content__header {
-    text-align: center;
-    padding: 12px 12px 10px;
-    border-bottom: 2px solid;
 }
 
 .button_back_dont-remove {

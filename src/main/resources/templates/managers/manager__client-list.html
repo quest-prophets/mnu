@@ -8,14 +8,14 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="flex-row-left">
+<div class="flex-row-center fixed-header fixed-header_small">
     <a th:href="@{/}">
         <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
     </a>
+    <h1>My clients</h1>
 </div>
 
 <div class="content">
-    <h1>My clients</h1>
     <div class="form-item gray" th:if="${clients == null or clients.isEmpty()}">
         You don't have any clients...
     </div>

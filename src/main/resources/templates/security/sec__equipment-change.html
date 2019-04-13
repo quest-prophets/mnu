@@ -111,7 +111,7 @@
 <form class="flex-column form-item_big" method="post" th:object="${form}" action="#" th:action="@{/sec/equipment}">
     <label>
         <b>New weapon Id</b>
-        <input id="weaponId" name="weaponId" type="number" class="input_big"
+        <input required id="weaponId" name="weaponId" type="number" class="input_big"
                th:value="${current_security.weapon != null ? current_security.weapon.id : ''}">
     </label>
     <label class="form-item">
