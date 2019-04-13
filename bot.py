@@ -20,10 +20,10 @@ def start(update, context):
 
 def entered_house(update, context):
     try:
-        row_column = update.message.text.split(", ", 2)
-        context.user_data['row'] = int(row_column[0])
-        context.user_data['column'] = int(row_column[1])
-        update.message.reply_text(f"Reporting incident for house {row_column[0]}, {row_column[1]}. How would you assess the danger level?")
+        row_column = update.message.text.split(",", 2)
+        context.user_data['row'] = int(row_column[0].strip())
+        context.user_data['column'] = int(row_column[1].strip())
+        update.message.reply_text(f"Reporting incident for house {row_column[0].strip()}, {row_column[1].strip()}. How would you assess the danger level? (1 - 3)")
         return ENTER_DANGER_LEVEL
     except:
         update.message.reply_text("Please enter houses' row and column correctly, as follows: \"1, 2\"")
@@ -31,9 +31,12 @@ def entered_house(update, context):
 
 def entered_danger_level(update, context):
     text = update.message.text
-    context.user_data['danger_level'] = text 
-    update.message.reply_text(f"Assigned danger level is {text}. Any additional notes?")
-    return ENTER_DESCRIPTION
+    if int(text) > 3 or int(text) < 1:
+        update.message.reply_text("Please enter danger level correctly, choose 1, 2 or 3")
+    else:
+        context.user_data['danger_level'] = text
+        update.message.reply_text(f"Assigned danger level is {text}. Any additional notes?")
+        return ENTER_DESCRIPTION
 
 def entered_description(update, context):
     text = update.message.text
