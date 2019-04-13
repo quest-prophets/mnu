@@ -130,17 +130,17 @@ class SecurityController (
         }
 
         when {
-            !requestedWeapon!!.isPresent && requestedWeapon != null -> {
+            requestedWeapon != null && !requestedWeapon.isPresent -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such weapon does not exist.")
                 return "redirect:/sec/equipment"
             }
-            !requestedTransport!!.isPresent && requestedTransport != null -> {
+            requestedTransport != null && !requestedTransport.isPresent -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such transport does not exist.")
                 return "redirect:/sec/equipment"
             }
-            !requestedTransport.isPresent && !requestedWeapon.isPresent && requestedWeapon != null && requestedTransport != null -> {
+            requestedTransport != null && requestedWeapon != null && !requestedTransport.isPresent && !requestedWeapon.isPresent -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Such weapon and transport do not exist.")
                 return "redirect:/sec/equipment"
