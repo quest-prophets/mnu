@@ -221,6 +221,18 @@ class SecurityController (
         return null
     }
 
+    @GetMapping("/report")
+    fun searchReport(@RequestParam id: String, model: Model, principal: Principal) : String {
+        val error = searchReportAccessError(id.toLong(), principal)
+        if (error == null) {
+            model.addAttribute("form", NewSearchForm())
+            model.addAttribute("weapons", weaponRepository.findAll())
+        } else
+            model.addAttribute("error", error)
+
+        return "security/sec__report.html"
+    }
+
     @PostMapping("/report")
     fun addSearchReport(@ModelAttribute form: NewSearchForm, principal: Principal, redirect: RedirectAttributes): String {
         val error = searchReportAccessError(form.incidentId.toLong(), principal)
