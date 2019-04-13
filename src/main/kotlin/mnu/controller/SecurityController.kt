@@ -84,7 +84,6 @@ class SecurityController (
             }
         }
 
-
         val requestedWeapon = when (form.weaponId) {
             null -> null
             else -> weaponRepository.findById(form.weaponId)
@@ -214,7 +213,7 @@ class SecurityController (
         val incident = districtIncidentRepository.findById(incidentId)
         if (!incident.isPresent)
             return "Incident with such id does not exist."
-        if (incident.get().availablePlaces > 0)
+        if (incident.get().dangerLevel > 0)
             return "You can not write a report on an incident which has not been resolved yet."
         if (!incident.get().assistants!!.contains(currentSecurity))
             return "You are not allowed to write a report on incident you did not participate in."
