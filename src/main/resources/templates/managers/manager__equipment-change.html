@@ -27,7 +27,7 @@
         <div class="form-item_micro" th:text="${'Salary: ' + request.employee.employee.salary + ' c.u.'}"></div>
         <div class="form-item_micro" th:text="${'Level: ' + request.employee.employee.level}"></div>
 
-        <div th:if="${request.employee.weapon != null}" class="weapon-flex">
+        <div th:if="${request.employee.weapon != null}" class="weapon-flex form-item">
             <div th:switch="${request.employee.weapon.type.name()}">
                 <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">
                 <img class="icon_middle" th:case="PISTOL" alt="pistol" th:src="@{/images/pistol.svg}">
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div th:if="${request.employee.transport != null}" class="weapon-flex">
+        <div th:if="${request.employee.transport != null}" class="weapon-flex form-item">
             <div th:switch="${request.employee.transport.type.name()}">
                 <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">
                 <img class="icon_middle" th:case="PISTOL" alt="pistol" th:src="@{/images/pistol.svg}">
@@ -71,6 +71,7 @@
                 <img class="icon_middle" th:case="AIR" alt="alien" th:src="@{/images/air.png}">
             </div>
             <div class="weapon-description">
+                <b>Current transport</b>
                 <div class="form-item_small">
                     <b>Name</b>
                     <span th:text="${request.employee.transport.name}"></span>
@@ -86,7 +87,7 @@
             </div>
         </div>
 
-        <div th:if="${request.weapon != null}" class="weapon-flex">
+        <div th:if="${request.weapon != null}" class="weapon-flex form-item">
             <div th:switch="${request.weapon.type.name()}">
                 <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">
                 <img class="icon_middle" th:case="PISTOL" alt="pistol" th:src="@{/images/pistol.svg}">
@@ -100,6 +101,7 @@
                 <img class="icon_middle" th:case="AIR" alt="alien" th:src="@{/images/air.png}">
             </div>
             <div class="weapon-description">
+                <b>New weapon</b>
                 <div class="form-item_small">
                     <b>Name</b>
                     <span th:text="${request.weapon.name}"></span>
@@ -123,7 +125,7 @@
             </div>
         </div>
 
-        <div th:if="${request.transport!= null}" class="weapon-flex">
+        <div th:if="${request.transport!= null}" class="weapon-flex form-item">
             <div th:switch="${request.transport.type.name()}">
                 <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">
                 <img class="icon_middle" th:case="PISTOL" alt="pistol" th:src="@{/images/pistol.svg}">
@@ -137,6 +139,7 @@
                 <img class="icon_middle" th:case="AIR" alt="alien" th:src="@{/images/air.png}">
             </div>
             <div class="weapon-description">
+                <b>New transport</b>
                 <div class="form-item_small">
                     <b>Name</b>
                     <span th:text="${request.transport.name}"></span>

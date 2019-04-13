@@ -1,5 +1,9 @@
 @import "../common.css";
 
+body {
+    margin: 0;
+}
+
 .content {
     text-align: center;
 }

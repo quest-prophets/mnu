@@ -5,28 +5,20 @@ document.addEventListener('click', (e) => {
     if (action === "accept") {
         fetch(`/man/acceptNewEquipment/` + requestId, {method: 'POST'})
             .then(() => {
-                dealWithWeapon(true, requestId);
+                document.getElementById("request-buttons-" + requestId).classList.add("hidden");
+                document.getElementById("request-flash-" + requestId).classList.remove('hidden');
+                document.getElementById("request-content-" + requestId).classList.add('approved');
+                document.getElementById("request-content-" + requestId).classList.remove('finished');
+                document.getElementById("request-flash-" + requestId).innerHTML = "Accepted";
             })
     } else if (action === "reject") {
         fetch(`/man/rejectNewEquipment/` + requestId, {method: 'POST'})
             .then(() => {
-                dealWithWeapon(false, requestId);
+                document.getElementById("request-buttons-" + requestId).classList.add("hidden");
+                document.getElementById("request-flash-" + requestId).classList.remove('hidden');
+                document.getElementById("request-content-" + requestId).classList.add('rejected');
+                document.getElementById("request-content-" + requestId).classList.remove('finished');
+                document.getElementById("request-flash-" + requestId).innerHTML = "Rejected";
             })
     }
 });
-
-function dealWithWeapon(isAccept, requestId) {
-    document.getElementById("request-buttons-" + requestId).classList.add("hidden");
-    document.getElementById("request-flash-" + requestId).classList.remove('hidden');
-    if (isAccept) {
-        document.getElementById("request-content-" + requestId).classList.add('approved');
-        document.getElementById("request-content-" + requestId).classList.remove('finished');
-        document.getElementById("request-content-" + requestId).classList.remove('rejected');
-        document.getElementById("request-flash-" + requestId).innerHTML = "Accepted";
-    } else {
-        document.getElementById("request-content-" + requestId).classList.add('rejected');
-        document.getElementById("request-content-" + requestId).classList.remove('finished');
-        document.getElementById("request-content-" + requestId).classList.remove('approved');
-        document.getElementById("request-flash-" + requestId).innerHTML = "Rejected";
-    }
-}

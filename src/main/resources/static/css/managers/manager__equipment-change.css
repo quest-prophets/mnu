@@ -75,4 +75,8 @@ h1 {
     .button-flex-row * {
         margin-bottom: 7px;
     }
+
+    h1 {
+        font-size: 30px;
+    }
 }
