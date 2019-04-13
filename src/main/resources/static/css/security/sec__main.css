@@ -14,24 +14,18 @@ body {
 
 .content {
     text-align: center;
-    margin-top: 84px;
+    margin-top: 109px;
 }
 
 .content__item {
-    margin: 20px auto auto auto;
+    margin: 25px auto;
     border: 2px solid black;
     width: 70%;
 }
 
 .content__header {
-    padding: 12px 12px 10px;
+    height: 35px;
     border-bottom: 2px solid;
-    display: flex;
-}
-
-.header-text {
-    width: 100%;
-    line-height: 22px;
 }
 
 .content__main {
