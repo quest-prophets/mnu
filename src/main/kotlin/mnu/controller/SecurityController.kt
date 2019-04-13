@@ -367,12 +367,12 @@ class SecurityController (
                 it.availablePlaces++
                 districtIncidentRepository.save(it)
                 redirect.addFlashAttribute("status", "Participation withdrawn.")
-                return "redirect:/sec/equipment"
+                return "redirect:/sec/main"
             }
         }
 
         redirect.addFlashAttribute("error", "You do not participate in any district incident resolving operations right now.")
-        return "redirect:/sec/equipment"
+        return "redirect:/sec/main"
     }
 
 }
