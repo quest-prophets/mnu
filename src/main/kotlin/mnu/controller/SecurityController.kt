@@ -3,6 +3,8 @@ package mnu.controller
 import mnu.form.NewEquipmentForm
 import mnu.form.NewSearchForm
 import mnu.model.DistrictIncident
+import mnu.model.Transport
+import mnu.model.Weapon
 import mnu.model.employee.SecurityEmployee
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.WeaponType
@@ -71,11 +73,22 @@ class SecurityController (
     fun securityEquipment(model: Model, principal: Principal): String {
         val curUser = userRepository?.findByLogin(principal.name)!!
         val curSecurity = securityEmployeeRepository.findById(curUser.id!!).get()
+
+        val allAvailableWeapons =
+            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0)
+                as MutableList<Weapon>
+        if (curSecurity.weapon != null)
+            allAvailableWeapons.remove(curSecurity.weapon!!)
+
+        val allAvailableTransport =
+            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0)
+                as MutableList<Transport>
+        if (curSecurity.transport != null)
+            allAvailableTransport.remove(curSecurity.transport!!)
+
         model.addAttribute("current_security", curSecurity)
-        model.addAttribute("available_weapons",
-            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0))
-        model.addAttribute("available_transport",
-            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0))
+        model.addAttribute("available_weapons", allAvailableWeapons)
+        model.addAttribute("available_transport", allAvailableTransport)
         return "security/sec__equipment-change"
     }
 
