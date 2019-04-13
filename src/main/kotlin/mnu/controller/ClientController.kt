@@ -46,11 +46,12 @@ class ClientController (
 
     @PostMapping("/cart/modify")
     fun modifyCart(@RequestBody cartItem: CartItem, principal: Principal, redirect: RedirectAttributes): String {
-        val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
+        val currentUser = userRepository?.findByLogin(principal.name)!!
+        val currentClient = clientRepository?.findByUserId(currentUser.id!!)!!
         val currentCreatingCart = when {
-            shoppingCartRepository.findAllByClientAndStatus(currentClient, ShoppingCartStatus.CREATING) != null ->
-                shoppingCartRepository.findAllByClientAndStatus(currentClient, ShoppingCartStatus.CREATING)!![0]
-            else -> ShoppingCart(currentClient).apply { this.status = ShoppingCartStatus.CREATING }
+            shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING) != null ->
+                shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)!![0]
+            else -> ShoppingCart(currentUser).apply { this.status = ShoppingCartStatus.CREATING }
         }
 
         shoppingCartRepository.save(currentCreatingCart)
@@ -92,12 +93,12 @@ class ClientController (
             CartItemType.TRANSPORT -> {
                 val possibleTransport = transportRepository.findById(cartItem.id)
                 if (!possibleTransport.isPresent) {
-                    redirect.addFlashAttribute("error", "Such weapon does not exist.")
+                    redirect.addFlashAttribute("error", "Such transport does not exist.")
                     return "redirect:/client/shop"
                 }
                 val existingTransport = possibleTransport.get()
                 if (existingTransport.quantity == 0L) {
-                    redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another weapon.")
+                    redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another transport.")
                     return "redirect:/client/shop"
                 }
                 val existingShoppingCartItemCheck = shoppingCartItemRepository.findByTransportAndCart(existingTransport, currentCreatingCart)
@@ -132,14 +133,13 @@ class ClientController (
     fun sendPurchaseRequest(principal: Principal, redirect: RedirectAttributes) : String {
         val newRequest = Request().apply { this.status = RequestStatus.PENDING }
         val currentUser = userRepository?.findByLogin(principal.name)!!
-        val currentClient = clientRepository?.findByUserId(currentUser.id!!)!!
-        val currentCreatingCart = when (shoppingCartRepository.findAllByClientAndStatus(currentClient, ShoppingCartStatus.CREATING)) {
+        val currentCreatingCart = when (shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)) {
             null -> {
                 redirect.addFlashAttribute("error", "You have no carts in creation.")
                 return "redirect:/client/shop"
             }
             else -> {
-                shoppingCartRepository.findAllByClientAndStatus(currentClient, ShoppingCartStatus.CREATING)!![0]
+                shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)!![0]
             }
         }
 

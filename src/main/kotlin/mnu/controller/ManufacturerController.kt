@@ -4,13 +4,12 @@ import mnu.form.NewEmailForm
 import mnu.form.NewPasswordForm
 import mnu.form.NewProductForm
 import mnu.form.NewVacancyForm
-import mnu.model.enums.RequestStatus
-import mnu.model.enums.TransportType
-import mnu.model.enums.WeaponType
-import mnu.model.request.NewTransportRequest
-import mnu.model.request.NewVacancyRequest
-import mnu.model.request.NewWeaponRequest
-import mnu.model.request.Request
+import mnu.model.enums.*
+import mnu.model.request.*
+import mnu.model.shop.ShoppingCart
+import mnu.model.shop.ShoppingCartItem
+import mnu.repository.TransportRepository
+import mnu.repository.WeaponRepository
 import mnu.repository.request.*
 import mnu.repository.shop.*
 import org.springframework.stereotype.Controller
@@ -27,7 +26,9 @@ class ManufacturerController (
     val purchaseRequestRepository: PurchaseRequestRepository,
     val newWeaponRequestRepository: NewWeaponRequestRepository,
     val newTransportRequestRepository: NewTransportRequestRepository,
-    val newVacancyRequestRepository: NewVacancyRequestRepository
+    val newVacancyRequestRepository: NewVacancyRequestRepository,
+    val transportRepository: TransportRepository,
+    val weaponRepository: WeaponRepository
 ) : ApplicationController() {
 
     @GetMapping("/market")
@@ -145,6 +146,134 @@ class ManufacturerController (
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Request submitted. Await for administrator's decision.")
+        return "redirect:/manufacturer/market"
+    }
+
+    enum class CartItemType { WEAPON, TRANSPORT }
+    data class CartItem(val type: CartItemType, var id: Long, var quantity: Long)
+
+    @PostMapping("/cart/modify")
+    fun modifyCart(@RequestBody cartItem: CartItem, principal: Principal, redirect: RedirectAttributes): String {
+        val currentUser = userRepository?.findByLogin(principal.name)!!
+        val currentClient = clientRepository?.findByUserId(currentUser.id!!)!!
+        val currentCreatingCart = when {
+            shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING) != null ->
+                shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)!![0]
+            else -> ShoppingCart(currentUser).apply { this.status = ShoppingCartStatus.CREATING }
+        }
+
+        shoppingCartRepository.save(currentCreatingCart)
+
+        var newShoppingCartItem = ShoppingCartItem()
+        when (cartItem.type) {
+            CartItemType.WEAPON -> {
+                val possibleWeapon = weaponRepository.findById(cartItem.id)
+                if (!possibleWeapon.isPresent) {
+                    redirect.addFlashAttribute("error", "Such weapon does not exist.")
+                    return "redirect:/manufacturer/market"
+                }
+                val existingWeapon = possibleWeapon.get()
+                if (existingWeapon.quantity == 0L) {
+                    redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another weapon.")
+                    return "redirect:/manufacturer/market"
+                }
+                val existingShoppingCartItemCheck = shoppingCartItemRepository.findByWeaponAndCart(existingWeapon, currentCreatingCart)
+                if (existingShoppingCartItemCheck == null) {
+                    if (cartItem.quantity <= 0L) {
+                        redirect.addFlashAttribute("error", "Please enter a valid quantity for this item.")
+                        return "redirect:/manufacturer/market"
+                    }
+                    newShoppingCartItem.apply {
+                        this.weapon = existingWeapon
+                        this.weaponQuantity = cartItem.quantity
+                    }
+                } else {
+                    if (cartItem.quantity <= 0L) {
+                        shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
+                        redirect.addFlashAttribute("status", "Item removed from cart.")
+                        return "redirect:/manufacturer/market"
+                    }
+                    existingShoppingCartItemCheck.weaponQuantity = cartItem.quantity
+                    newShoppingCartItem = existingShoppingCartItemCheck
+                }
+            }
+
+            CartItemType.TRANSPORT -> {
+                val possibleTransport = transportRepository.findById(cartItem.id)
+                if (!possibleTransport.isPresent) {
+                    redirect.addFlashAttribute("error", "Such weapon does not exist.")
+                    return "redirect:/manufacturer/market"
+                }
+                val existingTransport = possibleTransport.get()
+                if (existingTransport.quantity == 0L) {
+                    redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another transport.")
+                    return "redirect:/manufacturer/market"
+                }
+                val existingShoppingCartItemCheck = shoppingCartItemRepository.findByTransportAndCart(existingTransport, currentCreatingCart)
+                if (existingShoppingCartItemCheck == null) {
+                    if (cartItem.quantity <= 0L) {
+                        redirect.addFlashAttribute("error", "Please enter a valid quantity for this item.")
+                        return "redirect:/manufacturer/market"
+                    }
+                    newShoppingCartItem.apply {
+                        this.transport = existingTransport
+                        this.transportQuantity = cartItem.quantity
+                    }
+                } else {
+                    if (cartItem.quantity <= 0L) {
+                        shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
+                        redirect.addFlashAttribute("status", "Item removed from cart.")
+                        return "redirect:/manufacturer/market"
+                    }
+                    existingShoppingCartItemCheck.transportQuantity = existingShoppingCartItemCheck.transportQuantity!! + cartItem.quantity
+                    newShoppingCartItem = existingShoppingCartItemCheck
+                }
+            }
+        }
+
+        shoppingCartItemRepository.save(newShoppingCartItem.apply { this.cart = currentCreatingCart })
+
+        redirect.addFlashAttribute("status", "Added to cart!")
+        return "redirect:/manufacturer/market"
+    }
+
+    @PostMapping("/cart/sendRequest")
+    fun sendPurchaseRequest(principal: Principal, redirect: RedirectAttributes) : String {
+        val newRequest = Request().apply { this.status = RequestStatus.PENDING }
+        val currentUser = userRepository?.findByLogin(principal.name)!!
+        val currentCreatingCart = when (shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)) {
+            null -> {
+                redirect.addFlashAttribute("error", "You have no carts in creation.")
+                return "redirect:/manufacturer/market"
+            }
+            else -> {
+                shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)!![0]
+            }
+        }
+
+        if (currentCreatingCart.items == null || currentCreatingCart.items!!.size == 0) {
+            redirect.addFlashAttribute("error", "You have no items in your cart.")
+            return "redirect:/manufacturer/market"
+        }
+
+        val cartItems = currentCreatingCart.items
+
+        cartItems!!.forEach {
+            if (it.weapon != null) {
+                it.weapon!!.quantity += it.weaponQuantity!!
+                weaponRepository.save(it.weapon!!)
+            }
+            if(it.transport != null) {
+                it.transport!!.quantity += it.transportQuantity!!
+                transportRepository.save(it.transport!!)
+            }
+        }
+
+        currentCreatingCart.status = ShoppingCartStatus.REQUESTED
+        shoppingCartRepository.save(currentCreatingCart)
+        purchaseRequestRepository.save(PurchaseRequest(currentUser, currentCreatingCart).apply { this.request = newRequest })
+
+        redirect.addFlashAttribute("status", "Request sent. Await for your managing employee's decision.")
         return "redirect:/manufacturer/market"
     }
 }
