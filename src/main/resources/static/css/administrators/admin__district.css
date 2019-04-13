@@ -24,15 +24,6 @@
     max-width: 500px;
 }
 
-.danger-circle {
-    border: 1px solid black;
-    border-radius: 90px;
-    margin-right: 15px;
-    width: 30px;
-    height: 30px;
-    flex-shrink: 0;
-}
-
 .clickable-circle:hover {
     stroke-width: 2px;
     stroke: black;
@@ -42,18 +33,6 @@
 .clicked-circle {
     stroke-width: 2px;
     stroke: black;
-}
-
-.danger-level-3 {
-    background: red;
-}
-
-.danger-level-2 {
-    background: orange;
-}
-
-.danger-level-1 {
-    background: yellow;
 }
 
 .mobile-error {

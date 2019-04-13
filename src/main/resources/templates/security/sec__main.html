@@ -8,15 +8,69 @@
     <title>MNU</title>
 </head>
 <body>
-<div class="security-grid">
-    <div>
-        <a th:href="@{/profile}" class="flex-column button button_profile">
-            Profile
-        </a>
+<div class="fixed-header flex-row-between">
+    <a th:href="@{/profile}" class="button button_profile">
+        Profile
+    </a>
+    <a th:href="@{/sec/equipment}" class="change-button button">
+        Change equipment
+    </a>
+</div>
+
+<div class="content">
+    <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+    <div th:if="${error}" th:text="${error}" class="flash flash_success"></div>
+
+    <div class="flex-column">
+        <div class="form-item_big gray" th:if="${incidents == null or incidents.isEmpty()}">
+            No records of incidents are available
+        </div>
     </div>
-    <div class="security-flex-row security-grid__security-buttons">
-        <a class="security-buttons__change grid-button button">Change <br> equipment</a>
-        <a class="security-buttons_report grid-button button">Report on <br> a confiscated weapon</a>
+    <div th:each="inc: ${incidents}" class=" content__item">
+        <div class="content__header"
+             th:classappend="|${inc.status.name()=='PENDING' ? 'pending' : inc.status.name()=='APPROVED' ? 'approved' : inc.status.name()=='REJECTED' ? 'rejected' : 'finished'}|">
+            <div th:switch="${inc.status.name()}">
+                <img th:case="PENDING" class="content-icon" alt="pending" th:src="@{/images/clock.png}">
+                <img th:case="APPROVED" class="content-icon" alt="approved" th:src="@{/images/pencil.png}">
+                <img th:case="REJECTED" class="content-icon" alt="rejected" th:src="@{/images/x_mark.png}">
+                <img th:case="FINISHED" class="content-icon" alt="finished" th:src="@{/images/tick.png}">
+            </div>
+            <span class="header-text">
+                    <span th:text="${inc.type.name()} == 'MAJOR' ? 'Major' : 'Minor'"></span> inc. #<span
+                    th:text="${inc.id}"></span> <b><span th:text="${inc.title}"></span></b>
+                </span>
+        </div>
+        <div class="content__main" th:switch="${inc.status.name()}">
+            <div class="flex-column-left">
+                <div th:if="${inc.assistant}">
+                    <b class="form-item_micro">Assistant</b>
+                    <div th:text="${inc.assistant.employee.name}"></div>
+                </div>
+                <div class="form-item_micro" th:case="PENDING">
+                    <b>Submitted on </b>
+                </div>
+                <div class="form-item_micro" th:case="APPROVED">
+                    <b>Approved on </b>
+                </div>
+                <div class="form-item_micro" th:case="REJECTED">
+                    <b> Rejected on </b>
+                </div>
+                <div class="form-item_micro" th:case="FINISHED">
+                    <b> Finished on </b>
+                </div>
+                <div class="datetime-to-format" th:text="${inc.statusDate}"></div>
+                <b class="form-item_micro">Description</b>
+                <div th:text="${inc.description}"></div>
+                <div th:if="${inc.status.name() == 'FINISHED'}" class="flex-column-left">
+                    <b class="form-item_micro"> Report </b>
+                    <div th:text="${inc.result}"></div>
+                </div>
+            </div>
+            <div class="flex-column">
+                <a th:if="${inc.status.name()=='APPROVED'}" th:href="@{'/sci/report?id=' + ${inc.id}}"
+                   th:attr="data-inc-id=${inc.id}" class="button form-item_small">Write report</a>
+            </div>
+        </div>
     </div>
 </div>
 </body>

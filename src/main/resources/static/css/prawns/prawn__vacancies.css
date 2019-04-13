@@ -12,10 +12,6 @@ body {
     transform: scale(1.5);
 }
 
-.light-gray-bg {
-    background: #f6f6f6;
-}
-
 .vacancy-item {
     display: inline-block;
     width: 240px;

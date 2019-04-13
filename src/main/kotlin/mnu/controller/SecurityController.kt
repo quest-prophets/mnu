@@ -16,6 +16,7 @@ import mnu.repository.request.NewWeaponRequestRepository
 import mnu.repository.request.RequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
@@ -33,7 +34,10 @@ class SecurityController (
 ) : ApplicationController() {
 
     @GetMapping("/main")
-    fun securityMenu() = "security/sec__main.html"
+    fun securityMenu(model: Model, principal: Principal): String{
+        //todo в модель добавить инциденты
+        return "security/sec__main.html"
+    }
 
     @PostMapping("/equipment")
     fun requestNewEquipment(

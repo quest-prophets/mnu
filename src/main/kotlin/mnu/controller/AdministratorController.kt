@@ -110,7 +110,7 @@ class AdministratorController (
         model.addAttribute("experiment_count",
             experimentRepository.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
         model.addAttribute("ongoing_incidents",
-            districtIncidentRepository.findAllByLevelToAndDangerLevelGreaterThan(0, 0) ?: 0)
+            districtIncidentRepository.findAllByLevelToAndDangerLevelGreaterThan(0, 0)?.size)
         return "administrators/admin__menu.html"
     }
 

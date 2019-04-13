@@ -1,119 +1,59 @@
 @import "../common.css";
 
 body {
-    font-family: "Helvetica", sans-serif;
-    font-size: 17px;
+    margin: 0;
 }
 
-.input_big {
-    font-size: 16px;
-    height: 25px;
+.button_profile {
+    margin: initial;
 }
 
-.button {
-    color: black;
-    text-decoration: none;
-    border: 2px solid black;
-    border-radius: 6px;
-    padding: 8px 22px;
-    font-size: 20px;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 5px #cacaca;
-    background: white;
-}
-
-.button:hover:not(.button_pressed) {
-    top: 2px;
-    box-shadow: 0 3px #cacaca;
-}
-
-.button:active:not(.button_pressed) {
-    top: 5px;
-    box-shadow: none;
-}
-
-.button_pressed {
-    top: 3px;
-    box-shadow: none;
-    outline: none;
-    background: lightgreen;
-    cursor: default;
-}
-
-.security-grid {
-    display: grid;
-    grid: "header security-buttons" 50px "content content";
-    padding: 5px;
-}
-
-.employee-header {
-    grid-area: header;
-}
-
-.grid-button {
-    text-align: center;
-    font-size: 22px;
-    width: 220px;
-}
-
-.security-grid__security-buttons {
-    grid-area: security-buttons;
-    margin-top: 10px;
-}
-
-.security-buttons__change {
+.change-button {
     margin-right: 30px;
 }
 
-.security-buttons_report {
-    margin-right: 10px;
+.content {
+    text-align: center;
+    margin-top: 84px;
 }
 
-.flex-column {
+.content__item {
+    margin: 20px auto auto auto;
+    border: 2px solid black;
+    width: 70%;
+}
+
+.content__header {
+    padding: 12px 12px 10px;
+    border-bottom: 2px solid;
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
 }
 
-.security-flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: 10px;
+.header-text {
+    width: 100%;
+    line-height: 22px;
 }
 
-@media (max-width: 900px) {
-    .security-grid {
-        grid: "header" 50px "security-buttons" 80px "content";
-    }
+.content__main {
+    word-break: break-word;
+    text-align: left;
+    padding: 12px;
+}
 
-    .grid-button {
-        width: auto;
-        font-size: 20px;
-    }
-
-    .security-buttons_report {
-        margin-right: 0;
-    }
-
-    .security-flex-row {
-        justify-content: center;
+@media (max-width: 1000px) {
+    .content__item {
+        width: 80%
     }
 }
 
-@media (max-width: 395px) {
-    .security-grid {
-        grid: "header" 60px "security-buttons" 160px "content";
+@media (max-width: 700px) {
+    .content__item {
+        width: 92%
     }
+}
 
-    .security-flex-row {
-        flex-direction: column;
-    }
-
-    .security-buttons__change {
-        margin: 15px auto 20px auto;
+@media (max-width: 360px) {
+    .change-button {
+        font-size: 18px;
     }
 }

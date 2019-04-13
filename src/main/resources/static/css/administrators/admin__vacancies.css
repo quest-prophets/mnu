@@ -5,10 +5,6 @@ body {
     margin: 0;
 }
 
-.light-gray-bg {
-    background: #f6f6f6;
-}
-
 .vacancy-item {
     display: inline-block;
     width: 240px;

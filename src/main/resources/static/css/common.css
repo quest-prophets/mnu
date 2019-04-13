@@ -215,6 +215,19 @@ select {
     align-items: center;
 }
 
+.danger-circle {
+    border: 1px solid black;
+    border-radius: 90px;
+    margin-right: 15px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.light-gray-bg {
+    background: #f6f6f6;
+}
+
 .pending {
     background: #dcefff;
 }
@@ -233,6 +246,18 @@ select {
 
 .rejected {
     background: #f2d6de;
+}
+
+.danger-level-3 {
+    background: red;
+}
+
+.danger-level-2 {
+    background: orange;
+}
+
+.danger-level-1 {
+    background: yellow;
 }
 
 .flash {
