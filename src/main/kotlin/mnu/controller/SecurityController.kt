@@ -191,8 +191,6 @@ class SecurityController (
         incident.apply {
             this.assistants = incidentAssistants
             this.availablePlaces = this.availablePlaces - 1
-            if(this.availablePlaces == 0L)
-                this.dangerLevel = 0
         }
 
         districtIncidentRepository.save(incident)
@@ -352,6 +350,28 @@ class SecurityController (
         }
 
         redirect.addFlashAttribute("error", "You have no active equipment change requests.")
+        return "redirect:/sec/equipment"
+    }
+
+    @PostMapping("/withdrawParticipation")
+    fun withdrawParticipation (principal: Principal, redirect: RedirectAttributes) : String {
+        val user = userRepository?.findByLogin(principal.name)
+        val currentSecurity = securityEmployeeRepository.findById(user?.id!!).get()
+
+        val allSuitableIncidents = districtIncidentRepository
+            .findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
+                0, currentSecurity.employee!!.level!!, currentSecurity.employee!!.level!!) as MutableList<DistrictIncident>?
+        allSuitableIncidents?.forEach {
+            if (it.assistants!!.contains(currentSecurity) && it.dangerLevel > 0) {
+                it.assistants!!.remove(currentSecurity)
+                it.availablePlaces++
+                districtIncidentRepository.save(it)
+                redirect.addFlashAttribute("status", "Participation withdrawn.")
+                return "redirect:/sec/equipment"
+            }
+        }
+
+        redirect.addFlashAttribute("error", "You do not participate in any district incident resolving operations right now.")
         return "redirect:/sec/equipment"
     }
 
