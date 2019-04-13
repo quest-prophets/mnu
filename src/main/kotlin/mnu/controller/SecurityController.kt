@@ -74,6 +74,14 @@ class SecurityController (
         val curUser = userRepository?.findByLogin(principal.name)!!
         val curSecurity = securityEmployeeRepository.findById(curUser.id!!).get()
 
+        val allChangeRequests = changeEquipmentRequestRepository.findAllByEmployee(curSecurity)
+        var currentChangeRequest = ChangeEquipmentRequest()
+        allChangeRequests?.forEach {
+            if (it.request!!.status == RequestStatus.PENDING) {
+                currentChangeRequest = it
+            }
+        }
+
         val allAvailableWeapons =
             weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(curSecurity.employee!!.level!!, 0)
                 as MutableList<Weapon>
@@ -87,6 +95,7 @@ class SecurityController (
             allAvailableTransport.remove(curSecurity.transport!!)
 
         model.addAttribute("current_security", curSecurity)
+        model.addAttribute("current_request", currentChangeRequest)
         model.addAttribute("available_weapons", allAvailableWeapons)
         model.addAttribute("available_transport", allAvailableTransport)
         return "security/sec__equipment-change"
