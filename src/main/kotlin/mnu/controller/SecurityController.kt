@@ -2,6 +2,8 @@ package mnu.controller
 
 import mnu.form.NewEquipmentForm
 import mnu.form.NewSearchForm
+import mnu.model.DistrictIncident
+import mnu.model.employee.SecurityEmployee
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.WeaponType
 import mnu.model.request.ChangeEquipmentRequest
@@ -35,7 +37,32 @@ class SecurityController (
 
     @GetMapping("/main")
     fun securityMenu(model: Model, principal: Principal): String{
-        //todo в модель добавить инциденты
+        val curUser = userRepository?.findByLogin(principal.name)!!
+        val curSecurity = securityEmployeeRepository.findById(curUser.id!!).get()
+
+//        val allSuitableIncidents = districtIncidentRepository
+//            .findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
+//                0, curSecurity.employee!!.level!!, curSecurity.employee!!.level!!)
+//        var currentIncId = 0L
+//        allSuitableIncidents?.forEach {
+//            if (it.assistants!!.contains(curSecurity)) {
+//                currentIncId = it.id!!
+//            }
+//        }
+
+        val allIncidents = districtIncidentRepository.findAll()
+        val incidentsWithEmployee = ArrayList<DistrictIncident>()
+        allIncidents.forEach {
+            if(it.assistants!!.contains(curSecurity))
+                incidentsWithEmployee.add(it)
+        }
+
+//        model.addAttribute("curr_incident", currentIncId)
+        model.addAttribute("ongoing_incidents",
+            districtIncidentRepository.findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
+                0, curSecurity.employee!!.level!!, curSecurity.employee!!.level!!))
+        model.addAttribute("incidents_with_employee", incidentsWithEmployee)
+
         return "security/sec__main.html"
     }
 
@@ -124,34 +151,58 @@ class SecurityController (
     @PostMapping("/incident/{id}")
     fun acceptIncidentParticipation(@PathVariable id: Long, redirect: RedirectAttributes, principal: Principal) : String {
         val curUser = userRepository?.findByLogin(principal.name)!!
+        val curSecurity = securityEmployeeRepository.findById(curUser.id!!).get()
         val curEmployeeLevel = employeeRepository?.findByUserId(curUser.id!!)!!.level!!
         val possibleIncident = districtIncidentRepository.findById(id)
-        if (!possibleIncident.isPresent)
+        if (!possibleIncident.isPresent) {
             return "Incident with such id does not exist."
+        }
         val incident = possibleIncident.get()
-        incident.assistants = ArrayList()
+
+        var incidentAssistants = incident.assistants
+        if (incidentAssistants == null)
+            incidentAssistants = ArrayList()
+
         val allSuitableIncidents =
             districtIncidentRepository.findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
                 0, curEmployeeLevel, curEmployeeLevel)
         when {
+            incidentAssistants.contains(curSecurity) -> {
+                redirect.addFlashAttribute("error", "You are already appointed to this incident.")
+                return "redirect:main"
+            }
             incident.availablePlaces == 0L -> {
-                return "The amount of security is already sufficient for this incident."
+                redirect.addFlashAttribute("error", "The amount of security is already sufficient for this incident.")
+                return "redirect:main"
             }
             !allSuitableIncidents?.contains(incident)!! -> {
-                return "You are not suitable for this incident."
+                redirect.addFlashAttribute("error", "You are not suitable for this incident.")
+                return "redirect:main"
             }
         }
+        allSuitableIncidents?.forEach {
+            if (it.assistants!!.contains(curSecurity)) {
+                redirect.addFlashAttribute("error", "You are already appointed for an incident #${it.id}.")
+                return "redirect:main"
+            }
+        }
+        incidentAssistants.add(securityEmployeeRepository.findById(curUser.id!!).get())
+
         incident.apply {
-            this.assistants?.add(securityEmployeeRepository.findById(curUser.id!!).get())
+            this.assistants = incidentAssistants
             this.availablePlaces = this.availablePlaces - 1
             if(this.availablePlaces == 0L)
                 this.dangerLevel = 0
         }
 
         districtIncidentRepository.save(incident)
-        if (incident.availablePlaces == 0L)
-            return "You were appointed to the incident and have successfully resolved it."
-        return "You were appointed to the incident."
+        if (incident.availablePlaces == 0L) {
+            redirect.addFlashAttribute("status", "You were appointed to the incident and have successfully resolved it.")
+            return "redirect:main"
+        }
+
+        redirect.addFlashAttribute("status", "You were appointed to the incident.")
+        return "redirect:main"
     }
 
     fun searchReportAccessError(incidentId: Long, principal: Principal): String? {
@@ -163,6 +214,8 @@ class SecurityController (
         val incident = districtIncidentRepository.findById(incidentId)
         if (!incident.isPresent)
             return "Incident with such id does not exist."
+        if (incident.get().availablePlaces > 0)
+            return "You can not write a report on an incident which has not been resolved yet."
         if (!incident.get().assistants!!.contains(currentSecurity))
             return "You are not allowed to write a report on incident you did not participate in."
 
