@@ -1,5 +1,6 @@
 package mnu.controller
 
+import mnu.EmailSender
 import mnu.form.PrawnRegistrationForm
 import mnu.model.Prawn
 import mnu.model.User
@@ -40,7 +41,8 @@ class ManagerController (
     val vacancyRepository: VacancyRepository,
     val vacancyApplicationRequestRepository: VacancyApplicationRequestRepository,
     val purchaseRequestRepository: PurchaseRequestRepository,
-    val shoppingCartRepository: ShoppingCartRepository
+    val shoppingCartRepository: ShoppingCartRepository,
+    val emailSender: EmailSender
 ): ApplicationController() {
 
     @GetMapping("/main")
@@ -548,7 +550,27 @@ class ManagerController (
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
                     purchaseRequestRepository.save(checkedRequest)
 
-                    // todo mail to client
+                    var cartContents = ""
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.weapon != null) {
+                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
+                        }
+                    }
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.transport != null) {
+                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
+                        }
+                    }
+
+                    emailSender.sendMessage(
+                        curCustomer.email,
+                        "Request id#${checkedRequest.id} accepted",
+                        "Your purchase request (id #${checkedRequest.id}) has been accepted.\n" +
+                                "Cart items are as follows:\n$cartContents\n\n" +
+                                "Please contact us at +1-800-FUCK-OFF for payment and delivery discussions."
+                    )
+
+                    // todo idk if its working still have to test yet
                     redirect.addFlashAttribute("status", "Request accepted.")
                     return "redirect:/man/purchases"
                 }
@@ -631,7 +653,27 @@ class ManagerController (
                     checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
                     purchaseRequestRepository.save(checkedRequest)
 
-                    // todo mail to client
+                    var cartContents = ""
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.weapon != null) {
+                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
+                        }
+                    }
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.transport != null) {
+                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
+                        }
+                    }
+
+                    emailSender.sendMessage(
+                        curCustomer.email,
+                        "Request id#${checkedRequest.id} rejected",
+                        "Your purchase request (id #${checkedRequest.id}) has been rejected.\n" +
+                                "Unretrieved cart:\n$cartContents\n\n" +
+                                "If you are unsatisfied with this decision, please make a new request or contact us at +1-800-FUCK-OFF."
+                    )
+
+                    // todo same
                     redirect.addFlashAttribute("status", "Request rejected.")
                     return "redirect:/man/purchases"
                 }

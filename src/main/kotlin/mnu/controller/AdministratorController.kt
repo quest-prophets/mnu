@@ -1,5 +1,6 @@
 package mnu.controller
 
+import mnu.EmailSender
 import mnu.form.*
 import mnu.model.*
 import mnu.model.employee.*
@@ -39,7 +40,8 @@ class AdministratorController (
     val managerEmployeeRepository: ManagerEmployeeRepository,
     val securityEmployeeRepository: SecurityEmployeeRepository,
     val scientistEmployeeRepository: ScientistEmployeeRepository,
-    val administratorEmployeeRepository: AdministratorEmployeeRepository
+    val administratorEmployeeRepository: AdministratorEmployeeRepository,
+    val emailSender: EmailSender
 ) : ApplicationController() {
 
 
@@ -107,6 +109,8 @@ class AdministratorController (
         model.addAttribute("vac_appl_count", vaPendingRequests.size)
         model.addAttribute("experiment_count",
             experimentRepository.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
+        model.addAttribute("ongoing_incidents",
+            districtIncidentRepository.findAllByLevelToAndDangerLevelGreaterThan(0, 0) ?: 0)
         return "administrators/admin__menu.html"
     }
 
@@ -995,7 +999,7 @@ class AdministratorController (
             }
             when (userRequestRole) {
                 Role.CUSTOMER -> {
-
+                    val curCustomer = clientRepository?.findByUserId(checkedRequest.user!!.id!!)
                     checkedRequest.request!!.apply {
                         this.statusDate = LocalDateTime.now()
                         this.status = RequestStatus.ACCEPTED
@@ -1004,13 +1008,33 @@ class AdministratorController (
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
                     purchaseRequestRepository.save(checkedRequest)
 
-                    // todo mail to client
+                    var cartContents = ""
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.weapon != null) {
+                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
+                        }
+                    }
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.transport != null) {
+                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
+                        }
+                    }
+
+                    emailSender.sendMessage(
+                        curCustomer!!.email,
+                        "Request id#${checkedRequest.id} accepted",
+                        "Your purchase request (id #${checkedRequest.id}) has been accepted.\n" +
+                                "Cart items are as follows:\n$cartContents\n\n" +
+                                "Please contact us at +1-800-FUCK-OFF for payment and delivery discussions."
+                    )
+
+                    // todo idk if its working still have to test yet
                     redirect.addFlashAttribute("status", "Request accepted.")
                     return "redirect:/admin/purchases"
                 }
 
                 Role.MANUFACTURER -> {
-
+                    val curCustomer = clientRepository?.findByUserId(checkedRequest.user!!.id!!)
                     checkedRequest.request!!.apply {
                         this.statusDate = LocalDateTime.now()
                         this.status = RequestStatus.ACCEPTED
@@ -1019,7 +1043,27 @@ class AdministratorController (
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
                     purchaseRequestRepository.save(checkedRequest)
 
-                    // todo mail to manufacturer
+                    var cartContents = ""
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.weapon != null) {
+                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
+                        }
+                    }
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.transport != null) {
+                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
+                        }
+                    }
+
+                    emailSender.sendMessage(
+                        curCustomer!!.email,
+                        "Request id#${checkedRequest.id} accepted",
+                        "Your sale request (id #${checkedRequest.id}) has been accepted.\n" +
+                                "Your \"for sale\" items are as follows:\n$cartContents\n\n" +
+                                "Please contact us at +1-800-FUCK-OFF for payment and delivery discussions."
+                    )
+
+                    // todo same as customers
                     redirect.addFlashAttribute("status", "Request accepted.")
                     return "redirect:/admin/purchases"
                 }
@@ -1067,6 +1111,7 @@ class AdministratorController (
             }
             when (userRequestRole) {
                 Role.CUSTOMER -> {
+                    val curCustomer = clientRepository?.findByUserId(checkedRequest.user!!.id!!)
 
                     val cartItems = checkedRequest.cart!!.items
                     cartItems!!.forEach {
@@ -1087,12 +1132,34 @@ class AdministratorController (
                     checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
                     purchaseRequestRepository.save(checkedRequest)
 
-                    // todo mail to client
+                    var cartContents = ""
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.weapon != null) {
+                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
+                        }
+                    }
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.transport != null) {
+                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
+                        }
+                    }
+
+                    emailSender.sendMessage(
+                        curCustomer!!.email,
+                        "Request id#${checkedRequest.id} rejected",
+                        "Your purchase request (id #${checkedRequest.id}) has been rejected.\n" +
+                                "Unretrieved cart:\n$cartContents\n\n" +
+                                "If you are unsatisfied with this decision, please make a new request or contact us at +1-800-FUCK-OFF."
+                    )
+
+                    // todo same
                     redirect.addFlashAttribute("status", "Request rejected.")
                     "redirect:/admin/purchases"
                 }
 
                 Role.MANUFACTURER -> {
+                    val curCustomer = clientRepository?.findByUserId(checkedRequest.user!!.id!!)
+
                     val cartItems = checkedRequest.cart!!.items
                     cartItems!!.forEach {
                         if (it.weapon != null) {
@@ -1112,7 +1179,27 @@ class AdministratorController (
                     checkedRequest.cart!!.status = ShoppingCartStatus.REJECTED
                     purchaseRequestRepository.save(checkedRequest)
 
-                    // todo mail to manufacturer
+                    var cartContents = ""
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.weapon != null) {
+                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
+                        }
+                    }
+                    checkedRequest.cart!!.items!!.forEach {
+                        if(it.transport != null) {
+                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
+                        }
+                    }
+
+                    emailSender.sendMessage(
+                        curCustomer!!.email,
+                        "Request id#${checkedRequest.id} rejected",
+                        "Your sale request (id #${checkedRequest.id}) has been rejected.\n" +
+                                "Unsold item list:\n$cartContents\n\n" +
+                                "If you are unsatisfied with this decision, please make a new request or contact us at +1-800-FUCK-OFF."
+                    )
+
+                    // todo same...
                     redirect.addFlashAttribute("status", "Request rejected.")
                     "redirect:/admin/purchases"
                 }
