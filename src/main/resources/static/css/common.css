@@ -254,6 +254,10 @@ select {
     background: #f2d6de;
 }
 
+.flash_royal {
+    width: 100%;
+}
+
 .hidden {
     display: none !important;
 }

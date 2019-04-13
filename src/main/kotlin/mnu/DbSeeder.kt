@@ -12,11 +12,11 @@ class DbSeeder(
     @PostConstruct
     fun init() {
         val housesExist = districtHouseRepository.existsByShelterColumnAndShelterRow(1, 1)
-        if (housesExist)
+        if (housesExist!!)
             return
 
         for (i in 0..14)
             for (j in 0..14)
-                    districtHouseRepository.save(DistrictHouse(i, j))
+                districtHouseRepository.save(DistrictHouse(i, j))
     }
 }
