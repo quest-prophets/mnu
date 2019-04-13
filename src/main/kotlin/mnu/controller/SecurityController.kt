@@ -43,12 +43,14 @@ class SecurityController (
         val allSuitableIncidents = districtIncidentRepository
             .findAllByAvailablePlacesGreaterThanAndLevelFromLessThanEqualAndLevelToGreaterThanEqual(
                 0, curSecurity.employee!!.level!!, curSecurity.employee!!.level!!) as MutableList<DistrictIncident>?
-//        var currentIncId = 0L
+        var currentInc = DistrictIncident()
         allSuitableIncidents?.forEach {
             if (it.assistants!!.contains(curSecurity) && it.dangerLevel > 0) {
-                allSuitableIncidents.remove(it)
+                currentInc = it
             }
         }
+
+        allSuitableIncidents?.remove(currentInc)
 
         val allIncidents = districtIncidentRepository.findAll()
         val incidentsWithEmployee = ArrayList<DistrictIncident>()
