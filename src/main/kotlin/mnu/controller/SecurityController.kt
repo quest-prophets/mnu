@@ -67,6 +67,12 @@ class SecurityController (
         return "security/sec__main.html"
     }
 
+    @GetMapping("/equipment")
+    fun securityEquipment(model: Model, principal: Principal): String{
+        //todo добавь в модель сесурити...
+        return "security/sec__equipment-change"
+    }
+
     @PostMapping("/equipment")
     fun requestNewEquipment(
         @ModelAttribute form: NewEquipmentForm, principal: Principal,
