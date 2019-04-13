@@ -17,47 +17,47 @@
 <div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
 
 <div class="flex-row-center">
-    <div th:if="${current_security.weapon != null}" class="equipment-item approved"
+    <div th:if="${current_security.weapon != null}" class="equipment-item"
          th:classappend="|${current_security.weapon.type.name()=='MELEE' ? 'equipment-item_melee' : current_security.weapon.type.name()=='PISTOL' ? 'equipment-item_pistol' :
               current_security.weapon.type.name()=='SUBMACHINE_GUN' ? 'equipment-item_smg' : current_security.weapon.type.name()=='ASSAULT_RIFLE' ? 'equipment-item_assault' :
               current_security.weapon.type.name()=='LIGHT_MACHINE_GUN' ? 'equipment-item_lmg' : current_security.weapon.type.name()=='SNIPER_RIFLE' ? 'equipment-item_sniper' :
               current_security.weapon.type.name()=='ALIEN' ? 'equipment-item_alien' : ''}|">
         <div class="flex-column-no-center">
-            <div class="font-big" th:text="${current_security.weapon.name}"></div>
+            <div class="approved-name font-big" th:text="${current_security.weapon.name}"></div>
             <div class="form-item" th:text="${current_security.weapon.description}"></div>
-            <div class="form-item" th:text="${'Access level: ' + current_security.weapon.description}"></div>
+            <div class="form-item" th:text="${'Access level: ' + current_security.weapon.requiredAccessLvl}"></div>
         </div>
     </div>
-    <div th:if="${current_security.transport     != null}" class="equipment-item approved"
+    <div th:if="${current_security.transport != null}" class="equipment-item"
          th:classappend="|${current_security.transport.type.name()=='LAND' ? 'equipment-item_land' :
               current_security.transport.type.name()=='AIR' ? 'equipment-item_air' : ''}|">
         <div class="flex-column-no-center">
-            <div class="font-big" th:text="${current_security.weapon.name}"></div>
-            <div class="form-item" th:text="${current_security.weapon.description}"></div>
-            <div class="form-item" th:text="${'Access level: ' + current_security.weapon.description}"></div>
+            <div class="approved-name font-big" th:text="${current_security.transport.name}"></div>
+            <div class="form-item" th:text="${current_security.transport.description}"></div>
+            <div class="form-item" th:text="${'Access level: ' + current_security.transport.requiredAccessLvl}"></div>
         </div>
     </div>
 </div>
 
 <div class="flex-row-center" th:if="${current_request.employee != null}">
-    <div class="equipment-item pending"
+    <div class="equipment-item" th:if="${current_request.weapon != null}"
          th:classappend="|${current_request.weapon.type.name()=='MELEE' ? 'equipment-item_melee' : current_request.weapon.type.name()=='PISTOL' ? 'equipment-item_pistol' :
               current_request.weapon.type.name()=='SUBMACHINE_GUN' ? 'equipment-item_smg' : current_request.weapon.type.name()=='ASSAULT_RIFLE' ? 'equipment-item_assault' :
               current_request.weapon.type.name()=='LIGHT_MACHINE_GUN' ? 'equipment-item_lmg' : current_request.weapon.type.name()=='SNIPER_RIFLE' ? 'equipment-item_sniper' :
               current_request.weapon.type.name()=='ALIEN' ? 'equipment-item_alien' : ''}|">
         <div class="flex-column-no-center">
-            <div class="font-big" th:text="${current_request.weapon.name}"></div>
+            <div class="pending-name font-big" th:text="${current_request.weapon.name}"></div>
             <div class="form-item" th:text="${current_request.weapon.description}"></div>
-            <div class="form-item" th:text="${'Access level: ' + current_request.weapon.description}"></div>
+            <div class="form-item" th:text="${'Access level: ' + current_request.weapon.requiredAccessLvl}"></div>
         </div>
     </div>
-    <div class="equipment-item pending"
+    <div class="equipment-item" th:if="${current_request.transport != null}"
          th:classappend="|${current_request.transport.type.name()=='LAND' ? 'equipment-item_land' :
               current_request.transport.type.name()=='AIR' ? 'equipment-item_air' : ''}|">
         <div class="flex-column-no-center">
-            <div class="font-big" th:text="${current_request.weapon.name}"></div>
-            <div class="form-item" th:text="${current_request.weapon.description}"></div>
-            <div class="form-item" th:text="${'Access level: ' + current_request.weapon.description}"></div>
+            <div class="pending-name font-big" th:text="${current_request.transport.name}"></div>
+            <div class="form-item" th:text="${current_request.transport.description}"></div>
+            <div class="form-item" th:text="${'Access level: ' + current_request.transport.requiredAccessLvl}"></div>
         </div>
     </div>
 </div>
@@ -84,8 +84,8 @@
         <td> Access lvl</td>
     </tr>
     </thead>
-    <tbody>
-    <tr class="weapon-rows" th:each="weapon : ${available_weapons}">
+    <tbody id="weapons-tbody">
+    <tr class="weapon-row" th:each="weapon : ${available_weapons}" th:attr="data-id=${weapon.id}">
         <td th:text="${weapon.id}"></td>
         <td th:text="|${weapon.type.name()=='MELEE' ? 'Melee' : weapon.type.name()=='PISTOL' ? 'Pistol' :
               weapon.type.name()=='SUBMACHINE_GUN' ? 'Submachine gun' : weapon.type.name()=='ASSAULT_RIFLE' ? 'Assault rifle' :
@@ -95,7 +95,9 @@
         <td th:text="${weapon.description}"></td>
         <td th:text="${weapon.requiredAccessLvl}"></td>
     </tr>
-    <tr class="transport-rows hidden" th:each="transport : ${available_transport}">
+    </tbody>
+    <tbody id="transport-tbody">
+    <tr class="transport-row hidden" th:each="transport : ${available_transport}" th:attr="data-id=${weapon.id}">
         <td th:text="${transport.id}"></td>
         <td th:text="|${transport.type.name()=='LAND' ? 'Land transport' :
          transport.type.name()=='AIR' ? 'Air transport' : ''}|"></td>
@@ -109,11 +111,13 @@
 <form class="flex-column form-item_big" method="post" th:object="${form}" action="#" th:action="@{/sec/equipment}">
     <label>
         <b>New weapon Id</b>
-        <input id="weaponId" name="weaponId" type="number" class="input_big">
+        <input id="weaponId" name="weaponId" type="number" class="input_big"
+               th:value="${current_security.weapon != null ? current_security.weapon.id : ''}">
     </label>
     <label class="form-item">
         <b>New transport Id</b>
-        <input id="transportId" name="transportId" type="number" class="input_big">
+        <input id="transportId" name="transportId" type="number" class="input_big"
+               th:value="${current_security.transport != null ? current_security.transport.id : ''}">
     </label>
     <input type="submit" class="button form-item" value="Request new equipment">
 </form>

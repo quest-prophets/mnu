@@ -4,8 +4,8 @@
 .equipment-item {
     background-size: cover;
     display: inline-block;
-    width: 240px;
-    height: 240px;
+    width: 200px;
+    min-height: 150px;
     border: 2px solid black;
     border-radius: 30px;
     text-align: center;
@@ -16,39 +16,51 @@
 }
 
 .equipment-item_assault {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/assault.png");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/assault.png");
 }
 
 .equipment-item_pistol {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/pistol.svg");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/pistol.svg");
 }
 
 .equipment-item_melee {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/melee.png");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/melee.png");
 }
 
 .equipment-item_smg {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/smg.png");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/smg.png");
 }
 
 .equipment-item_lmg {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/minigun.png");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/minigun.png");
 }
 
 .equipment-item_sniper {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/sniper.png");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/sniper.png");
 }
 
 .equipment-item_alien {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/alien.png");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/alien.png");
 }
 
 .equipment-item_land {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/land.png");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/land.png");
 }
 
 .equipment-item_air {
-    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../images/air.png");
+    background-image: linear-gradient(to bottom, rgba(246, 246, 246, 0.94), rgba(246, 246, 246, 0.94)), url("../../images/air.png");
+}
+
+.pending-name {
+    padding: 10px;
+    background: #b5e9fa;
+    border-radius: 20px;
+}
+
+.approved-name {
+    padding: 10px;
+    background: #8afa9f;
+    border-radius: 20px;
 }
 
 table {
@@ -60,4 +72,8 @@ td {
     padding: 4px 10px;
     word-break: break-word;
     border: 1px solid black;
+}
+
+tbody {
+    cursor: pointer;
 }
