@@ -5,7 +5,6 @@ import mnu.form.NewSearchForm
 import mnu.model.DistrictIncident
 import mnu.model.Transport
 import mnu.model.Weapon
-import mnu.model.employee.SecurityEmployee
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.WeaponType
 import mnu.model.request.ChangeEquipmentRequest
@@ -18,7 +17,6 @@ import mnu.repository.employee.SecurityEmployeeRepository
 import mnu.repository.request.ChangeEquipmentRequestRepository
 import mnu.repository.request.NewWeaponRequestRepository
 import mnu.repository.request.RequestRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -83,13 +81,13 @@ class SecurityController (
         }
 
         val allAvailableWeapons =
-            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(curSecurity.employee!!.level!!, 0)
+            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(curSecurity.employee!!.level!!, 0)
                 as MutableList<Weapon>
         if (curSecurity.weapon != null)
             allAvailableWeapons.remove(curSecurity.weapon!!)
 
         val allAvailableTransport =
-            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(curSecurity.employee!!.level!!, 0)
+            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(curSecurity.employee!!.level!!, 0)
                 as MutableList<Transport>
         if (curSecurity.transport != null)
             allAvailableTransport.remove(curSecurity.transport!!)
