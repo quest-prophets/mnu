@@ -23,6 +23,10 @@ h1 {
     text-align: center;
 }
 
+.margin-right{
+    margin-right: 40px;
+}
+
 @media (max-width: 750px) {
     .content__item {
         width: 90vw;
