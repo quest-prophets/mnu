@@ -185,7 +185,7 @@ class ManagerController (
                     this.districtHouse = districtHouseRepository.findById(houseIdList.random()).get()
                     this.manager = possibleManager.get()
                     this.karma = 50
-                    this.balance = 350
+                    this.balance = 350.0
                 }
 
                 userRepository?.save(newUser)
@@ -593,8 +593,8 @@ class ManagerController (
                 }
 
                 Role.PRAWN -> {
-                    val curPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
-                    if (curPrawn!!.manager != managerEmployeeRepository.findById(currentManager!!.id!!).get()) {
+                    val reqPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
+                    if (reqPrawn!!.manager != managerEmployeeRepository.findById(currentManager!!.id!!).get()) {
                         redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
                         return "redirect:/man/purchases"
                     }
@@ -604,6 +604,15 @@ class ManagerController (
                         this.status = RequestStatus.ACCEPTED
                         this.resolver = currentManager
                     }
+                    checkedRequest.cart!!.items!!.forEach {
+                        if (it.weapon != null) {
+                            reqPrawn.balance -= it.weapon!!.price * it.weaponQuantity!!
+                        }
+                        if(it.transport != null) {
+                            reqPrawn.balance -= it.transport!!.price * it.transportQuantity!!
+                        }
+                    }
+                    prawnRepository?.save(reqPrawn)
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
                     purchaseRequestRepository.save(checkedRequest)
 

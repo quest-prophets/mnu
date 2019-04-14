@@ -419,7 +419,7 @@ class AdministratorController (
                     this.districtHouse = districtHouseRepository.findById(houseIdList.random()).get()
                     this.manager = managerEmployeeRepository.findById(managerIdList.random()).get()
                     this.karma = 50
-                    this.balance = 350
+                    this.balance = 350.0
                 }
 
                 userRepository?.save(newUser)
@@ -1069,6 +1069,7 @@ class AdministratorController (
                 }
 
                 Role.PRAWN -> {
+                    val reqPrawn = prawnRepository?.findById(checkedRequest.user!!.id!!)!!.get()
 
                     checkedRequest.request!!.apply {
                         this.statusDate = LocalDateTime.now()
@@ -1076,6 +1077,15 @@ class AdministratorController (
                         this.resolver = currentAdmin
                     }
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
+                    checkedRequest.cart!!.items!!.forEach {
+                        if (it.weapon != null) {
+                            reqPrawn.balance -= it.weapon!!.price * it.weaponQuantity!!
+                        }
+                        if(it.transport != null) {
+                            reqPrawn.balance -= it.transport!!.price * it.transportQuantity!!
+                        }
+                    }
+                    prawnRepository?.save(reqPrawn)
                     purchaseRequestRepository.save(checkedRequest)
 
                     redirect.addFlashAttribute("status", "Request accepted.")

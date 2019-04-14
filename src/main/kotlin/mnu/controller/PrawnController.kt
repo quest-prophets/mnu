@@ -176,18 +176,18 @@ class PrawnController (
                 val possibleWeapon = weaponRepository.findById(cartItem.id)
                 if (!possibleWeapon.isPresent) {
                     redirect.addFlashAttribute("error", "Such weapon does not exist.")
-                    return "redirect:/client/shop"
+                    return "redirect:/prawn/shop"
                 }
                 val existingWeapon = possibleWeapon.get()
                 if (existingWeapon.quantity == 0L) {
                     redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another weapon.")
-                    return "redirect:/client/shop"
+                    return "redirect:/prawn/shop"
                 }
                 val existingShoppingCartItemCheck = shoppingCartItemRepository.findByWeaponAndCart(existingWeapon, currentCreatingCart)
                 if (existingShoppingCartItemCheck == null) {
                     if (cartItem.quantity <= 0L) {
                         redirect.addFlashAttribute("error", "Please enter a valid quantity for this item.")
-                        return "redirect:/client/shop"
+                        return "redirect:/prawn/shop"
                     }
                     newShoppingCartItem.apply {
                         this.weapon = existingWeapon
@@ -197,7 +197,7 @@ class PrawnController (
                     if (cartItem.quantity <= 0L) {
                         shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
                         redirect.addFlashAttribute("status", "Item removed from cart.")
-                        return "redirect:/client/shop"
+                        return "redirect:/prawn/shop"
                     }
                     existingShoppingCartItemCheck.weaponQuantity = cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
@@ -208,18 +208,18 @@ class PrawnController (
                 val possibleTransport = transportRepository.findById(cartItem.id)
                 if (!possibleTransport.isPresent) {
                     redirect.addFlashAttribute("error", "Such transport does not exist.")
-                    return "redirect:/client/shop"
+                    return "redirect:/prawn/shop"
                 }
                 val existingTransport = possibleTransport.get()
                 if (existingTransport.quantity == 0L) {
                     redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another transport.")
-                    return "redirect:/client/shop"
+                    return "redirect:/prawn/shop"
                 }
                 val existingShoppingCartItemCheck = shoppingCartItemRepository.findByTransportAndCart(existingTransport, currentCreatingCart)
                 if (existingShoppingCartItemCheck == null) {
                     if (cartItem.quantity <= 0L) {
                         redirect.addFlashAttribute("error", "Please enter a valid quantity for this item.")
-                        return "redirect:/client/shop"
+                        return "redirect:/prawn/shop"
                     }
                     newShoppingCartItem.apply {
                         this.transport = existingTransport
@@ -229,7 +229,7 @@ class PrawnController (
                     if (cartItem.quantity <= 0L) {
                         shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
                         redirect.addFlashAttribute("status", "Item removed from cart.")
-                        return "redirect:/client/shop"
+                        return "redirect:/prawn/shop"
                     }
                     existingShoppingCartItemCheck.transportQuantity = existingShoppingCartItemCheck.transportQuantity!! + cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
@@ -240,17 +240,18 @@ class PrawnController (
         shoppingCartItemRepository.save(newShoppingCartItem.apply { this.cart = currentCreatingCart })
 
         redirect.addFlashAttribute("status", "Added to cart!")
-        return "redirect:/client/shop"
+        return "redirect:/prawn/shop"
     }
 
     @PostMapping("/cart/sendRequest")
     fun sendPurchaseRequest(principal: Principal, redirect: RedirectAttributes) : String {
         val newRequest = Request().apply { this.status = RequestStatus.PENDING }
         val currentUser = userRepository?.findByLogin(principal.name)!!
+        val currentPrawn = prawnRepository?.findById(currentUser.id!!)!!.get()
         val currentCreatingCart = when (shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)) {
             null -> {
                 redirect.addFlashAttribute("error", "You have no carts in creation.")
-                return "redirect:/client/shop"
+                return "redirect:/prawn/shop"
             }
             else -> {
                 shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)!![0]
@@ -259,10 +260,11 @@ class PrawnController (
 
         if (currentCreatingCart.items == null || currentCreatingCart.items!!.size == 0) {
             redirect.addFlashAttribute("error", "You have no items in your cart.")
-            return "redirect:/client/shop"
+            return "redirect:/prawn/shop"
         }
 
         val cartItems = currentCreatingCart.items
+        var cartSum = 0.0
 
         cartItems!!.forEach {
             if (it.weapon != null) {
@@ -285,11 +287,25 @@ class PrawnController (
             }
         }
 
+        cartItems.forEach {
+            if (it.weapon != null) {
+                cartSum += it.weapon!!.price * it.weaponQuantity!!
+            }
+            if(it.transport != null) {
+                cartSum += it.transport!!.price * it.transportQuantity!!
+            }
+        }
+        
+        if (currentPrawn.balance < cartSum) {
+            redirect.addFlashAttribute("error", "Insufficient funds, please edit your cart.")
+            return "redirect:/client/cart"
+        }
+
         currentCreatingCart.status = ShoppingCartStatus.REQUESTED
         shoppingCartRepository.save(currentCreatingCart)
         purchaseRequestRepository.save(PurchaseRequest(currentUser, currentCreatingCart).apply { this.request = newRequest })
 
         redirect.addFlashAttribute("status", "Request sent. Await for your managing employee's decision.")
-        return "redirect:/client/shop"
+        return "redirect:/prawn/shop"
     }
 }

@@ -29,7 +29,7 @@ data class Prawn(@Column(nullable = false) var name: String = "") {
     var job: Vacancy? = null
 
     @Min(0)
-    var balance: Long = 0
+    var balance: Double = 0.0
     var karma: Long = 0
     var dateOfDeath: LocalDateTime? = null
     var deathReason: DeathReason? = null
