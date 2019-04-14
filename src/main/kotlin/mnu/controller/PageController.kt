@@ -56,9 +56,6 @@ class PageController : ApplicationController() {
         return "/login.html"
     }
 
-    @GetMapping("/register")
-    fun register() = "register.html"
-
 
     @GetMapping("/profile")
     fun profile(model: Model, principal: Principal): String {

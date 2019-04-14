@@ -72,7 +72,16 @@ class AuthorizationController (
             redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
             "redirect:/auth/register"
         } else {
-
+            if (form.username.length < 4) {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Username length should be at least 4 symbols.")
+                return "redirect:/auth/register"
+            }
+            if (form.password.length < 6) {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Password length should be at least 6 symbols.")
+                return "redirect:/auth/register"
+            }
             val passwordEncoder = BCryptPasswordEncoder()
             val encodedPassword = passwordEncoder.encode(form.password)
             form.password = encodedPassword
