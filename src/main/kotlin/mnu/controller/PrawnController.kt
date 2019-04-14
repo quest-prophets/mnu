@@ -96,6 +96,22 @@ class PrawnController (
         return "prawns/prawn__shop.html"
     }
 
+    @GetMapping("/cart")
+    fun saleCart(model: Model, principal: Principal) : String {
+        val currentUser = userRepository?.findByLogin(principal.name)!!
+        val possibleCart = shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)
+        val usersCart = when {
+            possibleCart != null && possibleCart.isNotEmpty() ->
+                possibleCart[0]
+            else -> ShoppingCart(currentUser).apply {
+                this.status = ShoppingCartStatus.CREATING
+                this.items = mutableListOf()
+            }
+        }
+        model.addAttribute("cart_items", usersCart.items)
+        return "manufacturers/manufacturer__cart.html"
+    }
+
     @GetMapping("/profile")
     fun prawnProfile(model: Model, principal: Principal): String {
         val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)

@@ -31,6 +31,7 @@ class ManufacturerController (
     val transportRepository: TransportRepository,
     val weaponRepository: WeaponRepository
 ) : ApplicationController() {
+
     @GetMapping("/market/{category}")
     fun market(@PathVariable("category") category: String,
                @RequestParam(required = false) name: String?,
@@ -72,6 +73,22 @@ class ManufacturerController (
         }
         model.addAttribute("items", items)
         return "manufacturers/manufacturer__market.html"
+    }
+
+    @GetMapping("/cart")
+    fun saleCart(model: Model, principal: Principal) : String {
+        val currentUser = userRepository?.findByLogin(principal.name)!!
+        val possibleCart = shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)
+        val usersCart = when {
+            possibleCart != null && possibleCart.isNotEmpty() ->
+                possibleCart[0]
+            else -> ShoppingCart(currentUser).apply {
+                this.status = ShoppingCartStatus.CREATING
+                this.items = mutableListOf()
+            }
+        }
+        model.addAttribute("cart_items", usersCart.items)
+        return "manufacturers/manufacturer__cart.html"
     }
 
     @GetMapping("/newProduct")
@@ -199,7 +216,10 @@ class ManufacturerController (
         val currentCreatingCart = when {
             possibleCart != null && possibleCart.isNotEmpty() ->
                 possibleCart[0]
-            else -> ShoppingCart(currentUser).apply { this.status = ShoppingCartStatus.CREATING }
+            else -> ShoppingCart(currentUser).apply {
+                this.status = ShoppingCartStatus.CREATING
+                this.items = mutableListOf()
+            }
         }
 
         shoppingCartRepository.save(currentCreatingCart)
@@ -266,13 +286,13 @@ class ManufacturerController (
     fun sendPurchaseRequest(principal: Principal, redirect: RedirectAttributes) : String {
         val newRequest = Request().apply { this.status = RequestStatus.PENDING }
         val currentUser = userRepository?.findByLogin(principal.name)!!
-        val currentCreatingCart = when (shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)) {
-            null -> {
-                redirect.addFlashAttribute("error", "You have no carts in creation.")
-                return "redirect:/manufacturer/market"
-            }
-            else -> {
-                shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)!![0]
+        val possibleCart = shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)
+        val currentCreatingCart = when {
+            possibleCart != null && possibleCart.isNotEmpty() ->
+                possibleCart[0]
+            else -> ShoppingCart(currentUser).apply {
+                this.status = ShoppingCartStatus.CREATING
+                this.items = mutableListOf()
             }
         }
 
