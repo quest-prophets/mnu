@@ -212,7 +212,7 @@ class ManufacturerController (
                        @RequestParam("newQuantity") newQuantity: Long,
                        principal: Principal, redirect: RedirectAttributes): String {
         val currentUser = userRepository?.findByLogin(principal.name)!!
-        val shoppingCartItem = shoppingCartItemRepository.findByIdAndCartUserId(itemId, currentUser.id!!)
+        val shoppingCartItem = shoppingCartItemRepository.findByIdAndCartUserIdAndCartStatus(itemId, currentUser.id!!, ShoppingCartStatus.CREATING)
         if (shoppingCartItem != null && newQuantity > 0) {
             shoppingCartItemRepository.save(shoppingCartItem.apply {
                 if (this.weapon != null)
@@ -320,7 +320,7 @@ class ManufacturerController (
 
         if (currentCreatingCart.items == null || currentCreatingCart.items!!.size == 0) {
             redirect.addFlashAttribute("error", "You have no items in your cart.")
-            return "redirect:/manufacturer/market"
+            return "redirect:/manufacturer/market/weapon"
         }
 
         val cartItems = currentCreatingCart.items
@@ -341,6 +341,6 @@ class ManufacturerController (
         purchaseRequestRepository.save(PurchaseRequest(currentUser, currentCreatingCart).apply { this.request = newRequest })
 
         redirect.addFlashAttribute("status", "Request sent. Await for your managing employee's decision.")
-        return "redirect:/manufacturer/market"
+        return "redirect:/manufacturer/market/weapon"
     }
 }

@@ -24,16 +24,6 @@
     </div>
     <div th:each="item: ${items}" class="content__item">
         <div class="content__main weapon-flex finished">
-<!--            <div th:switch="${item.type.name()}">-->
-<!--                <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">-->
-<!--                <img class="icon_middle" th:case="PISTOL" alt="pistol" th:src="@{/images/pistol.svg}">-->
-<!--                <img class="icon_middle" th:case="SUBMACHINE_GUN" alt="submachine gun" th:src="@{/images/smg.png}">-->
-<!--                <img class="icon_middle" th:case="ASSAULT_RIFLE" alt="assault rifle" th:src="@{/images/assault.png}">-->
-<!--                <img class="icon_middle" th:case="LIGHT_MACHINE_GUN" alt="light machine gun"-->
-<!--                     th:src="@{/images/minigun.png}">-->
-<!--                <img class="icon_middle" th:case="SNIPER_RIFLE" alt="sniper rifle" th:src="@{/images/sniper.png}">-->
-<!--                <img class="icon_middle" th:case="ALIEN" alt="alien" th:src="@{/images/alien.png}">-->
-<!--            </div>-->
             <div class="weapon-description">
                 <div class="form-item_small">
                     <b>Name</b>
@@ -51,18 +41,18 @@
 <!--                    <b>Price</b>-->
 <!--                    <span th:text="${item.price}"></span>-->
 <!--                </div>-->
-                <form th:action="@{cart/updateQuantity}" method="post" class="form-item_small">
+                <form th:action="@{cart/updateQuantity}" method="post" class="form-item_small flex-column">
                     <b>Quantity</b>
                     <input type="hidden" name="itemId" th:value="${item.id}">
-                    <input type="number" name="newQuantity" th:value="${item.quantity()}">
-                    <button type="submit">Update</button>
-<!--                    <input type="number" th:id="${'quantity-input-' + item.id}" th:value="${item.quantity}">-->
-<!--                    <input type="submit" class="js-upd-quantity button" value="Update quantity"-->
-<!--                           th:attr="data-type=${item.itemType()}, data-id=${item.id}">-->
+                    <input type="number" name="newQuantity" th:value="${item.quantity()}" class="input_big form-item_small">
+                    <input type="submit" class="button form-item" value="Update quantity">
                 </form>
             </div>
         </div>
     </div>
+    <form th:if="${items != null and !items.isEmpty()}" th:action="@{/manufacturer/cart/sendRequest}" method="post" class="form-item last-item">
+        <input type="submit" class="button" value="Send sale request">
+    </form>
 </div>
 <script rel="script" type="text/javascript" th:src="@{/js/cart.js}"></script>
 </body>
