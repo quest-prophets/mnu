@@ -46,7 +46,7 @@ class ManufacturerController (
         val productSort = when (sort) {
             "price_asc" -> Sort(Sort.Direction.ASC, "price")
             "price_desc" -> Sort(Sort.Direction.DESC, "price")
-            else -> Sort(Sort.Direction.ASC, "id")
+            else -> Sort(Sort.Direction.ASC, "price")
         }
 
         val items: List<Any> = when {
