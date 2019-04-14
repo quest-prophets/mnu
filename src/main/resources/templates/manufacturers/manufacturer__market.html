@@ -9,7 +9,8 @@
 </head>
 <body>
 <div class="desktop-header fixed-header fixed-header_small flex-row-between">
-    <form method="get" action="#" th:action="@{/manufacturer/market/} + ${category}" class="flex-row-center mobile-hide">
+    <form method="get" action="#" th:action="@{/manufacturer/market/} + ${category}"
+          class="flex-row-center mobile-hide">
         <input type="search" name="name" class="search-bar-input" placeholder="Search..." th:value="${param.name}">
         <input type="submit" class="search-bar-button button" value="Go!">
         <input type="hidden" name="sort" th:value="${param.sort}"/>
@@ -71,7 +72,8 @@
     </form>
 
     <div id="mobile-menu" class="grid__departments flex-column-no-center">
-        <a class="department-button bold" th:classappend="${category == 'weapon' and (param.type==null or param.type[0]=='') ? 'chosen-department' : ''}"
+        <a class="department-button bold"
+           th:classappend="${category == 'weapon' and (param.type==null or param.type[0]=='') ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/weapon(sort=${param.sort}, name=${param.name})}">
             All weapons </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'melee' ? 'chosen-department' : ''}"
@@ -80,13 +82,16 @@
         <a class="department-button" th:classappend="${param.type?.get(0) == 'pistol' ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/weapon(sort=${param.sort}, name=${param.name}, type='pistol')}">
             Pistols </a>
-        <a class="department-button" th:classappend="${param.type?.get(0) == 'submachine_gun' ? 'chosen-department' : ''}"
+        <a class="department-button"
+           th:classappend="${param.type?.get(0) == 'submachine_gun' ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/weapon(sort=${param.sort}, name=${param.name}, type='submachine_gun')}">
             SMGs </a>
-        <a class="department-button" th:classappend="${param.type?.get(0) == 'assault_rifle' ? 'chosen-department' : ''}"
+        <a class="department-button"
+           th:classappend="${param.type?.get(0) == 'assault_rifle' ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/weapon(sort=${param.sort}, name=${param.name}, type='assault_rifle')}">
             Assault riffles </a>
-        <a class="department-button" th:classappend="${param.type?.get(0) == 'light_machine_gun' ? 'chosen-department' : ''}"
+        <a class="department-button"
+           th:classappend="${param.type?.get(0) == 'light_machine_gun' ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/weapon(sort=${param.sort}, name=${param.name}, type='light_machine_gun')}">
             Light machine guns </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'sniper_rifle' ? 'chosen-department' : ''}"
@@ -95,7 +100,8 @@
         <a class="department-button" th:classappend="${param.type?.get(0) == 'alien' ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/weapon(sort=${param.sort}, name=${param.name}, type='alien')}">
             Alien weapon </a>
-        <a class="department-button bold" th:classappend="${category == 'transport' and (param.type==null or param.type[0]=='') ? 'chosen-department' : ''}"
+        <a class="department-button bold"
+           th:classappend="${category == 'transport' and (param.type==null or param.type[0]=='') ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/transport(sort=${param.sort}, name=${param.name})}">
             All transport </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'land' ? 'chosen-department' : ''}"
@@ -122,10 +128,11 @@
                 <div class="form-item" th:text="${item.description}"></div>
                 <div class="form-item_small" th:text="${item.price + ' c.u.'}"></div>
             </div>
-            <div class="button approved"
+            <div class="button"
+                 th:classappend="${cartIds.contains(item.id) ? 'rejected' : 'approved'}"
                  th:attr="data-type=${item.type.name()=='AIR' or item.type.name()=='LAND' ? 'TRANSPORT' : 'WEAPON'},
-                              data-id=${item.id}, data-action='add-to-cart'">
-                Add to cart
+                              data-id=${item.id}, data-action=${cartIds.contains(item.id) ? 'remove-from-cart' : 'add-to-cart'}"
+                 th:text="${cartIds.contains(item.id) ? 'Remove from cart' : 'Add to cart'}">
             </div>
         </div>
     </div>

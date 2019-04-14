@@ -14,5 +14,7 @@ interface ShoppingCartItemRepository : JpaRepository<ShoppingCartItem, Long> {
 
     fun findByTransportAndCart(transport: Transport, cart: ShoppingCart) : ShoppingCartItem?
 
+    fun findAllByCartUserIdAndCartStatus(cartUserId: Long, status: ShoppingCartStatus): List<ShoppingCartItem>
+
     fun findByIdAndCartUserIdAndCartStatus(id: Long, cartUserId: Long, status: ShoppingCartStatus): ShoppingCartItem?
 }

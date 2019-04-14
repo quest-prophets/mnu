@@ -8,7 +8,27 @@ document.getElementsByTagName('body')[0].addEventListener('click', async e => {
         });
         const json = await response.json();
         if (json.error) document.getElementById("message").className = 'flash flash_error';
-        else document.getElementById("message").className = 'flash flash_success';
+        else {
+            e.target.innerText = "Remove from cart";
+            e.target.className = "button rejected";
+            e.target.dataset.action = "remove-from-cart";
+            document.getElementById("message").className = 'flash flash_success';
+        }
+        document.getElementById('message').innerText = json.message;
+    } else if (action === 'remove-from-cart') {
+        const response = await post("/manufacturer/cart/modifyAjax", {
+            type: e.target.dataset.type,
+            id: e.target.dataset.id,
+            quantity: 0
+        });
+        const json = await response.json();
+        if (json.error) document.getElementById("message").className = 'flash flash_error';
+        else {
+            e.target.innerText = "Add to cart";
+            e.target.className = "button approved";
+            e.target.dataset.action = "add-to-cart";
+            document.getElementById("message").className = 'flash flash_success';
+        }
         document.getElementById('message').innerText = json.message;
     }
 });

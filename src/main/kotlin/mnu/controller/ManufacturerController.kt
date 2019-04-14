@@ -38,7 +38,8 @@ class ManufacturerController (
                @RequestParam(required = false) type: String?,
                @RequestParam(required = false) sort: String?,
                model: Model, principal: Principal, redirect: RedirectAttributes): String {
-        val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
+        val userId = userRepository?.findByLogin(principal.name)!!.id!!
+        val currentClient = clientRepository?.findByUserId(userId)
         model.addAttribute("user", currentClient)
 
         val productType = if (category == "weapon") WeaponType.fromClient(type) else TransportType.fromClient(type)
@@ -71,7 +72,15 @@ class ManufacturerController (
                 return "redirect:/manufacturer/market/weapon"
             }
         }
+
+        val cartItems = shoppingCartItemRepository.findAllByCartUserIdAndCartStatus(userId, ShoppingCartStatus.CREATING)
+        val cartItemIds = if (category == "weapon")
+            cartItems.filter { it.weapon != null }.map { it.weapon!!.id }
+        else
+            cartItems.filter { it.transport != null }.map { it.transport!!.id }
+
         model.addAttribute("items", items)
+        model.addAttribute("cartIds", cartItemIds)
         return "manufacturers/manufacturer__market.html"
     }
 
