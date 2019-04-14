@@ -1,7 +1,11 @@
 package mnu.controller
 
+import mnu.model.Transport
+import mnu.model.Weapon
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.ShoppingCartStatus
+import mnu.model.enums.TransportType
+import mnu.model.enums.WeaponType
 import mnu.model.request.PurchaseRequest
 import mnu.model.request.Request
 import mnu.model.shop.ShoppingCart
@@ -13,10 +17,7 @@ import mnu.repository.shop.ShoppingCartItemRepository
 import mnu.repository.shop.ShoppingCartRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
 
@@ -31,13 +32,73 @@ class ClientController (
 ) : ApplicationController() {
 
     @GetMapping("/shop")
-    fun clientsShop(model: Model, principal: Principal): String {
+    fun clientsShop(@RequestParam(required = false) name: String?, @RequestParam(required = false) type: String?,
+                    model: Model, principal: Principal, redirect: RedirectAttributes): String {
         val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
-        val allAvailableWeapons = weaponRepository.findAllByQuantityGreaterThanEqual(0)
-        val allAvailableTransport = transportRepository.findAllByQuantityGreaterThanEqual(0)
         model.addAttribute("user", currentClient)
-        model.addAttribute("weapons", allAvailableWeapons)
-        model.addAttribute("transport", allAvailableTransport)
+
+        val items = weaponRepository.findAllByQuantityGreaterThanEqual(0) as MutableList<Weapon> +
+                transportRepository.findAllByQuantityGreaterThanEqual(0) as MutableList<Transport>
+
+        if(name != null) {
+            if (type != null) {
+                val productType = when (type) {
+                    "melee" -> WeaponType.MELEE
+                    "pistol" -> WeaponType.PISTOL
+                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
+                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
+                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
+                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
+                    "alien" -> WeaponType.ALIEN
+                    "land" -> TransportType.LAND
+                    "air" -> TransportType.AIR
+                    else -> {
+                        redirect.addFlashAttribute("error", "Such product type does not exist.")
+                        return "redirect:/client/shop"
+                    }
+                }
+
+                if (productType == TransportType.LAND || productType == TransportType.AIR) {
+                    model.addAttribute("items",
+                        transportRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThanOrderByIdAsc(name, productType as TransportType, 0))
+                } else {
+                    model.addAttribute("items",
+                        weaponRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThanOrderByIdAsc(name, productType as WeaponType, 0))
+                }
+            } else {
+                model.addAttribute("items",
+                    weaponRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThanOrderByIdAsc(name, 0) as MutableList<Weapon> +
+                            transportRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThanOrderByIdAsc(name, 0) as MutableList<Transport>)
+            }
+        } else {
+            if (type != null) {
+                val productType = when (type) {
+                    "melee" -> WeaponType.MELEE
+                    "pistol" -> WeaponType.PISTOL
+                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
+                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
+                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
+                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
+                    "alien" -> WeaponType.ALIEN
+                    "land" -> TransportType.LAND
+                    "air" -> TransportType.AIR
+                    else -> {
+                        redirect.addFlashAttribute("error", "Such product type does not exist.")
+                        return "redirect:/client/shop"
+                    }
+                }
+
+                if (productType == TransportType.LAND || productType == TransportType.AIR) {
+                    model.addAttribute("items",
+                        transportRepository.findAllByTypeAndQuantityGreaterThanOrderByIdAsc(productType as TransportType, 0))
+                } else {
+                    model.addAttribute("items",
+                        weaponRepository.findAllByTypeAndQuantityGreaterThanOrderByIdAsc(productType as WeaponType, 0))
+                }
+            } else {
+                model.addAttribute("items", items)
+            }
+        }
         return "customers/customer__shop.html"
     }
 

@@ -7,16 +7,17 @@ import org.springframework.data.jpa.repository.*
 interface WeaponRepository : JpaRepository<Weapon, Long> {
     fun findAllByTypeOrderByIdAsc(type: WeaponType) : List<Weapon>?
 
-    fun findAllByRequiredAccessLvlLessThanEqual(accessLevel: Int) : List<Weapon>?
+    fun findAllByTypeAndQuantityGreaterThanOrderByIdAsc(type: WeaponType, quantity: Long) : List<Weapon>?
 
     fun findAllByQuantityGreaterThanEqual(quantity: Long) : List<Weapon>?
-
-    fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(accessLevel: Int, quantity: Long) : List<Weapon>?
 
     fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(accessLevel: Int, quantity: Long) : List<Weapon>?
 
     fun findAllByNameIgnoreCaseContainingOrderByIdAsc (name: String) : List<Weapon>?
-    fun findAllByNameAndTypeIgnoreCaseContainingOrderByIdAsc (name: String, type: WeaponType) : List<Weapon>?
+    fun findAllByNameIgnoreCaseContainingAndTypeOrderByIdAsc (name: String, type: WeaponType) : List<Weapon>?
+
+    fun findAllByNameIgnoreCaseContainingAndQuantityGreaterThanOrderByIdAsc (name: String, quantity: Long) : List<Weapon>?
+    fun findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThanOrderByIdAsc (name: String, type: WeaponType, quantity: Long) : List<Weapon>?
 
     fun findAllByTypeOrderByPriceAsc(type: WeaponType) : List<Weapon>
     fun findAllByTypeOrderByPriceDesc(type: WeaponType) : List<Weapon>

@@ -1,9 +1,13 @@
 package mnu.controller
 
 import mnu.form.NewPasswordForm
+import mnu.model.Transport
 import mnu.model.Vacancy
+import mnu.model.Weapon
 import mnu.model.enums.RequestStatus
 import mnu.model.enums.ShoppingCartStatus
+import mnu.model.enums.TransportType
+import mnu.model.enums.WeaponType
 import mnu.model.request.PurchaseRequest
 import mnu.model.request.Request
 import mnu.model.request.VacancyApplicationRequest
@@ -41,6 +45,82 @@ class PrawnController (
         val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         model.addAttribute("user", currentPrawn)
         return "prawns/prawn__main.html"
+    }
+
+    @GetMapping("/shop")
+    fun prawnShop(@RequestParam(required = false) name: String?, @RequestParam(required = false) type: String?,
+                    model: Model, principal: Principal, redirect: RedirectAttributes): String {
+        val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
+        if (currentPrawn.karma < 5000) {
+            redirect.addFlashAttribute("error", "You have no permission to buy our products.")
+            return "redirect:/prawn/main"
+        }
+
+        model.addAttribute("user", currentPrawn)
+
+        val items = weaponRepository.findAllByQuantityGreaterThanEqual(0) as MutableList<Weapon> +
+                transportRepository.findAllByQuantityGreaterThanEqual(0) as MutableList<Transport>
+
+        if(name != null) {
+            if (type != null) {
+                val productType = when (type) {
+                    "melee" -> WeaponType.MELEE
+                    "pistol" -> WeaponType.PISTOL
+                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
+                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
+                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
+                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
+                    "alien" -> WeaponType.ALIEN
+                    "land" -> TransportType.LAND
+                    "air" -> TransportType.AIR
+                    else -> {
+                        redirect.addFlashAttribute("error", "Such product type does not exist.")
+                        return "redirect:/prawn/shop"
+                    }
+                }
+
+                if (productType == TransportType.LAND || productType == TransportType.AIR) {
+                    model.addAttribute("items",
+                        transportRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThanOrderByIdAsc(name, productType as TransportType, 0))
+                } else {
+                    model.addAttribute("items",
+                        weaponRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThanOrderByIdAsc(name, productType as WeaponType, 0))
+                }
+            } else {
+                model.addAttribute("items",
+                    weaponRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThanOrderByIdAsc(name, 0) as MutableList<Weapon> +
+                            transportRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThanOrderByIdAsc(name, 0) as MutableList<Transport>)
+            }
+        } else {
+            if (type != null) {
+                val productType = when (type) {
+                    "melee" -> WeaponType.MELEE
+                    "pistol" -> WeaponType.PISTOL
+                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
+                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
+                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
+                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
+                    "alien" -> WeaponType.ALIEN
+                    "land" -> TransportType.LAND
+                    "air" -> TransportType.AIR
+                    else -> {
+                        redirect.addFlashAttribute("error", "Such product type does not exist.")
+                        return "redirect:/prawn/shop"
+                    }
+                }
+
+                if (productType == TransportType.LAND || productType == TransportType.AIR) {
+                    model.addAttribute("items",
+                        transportRepository.findAllByTypeAndQuantityGreaterThanOrderByIdAsc(productType as TransportType, 0))
+                } else {
+                    model.addAttribute("items",
+                        weaponRepository.findAllByTypeAndQuantityGreaterThanOrderByIdAsc(productType as WeaponType, 0))
+                }
+            } else {
+                model.addAttribute("items", items)
+            }
+        }
+        return "prawns/prawn__shop.html"
     }
 
     @GetMapping("/profile")

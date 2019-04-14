@@ -1,7 +1,5 @@
 package mnu.controller
 
-import mnu.form.NewEmailForm
-import mnu.form.NewPasswordForm
 import mnu.form.NewProductForm
 import mnu.form.NewVacancyForm
 import mnu.model.Transport
@@ -19,7 +17,6 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
-import java.util.ArrayList
 
 @Controller
 @RequestMapping("/manufacturer")
@@ -39,6 +36,7 @@ class ManufacturerController (
                model: Model, principal: Principal, redirect: RedirectAttributes): String {
         val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         model.addAttribute("user", currentClient)
+
         val items = weaponRepository.findAll() + transportRepository.findAll()
 
         if(name != null) {
@@ -55,16 +53,16 @@ class ManufacturerController (
                     "air" -> TransportType.AIR
                     else -> {
                         redirect.addFlashAttribute("error", "Such product type does not exist.")
-                        return "redirect:/manufacturer/newProduct"
+                        return "redirect:/manufacturer/market"
                     }
                 }
 
                 if (productType == TransportType.LAND || productType == TransportType.AIR) {
                     model.addAttribute("items",
-                        transportRepository.findAllByNameAndTypeIgnoreCaseContainingOrderByIdAsc(name, productType as TransportType))
+                        transportRepository.findAllByNameIgnoreCaseContainingAndTypeOrderByIdAsc(name, productType as TransportType))
                 } else {
                     model.addAttribute("items",
-                        weaponRepository.findAllByNameAndTypeIgnoreCaseContainingOrderByIdAsc(name, productType as WeaponType))
+                        weaponRepository.findAllByNameIgnoreCaseContainingAndTypeOrderByIdAsc(name, productType as WeaponType))
                 }
             } else {
                 model.addAttribute("items",
@@ -85,7 +83,7 @@ class ManufacturerController (
                     "air" -> TransportType.AIR
                     else -> {
                         redirect.addFlashAttribute("error", "Such product type does not exist.")
-                        return "redirect:/manufacturer/newProduct"
+                        return "redirect:/manufacturer/market"
                     }
                 }
 
