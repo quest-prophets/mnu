@@ -219,9 +219,10 @@ class ManufacturerController (
     fun modifyCart(@RequestBody cartItem: CartItem, principal: Principal, redirect: RedirectAttributes): String {
         val currentUser = userRepository?.findByLogin(principal.name)!!
         val currentClient = clientRepository?.findByUserId(currentUser.id!!)!!
+        val possibleCart = shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)
         val currentCreatingCart = when {
-            shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING) != null ->
-                shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)!![0]
+            possibleCart != null && possibleCart.isNotEmpty() ->
+                possibleCart[0]
             else -> ShoppingCart(currentUser).apply { this.status = ShoppingCartStatus.CREATING }
         }
 
@@ -236,10 +237,6 @@ class ManufacturerController (
                     return "redirect:/manufacturer/market"
                 }
                 val existingWeapon = possibleWeapon.get()
-                if (existingWeapon.quantity == 0L) {
-                    redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another weapon.")
-                    return "redirect:/manufacturer/market"
-                }
                 val existingShoppingCartItemCheck = shoppingCartItemRepository.findByWeaponAndCart(existingWeapon, currentCreatingCart)
                 if (existingShoppingCartItemCheck == null) {
                     if (cartItem.quantity <= 0L) {
@@ -268,10 +265,6 @@ class ManufacturerController (
                     return "redirect:/manufacturer/market"
                 }
                 val existingTransport = possibleTransport.get()
-                if (existingTransport.quantity == 0L) {
-                    redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another transport.")
-                    return "redirect:/manufacturer/market"
-                }
                 val existingShoppingCartItemCheck = shoppingCartItemRepository.findByTransportAndCart(existingTransport, currentCreatingCart)
                 if (existingShoppingCartItemCheck == null) {
                     if (cartItem.quantity <= 0L) {
