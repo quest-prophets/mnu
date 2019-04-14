@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="desktop-header fixed-header fixed-header_small flex-row-between">
-    <form method="get" action="#" th:action="@{/client/shop/} + ${category}"
+    <form method="get" action="#" th:action="@{/prawn/shop/} + ${category}"
           class="flex-row-center mobile-hide">
         <input type="search" name="name" class="search-bar-input" placeholder="Search..." th:value="${param.name}">
         <input type="submit" class="search-bar-button button" value="Go!">
@@ -19,10 +19,8 @@
 
     <div class="flex-row-center">
         <b th:text="${user.user.login}"></b>
-        <a th:href="@{/profileClient}">
-            <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
-        </a>
-        <a th:href="@{/client/cart}">
+        <a th:href="@{/}" class="button"> Main menu</a>
+        <a th:href="@{/prawn/cart}">
             <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
         </a>
     </div>
@@ -34,7 +32,7 @@
 </div>
 
 <div class="grid">
-    <form method="get" action="#" th:action="@{/client/shop/} + ${category}"
+    <form method="get" action="#" th:action="@{/prawn/shop/} + ${category}"
           class="mobile-hide grid__search-bar search-bar-sorter flex-row-right">
         Sort by: &nbsp;
         <select name="sort" class="input_big" onchange="this.form.submit()">
@@ -47,7 +45,7 @@
         <input type="hidden" name="type" th:value="${param.type}">
     </form>
 
-    <form method="get" action="#" th:action="@{/client/shop/} + ${category}"
+    <form method="get" action="#" th:action="@{/prawn/shop/} + ${category}"
           class="mobile-show grid__search-bar flex-row-between">
         <span>
             <input name="name" type="search" class="search-bar-input" placeholder="Search...">
@@ -68,41 +66,41 @@
     <div id="mobile-menu" class="grid__departments flex-column-no-center">
         <a class="department-button bold"
            th:classappend="${category == 'weapon' and (param.type==null or param.type[0]=='') ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/weapon(sort=${param.sort}, name=${param.name})}">
+           th:href="@{/prawn/shop/weapon(sort=${param.sort}, name=${param.name})}">
             All weapons </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'melee' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/weapon(sort=${param.sort}, name=${param.name}, type='melee')}">
+           th:href="@{/prawn/shop/weapon(sort=${param.sort}, name=${param.name}, type='melee')}">
             Melee weapons </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'pistol' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/weapon(sort=${param.sort}, name=${param.name}, type='pistol')}">
+           th:href="@{/prawn/shop/weapon(sort=${param.sort}, name=${param.name}, type='pistol')}">
             Pistols </a>
         <a class="department-button"
            th:classappend="${param.type?.get(0) == 'submachine_gun' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/weapon(sort=${param.sort}, name=${param.name}, type='submachine_gun')}">
+           th:href="@{/prawn/shop/weapon(sort=${param.sort}, name=${param.name}, type='submachine_gun')}">
             SMGs </a>
         <a class="department-button"
            th:classappend="${param.type?.get(0) == 'assault_rifle' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/weapon(sort=${param.sort}, name=${param.name}, type='assault_rifle')}">
+           th:href="@{/prawn/shop/weapon(sort=${param.sort}, name=${param.name}, type='assault_rifle')}">
             Assault riffles </a>
         <a class="department-button"
            th:classappend="${param.type?.get(0) == 'light_machine_gun' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/weapon(sort=${param.sort}, name=${param.name}, type='light_machine_gun')}">
+           th:href="@{/prawn/shop/weapon(sort=${param.sort}, name=${param.name}, type='light_machine_gun')}">
             Light machine guns </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'sniper_rifle' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/weapon(sort=${param.sort}, name=${param.name}, type='sniper_rifle')}">
+           th:href="@{/prawn/shop/weapon(sort=${param.sort}, name=${param.name}, type='sniper_rifle')}">
             Sniper rifles </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'alien' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/weapon(sort=${param.sort}, name=${param.name}, type='alien')}">
+           th:href="@{/prawn/shop/weapon(sort=${param.sort}, name=${param.name}, type='alien')}">
             Alien weapon </a>
         <a class="department-button bold"
            th:classappend="${category == 'transport' and (param.type==null or param.type[0]=='') ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/transport(sort=${param.sort}, name=${param.name})}">
+           th:href="@{/prawn/shop/transport(sort=${param.sort}, name=${param.name})}">
             All transport </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'land' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/transport(sort=${param.sort}, name=${param.name}, type='land')}">
+           th:href="@{/prawn/shop/transport(sort=${param.sort}, name=${param.name}, type='land')}">
             Land transport </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'air' ? 'chosen-department' : ''}"
-           th:href="@{/client/shop/transport(sort=${param.sort}, name=${param.name}, type='air')}">
+           th:href="@{/prawn/shop/transport(sort=${param.sort}, name=${param.name}, type='air')}">
             Air transport </a>
     </div>
 
@@ -131,17 +129,15 @@
                  th:attr="data-type=${item.type.name()=='AIR' or item.type.name()=='LAND' ? 'TRANSPORT' : 'WEAPON'},
                               data-id=${item.id}, data-action=${cartIds.contains(item.id) ? 'remove-from-cart' : 'add-to-cart'}"
                  th:text="${cartIds.contains(item.id) ? 'Remove from cart' : 'Add to cart'}"
-                data-baseurl="/client/cart/modifyAjax">
+                 data-baseurl="/prawn/cart/modifyAjax">
             </div>
         </div>
     </div>
 </div>
 
 <div class="mobile-footer flex-row-around">
-    <a th:href="@{/profileClient}">
-        <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
-    </a>
-    <a th:href="@{/client/cart}">
+    <a th:href="@{/}" class="button"> Main menu</a>
+    <a th:href="@{/prawn/cart}">
         <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
     </a>
 </div>

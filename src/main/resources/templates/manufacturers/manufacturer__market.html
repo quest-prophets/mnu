@@ -33,7 +33,7 @@
 
 <div id="header_mobile" class="flex-row-center-left">
     <img id="burger" alt="departments" class="shop-icon icon burger" th:src="@{/images/burger.png}">
-    <div class="mobile-title">CATEGORY</div>
+    <div class="mobile-title" th:text="${(param.type==null or param.type[0]=='') ? category : param.type}"></div>
 </div>
 
 <div class="grid">
@@ -152,7 +152,7 @@
     </a>
 </div>
 
-<script rel="icon" type="text/javascript" th:src="@{/js/shop.js}"></script>
+<script rel="script" type="text/javascript" th:src="@{/js/shop.js}"></script>
 <script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
 </html>
