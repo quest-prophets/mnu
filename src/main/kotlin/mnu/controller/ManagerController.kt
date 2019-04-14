@@ -219,7 +219,7 @@ class ManagerController (
                 "redirect:/man/newEquipment"
             } else {
                 when {
-                    checkedRequest.weapon?.quantity!! == 0L -> {
+                    checkedRequest.weapon != null && checkedRequest.weapon?.quantity!! == 0L -> {
                         checkedRequest.request!!.apply {
                             this.statusDate = LocalDateTime.now()
                             this.status = RequestStatus.REJECTED
@@ -229,7 +229,7 @@ class ManagerController (
                         redirect.addFlashAttribute("error", "Weapon is out of stock, request cannot be satisfied.")
                         return "redirect:/man/newEquipment"
                     }
-                    checkedRequest.transport?.quantity!! == 0L -> {
+                    checkedRequest.transport != null && checkedRequest.transport?.quantity!! == 0L -> {
                         checkedRequest.request!!.apply {
                             this.statusDate = LocalDateTime.now()
                             this.status = RequestStatus.REJECTED
