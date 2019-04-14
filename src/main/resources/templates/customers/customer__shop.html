@@ -9,16 +9,23 @@
 </head>
 <body>
 <div class="desktop-header fixed-header fixed-header_small flex-row-right">
-    <b th:text="${user.user.login}"></b>
-    <a th:href="@{/profileClient}">
-        <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
-    </a>
-    <a th:href="@{/}">
-        <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
-    </a>
-    <a th:href="@{/}">
-        <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
-    </a>
+    <div class="flex-row-center mobile-hide">
+        <input type="search" class="search-bar-input" placeholder="Search...">
+        <button class="search-bar-button button">Go!</button>
+    </div>
+
+    <div class="flex-row-center">
+        <b th:text="${user.user.login}"></b>
+        <a th:href="@{/profileClient}">
+            <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
+        </a>
+        <a th:href="@{/}">
+            <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
+        </a>
+        <a th:href="@{/}">
+            <img alt="Cart" class="shop-icon icon" th:src="@{/images/cart.png}">
+        </a>
+    </div>
 </div>
 
 <div id="header_mobile" class="flex-row-center-left">
@@ -27,10 +34,18 @@
 </div>
 
 <div class="grid">
-    <div class="grid__search-bar flex-row-between">
+    <label class="mobile-hide grid__search-bar search-bar-sorter flex-row-right">
+        Sort by: &nbsp;
+        <select class="input_big">
+            <option>Price (asc.)</option>
+            <option>Price (desc.)</option>
+        </select>
+    </label>
+
+    <div class="mobile-show grid__search-bar flex-row-between">
         <span>
-            <input type="search" class="search-bar-input" placeholder="Search..."
-            ><button class="search-bar-button button">Go!</button>
+            <input type="search" class="search-bar-input" placeholder="Search...">
+            <button class="search-bar-button button">Go!</button>
         </span>
         <label class="search-bar-sorter flex-row-center">
             Sort by: &nbsp;
@@ -65,7 +80,7 @@
               item.type.name()=='ALIEN' ? 'shop-item_alien' : item.type.name()=='LAND' ? 'shop-item_land' :
               item.type.name()=='AIR' ? 'shop-item_air' : ''}|">
             <div class="flex-column-no-center">
-                <div class="font-big" th:text="${item.name}"></div>
+                <b class="font-big" th:text="${item.name}"></b>
                 <div class="form-item" th:text="${item.description}"></div>
                 <div class="form-item_small" th:text="${item.price + ' c.u.'}"></div>
                 <div class="form-item_small" th:text="${item.quantity + ' pieces'}"></div>

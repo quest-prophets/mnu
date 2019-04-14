@@ -18,7 +18,9 @@ body {
 }
 
 .search-bar-input {
+    padding: 0 10px;
     height: 35px;
+    border: 2px solid black;
     border-radius: 10px 0 0 10px;
     display: inline;
     font-size: 18px;
@@ -27,9 +29,11 @@ body {
 .search-bar-button {
     border-radius: 0 10px 10px 0;
     padding: 3px 15px;
+    margin-left: 5px;
 }
 
 .mobile-footer {
+    background: white;
     display: none;
     border-top: 2px solid black;
     position: fixed;
@@ -40,6 +44,9 @@ body {
 .grid__departments {
     padding: 25px 0;
     grid-area: departments;
+    position: sticky;
+    top: 100px;
+    align-self: flex-start;
     text-align: center;
 }
 
@@ -54,10 +61,10 @@ body {
 
 .grid__catalogue {
     grid-area: catalogue;
-    overflow-y: scroll;
 }
 
 #header_mobile {
+    background: white;
     grid-area: mobile-header;
     position: fixed;
     top: 0;
@@ -68,8 +75,8 @@ body {
 .shop-item {
     background-size: cover;
     display: inline-block;
-    width: 240px;
-    min-height: 240px;
+    width: 220px;
+    min-height: 220px;
     border: 2px solid black;
     border-radius: 30px;
     text-align: center;
@@ -137,6 +144,10 @@ body {
     background: #b9e9ff;
 }
 
+.mobile-show {
+    display: none;
+}
+
 @media (max-width: 700px) {
     .grid {
         grid: "mobile-header" "search-bar" "catalogue";
@@ -159,7 +170,7 @@ body {
     }
 
     .search-bar-input {
-        width: 20vw;
+        width: 30vw;
     }
 
     .shop-icon {
@@ -169,11 +180,18 @@ body {
     .header-mobile-border {
         border-bottom: 2px solid black;
     }
+
+    .mobile-show {
+        display: flex;
+    }
+
+    .mobile-hide {
+        display: none;
+    }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 460px) {
     .grid__search-bar {
-        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;

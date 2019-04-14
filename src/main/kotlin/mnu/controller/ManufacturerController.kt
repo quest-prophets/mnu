@@ -19,6 +19,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.security.Principal
+import java.util.ArrayList
 
 @Controller
 @RequestMapping("/manufacturer")
@@ -37,9 +38,9 @@ class ManufacturerController (
     fun market(model: Model, principal: Principal): String {
         val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         model.addAttribute("user", currentClient)
+        val items = weaponRepository.findAll() + transportRepository.findAll()
 
-        model.addAttribute("weapons", weaponRepository.findAll())
-        model.addAttribute("transport", transportRepository.findAll())
+        model.addAttribute("items", items)
         return "manufacturers/manufacturer__market.html"
     }
 

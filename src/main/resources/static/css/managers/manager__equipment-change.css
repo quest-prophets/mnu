@@ -35,7 +35,6 @@ body {
     margin: 0 15px;
 }
 
-
 .content__main {
     padding: 12px;
 }
@@ -50,6 +49,11 @@ h1 {
     text-align: center;
     padding: 12px 12px 10px;
     border-bottom: 2px solid;
+}
+
+.blank-weapon-icon {
+    width: 70px;
+    height: 10px;
 }
 
 @media (max-width: 750px) {
