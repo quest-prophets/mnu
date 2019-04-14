@@ -216,6 +216,10 @@ select {
     font-weight: bold;
 }
 
+.content__item:last-child {
+    margin-bottom: 40px;
+}
+
 .hidden {
     display: none !important;
 }

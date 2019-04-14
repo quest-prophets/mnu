@@ -21,7 +21,7 @@
         </a>
     </div>
     <div class="managers-grid__buttons">
-        <a class="flex-column grid-button button">
+        <a th:href="@{/man/purchaseRequests}" class="flex-column grid-button button">
             Purchase requests
             <div class="notification-number" th:if="${UNKNOWN > 0}"></div>
         </a>

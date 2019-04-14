@@ -117,6 +117,10 @@
         <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
         <div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
 
+        <div class="form-item gray flex-column" th:if="${items == null or items.isEmpty()}">
+            No items in this category
+        </div>
+
         <div class="shop-item flex-column-around" th:each="item: ${items}"
              th:classappend="|${item.type.name()=='MELEE' ? 'shop-item_melee' : item.type.name()=='PISTOL' ? 'shop-item_pistol' :
               item.type.name()=='SUBMACHINE_GUN' ? 'shop-item_smg' : item.type.name()=='ASSAULT_RIFLE' ? 'shop-item_assault' :

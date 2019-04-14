@@ -22,35 +22,23 @@
     <div class="form-item gray" th:if="${items == null or items.isEmpty()}">
         There is nothing in cart
     </div>
-    <div th:each="item: ${items}" class="content__item">
-        <div class="content__main weapon-flex finished">
-            <div class="weapon-description">
-                <div class="form-item_small">
-                    <b>Name</b>
-                    <span th:text="${item.name()}"></span>
-                </div>
-<!--                <div class="form-item_small">-->
-<!--                    <b>Description</b>-->
-<!--                    <span th:text="${item.description}"></span>-->
-<!--                </div>-->
-<!--                <div class="form-item_small">-->
-<!--                    <b>Access level</b>-->
-<!--                    <span th:text="${item.requiredAccessLvl}"></span>-->
-<!--                </div>-->
-<!--                <div class="form-item_small">-->
-<!--                    <b>Price</b>-->
-<!--                    <span th:text="${item.price}"></span>-->
-<!--                </div>-->
-                <form th:action="@{cart/updateQuantity}" method="post" class="form-item_small flex-column">
-                    <b>Quantity</b>
-                    <input type="hidden" name="itemId" th:value="${item.id}">
-                    <input type="number" name="newQuantity" th:value="${item.quantity}" class="input_big form-item_small">
-                    <input type="submit" class="button form-item" value="Update quantity">
-                </form>
-            </div>
+    <div th:each="item: ${items}" class="content__item finished">
+        <div class="form-item_small">
+            <b th:text="${item.name()}"></b>
         </div>
+        <div class="form-item_small">
+            <b>Price:</b>
+            <span th:text="${item.price() + ' c.u'}"></span>
+        </div>
+        <form th:action="@{cart/updateQuantity}" method="post" class="form-item_small flex-column">
+            <b>Quantity</b>
+            <input type="hidden" name="itemId" th:value="${item.id}">
+            <input type="number" name="newQuantity" th:value="${item.quantity}" class="input_big form-item_small">
+            <input type="submit" class="button form-item" value="Update quantity">
+        </form>
     </div>
-    <form th:if="${items != null and !items.isEmpty()}" th:action="@{/manufacturer/cart/sendRequest}" method="post" class="form-item last-item">
+    <form th:if="${items != null and !items.isEmpty()}" th:action="@{/manufacturer/cart/sendRequest}" method="post"
+          class="form-item last-item">
         <input type="submit" class="button" value="Send sale request">
     </form>
 </div>

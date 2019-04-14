@@ -24,7 +24,7 @@
         Experiments & Articles
         <div class="notification-number" th:if="${experiment_count > 0}" th:text="${experiment_count}"></div>
     </a>
-    <a class="flex-column clients-manufacturers grid-button button">
+    <a th:href="@{/admin/purchaseRequests}" class="flex-column clients-manufacturers grid-button button">
         Purchase & sale requests
         <div class="notification-number" th:if="${UNKNOWN > 0}"></div>
     </a>
