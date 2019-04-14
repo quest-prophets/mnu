@@ -1010,14 +1010,7 @@ class AdministratorController (
 
                     var cartContents = ""
                     checkedRequest.cart!!.items!!.forEach {
-                        if(it.weapon != null) {
-                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
-                        }
-                    }
-                    checkedRequest.cart!!.items!!.forEach {
-                        if(it.transport != null) {
-                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
-                        }
+                        cartContents += "\n${it.name()} - ${it.quantity} pieces"
                     }
 
                     emailSender.sendMessage(
@@ -1045,14 +1038,7 @@ class AdministratorController (
 
                     var cartContents = ""
                     checkedRequest.cart!!.items!!.forEach {
-                        if(it.weapon != null) {
-                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
-                        }
-                    }
-                    checkedRequest.cart!!.items!!.forEach {
-                        if(it.transport != null) {
-                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
-                        }
+                        cartContents += "\n${it.name()} - ${it.quantity} pieces"
                     }
 
                     emailSender.sendMessage(
@@ -1078,12 +1064,7 @@ class AdministratorController (
                     }
                     checkedRequest.cart!!.status = ShoppingCartStatus.RETRIEVED
                     checkedRequest.cart!!.items!!.forEach {
-                        if (it.weapon != null) {
-                            reqPrawn.balance -= it.weapon!!.price * it.weaponQuantity!!
-                        }
-                        if(it.transport != null) {
-                            reqPrawn.balance -= it.transport!!.price * it.transportQuantity!!
-                        }
+                        reqPrawn.balance -= it.price() * it.quantity!!
                     }
                     prawnRepository?.save(reqPrawn)
                     purchaseRequestRepository.save(checkedRequest)
@@ -1126,11 +1107,11 @@ class AdministratorController (
                     val cartItems = checkedRequest.cart!!.items
                     cartItems!!.forEach {
                         if (it.weapon != null) {
-                            it.weapon!!.quantity += it.weaponQuantity!!
+                            it.weapon!!.quantity += it.quantity!!
                             weaponRepository.save(it.weapon!!)
                         }
                         if(it.transport != null) {
-                            it.transport!!.quantity += it.transportQuantity!!
+                            it.transport!!.quantity += it.quantity!!
                             transportRepository.save(it.transport!!)
                         }
                     }
@@ -1144,14 +1125,7 @@ class AdministratorController (
 
                     var cartContents = ""
                     checkedRequest.cart!!.items!!.forEach {
-                        if(it.weapon != null) {
-                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
-                        }
-                    }
-                    checkedRequest.cart!!.items!!.forEach {
-                        if(it.transport != null) {
-                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
-                        }
+                        cartContents += "\n${it.name()} - ${it.quantity} pieces"
                     }
 
                     emailSender.sendMessage(
@@ -1173,11 +1147,11 @@ class AdministratorController (
                     val cartItems = checkedRequest.cart!!.items
                     cartItems!!.forEach {
                         if (it.weapon != null) {
-                            it.weapon!!.quantity -= it.weaponQuantity!!
+                            it.weapon!!.quantity -= it.quantity!!
                             weaponRepository.save(it.weapon!!)
                         }
                         if(it.transport != null) {
-                            it.transport!!.quantity -= it.transportQuantity!!
+                            it.transport!!.quantity -= it.quantity!!
                             transportRepository.save(it.transport!!)
                         }
                     }
@@ -1191,14 +1165,7 @@ class AdministratorController (
 
                     var cartContents = ""
                     checkedRequest.cart!!.items!!.forEach {
-                        if(it.weapon != null) {
-                            cartContents += "\n${it.weapon!!.name} - ${it.weaponQuantity} pieces"
-                        }
-                    }
-                    checkedRequest.cart!!.items!!.forEach {
-                        if(it.transport != null) {
-                            cartContents += "\n${it.transport!!.name} - ${it.transportQuantity} pieces"
-                        }
+                        cartContents += "\n${it.name()} - ${it.quantity} pieces"
                     }
 
                     emailSender.sendMessage(
@@ -1224,11 +1191,11 @@ class AdministratorController (
                     val cartItems = checkedRequest.cart!!.items
                     cartItems!!.forEach {
                         if (it.weapon != null) {
-                            it.weapon!!.quantity += it.weaponQuantity!!
+                            it.weapon!!.quantity += it.quantity!!
                             weaponRepository.save(it.weapon!!)
                         }
                         if(it.transport != null) {
-                            it.transport!!.quantity += it.transportQuantity!!
+                            it.transport!!.quantity += it.quantity!!
                             transportRepository.save(it.transport!!)
                         }
                     }

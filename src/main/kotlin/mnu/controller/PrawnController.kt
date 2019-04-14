@@ -97,8 +97,13 @@ class PrawnController (
     }
 
     @GetMapping("/cart")
-    fun saleCart(model: Model, principal: Principal) : String {
+    fun saleCart(model: Model, principal: Principal, redirect: RedirectAttributes) : String {
         val currentUser = userRepository?.findByLogin(principal.name)!!
+        val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
+        if (currentPrawn.karma < 5000) {
+            redirect.addFlashAttribute("error", "You have no permission to buy our products.")
+            return "redirect:/prawn/main"
+        }
         val possibleCart = shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)
         val usersCart = when {
             possibleCart != null && possibleCart.isNotEmpty() ->
@@ -260,7 +265,7 @@ class PrawnController (
                     }
                     newShoppingCartItem.apply {
                         this.weapon = existingWeapon
-                        this.weaponQuantity = cartItem.quantity
+                        this.quantity = cartItem.quantity
                     }
                 } else {
                     if (cartItem.quantity <= 0L) {
@@ -268,7 +273,7 @@ class PrawnController (
                         redirect.addFlashAttribute("status", "Item removed from cart.")
                         return "redirect:/prawn/shop"
                     }
-                    existingShoppingCartItemCheck.weaponQuantity = cartItem.quantity
+                    existingShoppingCartItemCheck.quantity = cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
                 }
             }
@@ -292,7 +297,7 @@ class PrawnController (
                     }
                     newShoppingCartItem.apply {
                         this.transport = existingTransport
-                        this.transportQuantity = cartItem.quantity
+                        this.quantity = cartItem.quantity
                     }
                 } else {
                     if (cartItem.quantity <= 0L) {
@@ -300,7 +305,7 @@ class PrawnController (
                         redirect.addFlashAttribute("status", "Item removed from cart.")
                         return "redirect:/prawn/shop"
                     }
-                    existingShoppingCartItemCheck.transportQuantity = existingShoppingCartItemCheck.transportQuantity!! + cartItem.quantity
+                    existingShoppingCartItemCheck.quantity = cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
                 }
             }
@@ -337,32 +342,27 @@ class PrawnController (
 
         cartItems!!.forEach {
             if (it.weapon != null) {
-                if (it.weapon!!.quantity < it.weaponQuantity!!) {
+                if (it.weapon!!.quantity < it.quantity!!) {
                     redirect.addFlashAttribute("error",
                         "No sufficient \"${it.weapon!!.name}\" weapons, request cannot be satisfied.")
                     return "redirect:/client/cart"
                 }
-                it.weapon!!.quantity -= it.weaponQuantity!!
+                it.weapon!!.quantity -= it.quantity!!
                 weaponRepository.save(it.weapon!!)
             }
             if(it.transport != null) {
-                if(it.transport!!.quantity < it.transportQuantity!!) {
+                if(it.transport!!.quantity < it.quantity!!) {
                     redirect.addFlashAttribute("error",
                         "No sufficient \"${it.transport!!.name}\" transport, request cannot be satisfied.")
                     return "redirect:/client/cart"
                 }
-                it.transport!!.quantity -= it.transportQuantity!!
+                it.transport!!.quantity -= it.quantity!!
                 transportRepository.save(it.transport!!)
             }
         }
 
         cartItems.forEach {
-            if (it.weapon != null) {
-                cartSum += it.weapon!!.price * it.weaponQuantity!!
-            }
-            if(it.transport != null) {
-                cartSum += it.transport!!.price * it.transportQuantity!!
-            }
+            cartSum += it.price() * it.quantity!!
         }
         
         if (currentPrawn.balance < cartSum) {

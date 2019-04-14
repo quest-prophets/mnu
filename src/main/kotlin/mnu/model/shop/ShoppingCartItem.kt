@@ -9,12 +9,12 @@ import javax.persistence.*
 data class ShoppingCartItem (@ManyToOne(fetch = FetchType.EAGER)
                              @JoinColumn(name = "weapon_id", referencedColumnName = "id")
                              var weapon: Weapon? = null,
-                             var weaponQuantity: Long? = null,
 
                              @ManyToOne(fetch = FetchType.EAGER)
                              @JoinColumn(name = "transport_id", referencedColumnName = "id")
                              var transport: Transport? = null,
-                             var transportQuantity: Long? = null) {
+
+                             var quantity: Long? = null) {
     @Id
     @GeneratedValue
     var id: Long? = null
@@ -23,6 +23,6 @@ data class ShoppingCartItem (@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
     var cart: ShoppingCart? = null
 
-    fun name() = weapon?.name ?: transport?.name
-    fun quantity() = if (weapon != null) weaponQuantity else transportQuantity
+    fun name() = weapon?.name ?: transport!!.name
+    fun price() = weapon?.price ?: transport!!.price
 }

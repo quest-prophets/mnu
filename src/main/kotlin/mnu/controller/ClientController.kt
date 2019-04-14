@@ -127,7 +127,7 @@ class ClientController (
                     }
                     newShoppingCartItem.apply {
                         this.weapon = existingWeapon
-                        this.weaponQuantity = cartItem.quantity
+                        this.quantity = cartItem.quantity
                     }
                 } else {
                     if (cartItem.quantity <= 0L) {
@@ -135,7 +135,7 @@ class ClientController (
                         redirect.addFlashAttribute("status", "Item removed from cart.")
                         return "redirect:/client/shop"
                     }
-                    existingShoppingCartItemCheck.weaponQuantity = cartItem.quantity
+                    existingShoppingCartItemCheck.quantity = cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
                 }
             }
@@ -159,7 +159,7 @@ class ClientController (
                     }
                     newShoppingCartItem.apply {
                         this.transport = existingTransport
-                        this.transportQuantity = cartItem.quantity
+                        this.quantity = cartItem.quantity
                     }
                 } else {
                     if (cartItem.quantity <= 0L) {
@@ -167,7 +167,7 @@ class ClientController (
                         redirect.addFlashAttribute("status", "Item removed from cart.")
                         return "redirect:/client/shop"
                     }
-                    existingShoppingCartItemCheck.transportQuantity = existingShoppingCartItemCheck.transportQuantity!! + cartItem.quantity
+                    existingShoppingCartItemCheck.quantity = cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
                 }
             }
@@ -202,21 +202,21 @@ class ClientController (
 
         cartItems!!.forEach {
             if (it.weapon != null) {
-                if (it.weapon!!.quantity < it.weaponQuantity!!) {
+                if (it.weapon!!.quantity < it.quantity!!) {
                     redirect.addFlashAttribute("error",
                             "No sufficient \"${it.weapon!!.name}\" weapons, request cannot be satisfied.")
                     return "redirect:/client/cart"
                 }
-                it.weapon!!.quantity -= it.weaponQuantity!!
+                it.weapon!!.quantity -= it.quantity!!
                 weaponRepository.save(it.weapon!!)
             }
             if(it.transport != null) {
-                if(it.transport!!.quantity < it.transportQuantity!!) {
+                if(it.transport!!.quantity < it.quantity!!) {
                     redirect.addFlashAttribute("error",
                         "No sufficient \"${it.transport!!.name}\" transport, request cannot be satisfied.")
                     return "redirect:/client/cart"
                 }
-                it.transport!!.quantity -= it.transportQuantity!!
+                it.transport!!.quantity -= it.quantity!!
                 transportRepository.save(it.transport!!)
             }
         }

@@ -216,9 +216,9 @@ class ManufacturerController (
         if (shoppingCartItem != null && newQuantity > 0) {
             shoppingCartItemRepository.save(shoppingCartItem.apply {
                 if (this.weapon != null)
-                    this.weaponQuantity = newQuantity
+                    this.quantity = newQuantity
                 else if (this.transport != null)
-                    this.transportQuantity = newQuantity
+                    this.quantity = newQuantity
             })
 
             redirect.addFlashAttribute("status", "Quantity updated.")
@@ -261,14 +261,14 @@ class ManufacturerController (
                     }
                     newShoppingCartItem.apply {
                         this.weapon = existingWeapon
-                        this.weaponQuantity = cartItem.quantity
+                        this.quantity = cartItem.quantity
                     }
                 } else {
                     if (cartItem.quantity <= 0L) {
                         shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
                         return CartModifyResponse(isError = false, message = "Item removed from cart.")
                     }
-                    existingShoppingCartItemCheck.weaponQuantity = cartItem.quantity
+                    existingShoppingCartItemCheck.quantity = cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
                 }
             }
@@ -286,14 +286,14 @@ class ManufacturerController (
                     }
                     newShoppingCartItem.apply {
                         this.transport = existingTransport
-                        this.transportQuantity = cartItem.quantity
+                        this.quantity = cartItem.quantity
                     }
                 } else {
                     if (cartItem.quantity <= 0L) {
                         shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
                         return CartModifyResponse(isError = false, message = "Item removed from cart.")
                     }
-                    existingShoppingCartItemCheck.transportQuantity = existingShoppingCartItemCheck.transportQuantity!! + cartItem.quantity
+                    existingShoppingCartItemCheck.quantity = cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
                 }
             }
@@ -327,11 +327,11 @@ class ManufacturerController (
 
         cartItems!!.forEach {
             if (it.weapon != null) {
-                it.weapon!!.quantity += it.weaponQuantity!!
+                it.weapon!!.quantity += it.quantity!!
                 weaponRepository.save(it.weapon!!)
             }
             if(it.transport != null) {
-                it.transport!!.quantity += it.transportQuantity!!
+                it.transport!!.quantity += it.quantity!!
                 transportRepository.save(it.transport!!)
             }
         }
