@@ -87,7 +87,7 @@ class SecurityController (
                 as MutableList<Weapon>
 
         val allAvailableTransport =
-            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(curSecurity.employee!!.level!!, 0)
+            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(curSecurity.employee!!.level!!, 0)
                 as MutableList<Transport>
 
         model.addAttribute("current_security", curSecurity)

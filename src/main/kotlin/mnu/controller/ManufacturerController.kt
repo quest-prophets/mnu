@@ -188,8 +188,11 @@ class ManufacturerController (
     enum class CartItemType { WEAPON, TRANSPORT }
     data class CartItem(val type: CartItemType, var id: Long, var quantity: Long)
 
-    @PostMapping("/cart/modify")
-    fun modifyCart(@RequestBody cartItem: CartItem, principal: Principal, redirect: RedirectAttributes): String {
+    data class CartModifyResponse(var isError: Boolean = false, var message: String = "")
+
+    @PostMapping("/cart/modifyAjax")
+    @ResponseBody
+    fun modifyCartAjax(@RequestBody cartItem: CartItem, principal: Principal, redirect: RedirectAttributes): CartModifyResponse {
         val currentUser = userRepository?.findByLogin(principal.name)!!
         val currentClient = clientRepository?.findByUserId(currentUser.id!!)!!
         val possibleCart = shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)
@@ -206,15 +209,13 @@ class ManufacturerController (
             CartItemType.WEAPON -> {
                 val possibleWeapon = weaponRepository.findById(cartItem.id)
                 if (!possibleWeapon.isPresent) {
-                    redirect.addFlashAttribute("error", "Such weapon does not exist.")
-                    return "redirect:/manufacturer/market"
+                    return CartModifyResponse(isError = true, message = "Such weapon does not exist.")
                 }
                 val existingWeapon = possibleWeapon.get()
                 val existingShoppingCartItemCheck = shoppingCartItemRepository.findByWeaponAndCart(existingWeapon, currentCreatingCart)
                 if (existingShoppingCartItemCheck == null) {
                     if (cartItem.quantity <= 0L) {
-                        redirect.addFlashAttribute("error", "Please enter a valid quantity for this item.")
-                        return "redirect:/manufacturer/market"
+                        return CartModifyResponse(isError = true, message = "Please enter a valid quantity for this item.")
                     }
                     newShoppingCartItem.apply {
                         this.weapon = existingWeapon
@@ -223,8 +224,7 @@ class ManufacturerController (
                 } else {
                     if (cartItem.quantity <= 0L) {
                         shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
-                        redirect.addFlashAttribute("status", "Item removed from cart.")
-                        return "redirect:/manufacturer/market"
+                        return CartModifyResponse(isError = false, message = "Item removed from cart.")
                     }
                     existingShoppingCartItemCheck.weaponQuantity = cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
@@ -234,15 +234,13 @@ class ManufacturerController (
             CartItemType.TRANSPORT -> {
                 val possibleTransport = transportRepository.findById(cartItem.id)
                 if (!possibleTransport.isPresent) {
-                    redirect.addFlashAttribute("error", "Such weapon does not exist.")
-                    return "redirect:/manufacturer/market"
+                    return CartModifyResponse(isError = true, message = "Such weapon does not exist.")
                 }
                 val existingTransport = possibleTransport.get()
                 val existingShoppingCartItemCheck = shoppingCartItemRepository.findByTransportAndCart(existingTransport, currentCreatingCart)
                 if (existingShoppingCartItemCheck == null) {
                     if (cartItem.quantity <= 0L) {
-                        redirect.addFlashAttribute("error", "Please enter a valid quantity for this item.")
-                        return "redirect:/manufacturer/market"
+                        return CartModifyResponse(isError = true, message = "Please enter a valid quantity for this item.")
                     }
                     newShoppingCartItem.apply {
                         this.transport = existingTransport
@@ -251,8 +249,7 @@ class ManufacturerController (
                 } else {
                     if (cartItem.quantity <= 0L) {
                         shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
-                        redirect.addFlashAttribute("status", "Item removed from cart.")
-                        return "redirect:/manufacturer/market"
+                        return CartModifyResponse(isError = false, message = "Item removed from cart.")
                     }
                     existingShoppingCartItemCheck.transportQuantity = existingShoppingCartItemCheck.transportQuantity!! + cartItem.quantity
                     newShoppingCartItem = existingShoppingCartItemCheck
@@ -262,8 +259,7 @@ class ManufacturerController (
 
         shoppingCartItemRepository.save(newShoppingCartItem.apply { this.cart = currentCreatingCart })
 
-        redirect.addFlashAttribute("status", "Added to cart!")
-        return "redirect:/manufacturer/market"
+        return CartModifyResponse(isError = false, message = "Added to cart!")
     }
 
     @PostMapping("/cart/sendRequest")

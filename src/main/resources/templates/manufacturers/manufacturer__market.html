@@ -71,7 +71,7 @@
     </form>
 
     <div id="mobile-menu" class="grid__departments flex-column-no-center">
-        <a class="department-button bold" th:classappend="${category == 'weapon' and param.type == null ? 'chosen-department' : ''}"
+        <a class="department-button bold" th:classappend="${category == 'weapon' and (param.type==null or param.type[0]=='') ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/weapon(sort=${param.sort}, name=${param.name})}">
             All weapons </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'melee' ? 'chosen-department' : ''}"
@@ -95,7 +95,7 @@
         <a class="department-button" th:classappend="${param.type?.get(0) == 'alien' ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/weapon(sort=${param.sort}, name=${param.name}, type='alien')}">
             Alien weapon </a>
-        <a class="department-button bold" th:classappend="${category == 'transport' and param.type == null ? 'chosen-department' : ''}"
+        <a class="department-button bold" th:classappend="${category == 'transport' and (param.type==null or param.type[0]=='') ? 'chosen-department' : ''}"
            th:href="@{/manufacturer/market/transport(sort=${param.sort}, name=${param.name})}">
             All transport </a>
         <a class="department-button" th:classappend="${param.type?.get(0) == 'land' ? 'chosen-department' : ''}"
