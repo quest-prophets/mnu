@@ -26,7 +26,7 @@
     </a>
     <a th:href="@{/admin/purchaseRequests}" class="flex-column clients-manufacturers grid-button button">
         Purchase & sale requests
-        <div class="notification-number" th:if="${UNKNOWN > 0}"></div>
+        <div class="notification-number" th:if="${purch_count > 0}" th:text="${purch_count}"></div>
     </a>
     <a th:href="@{/admin/employee}" class="flex-column employees grid-button button">Employees</a>
     <a th:href="@{/admin/vacancies}" class="flex-column prawn-vacancies grid-button button">

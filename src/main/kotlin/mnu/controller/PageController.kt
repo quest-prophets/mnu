@@ -139,6 +139,7 @@ class PageController : ApplicationController() {
             return "redirect:/profileClient"
         }
         currentClient.email = form.newEmail
+        clientRepository?.save(currentClient)
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Email changed successfully.")
         return "redirect:/profileClient"

@@ -1,7 +1,7 @@
 document.getElementsByTagName('body')[0].addEventListener('click', async e => {
     const action = e.target.dataset.action;
     if (action === 'add-to-cart') {
-        const response = await post("/manufacturer/cart/modifyAjax", {
+        const response = await post(e.target.dataset.baseurl, {
             type: e.target.dataset.type,
             id: e.target.dataset.id,
             quantity: 1
@@ -16,7 +16,7 @@ document.getElementsByTagName('body')[0].addEventListener('click', async e => {
         }
         document.getElementById('message').innerText = json.message;
     } else if (action === 'remove-from-cart') {
-        const response = await post("/manufacturer/cart/modifyAjax", {
+        const response = await post(e.target.dataset.baseurl, {
             type: e.target.dataset.type,
             id: e.target.dataset.id,
             quantity: 0

@@ -22,9 +22,6 @@
         <a th:href="@{/profileClient}">
             <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
         </a>
-        <a th:href="@{/}">
-            <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
-        </a>
         <a th:href="@{/manufacturer/newProduct}">
             <img alt="Add item" class="shop-icon icon" th:src="@{/images/add_item.svg}">
         </a>
@@ -136,7 +133,8 @@
                  th:classappend="${cartIds.contains(item.id) ? 'rejected' : 'approved'}"
                  th:attr="data-type=${item.type.name()=='AIR' or item.type.name()=='LAND' ? 'TRANSPORT' : 'WEAPON'},
                               data-id=${item.id}, data-action=${cartIds.contains(item.id) ? 'remove-from-cart' : 'add-to-cart'}"
-                 th:text="${cartIds.contains(item.id) ? 'Remove from cart' : 'Add to cart'}">
+                 th:text="${cartIds.contains(item.id) ? 'Remove from cart' : 'Add to cart'}"
+                 data-baseurl="/manufacturer/cart/modifyAjax">
             </div>
         </div>
     </div>
@@ -146,9 +144,6 @@
     <a th:href="@{/profileClient}">
         <img alt="Profile settings" class="shop-icon icon" th:src="@{/images/profile.png}">
     </a>
-    <a th:href="@{/}">
-        <img alt="History" class="shop-icon icon" th:src="@{/images/history.svg}">
-    </a>
     <a th:href="@{/manufacturer/newProduct}">
         <img alt="Add item" class="shop-icon icon" th:src="@{/images/add_item.svg}">
     </a>
@@ -157,7 +152,7 @@
     </a>
 </div>
 
-<script rel="icon" type="text/javascript" th:src="@{/js/shop_manufacturer.js}"></script>
+<script rel="icon" type="text/javascript" th:src="@{/js/shop.js}"></script>
 <script rel="script" type="text/javascript" th:src="@{/js/mobileMenu.js}"></script>
 </body>
 </html>
