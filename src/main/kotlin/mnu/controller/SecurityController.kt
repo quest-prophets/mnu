@@ -152,6 +152,12 @@ class SecurityController (
             existingTransport = requestedTransport.get()
 
         when {
+            existingWeapon == currentSecurity.weapon && existingTransport == currentSecurity.transport -> {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Requested equipment is the same as yours.")
+                return "redirect:/sec/equipment"
+            }
+
             existingWeapon.quantity == 0L && existingWeapon.id != null -> {
                 redirect.addFlashAttribute("form", form)
                 redirect.addFlashAttribute("error", "Out of stock. Check back later or choose another weapon.")
