@@ -57,6 +57,11 @@
             </div>
         </div>
 
+        <div th:if="${request.employee.weapon == null}" class="form-item weapon-flex">
+            <div class="blank-weapon-icon"></div>
+            <b class="weapon-description"> Current weapon: none </b>
+        </div>
+
         <div th:if="${request.employee.transport != null}" class="weapon-flex form-item">
             <div th:switch="${request.employee.transport.type.name()}">
                 <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">
@@ -85,6 +90,11 @@
                     <span th:text="${request.employee.transport.requiredAccessLvl}"></span>
                 </div>
             </div>
+        </div>
+
+        <div th:if="${request.employee.transport == null}" class="form-item weapon-flex">
+            <div class="blank-weapon-icon"></div>
+            <b class="weapon-description"> Current transport: none </b>
         </div>
 
         <div th:if="${request.weapon != null}" class="weapon-flex form-item">
@@ -125,6 +135,11 @@
             </div>
         </div>
 
+        <div th:if="${request.weapon == null}" class="form-item weapon-flex">
+            <div class="blank-weapon-icon"></div>
+            <b class="weapon-description"> New weapon: none </b>
+        </div>
+
         <div th:if="${request.transport!= null}" class="weapon-flex form-item">
             <div th:switch="${request.transport.type.name()}">
                 <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">
@@ -162,6 +177,12 @@
                 </div>
             </div>
         </div>
+
+        <div th:if="${request.transport == null}" class="form-item weapon-flex">
+            <div class="blank-weapon-icon"></div>
+            <b class="weapon-description"> New transport: none </b>
+        </div>
+
         <div th:id="${'request-buttons-' + request.id}" class="form-item button-flex-row">
             <a th:attr="data-request-id=${request.id}" data-action="accept" class="button approved">Accept</a>
             <a th:attr="data-request-id=${request.id}" data-action="reject" class="button rejected">Reject</a>

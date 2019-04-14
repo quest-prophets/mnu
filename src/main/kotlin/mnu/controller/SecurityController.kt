@@ -83,14 +83,10 @@ class SecurityController (
         val allAvailableWeapons =
             weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(curSecurity.employee!!.level!!, 0)
                 as MutableList<Weapon>
-        if (curSecurity.weapon != null)
-            allAvailableWeapons.remove(curSecurity.weapon!!)
 
         val allAvailableTransport =
             transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(curSecurity.employee!!.level!!, 0)
                 as MutableList<Transport>
-        if (curSecurity.transport != null)
-            allAvailableTransport.remove(curSecurity.transport!!)
 
         model.addAttribute("current_security", curSecurity)
         model.addAttribute("current_request", currentChangeRequest)

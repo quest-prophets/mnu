@@ -97,7 +97,8 @@
     </tr>
     </thead>
     <tbody id="weapons-tbody">
-    <tr class="weapon-row" th:each="weapon : ${available_weapons}" th:attr="data-id=${weapon.id}">
+    <tr class="weapon-row" th:each="weapon : ${available_weapons}" th:attr="data-id=${weapon.id}"
+        th:classappend="${current_security.weapon.id == weapon.id ? 'selected-row' : ''}">
         <td th:text="${weapon.id}"></td>
         <td th:text="|${weapon.type.name()=='MELEE' ? 'Melee' : weapon.type.name()=='PISTOL' ? 'Pistol' :
               weapon.type.name()=='SUBMACHINE_GUN' ? 'Submachine gun' : weapon.type.name()=='ASSAULT_RIFLE' ? 'Assault rifle' :
@@ -109,7 +110,8 @@
     </tr>
     </tbody>
     <tbody id="transport-tbody">
-    <tr class="transport-row hidden" th:each="transport : ${available_transport}" th:attr="data-id=${weapon.id}">
+    <tr class="transport-row hidden" th:each="transport : ${available_transport}" th:attr="data-id=${weapon.id}"
+        th:classappend="${current_security.transport.id == transport.id ? 'selected-row' : ''}">
         <td th:text="${transport.id}"></td>
         <td th:text="|${transport.type.name()=='LAND' ? 'Land transport' :
          transport.type.name()=='AIR' ? 'Air transport' : ''}|"></td>
@@ -123,15 +125,17 @@
 <form class="flex-column form-item_big" method="post" th:object="${form}" action="#" th:action="@{/sec/equipment}">
     <label>
         <b>New weapon Id</b>
-        <input required id="weaponId" name="weaponId" type="number" class="input_big"
-               th:value="${current_security.weapon != null ? current_security.weapon.id : ''}">
+        <input id="weaponId" name="weaponId" type="number" class="input_big"
+               th:value="${current_security.weapon != null ? current_security.weapon.id : ''}"
+               th:placeholder=" ${current_security.weapon !=null ? 'Current weapon id: ' + current_security.weapon.id : ''}">
     </label>
     <label class="form-item">
         <b>New transport Id</b>
         <input id="transportId" name="transportId" type="number" class="input_big"
-               th:value="${current_security.transport != null ? current_security.transport.id : ''}">
+               th:value="${current_security.transport != null ? current_security.transport.id : ''}"
+               th:placeholder=" ${current_security.transport !=null ? 'Current transport id: ' + current_security.transport.id : ''}">
     </label>
-    <input type="submit" class="button form-item" value="Request new equipment">
+    <input type="submit" class="last-item button form-item" value="Request new equipment">
 </form>
 <script rel="script" type="text/javascript" th:src="@{/js/security/sec__equipment-change.js}"></script>
 </body>

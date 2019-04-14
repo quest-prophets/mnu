@@ -137,6 +137,11 @@ select {
     height: 70px;
 }
 
+.blank-weapon-icon{
+    width: 70px;
+    height: 10px;
+}
+
 .icon_big {
     width: 100px;
     height: 100px;
@@ -272,6 +277,10 @@ select {
 
 .flash_royal {
     width: 100%;
+}
+
+.last-item {
+    margin-bottom: 40px;
 }
 
 .hidden {

@@ -4,6 +4,8 @@ import mnu.form.NewEmailForm
 import mnu.form.NewPasswordForm
 import mnu.form.NewProductForm
 import mnu.form.NewVacancyForm
+import mnu.model.Transport
+import mnu.model.Weapon
 import mnu.model.enums.*
 import mnu.model.request.*
 import mnu.model.shop.ShoppingCart
@@ -35,6 +37,9 @@ class ManufacturerController (
     fun market(model: Model, principal: Principal): String {
         val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         model.addAttribute("user", currentClient)
+
+        model.addAttribute("weapons", weaponRepository.findAll())
+        model.addAttribute("transport", transportRepository.findAll())
         return "manufacturers/manufacturer__market.html"
     }
 
