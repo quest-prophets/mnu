@@ -84,11 +84,11 @@ class PrawnController (
                         transportRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThanOrderByIdAsc(name, productType as TransportType, 0))
                 } else {
                     model.addAttribute("items",
-                        weaponRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThanOrderByIdAsc(name, productType as WeaponType, 0))
+                        weaponRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThan(name, productType as WeaponType, 0))
                 }
             } else {
                 model.addAttribute("items",
-                    weaponRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThanOrderByIdAsc(name, 0) as MutableList<Weapon> +
+                    weaponRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThan(name, 0) as MutableList<Weapon> +
                             transportRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThanOrderByIdAsc(name, 0) as MutableList<Transport>)
             }
         } else {
@@ -114,7 +114,7 @@ class PrawnController (
                         transportRepository.findAllByTypeAndQuantityGreaterThanOrderByIdAsc(productType as TransportType, 0))
                 } else {
                     model.addAttribute("items",
-                        weaponRepository.findAllByTypeAndQuantityGreaterThanOrderByIdAsc(productType as WeaponType, 0))
+                        weaponRepository.findAllByTypeAndQuantityGreaterThan(productType as WeaponType, 0))
                 }
             } else {
                 model.addAttribute("items", items)

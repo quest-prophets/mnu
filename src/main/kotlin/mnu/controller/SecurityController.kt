@@ -81,7 +81,7 @@ class SecurityController (
         }
 
         val allAvailableWeapons =
-            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(curSecurity.employee!!.level!!, 0)
+            weaponRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(curSecurity.employee!!.level!!, 0)
                 as MutableList<Weapon>
 
         val allAvailableTransport =

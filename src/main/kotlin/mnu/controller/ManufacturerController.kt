@@ -12,6 +12,7 @@ import mnu.repository.TransportRepository
 import mnu.repository.WeaponRepository
 import mnu.repository.request.*
 import mnu.repository.shop.*
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -30,74 +31,46 @@ class ManufacturerController (
     val transportRepository: TransportRepository,
     val weaponRepository: WeaponRepository
 ) : ApplicationController() {
-
-    @GetMapping("/market")
-    fun market(@RequestParam(required = false) name: String?, @RequestParam(required = false) type: String?,
+    @GetMapping("/market/{category}")
+    fun market(@PathVariable("category") category: String,
+               @RequestParam(required = false) name: String?,
+               @RequestParam(required = false) type: String?,
+               @RequestParam(required = false) sort: String?,
                model: Model, principal: Principal, redirect: RedirectAttributes): String {
         val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         model.addAttribute("user", currentClient)
 
-        val items = weaponRepository.findAll() + transportRepository.findAll()
+        val productType = if (category == "weapon") WeaponType.fromClient(type) else TransportType.fromClient(type)
+        val productSort = when (sort) {
+            "price_asc" -> Sort(Sort.Direction.ASC, "price")
+            "price_desc" -> Sort(Sort.Direction.DESC, "price")
+            else -> Sort(Sort.Direction.ASC, "id")
+        }
 
-        if(name != null) {
-            if (type != null) {
-                val productType = when (type) {
-                    "melee" -> WeaponType.MELEE
-                    "pistol" -> WeaponType.PISTOL
-                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
-                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
-                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
-                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
-                    "alien" -> WeaponType.ALIEN
-                    "land" -> TransportType.LAND
-                    "air" -> TransportType.AIR
-                    else -> {
-                        redirect.addFlashAttribute("error", "Such product type does not exist.")
-                        return "redirect:/manufacturer/market"
-                    }
-                }
+        val items: List<Any> = when {
+            category == "weapon" && name != null && productType != null ->
+                weaponRepository.findAllByNameIgnoreCaseContainingAndType(name, productType as WeaponType, productSort)
+            category == "transport" && name != null && productType != null ->
+                transportRepository.findAllByNameIgnoreCaseContainingAndType(name, productType as TransportType, productSort)
+            category == "weapon" && name == null && productType != null ->
+                weaponRepository.findAllByType(productType as WeaponType, productSort)
+            category == "transport" && name == null && productType != null ->
+                transportRepository.findAllByType(productType as TransportType, productSort)
 
-                if (productType == TransportType.LAND || productType == TransportType.AIR) {
-                    model.addAttribute("items",
-                        transportRepository.findAllByNameIgnoreCaseContainingAndTypeOrderByIdAsc(name, productType as TransportType))
-                } else {
-                    model.addAttribute("items",
-                        weaponRepository.findAllByNameIgnoreCaseContainingAndTypeOrderByIdAsc(name, productType as WeaponType))
-                }
-            } else {
-                model.addAttribute("items",
-                    weaponRepository.findAllByNameIgnoreCaseContainingOrderByIdAsc(name) as MutableList<Weapon> +
-                            transportRepository.findAllByNameIgnoreCaseContainingOrderByIdAsc(name) as MutableList<Transport>)
-            }
-        } else {
-            if (type != null) {
-                val productType = when (type) {
-                    "melee" -> WeaponType.MELEE
-                    "pistol" -> WeaponType.PISTOL
-                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
-                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
-                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
-                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
-                    "alien" -> WeaponType.ALIEN
-                    "land" -> TransportType.LAND
-                    "air" -> TransportType.AIR
-                    else -> {
-                        redirect.addFlashAttribute("error", "Such product type does not exist.")
-                        return "redirect:/manufacturer/market"
-                    }
-                }
-
-                if (productType == TransportType.LAND || productType == TransportType.AIR) {
-                    model.addAttribute("items",
-                        transportRepository.findAllByTypeOrderByIdAsc(productType as TransportType))
-                } else {
-                    model.addAttribute("items",
-                        weaponRepository.findAllByTypeOrderByIdAsc(productType as WeaponType))
-                }
-            } else {
-                model.addAttribute("items", items)
+            category == "weapon" && name != null && productType == null ->
+                weaponRepository.findAllByNameIgnoreCaseContaining(name, productSort)
+            category == "transport" && name != null && productType == null ->
+                transportRepository.findAllByNameIgnoreCaseContaining(name, productSort)
+            category == "weapon" && name == null && productType == null ->
+                weaponRepository.findAll(productSort)
+            category == "transport" && name == null && productType == null ->
+                transportRepository.findAll(productSort)
+            else -> {
+                redirect.addFlashAttribute("error", "Such category filter does not exist.")
+                return "redirect:/manufacturer/market/weapon"
             }
         }
+        model.addAttribute("items", items)
         return "manufacturers/manufacturer__market.html"
     }
 
