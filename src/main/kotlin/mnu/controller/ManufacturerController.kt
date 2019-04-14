@@ -294,7 +294,7 @@ class ManufacturerController (
             CartItemType.TRANSPORT -> {
                 val possibleTransport = transportRepository.findById(cartItem.id)
                 if (!possibleTransport.isPresent) {
-                    return CartModifyResponse(isError = true, message = "Such weapon does not exist.")
+                    return CartModifyResponse(isError = true, message = "Such transport does not exist.")
                 }
                 val existingTransport = possibleTransport.get()
                 val existingShoppingCartItemCheck = shoppingCartItemRepository.findByTransportAndCart(existingTransport, currentCreatingCart)
