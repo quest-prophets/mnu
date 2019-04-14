@@ -132,7 +132,15 @@ class PageController : ApplicationController() {
     @PostMapping("/changeEmail")
     fun changeEmail(@ModelAttribute form: NewEmailForm, principal: Principal, redirect: RedirectAttributes): String {
         val curUser = userRepository?.findByLogin(principal.name)!!
-        //todo
-        return ""
+        val currentClient = clientRepository?.findByUserId(curUser.id!!)!!
+        if (form.newEmail == "") {
+            redirect.addFlashAttribute("form", form)
+            redirect.addFlashAttribute("error", "Field is empty.")
+            return "redirect:/profileClient"
+        }
+        currentClient.email = form.newEmail
+        redirect.addFlashAttribute("form", form)
+        redirect.addFlashAttribute("status", "Email changed successfully.")
+        return "redirect:/profileClient"
     }
 }

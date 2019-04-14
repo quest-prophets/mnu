@@ -104,9 +104,20 @@ class AdministratorController (
             }
         }
 
+        val purchaseRequests = purchaseRequestRepository.findAll()
+        val pPendingRequests = ArrayList<PurchaseRequest>()
+        purchaseRequests.forEach {
+            val requestUser = it.user!!
+            if (it.request!!.status == RequestStatus.PENDING
+                && (requestUser.role == Role.CUSTOMER || requestUser.role == Role.PRAWN || requestUser.role == Role.MANUFACTURER)) {
+                pPendingRequests.add(it)
+            }
+        }
+
         model.addAttribute("new_prod_count", nwPendingRequests.size + ntPendingRequests.size)
         model.addAttribute("new_vac_count", nvPendingRequests.size)
         model.addAttribute("vac_appl_count", vaPendingRequests.size)
+        model.addAttribute("purch_count", pPendingRequests.size)
         model.addAttribute("experiment_count",
             experimentRepository.countAllByStatusAndType(ExperimentStatus.PENDING, ExperimentType.MAJOR))
         model.addAttribute("ongoing_incidents",

@@ -47,7 +47,7 @@ class ManagerController (
 ): ApplicationController() {
 
     @GetMapping("/main")
-    fun manMenu(model: Model): String {
+    fun manMenu(model: Model, principal: Principal): String {
         val pendingRequests = requestRepository.findAllByStatus(RequestStatus.PENDING)
 
         val equipmentChangeRequests = changeEquipmentRequestRepository.findAll()
@@ -79,9 +79,27 @@ class ManagerController (
             }
         }
 
+        val user = userRepository?.findByLogin(principal.name)!!
+        val curManager = managerEmployeeRepository.findById(user.id!!).get()
+        val purchaseRequests = purchaseRequestRepository.findAll()
+        val pPendingRequests = ArrayList<PurchaseRequest>()
+        purchaseRequests.forEach {
+            val requestUser = it.user!!
+            if (it.request!!.status == RequestStatus.PENDING) {
+                if (requestUser.role == Role.PRAWN) {
+                    if (prawnRepository?.findByUserId(requestUser.id!!)!!.manager == curManager)
+                        pPendingRequests.add(it)
+                } else if (requestUser.role == Role.CUSTOMER) {
+                    if (clientRepository?.findByUserId(requestUser.id!!)!!.manager == curManager)
+                        pPendingRequests.add(it)
+                }
+            }
+        }
+
         model.addAttribute("eq_change_count", ecPendingRequests.size)
         model.addAttribute("new_weap_count", nwPendingRequests.size)
         model.addAttribute("vac_appl_count", vaPendingRequests.size)
+        model.addAttribute("purch_count", pPendingRequests.size)
         return "managers/manager__main.html"
     }
 
