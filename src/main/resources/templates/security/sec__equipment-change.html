@@ -23,18 +23,24 @@
               current_security.weapon.type.name()=='LIGHT_MACHINE_GUN' ? 'equipment-item_lmg' : current_security.weapon.type.name()=='SNIPER_RIFLE' ? 'equipment-item_sniper' :
               current_security.weapon.type.name()=='ALIEN' ? 'equipment-item_alien' : ''}|">
         <div class="flex-column-no-center">
-            <div class="approved-name font-big" th:text="${current_security.weapon.name}"></div>
-            <div class="form-item" th:text="${current_security.weapon.description}"></div>
-            <div class="form-item" th:text="${'Access level: ' + current_security.weapon.requiredAccessLvl}"></div>
+            <b class="approved-name font-big" th:text="${current_security.weapon.name}"></b>
+            <div class="equipment-item-main">
+                <div th:text="${current_security.weapon.description}"></div>
+                <div class="form-item_small"
+                     th:text="${'Access level: ' + current_security.weapon.requiredAccessLvl}"></div>
+            </div>
         </div>
     </div>
     <div th:if="${current_security.transport != null}" class="equipment-item"
          th:classappend="|${current_security.transport.type.name()=='LAND' ? 'equipment-item_land' :
               current_security.transport.type.name()=='AIR' ? 'equipment-item_air' : ''}|">
         <div class="flex-column-no-center">
-            <div class="approved-name font-big" th:text="${current_security.transport.name}"></div>
-            <div class="form-item" th:text="${current_security.transport.description}"></div>
-            <div class="form-item" th:text="${'Access level: ' + current_security.transport.requiredAccessLvl}"></div>
+            <b class="approved-name font-big" th:text="${current_security.transport.name}"></b>
+            <div class="equipment-item-main">
+                <div th:text="${current_security.transport.description}"></div>
+                <div class="form-item_small"
+                     th:text="${'Access level: ' + current_security.transport.requiredAccessLvl}"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -46,18 +52,24 @@
               current_request.weapon.type.name()=='LIGHT_MACHINE_GUN' ? 'equipment-item_lmg' : current_request.weapon.type.name()=='SNIPER_RIFLE' ? 'equipment-item_sniper' :
               current_request.weapon.type.name()=='ALIEN' ? 'equipment-item_alien' : ''}|">
         <div class="flex-column-no-center">
-            <div class="pending-name font-big" th:text="${current_request.weapon.name}"></div>
-            <div class="form-item" th:text="${current_request.weapon.description}"></div>
-            <div class="form-item" th:text="${'Access level: ' + current_request.weapon.requiredAccessLvl}"></div>
+            <b class="pending-name font-big" th:text="${current_request.weapon.name}"></b>
+            <div class="equipment-item-main">
+                <div th:text="${current_request.weapon.description}"></div>
+                <div class="form-item_small"
+                     th:text="${'Access level: ' + current_request.weapon.requiredAccessLvl}"></div>
+            </div>
         </div>
     </div>
     <div class="equipment-item" th:if="${current_request.transport != null}"
          th:classappend="|${current_request.transport.type.name()=='LAND' ? 'equipment-item_land' :
               current_request.transport.type.name()=='AIR' ? 'equipment-item_air' : ''}|">
         <div class="flex-column-no-center">
-            <div class="pending-name font-big" th:text="${current_request.transport.name}"></div>
-            <div class="form-item" th:text="${current_request.transport.description}"></div>
-            <div class="form-item" th:text="${'Access level: ' + current_request.transport.requiredAccessLvl}"></div>
+            <b class="pending-name font-big" th:text="${current_request.transport.name}"></b>
+            <div class="equipment-item-main">
+                <div th:text="${current_request.transport.description}"></div>
+                <div class="form-item_small"
+                     th:text="${'Access level: ' + current_request.transport.requiredAccessLvl}"></div>
+            </div>
         </div>
     </div>
 </div>

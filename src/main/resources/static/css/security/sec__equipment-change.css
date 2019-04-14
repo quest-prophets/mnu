@@ -9,10 +9,13 @@
     border: 2px solid black;
     border-radius: 30px;
     text-align: center;
-    padding: 12px;
     word-break: break-word;
     margin: 20px;
     float: left;
+}
+
+.equipment-item-main {
+    padding: 12px;
 }
 
 .equipment-item_assault {
@@ -52,15 +55,15 @@
 }
 
 .pending-name {
-    padding: 10px;
-    background: #b5e9fa;
-    border-radius: 20px;
+    padding: 12px;
+    background: #adebffb0;
+    border-radius: 30px 30px 0 0;
 }
 
 .approved-name {
-    padding: 10px;
-    background: #8afa9f;
-    border-radius: 20px;
+    padding: 12px;
+    background: #c8ffbab0;
+    border-radius: 30px 30px 0 0;
 }
 
 table {
