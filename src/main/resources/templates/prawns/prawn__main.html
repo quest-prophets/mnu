@@ -15,6 +15,9 @@
     </a>
 </div>
 
+<div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+<div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
+
 <div class="flex-row menu-content">
     <div class="flex-column">
         <div class="flex-row-center">
@@ -31,7 +34,7 @@
             <img alt="money" th:src="@{/images/gold_coin.png}" class="menu-item icon_big">
             <div class="font-huge" th:text="${user.balance}"></div>
         </div>
-        <a th:href="@{/prawn/shop}" class="flex-column button menu-item">
+        <a th:href="@{/prawn/shop/weapon}" class="flex-column button menu-item">
             <img alt="store" th:src="@{/images/prawn_cart.png}" class="icon_giant">
             <div class="font-huge"> Buy items</div>
         </a>

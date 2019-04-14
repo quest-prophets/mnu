@@ -42,7 +42,7 @@ class PageController : ApplicationController() {
             if (roles.contains("SECURITY"))
                 return "redirect:/sec/main"
             if (roles.contains("CUSTOMER"))
-                return "redirect:/client/shop"
+                return "redirect:/client/shop/weapon"
             if (roles.contains("MANUFACTURER"))
                 return "redirect:/manufacturer/market/weapon"
             if (roles.contains("PRAWN"))
