@@ -35,12 +35,71 @@ class ManufacturerController (
 ) : ApplicationController() {
 
     @GetMapping("/market")
-    fun market(model: Model, principal: Principal): String {
+    fun market(@RequestParam(required = false) name: String?, @RequestParam(required = false) type: String?,
+               model: Model, principal: Principal, redirect: RedirectAttributes): String {
         val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         model.addAttribute("user", currentClient)
         val items = weaponRepository.findAll() + transportRepository.findAll()
 
-        model.addAttribute("items", items)
+        if(name != null) {
+            if (type != null) {
+                val productType = when (type) {
+                    "melee" -> WeaponType.MELEE
+                    "pistol" -> WeaponType.PISTOL
+                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
+                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
+                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
+                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
+                    "alien" -> WeaponType.ALIEN
+                    "land" -> TransportType.LAND
+                    "air" -> TransportType.AIR
+                    else -> {
+                        redirect.addFlashAttribute("error", "Such product type does not exist.")
+                        return "redirect:/manufacturer/newProduct"
+                    }
+                }
+
+                if (productType == TransportType.LAND || productType == TransportType.AIR) {
+                    model.addAttribute("items",
+                        transportRepository.findAllByNameAndTypeIgnoreCaseContainingOrderByIdAsc(name, productType as TransportType))
+                } else {
+                    model.addAttribute("items",
+                        weaponRepository.findAllByNameAndTypeIgnoreCaseContainingOrderByIdAsc(name, productType as WeaponType))
+                }
+            } else {
+                model.addAttribute("items",
+                    weaponRepository.findAllByNameIgnoreCaseContainingOrderByIdAsc(name) as MutableList<Weapon> +
+                            transportRepository.findAllByNameIgnoreCaseContainingOrderByIdAsc(name) as MutableList<Transport>)
+            }
+        } else {
+            if (type != null) {
+                val productType = when (type) {
+                    "melee" -> WeaponType.MELEE
+                    "pistol" -> WeaponType.PISTOL
+                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
+                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
+                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
+                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
+                    "alien" -> WeaponType.ALIEN
+                    "land" -> TransportType.LAND
+                    "air" -> TransportType.AIR
+                    else -> {
+                        redirect.addFlashAttribute("error", "Such product type does not exist.")
+                        return "redirect:/manufacturer/newProduct"
+                    }
+                }
+
+                if (productType == TransportType.LAND || productType == TransportType.AIR) {
+                    model.addAttribute("items",
+                        transportRepository.findAllByTypeOrderByIdAsc(productType as TransportType))
+                } else {
+                    model.addAttribute("items",
+                        weaponRepository.findAllByTypeOrderByIdAsc(productType as WeaponType))
+                }
+            } else {
+                model.addAttribute("items", items)
+            }
+        }
         return "manufacturers/manufacturer__market.html"
     }
 

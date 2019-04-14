@@ -5,7 +5,7 @@ import mnu.model.enums.TransportType
 import org.springframework.data.jpa.repository.*
 
 interface TransportRepository : JpaRepository<Transport, Long> {
-    fun findAllByType(type: TransportType) : List<Transport>
+    fun findAllByTypeOrderByIdAsc(type: TransportType) : List<Transport>?
 
     fun findAllByRequiredAccessLvlLessThanEqual(accessLevel: Int) : List<Transport>
 
@@ -14,6 +14,9 @@ interface TransportRepository : JpaRepository<Transport, Long> {
     fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(accessLevel: Int, quantity: Long) : List<Transport>?
 
     fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(accessLevel: Int, quantity: Long) : List<Transport>?
+
+    fun findAllByNameIgnoreCaseContainingOrderByIdAsc (name: String) : List<Transport>?
+    fun findAllByNameAndTypeIgnoreCaseContainingOrderByIdAsc (name: String, type: TransportType) : List<Transport>?
 
     fun findAllByTypeOrderByPriceAsc(type: TransportType) : List<Transport>
     fun findAllByTypeOrderByPriceDesc(type: TransportType) : List<Transport>

@@ -5,7 +5,7 @@ import mnu.model.enums.WeaponType
 import org.springframework.data.jpa.repository.*
 
 interface WeaponRepository : JpaRepository<Weapon, Long> {
-    fun findAllByType(type: WeaponType) : List<Weapon>
+    fun findAllByTypeOrderByIdAsc(type: WeaponType) : List<Weapon>?
 
     fun findAllByRequiredAccessLvlLessThanEqual(accessLevel: Int) : List<Weapon>?
 
@@ -14,6 +14,9 @@ interface WeaponRepository : JpaRepository<Weapon, Long> {
     fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanEqual(accessLevel: Int, quantity: Long) : List<Weapon>?
 
     fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(accessLevel: Int, quantity: Long) : List<Weapon>?
+
+    fun findAllByNameIgnoreCaseContainingOrderByIdAsc (name: String) : List<Weapon>?
+    fun findAllByNameAndTypeIgnoreCaseContainingOrderByIdAsc (name: String, type: WeaponType) : List<Weapon>?
 
     fun findAllByTypeOrderByPriceAsc(type: WeaponType) : List<Weapon>
     fun findAllByTypeOrderByPriceDesc(type: WeaponType) : List<Weapon>
