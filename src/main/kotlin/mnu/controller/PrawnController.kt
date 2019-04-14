@@ -54,8 +54,9 @@ class PrawnController (
                   @RequestParam(required = false) type: String?,
                   @RequestParam(required = false) sort: String?,
                   model: Model, principal: Principal, redirect: RedirectAttributes): String {
-        val currentPrawn = prawnRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)!!
-        if (currentPrawn.karma < 5000) {
+        val userId = userRepository?.findByLogin(principal.name)!!.id!!
+        val currentPrawn = prawnRepository?.findByUserId(userId)
+        if (currentPrawn!!.karma < 5000) {
             redirect.addFlashAttribute("error", "You have no permission to buy our products.")
             return "redirect:/prawn/main"
         }
@@ -89,10 +90,17 @@ class PrawnController (
                 transportRepository.findAllByQuantityGreaterThanEqual(1, productSort)
             else -> {
                 redirect.addFlashAttribute("error", "Such category filter does not exist.")
-                return "redirect:/manufacturer/market/weapon"
+                return "redirect:/prawn/shop/weapon"
             }
         }
+        val cartItems = shoppingCartItemRepository.findAllByCartUserIdAndCartStatus(userId, ShoppingCartStatus.CREATING)
+        val cartItemIds = if (category == "weapon")
+            cartItems.filter { it.weapon != null }.map { it.weapon!!.id }
+        else
+            cartItems.filter { it.transport != null }.map { it.transport!!.id }
+
         model.addAttribute("items", items)
+        model.addAttribute("cartIds", cartItemIds)
         return "prawns/prawn__shop.html"
     }
 
@@ -114,7 +122,7 @@ class PrawnController (
             }
         }
         model.addAttribute("cart_items", usersCart.items)
-        return "manufacturers/manufacturer__cart.html"
+        return "prawns/prawn__cart.html"
     }
 
     @GetMapping("/profile")

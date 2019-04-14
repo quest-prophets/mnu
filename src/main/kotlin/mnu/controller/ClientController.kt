@@ -38,7 +38,8 @@ class ClientController (
                     @RequestParam(required = false) type: String?,
                     @RequestParam(required = false) sort: String?,
                     model: Model, principal: Principal, redirect: RedirectAttributes): String {
-        val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
+        val userId = userRepository?.findByLogin(principal.name)!!.id!!
+        val currentClient = clientRepository?.findByUserId(userId)
         model.addAttribute("user", currentClient)
 
         val productType = if (category == "weapon") WeaponType.fromClient(type) else TransportType.fromClient(type)
@@ -68,10 +69,18 @@ class ClientController (
                 transportRepository.findAllByQuantityGreaterThanEqual(1, productSort)
             else -> {
                 redirect.addFlashAttribute("error", "Such category filter does not exist.")
-                return "redirect:/manufacturer/market/weapon"
+                return "redirect:/client/shop/weapon"
             }
         }
+
+        val cartItems = shoppingCartItemRepository.findAllByCartUserIdAndCartStatus(userId, ShoppingCartStatus.CREATING)
+        val cartItemIds = if (category == "weapon")
+            cartItems.filter { it.weapon != null }.map { it.weapon!!.id }
+        else
+            cartItems.filter { it.transport != null }.map { it.transport!!.id }
+
         model.addAttribute("items", items)
+        model.addAttribute("cartIds", cartItemIds)
         return "customers/customer__shop.html"
     }
 
@@ -88,7 +97,7 @@ class ClientController (
             }
         }
         model.addAttribute("cart_items", usersCart.items)
-        return "manufacturers/manufacturer__cart.html"
+        return "customers/customer__cart.html"
     }
 
     enum class CartItemType { WEAPON, TRANSPORT }
