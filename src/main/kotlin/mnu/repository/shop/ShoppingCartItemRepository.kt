@@ -12,4 +12,6 @@ interface ShoppingCartItemRepository : JpaRepository<ShoppingCartItem, Long> {
     fun findByWeaponAndCart(weapon: Weapon, cart: ShoppingCart) : ShoppingCartItem?
 
     fun findByTransportAndCart(transport: Transport, cart: ShoppingCart) : ShoppingCartItem?
+
+    fun findByIdAndCartUserId(id: Long, cartUserId: Long): ShoppingCartItem?
 }

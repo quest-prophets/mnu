@@ -1,7 +1,7 @@
 document.getElementsByTagName('body')[0].addEventListener('click', async e => {
     const action = e.target.dataset.action;
     if (action === 'add-to-cart') {
-        const response = await post("/manufacturer/cart/modify", {
+        const response = await post("/manufacturer/cart/modifyAjax", {
             type: e.target.dataset.type,
             id: e.target.dataset.id,
             quantity: 1

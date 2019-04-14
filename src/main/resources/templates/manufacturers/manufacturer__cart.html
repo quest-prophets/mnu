@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cart.css}">
+    <title>MNU</title>
+</head>
+<body>
+<div class="flex-row-center fixed-header fixed-header_small">
+    <a th:href="@{/}">
+        <img alt="back" th:src="@{/images/back.png}" class="button button_back button_round">
+    </a>
+    <h1>Cart</h1>
+</div>
+
+<div class="content">
+    <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
+    <div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
+
+    <div class="form-item gray" th:if="${items == null or items.isEmpty()}">
+        There is nothing in cart
+    </div>
+    <div th:each="item: ${items}" class="content__item">
+        <div class="content__main weapon-flex finished">
+<!--            <div th:switch="${item.type.name()}">-->
+<!--                <img class="icon_middle" th:case="MELEE" alt="melee" th:src="@{/images/melee.png}">-->
+<!--                <img class="icon_middle" th:case="PISTOL" alt="pistol" th:src="@{/images/pistol.svg}">-->
+<!--                <img class="icon_middle" th:case="SUBMACHINE_GUN" alt="submachine gun" th:src="@{/images/smg.png}">-->
+<!--                <img class="icon_middle" th:case="ASSAULT_RIFLE" alt="assault rifle" th:src="@{/images/assault.png}">-->
+<!--                <img class="icon_middle" th:case="LIGHT_MACHINE_GUN" alt="light machine gun"-->
+<!--                     th:src="@{/images/minigun.png}">-->
+<!--                <img class="icon_middle" th:case="SNIPER_RIFLE" alt="sniper rifle" th:src="@{/images/sniper.png}">-->
+<!--                <img class="icon_middle" th:case="ALIEN" alt="alien" th:src="@{/images/alien.png}">-->
+<!--            </div>-->
+            <div class="weapon-description">
+                <div class="form-item_small">
+                    <b>Name</b>
+                    <span th:text="${item.name()}"></span>
+                </div>
+<!--                <div class="form-item_small">-->
+<!--                    <b>Description</b>-->
+<!--                    <span th:text="${item.description}"></span>-->
+<!--                </div>-->
+<!--                <div class="form-item_small">-->
+<!--                    <b>Access level</b>-->
+<!--                    <span th:text="${item.requiredAccessLvl}"></span>-->
+<!--                </div>-->
+<!--                <div class="form-item_small">-->
+<!--                    <b>Price</b>-->
+<!--                    <span th:text="${item.price}"></span>-->
+<!--                </div>-->
+                <form th:action="@{cart/updateQuantity}" method="post" class="form-item_small">
+                    <b>Quantity</b>
+                    <input type="hidden" name="itemId" th:value="${item.id}">
+                    <input type="number" name="newQuantity" th:value="${item.quantity()}">
+                    <button type="submit">Update</button>
+<!--                    <input type="number" th:id="${'quantity-input-' + item.id}" th:value="${item.quantity}">-->
+<!--                    <input type="submit" class="js-upd-quantity button" value="Update quantity"-->
+<!--                           th:attr="data-type=${item.itemType()}, data-id=${item.id}">-->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script rel="script" type="text/javascript" th:src="@{/js/cart.js}"></script>
+</body>
+</html>

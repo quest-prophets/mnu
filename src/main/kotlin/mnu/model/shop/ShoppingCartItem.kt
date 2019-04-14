@@ -22,4 +22,7 @@ data class ShoppingCartItem (@ManyToOne(fetch = FetchType.EAGER)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
     var cart: ShoppingCart? = null
+
+    fun name() = weapon?.name ?: transport?.name
+    fun quantity() = if (weapon != null) weaponQuantity else transportQuantity
 }

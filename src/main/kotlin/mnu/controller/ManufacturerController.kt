@@ -87,7 +87,7 @@ class ManufacturerController (
                 this.items = mutableListOf()
             }
         }
-        model.addAttribute("cart_items", usersCart.items)
+        model.addAttribute("items", usersCart.items)
         return "manufacturers/manufacturer__cart.html"
     }
 
@@ -206,6 +206,28 @@ class ManufacturerController (
     data class CartItem(val type: CartItemType, var id: Long, var quantity: Long)
 
     data class CartModifyResponse(var isError: Boolean = false, var message: String = "")
+
+    @PostMapping("/cart/updateQuantity")
+    fun modifyQuantity(@RequestParam("itemId") itemId: Long,
+                       @RequestParam("newQuantity") newQuantity: Long,
+                       principal: Principal, redirect: RedirectAttributes): String {
+        val currentUser = userRepository?.findByLogin(principal.name)!!
+        val shoppingCartItem = shoppingCartItemRepository.findByIdAndCartUserId(itemId, currentUser.id!!)
+        if (shoppingCartItem != null && newQuantity > 0) {
+            shoppingCartItemRepository.save(shoppingCartItem.apply {
+                if (this.weapon != null)
+                    this.weaponQuantity = newQuantity
+                else if (this.transport != null)
+                    this.transportQuantity = newQuantity
+            })
+
+            redirect.addFlashAttribute("status", "Quantity updated.")
+            return "redirect:/manufacturer/cart"
+        }
+
+        redirect.addFlashAttribute("error", "Invalid request.")
+        return "redirect:/manufacturer/cart"
+    }
 
     @PostMapping("/cart/modifyAjax")
     @ResponseBody
