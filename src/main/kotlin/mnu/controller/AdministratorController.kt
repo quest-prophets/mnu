@@ -242,6 +242,23 @@ class AdministratorController (
         return "administrators/admin__district.html"
     }
 
+    @GetMapping("/purchaseRequests")
+    fun adminPurchaseRequests(principal: Principal, model: Model) : String {
+        val user = userRepository?.findByLogin(principal.name)!!
+
+        val purchaseRequests = purchaseRequestRepository.findAll()
+        val validPurchRequests = ArrayList<PurchaseRequest>()
+        purchaseRequests.forEach {
+            val requestUser = it.user!!
+            if (it.request!!.status == RequestStatus.PENDING
+                && (requestUser.role == Role.CUSTOMER || requestUser.role == Role.PRAWN || requestUser.role == Role.MANUFACTURER)) {
+                validPurchRequests.add(it)
+            }
+        }
+        model.addAttribute("requests", validPurchRequests)
+        return "/administrators/admin__purchase-sale.html"
+    }
+
 
     @PostMapping("/registerEmployee")
     fun addEmployee(@ModelAttribute form: EmployeeRegistrationForm, redirect: RedirectAttributes): String {

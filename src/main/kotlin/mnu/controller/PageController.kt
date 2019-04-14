@@ -131,6 +131,7 @@ class PageController : ApplicationController() {
 
     @PostMapping("/changeEmail")
     fun changeEmail(@ModelAttribute form: NewEmailForm, principal: Principal, redirect: RedirectAttributes): String {
+        val curUser = userRepository?.findByLogin(principal.name)!!
         //todo
         return ""
     }

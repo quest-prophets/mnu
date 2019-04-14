@@ -10,6 +10,7 @@ import mnu.model.enums.Role
 import mnu.model.enums.ShoppingCartStatus
 import mnu.model.request.ChangeEquipmentRequest
 import mnu.model.request.NewWeaponRequest
+import mnu.model.request.PurchaseRequest
 import mnu.model.request.VacancyApplicationRequest
 import mnu.repository.DistrictHouseRepository
 import mnu.repository.TransportRepository
@@ -143,6 +144,29 @@ class ManagerController (
         }
         model.addAttribute("requests", validVacAppRequests)
         return "managers/manager__job-applications.html"
+    }
+
+    @GetMapping("/purchaseRequests")
+    fun manPurchaseRequests(principal: Principal, model: Model) : String {
+        val user = userRepository?.findByLogin(principal.name)!!
+        val curManager = managerEmployeeRepository.findById(user.id!!).get()
+
+        val purchaseRequests = purchaseRequestRepository.findAll()
+        val validPurchRequests = ArrayList<PurchaseRequest>()
+        purchaseRequests.forEach {
+            val requestUser = it.user!!
+            if (it.request!!.status == RequestStatus.PENDING) {
+                if (requestUser.role == Role.PRAWN) {
+                    if (prawnRepository?.findByUserId(requestUser.id!!)!!.manager == curManager)
+                        validPurchRequests.add(it)
+                } else if (requestUser.role == Role.CUSTOMER) {
+                    if (clientRepository?.findByUserId(requestUser.id!!)!!.manager == curManager)
+                        validPurchRequests.add(it)
+                }
+            }
+        }
+        model.addAttribute("requests", validPurchRequests)
+        return "/managers/manager__purchase-requests.html"
     }
 
 
