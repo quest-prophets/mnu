@@ -274,8 +274,8 @@ class PrawnController (
         return "redirect:/prawn/cart"
     }
 
-    @PostMapping("/cart/modify")
-    fun modifyCart(@RequestBody cartItem: CartItem, principal: Principal, redirect: RedirectAttributes): CartModifyResponse {
+    @PostMapping("/cart/modifyAjax")
+    fun modifyCartAjax(@RequestBody cartItem: CartItem, principal: Principal, redirect: RedirectAttributes): CartModifyResponse {
         val currentUser = userRepository?.findByLogin(principal.name)!!
         val possibleCart = shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)
         val currentCreatingCart = when {
