@@ -212,6 +212,10 @@ select {
     margin-bottom: 40px;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .hidden {
     display: none !important;
 }

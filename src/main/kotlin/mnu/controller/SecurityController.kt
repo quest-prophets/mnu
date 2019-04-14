@@ -17,6 +17,8 @@ import mnu.repository.employee.SecurityEmployeeRepository
 import mnu.repository.request.ChangeEquipmentRequestRepository
 import mnu.repository.request.NewWeaponRequestRepository
 import mnu.repository.request.RequestRepository
+import net.bytebuddy.matcher.MethodSortMatcher
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -85,7 +87,7 @@ class SecurityController (
                 as MutableList<Weapon>
 
         val allAvailableTransport =
-            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(curSecurity.employee!!.level!!, 0)
+            transportRepository.findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(curSecurity.employee!!.level!!, 0)
                 as MutableList<Transport>
 
         model.addAttribute("current_security", curSecurity)

@@ -42,7 +42,7 @@ class AuthorizationController (
             if (roles.contains("CUSTOMER"))
                 return "redirect:/client/shop"
             if (roles.contains("MANUFACTURER"))
-                return "redirect:/manufacturer/market"
+                return "redirect:/manufacturer/market/weapon"
             if (roles.contains("PRAWN"))
                 return "redirect:/prawn/main"
         }
