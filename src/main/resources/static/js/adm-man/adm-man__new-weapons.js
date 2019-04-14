@@ -6,17 +6,17 @@ document.addEventListener('click', (e) => {
     if (action === "accept") {
         fetch(`/${role}/acceptNewWeapon/` + weaponId, {method: 'POST'})
             .then(() => {
-                dealWithWeapon(true, weaponId);
+                dealWithWeapon(true, weaponId, role);
             })
     } else if (action === "reject") {
         fetch(`/${role}/rejectNewWeapon/` + weaponId, {method: 'POST'})
             .then(() => {
-                dealWithWeapon(false, weaponId);
+                dealWithWeapon(false, weaponId, role);
             })
     }
 });
 
-function dealWithWeapon(isAccept, weaponId) {
+function dealWithWeapon(isAccept, weaponId, role) {
     document.getElementById("weapon-buttons-" + weaponId).classList.add("hidden");
     document.getElementById("weapon-flash-" + weaponId).classList.remove('hidden');
     if (isAccept) {
@@ -44,7 +44,7 @@ function dealWithWeapon(isAccept, weaponId) {
     undoButton.addEventListener('click', () => {
         clearInterval(timer);
         clearTimeout(timeout);
-        fetch("/man/undoWeaponChoice/" + weaponId, {method: 'POST'})
+        fetch(`/${role}/undoWeaponChoice/` + weaponId, {method: 'POST'})
             .then(() => {
                 document.getElementById("weapon-buttons-" + weaponId).classList.remove("hidden");
                 document.getElementById("weapon-flash-" + weaponId).classList.add('hidden');
