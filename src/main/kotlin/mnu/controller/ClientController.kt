@@ -96,7 +96,7 @@ class ClientController (
                 this.items = mutableListOf()
             }
         }
-        model.addAttribute("cart_items", usersCart.items)
+        model.addAttribute("items", usersCart.items)
         return "customers/customer__cart.html"
     }
 
@@ -234,7 +234,7 @@ class ClientController (
 
         if (currentCreatingCart.items == null || currentCreatingCart.items!!.size == 0) {
             redirect.addFlashAttribute("error", "You have no items in your cart.")
-            return "redirect:/client/shop"
+            return "redirect:/client/shop/weapon"
         }
 
         val cartItems = currentCreatingCart.items
@@ -265,7 +265,7 @@ class ClientController (
         purchaseRequestRepository.save(PurchaseRequest(currentUser, currentCreatingCart).apply { this.request = newRequest })
 
         redirect.addFlashAttribute("status", "Request sent. Await for your managing employee's decision.")
-        return "redirect:/client/shop"
+        return "redirect:/client/shop/weapon"
     }
 
 }

@@ -1023,7 +1023,7 @@ class AdministratorController (
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                return "redirect:/admin/purchases"
+                return "redirect:/admin/purchaseRequests"
             }
             when (userRequestRole) {
                 Role.CUSTOMER -> {
@@ -1051,7 +1051,7 @@ class AdministratorController (
 
                     // todo idk if its working still have to test yet
                     redirect.addFlashAttribute("status", "Request accepted.")
-                    return "redirect:/admin/purchases"
+                    return "redirect:/admin/purchaseRequests"
                 }
 
                 Role.MANUFACTURER -> {
@@ -1079,7 +1079,7 @@ class AdministratorController (
 
                     // todo same as customers
                     redirect.addFlashAttribute("status", "Request accepted.")
-                    return "redirect:/admin/purchases"
+                    return "redirect:/admin/purchaseRequests"
                 }
 
                 Role.PRAWN -> {
@@ -1098,19 +1098,19 @@ class AdministratorController (
                     purchaseRequestRepository.save(checkedRequest)
 
                     redirect.addFlashAttribute("status", "Request accepted.")
-                    return "redirect:/admin/purchases"
+                    return "redirect:/admin/purchaseRequests"
                 }
 
                 else -> {
                     redirect.addFlashAttribute("error", "Error. Wrong request credentials.")
-                    return "redirect:/admin/purchases"
+                    return "redirect:/admin/purchaseRequests"
                 }
             }
 
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:/admin/purchases"
+            "redirect:/admin/purchaseRequests"
         }
     }
 
@@ -1126,7 +1126,7 @@ class AdministratorController (
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                return "redirect:/admin/purchases"
+                return "redirect:/admin/purchaseRequests"
             }
             when (userRequestRole) {
                 Role.CUSTOMER -> {
@@ -1166,7 +1166,7 @@ class AdministratorController (
 
                     // todo same
                     redirect.addFlashAttribute("status", "Request rejected.")
-                    "redirect:/admin/purchases"
+                    "redirect:/admin/purchaseRequests"
                 }
 
                 Role.MANUFACTURER -> {
@@ -1206,14 +1206,14 @@ class AdministratorController (
 
                     // todo same...
                     redirect.addFlashAttribute("status", "Request rejected.")
-                    "redirect:/admin/purchases"
+                    "redirect:/admin/purchaseRequests"
                 }
 
                 Role.PRAWN -> {
                     val curPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
                     if (curPrawn!!.manager != managerEmployeeRepository.findById(currentAdmin!!.id!!).get()) {
                         redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
-                        return "redirect:/man/purchases"
+                        return "redirect:/admin/purchaseRequests"
                     }
 
                     val cartItems = checkedRequest.cart!!.items
@@ -1236,19 +1236,19 @@ class AdministratorController (
                     purchaseRequestRepository.save(checkedRequest)
 
                     redirect.addFlashAttribute("status", "Request rejected.")
-                    return "redirect:/admin/purchases"
+                    return "redirect:/admin/purchaseRequests"
                 }
 
                 else -> {
                     redirect.addFlashAttribute("error", "Error. Wrong request credentials.")
-                    return "redirect:/admin/purchases"
+                    return "redirect:/admin/purchaseRequests"
                 }
             }
 
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:/admin/purchases"
+            "redirect:/admin/purchaseRequests"
         }
     }
 

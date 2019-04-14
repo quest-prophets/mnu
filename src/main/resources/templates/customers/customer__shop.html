@@ -125,6 +125,7 @@
                 <b class="font-big" th:text="${item.name}"></b>
                 <div class="form-item" th:text="${item.description}"></div>
                 <div class="form-item_small" th:text="${item.price + ' c.u.'}"></div>
+                <div class="form-item_small" th:text="${item.quantity + ' pieces'}"></div>
             </div>
             <div class="button"
                  th:classappend="${cartIds.contains(item.id) ? 'rejected' : 'approved'}"

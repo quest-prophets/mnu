@@ -23,7 +23,7 @@
     <div class="managers-grid__buttons">
         <a th:href="@{/man/purchaseRequests}" class="flex-column grid-button button">
             Purchase requests
-            <div class="notification-number" th:if="${purch_count > 0}" th:text="#{purch_count}"></div>
+            <div class="notification-number" th:if="${purch_count > 0}" th:text="${purch_count}"></div>
         </a>
         <a th:href="@{/man/newWeapons}" class="flex-column grid-button button">
             New weapons

@@ -586,14 +586,14 @@ class ManagerController (
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                return "redirect:/man/purchases"
+                return "redirect:/man/purchaseRequests"
             }
             when (userRequestRole) {
                 Role.CUSTOMER -> {
                     val curCustomer = clientRepository?.findByUserId(checkedRequest.user!!.id!!)
                     if (curCustomer!!.manager != managerEmployeeRepository.findById(currentManager!!.id!!).get()) {
                         redirect.addFlashAttribute("error", "You are not this client's supervising manager.")
-                        return "redirect:/man/purchases"
+                        return "redirect:/man/purchaseRequests"
                     }
 
                     checkedRequest.request!!.apply {
@@ -619,19 +619,19 @@ class ManagerController (
 
                     // todo idk if its working still have to test yet
                     redirect.addFlashAttribute("status", "Request accepted.")
-                    return "redirect:/man/purchases"
+                    return "redirect:/man/purchaseRequests"
                 }
 
                 Role.MANUFACTURER -> {
                     redirect.addFlashAttribute("error", "You cannot process manufacturers' requests.")
-                    return "redirect:/man/purchases"
+                    return "redirect:/man/purchaseRequests"
                 }
 
                 Role.PRAWN -> {
                     val reqPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
                     if (reqPrawn!!.manager != managerEmployeeRepository.findById(currentManager!!.id!!).get()) {
                         redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
-                        return "redirect:/man/purchases"
+                        return "redirect:/man/purchaseRequests"
                     }
 
                     checkedRequest.request!!.apply {
@@ -647,19 +647,19 @@ class ManagerController (
                     purchaseRequestRepository.save(checkedRequest)
 
                     redirect.addFlashAttribute("status", "Request accepted.")
-                    return "redirect:/man/purchases"
+                    return "redirect:/man/purchaseRequests"
                 }
 
                 else -> {
                     redirect.addFlashAttribute("error", "Error. Wrong request credentials.")
-                    return "redirect:/man/purchases"
+                    return "redirect:/man/purchaseRequests"
                 }
             }
 
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:/man/purchases"
+            "redirect:/man/purchaseRequests"
         }
     }
 
@@ -675,14 +675,14 @@ class ManagerController (
 
             if (checkedRequest.request!!.status != RequestStatus.PENDING) {
                 redirect.addFlashAttribute("error", "Request has already been handled.")
-                return "redirect:/man/purchases"
+                return "redirect:/man/purchaseRequests"
             }
             when (userRequestRole) {
                 Role.CUSTOMER -> {
                     val curCustomer = clientRepository?.findByUserId(checkedRequest.user!!.id!!)
                     if (curCustomer!!.manager != managerEmployeeRepository.findById(currentManager!!.id!!).get()) {
                         redirect.addFlashAttribute("error", "You are not this client's supervising manager.")
-                        return "redirect:/man/purchases"
+                        return "redirect:/man/purchaseRequests"
                     }
 
                     val cartItems = checkedRequest.cart!!.items
@@ -719,19 +719,19 @@ class ManagerController (
 
                     // todo same
                     redirect.addFlashAttribute("status", "Request rejected.")
-                    return "redirect:/man/purchases"
+                    return "redirect:/man/purchaseRequests"
                 }
 
                 Role.MANUFACTURER -> {
                     redirect.addFlashAttribute("error", "You cannot process manufacturers' requests.")
-                    return "redirect:/man/purchases"
+                    return "redirect:/man/purchaseRequests"
                 }
 
                 Role.PRAWN -> {
                     val curPrawn = prawnRepository?.findByUserId(checkedRequest.user!!.id!!)
                     if (curPrawn!!.manager != managerEmployeeRepository.findById(currentManager!!.id!!).get()) {
                         redirect.addFlashAttribute("error", "You are not this prawn's supervising manager.")
-                        return "redirect:/man/purchases"
+                        return "redirect:/man/purchaseRequests"
                     }
 
                     val cartItems = checkedRequest.cart!!.items
@@ -754,19 +754,19 @@ class ManagerController (
                     purchaseRequestRepository.save(checkedRequest)
 
                     redirect.addFlashAttribute("status", "Request rejected.")
-                    return "redirect:/man/purchases"
+                    return "redirect:/man/purchaseRequests"
                 }
 
                 else -> {
                     redirect.addFlashAttribute("error", "Error. Wrong request credentials.")
-                    return "redirect:/man/purchases"
+                    return "redirect:/man/purchaseRequests"
                 }
             }
 
 
         } else {
             redirect.addFlashAttribute("error", error)
-            "redirect:/man/purchases"
+            "redirect:/man/purchaseRequests"
         }
     }
 

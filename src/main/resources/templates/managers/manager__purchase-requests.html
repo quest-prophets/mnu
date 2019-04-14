@@ -19,7 +19,7 @@
     <div th:if="${status}" th:text="${status}" class="flash flash_success"></div>
     <div th:if="${error}" th:text="${error}" class="flash flash_error"></div>
 
-    <div class="form-item gray" th:if="${items == null or items.isEmpty()}">
+    <div class="form-item gray" th:if="${requests == null or requests.isEmpty()}">
         No new requests
     </div>
 
