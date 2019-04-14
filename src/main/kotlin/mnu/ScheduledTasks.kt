@@ -39,6 +39,10 @@ class ScheduledTasks {
                 it.inhabitants?.forEach { prawn ->
                     prawn.karma += 50
                 }
+            } else {
+                it.inhabitants?.forEach { prawn ->
+                    prawn.karma -= 25
+                }
             }
         }
     }

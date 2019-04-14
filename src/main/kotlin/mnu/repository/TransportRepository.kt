@@ -6,13 +6,13 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.repository.*
 
 interface TransportRepository : JpaRepository<Transport, Long> {
-    fun findAllByQuantityGreaterThanEqual(quantity: Long) : List<Transport>?
+    fun findAllByQuantityGreaterThanEqual(quantity: Long, sort: Sort) : List<Transport>
 
     fun findAllByType(type: TransportType, sort: Sort) : List<Transport>
 
     fun findAllByTypeAndQuantityGreaterThan(type: TransportType, quantity: Long, sort: Sort) : List<Transport>
 
-    fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThan(accessLevel: Int, quantity: Long, sort: Sort) : List<Transport>
+    fun findAllByRequiredAccessLvlLessThanEqualAndQuantityGreaterThanOrderByIdAsc(accessLevel: Int, quantity: Long) : List<Transport>
 
     fun findAllByNameIgnoreCaseContaining (name: String, sort: Sort) : List<Transport>
     fun findAllByNameIgnoreCaseContainingAndType (name: String, type: TransportType, sort: Sort) : List<Transport>

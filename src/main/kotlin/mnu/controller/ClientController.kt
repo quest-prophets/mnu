@@ -15,6 +15,7 @@ import mnu.repository.WeaponRepository
 import mnu.repository.request.PurchaseRequestRepository
 import mnu.repository.shop.ShoppingCartItemRepository
 import mnu.repository.shop.ShoppingCartRepository
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -31,74 +32,46 @@ class ClientController (
     val purchaseRequestRepository: PurchaseRequestRepository
 ) : ApplicationController() {
 
-    @GetMapping("/shop")
-    fun clientsShop(@RequestParam(required = false) name: String?, @RequestParam(required = false) type: String?,
+    @GetMapping("/shop/{category}")
+    fun clientsShop(@PathVariable("category") category: String,
+                    @RequestParam(required = false) name: String?,
+                    @RequestParam(required = false) type: String?,
+                    @RequestParam(required = false) sort: String?,
                     model: Model, principal: Principal, redirect: RedirectAttributes): String {
         val currentClient = clientRepository?.findByUserId(userRepository?.findByLogin(principal.name)!!.id!!)
         model.addAttribute("user", currentClient)
 
-        val items = weaponRepository.findAllByQuantityGreaterThanEqual(0) as MutableList<Weapon> +
-                transportRepository.findAllByQuantityGreaterThanEqual(0) as MutableList<Transport>
+        val productType = if (category == "weapon") WeaponType.fromClient(type) else TransportType.fromClient(type)
+        val productSort = when (sort) {
+            "price_asc" -> Sort(Sort.Direction.ASC, "price")
+            "price_desc" -> Sort(Sort.Direction.DESC, "price")
+            else -> Sort(Sort.Direction.ASC, "id")
+        }
 
-        if(name != null) {
-            if (type != null) {
-                val productType = when (type) {
-                    "melee" -> WeaponType.MELEE
-                    "pistol" -> WeaponType.PISTOL
-                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
-                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
-                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
-                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
-                    "alien" -> WeaponType.ALIEN
-                    "land" -> TransportType.LAND
-                    "air" -> TransportType.AIR
-                    else -> {
-                        redirect.addFlashAttribute("error", "Such product type does not exist.")
-                        return "redirect:/client/shop"
-                    }
-                }
+        val items: List<Any> = when {
+            category == "weapon" && name != null && productType != null ->
+                weaponRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThan(name, productType as WeaponType, 0, productSort)
+            category == "transport" && name != null && productType != null ->
+                transportRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThan(name, productType as TransportType, 0, productSort)
+            category == "weapon" && name == null && productType != null ->
+                weaponRepository.findAllByTypeAndQuantityGreaterThan(productType as WeaponType, 0, productSort)
+            category == "transport" && name == null && productType != null ->
+                transportRepository.findAllByTypeAndQuantityGreaterThan(productType as TransportType, 0, productSort)
 
-                if (productType == TransportType.LAND || productType == TransportType.AIR) {
-                    model.addAttribute("items",
-                        transportRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThanOrderByIdAsc(name, productType as TransportType, 0))
-                } else {
-                    model.addAttribute("items",
-                        weaponRepository.findAllByNameIgnoreCaseContainingAndTypeAndQuantityGreaterThan(name, productType as WeaponType, 0))
-                }
-            } else {
-                model.addAttribute("items",
-                    weaponRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThan(name, 0) as MutableList<Weapon> +
-                            transportRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThanOrderByIdAsc(name, 0) as MutableList<Transport>)
-            }
-        } else {
-            if (type != null) {
-                val productType = when (type) {
-                    "melee" -> WeaponType.MELEE
-                    "pistol" -> WeaponType.PISTOL
-                    "submachine_gun" -> WeaponType.SUBMACHINE_GUN
-                    "assault_rifle" -> WeaponType.ASSAULT_RIFLE
-                    "light_machine_gun" -> WeaponType.LIGHT_MACHINE_GUN
-                    "sniper_rifle" -> WeaponType.SNIPER_RIFLE
-                    "alien" -> WeaponType.ALIEN
-                    "land" -> TransportType.LAND
-                    "air" -> TransportType.AIR
-                    else -> {
-                        redirect.addFlashAttribute("error", "Such product type does not exist.")
-                        return "redirect:/client/shop"
-                    }
-                }
-
-                if (productType == TransportType.LAND || productType == TransportType.AIR) {
-                    model.addAttribute("items",
-                        transportRepository.findAllByTypeAndQuantityGreaterThanOrderByIdAsc(productType as TransportType, 0))
-                } else {
-                    model.addAttribute("items",
-                        weaponRepository.findAllByTypeAndQuantityGreaterThan(productType as WeaponType, 0))
-                }
-            } else {
-                model.addAttribute("items", items)
+            category == "weapon" && name != null && productType == null ->
+                weaponRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThan(name, 0, productSort)
+            category == "transport" && name != null && productType == null ->
+                transportRepository.findAllByNameIgnoreCaseContainingAndQuantityGreaterThan(name, 0, productSort)
+            category == "weapon" && name == null && productType == null ->
+                weaponRepository.findAllByQuantityGreaterThanEqual(1, productSort)
+            category == "transport" && name == null && productType == null ->
+                transportRepository.findAllByQuantityGreaterThanEqual(1, productSort)
+            else -> {
+                redirect.addFlashAttribute("error", "Such category filter does not exist.")
+                return "redirect:/manufacturer/market/weapon"
             }
         }
+        model.addAttribute("items", items)
         return "customers/customer__shop.html"
     }
 
