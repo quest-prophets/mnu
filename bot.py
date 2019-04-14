@@ -33,6 +33,7 @@ def entered_danger_level(update, context):
     text = update.message.text
     if int(text) > 3 or int(text) < 1:
         update.message.reply_text("Please enter danger level correctly, choose 1, 2 or 3")
+        return ENTER_DANGER_LEVEL
     else:
         context.user_data['danger_level'] = text
         update.message.reply_text(f"Assigned danger level is {text}. Any additional notes?")

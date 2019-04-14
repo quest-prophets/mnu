@@ -185,7 +185,7 @@ class ManufacturerController (
             newTransportRequestRepository.save(newProductRequest.apply { this.request = newRequest })
 
         redirect.addFlashAttribute("status", "Request submitted. Await for administrator's decision.")
-        return "redirect:/manufacturer/market"
+        return "redirect:/manufacturer/market/weapon"
     }
 
     @PostMapping("/newVacancy")
@@ -208,7 +208,7 @@ class ManufacturerController (
 
         redirect.addFlashAttribute("form", form)
         redirect.addFlashAttribute("status", "Request submitted. Await for administrator's decision.")
-        return "redirect:/manufacturer/market"
+        return "redirect:/manufacturer/market/weapon"
     }
 
     enum class CartItemType { WEAPON, TRANSPORT }
