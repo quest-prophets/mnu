@@ -281,6 +281,16 @@ class AdministratorController (
             redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
             "redirect:/admin/employee"
         } else {
+            if (form.username.length < 4) {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Username length should be at least 4 symbols.")
+                return "redirect:/admin/employee"
+            }
+            if (form.password.length < 6) {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Password length should be at least 6 symbols.")
+                return "redirect:/admin/employee"
+            }
 
             val passwordEncoder = BCryptPasswordEncoder()
             val encodedPassword = passwordEncoder.encode(form.password)
@@ -427,6 +437,16 @@ class AdministratorController (
             redirect.addFlashAttribute("error", "Only latin letters, numbers, \"_\" and \".\" are supported.")
             "redirect:/admin/prawns"
         } else {
+            if (form.username.length < 4) {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Username length should be at least 4 symbols.")
+                return "redirect:/admin/prawns"
+            }
+            if (form.password.length < 6) {
+                redirect.addFlashAttribute("form", form)
+                redirect.addFlashAttribute("error", "Password length should be at least 6 symbols.")
+                return "redirect:/admin/prawns"
+            }
 
             val passwordEncoder = BCryptPasswordEncoder()
             val encodedPassword = passwordEncoder.encode(form.password)
