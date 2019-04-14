@@ -222,6 +222,14 @@ class ManufacturerController (
                        principal: Principal, redirect: RedirectAttributes): String {
         val currentUser = userRepository?.findByLogin(principal.name)!!
         val shoppingCartItem = shoppingCartItemRepository.findByIdAndCartUserIdAndCartStatus(itemId, currentUser.id!!, ShoppingCartStatus.CREATING)
+        if (shoppingCartItem != null && newQuantity <= 0L) {
+            shoppingCartItem.cart = null
+            shoppingCartItemRepository.delete(shoppingCartItem)
+
+            redirect.addFlashAttribute("status", "Item deleted.")
+            return "redirect:/manufacturer/cart"
+        }
+
         if (shoppingCartItem != null && newQuantity > 0) {
             shoppingCartItemRepository.save(shoppingCartItem.apply {
                 if (this.weapon != null)
@@ -274,6 +282,7 @@ class ManufacturerController (
                     }
                 } else {
                     if (cartItem.quantity <= 0L) {
+                        existingShoppingCartItemCheck.cart = null
                         shoppingCartItemRepository.delete(existingShoppingCartItemCheck)
                         return CartModifyResponse(isError = false, message = "Item removed from cart.")
                     }
