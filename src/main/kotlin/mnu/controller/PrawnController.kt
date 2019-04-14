@@ -255,7 +255,7 @@ class PrawnController (
             shoppingCartItemRepository.delete(shoppingCartItem)
 
             redirect.addFlashAttribute("status", "Item deleted.")
-            return "redirect:/client/cart"
+            return "redirect:/prawn/cart"
         }
 
         if (shoppingCartItem != null && newQuantity > 0) {
@@ -275,6 +275,7 @@ class PrawnController (
     }
 
     @PostMapping("/cart/modifyAjax")
+    @ResponseBody
     fun modifyCartAjax(@RequestBody cartItem: CartItem, principal: Principal, redirect: RedirectAttributes): CartModifyResponse {
         val currentUser = userRepository?.findByLogin(principal.name)!!
         val possibleCart = shoppingCartRepository.findAllByUserAndStatus(currentUser, ShoppingCartStatus.CREATING)
@@ -383,7 +384,7 @@ class PrawnController (
                 if (it.weapon!!.quantity < it.quantity!!) {
                     redirect.addFlashAttribute("error",
                         "No sufficient \"${it.weapon!!.name}\" weapons, request cannot be satisfied.")
-                    return "redirect:/client/cart"
+                    return "redirect:/prawn/cart"
                 }
                 it.weapon!!.quantity -= it.quantity!!
                 weaponRepository.save(it.weapon!!)
@@ -392,7 +393,7 @@ class PrawnController (
                 if(it.transport!!.quantity < it.quantity!!) {
                     redirect.addFlashAttribute("error",
                         "No sufficient \"${it.transport!!.name}\" transport, request cannot be satisfied.")
-                    return "redirect:/client/cart"
+                    return "redirect:/prawn/cart"
                 }
                 it.transport!!.quantity -= it.quantity!!
                 transportRepository.save(it.transport!!)
@@ -405,7 +406,7 @@ class PrawnController (
         
         if (currentPrawn.balance < cartSum) {
             redirect.addFlashAttribute("error", "Insufficient funds, please edit your cart.")
-            return "redirect:/client/cart"
+            return "redirect:/prawn/cart"
         }
 
         currentCreatingCart.status = ShoppingCartStatus.REQUESTED
