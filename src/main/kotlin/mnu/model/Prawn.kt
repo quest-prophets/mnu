@@ -28,7 +28,6 @@ data class Prawn(@Column(nullable = false) var name: String = "") {
     @JoinColumn(name = "job_id", referencedColumnName = "id")
     var job: Vacancy? = null
 
-    @Min(0)
     var balance: Double = 0.0
     var karma: Long = 0
     var dateOfDeath: LocalDateTime? = null

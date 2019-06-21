@@ -9,14 +9,15 @@ import java.time.LocalDateTime
 
 @Component
 class ScheduledTasks {
-    @Autowired
+  /*  @Autowired
     val prawnRepository: PrawnRepository? = null
     @Autowired
     val districtHouseRepository: DistrictHouseRepository? = null
     @Autowired
     val districtIncidentRepository: DistrictIncidentRepository? = null
 
-    @Scheduled(cron = "0 0 0 ? * MON")
+    //@Scheduled(cron = "0 0 0 ? * MON")
+    @Scheduled(fixedDelay = 120000)
     fun paydayTime() {
         val allPrawns = prawnRepository?.findAll()
         val allHouses = districtHouseRepository?.findAll()
@@ -25,9 +26,10 @@ class ScheduledTasks {
         val allHousesInIncidents = ArrayList<DistrictHouse>()
         allPrawns?.forEach {
             if (it.job != null) {
-                it.balance += it.job!!.salary - 100 //taxes for everybody
+                it.balance += it.job!!.salary - 100.0 //taxes for everybody
                 it.karma += 75
-            } else it.balance -= 100
+            } else it.balance -= 100.0
+            prawnRepository?.save(it)
         }
 
         allIncidentsForPastWeek?.forEach {
@@ -38,12 +40,15 @@ class ScheduledTasks {
             if (!allHousesInIncidents.contains(it)) {
                 it.inhabitants?.forEach { prawn ->
                     prawn.karma += 50
+                    prawnRepository?.save(prawn)
                 }
             } else {
                 it.inhabitants?.forEach { prawn ->
                     prawn.karma -= 25
+                    prawnRepository?.save(prawn)
                 }
             }
         }
     }
+   */
 }

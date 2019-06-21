@@ -908,7 +908,7 @@ class AdministratorController (
             return "redirect:/admin/vacancies"
         }
         val newVacancy =
-            Vacancy(form.title, form.salary.toLong(), form.requiredKarma.toLong(), form.workHoursPerWeek.toInt())
+            Vacancy(form.title, form.salary.toDouble(), form.requiredKarma.toLong(), form.workHoursPerWeek.toInt())
                 .apply { this.vacantPlaces = form.vacantPlaces.toLong() }
 
         vacancyRepository.save(newVacancy)
@@ -945,7 +945,7 @@ class AdministratorController (
                     this.resolver = currentAdmin
                 }
                 val newVacancy =
-                    Vacancy(checkedRequest.title, checkedRequest.salary, checkedRequest.requiredKarma, checkedRequest.workHoursPerWeek)
+                    Vacancy(checkedRequest.title, checkedRequest.salary.toDouble(), checkedRequest.requiredKarma, checkedRequest.workHoursPerWeek)
                         .apply { this.vacantPlaces = checkedRequest.vacantPlaces }
                 vacancyRepository.save(newVacancy)
 
